@@ -1,0 +1,21 @@
+{
+  "name": "vumi-jssandbox-toolkit",
+  "version": "0.0.1",
+  "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/praekelt/vumi-jssandbox-toolkit"
+  },
+  "keywords": [
+    "vumi",
+    "javascript",
+    "sandbox",
+    "examples"
+  ],
+  "author": "Praekelt Foundation <dev@praekeltfoundation.org>",
+  "license": "BSD"
+}
