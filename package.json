@@ -10,6 +10,10 @@
     "type": "git",
     "url": "git://github.com/praekelt/vumi-jssandbox-toolkit"
   },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~1.7.1"
+  },
   "keywords": [
     "vumi",
     "javascript",
