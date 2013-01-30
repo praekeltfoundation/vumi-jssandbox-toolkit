@@ -2,7 +2,7 @@
   "name": "vumigo",
   "version": "0.0.1",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "mocha"
   },
