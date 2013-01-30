@@ -1,5 +1,5 @@
 {
-  "name": "vumi-jssandbox-toolkit",
+  "name": "vumigo",
   "version": "0.0.1",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "index.js",
@@ -10,9 +10,10 @@
     "type": "git",
     "url": "git://github.com/praekelt/vumi-jssandbox-toolkit"
   },
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
-    "mocha": "~1.7.1"
+    "mocha": "1.7.x"
   },
   "keywords": [
     "vumi",
