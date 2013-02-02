@@ -1,10 +1,16 @@
 #!/bin/bash
-LANGS="en sw"
-DOMAIN="messages"
-PROJECT_DIR="`dirname $0`/.."
+PROJECT_DIR="$1"
+if [ "$PROJECT_DIR" == "" ] ; then
+    echo "Usage:" `basename "$0"` "<project_folder>"
+    exit 1
+fi
+
+SCRIPT_DIR="`dirname $0`"
+JS2PYTHONISH="$SCRIPT_DIR/js2pythonish.py"
+
 PO_DIR="$PROJECT_DIR/po"
 LIB_DIR="$PROJECT_DIR/lib"
-JS2PYTHONISH="$PROJECT_DIR/utils/js2pythonish.py"
+DOMAIN="messages"
 
 POT_FILE="$PO_DIR/$DOMAIN.pot"
 
