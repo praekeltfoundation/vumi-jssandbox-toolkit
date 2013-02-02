@@ -1,6 +1,6 @@
 #!/bin/bash
 PROJECT_DIR="$1"
-if [ "$PROJECT_DIR" == "" ] ; then
+if [ "x$PROJECT_DIR" = "x" ] ; then
     echo "Usage:" `basename "$0"` "<project_folder>"
     exit 1
 fi
