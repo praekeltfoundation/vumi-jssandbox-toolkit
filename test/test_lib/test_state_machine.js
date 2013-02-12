@@ -24,6 +24,7 @@ describe("test InteractionMachine", function() {
             new states.FreeText("start", "next", "Foo"));
         var done = 0;
         sim.im.user = {};
+        sim.im.config = {};
         var p = sim.im.switch_state("start");
         p.add_callback(function () {done += 1;});
         assert.equal(done, 1);
