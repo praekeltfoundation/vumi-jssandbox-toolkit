@@ -30,6 +30,26 @@ describe("test InteractionMachine", function() {
         assert.equal(done, 1);
         assert.equal(sim.im.current_state, sim.state);
     });
+    it("should throw an error on duplicate states", function() {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "next", "Foo"));
+        assert.throws(
+            function () {
+                sim.states.add_state(
+                    new states.FreeText("start", "next", "Duplicate"));
+            },
+            states.StateError);
+    });
+    it("should throw an error on switching to unknown states", function () {
+        var sim = new SingleStateIm();
+        sim.im.user = {};
+        sim.im.config = {};
+        assert.throws(
+            function () {
+                sim.im.switch_state("unknown");
+            },
+            states.StateError);
+    });
 });
 
 describe("test State", function() {
