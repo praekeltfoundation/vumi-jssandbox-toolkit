@@ -37,11 +37,12 @@ describe("ImTester.check_state", function() {
     var tester = new test_utils.ImTester(api);
 
     it("should pass on correct results", function() {
-        tester.check_state({}, null,
-                           "intro",
-                           "Type something:"
-                          );
-        console.log("Yay!");
+        tester.check_state({
+            user: {},
+            content: null,
+            next_state: "intro",
+            response: "Type something:",
+        });
     });
 });
 
@@ -51,6 +52,9 @@ describe("ImTester.check_close", function() {
     var tester = new test_utils.ImTester(api);
 
     it("should pass on correct results", function() {
-        tester.check_close(null, "intro");
+        tester.check_close({
+            user: {},
+            next_state: "intro"
+        });
     });
 });
