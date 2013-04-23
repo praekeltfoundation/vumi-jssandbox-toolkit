@@ -89,6 +89,10 @@ describe("ImTester.check_state", function() {
     it("should fail if response is too long", function() {
         fail_with({max_response_length: 2});
     });
+
+    it("should fail if session continues unexpectedly", function() {
+        fail_with({continue_session: false});
+    });
 });
 
 
