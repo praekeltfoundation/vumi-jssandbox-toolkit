@@ -64,6 +64,20 @@ describe("ImTester.check_state", function() {
         succeed_with({});
     });
 
+    it("should accept custom setup", function() {
+        var recv_api = null;
+        succeed_with({setup: function (api) { recv_api = api; }});
+        assert.equal(recv_api, tester.api);
+    });
+
+    it("should accept custom teardown", function() {
+        var recv_api, recv_user = null;
+        succeed_with({teardown: function (api, user) {
+            recv_api = api; recv_user = user;}});
+        assert.equal(recv_api, tester.api);
+        assert.deepEqual(recv_user, {current_state: "intro"});
+    });
+
     it("should fail on incorrect next_state", function() {
         fail_with({next_state: "unknown"});
     });
@@ -73,7 +87,7 @@ describe("ImTester.check_state", function() {
     });
 
     it("should fail if response is too long", function() {
-        fail_with({max_content_length: 2});
+        fail_with({max_response_length: 2});
     });
 });
 
@@ -106,6 +120,20 @@ describe("ImTester.check_close", function() {
 
     it("should pass on correct next_state", function() {
         succeed_with({});
+    });
+
+    it("should accept custom setup", function() {
+        var recv_api = null;
+        succeed_with({setup: function (api) { recv_api = api; }});
+        assert.equal(recv_api, tester.api);
+    });
+
+    it("should accept custom teardown", function() {
+        var recv_api, recv_user = null;
+        succeed_with({teardown: function (api, user) {
+            recv_api = api; recv_user = user;}});
+        assert.equal(recv_api, tester.api);
+        assert.deepEqual(recv_user, {current_state: "intro"});
     });
 
     it("should fail on incorrect next_state", function() {
