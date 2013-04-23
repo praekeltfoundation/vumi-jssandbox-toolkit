@@ -156,9 +156,43 @@ describe("test HttpApi", function() {
 
 
 describe("test JsonApi", function() {
-    var im = new DummyIm();
-
     it("should be constructable", function() {
+        var api = new JsonApi(new DummyIm());
+    });
+
+    it("should perform simple request", function (done) {
+        var im = new DummyIm();
         var api = new JsonApi(im);
+        var req_data = {req: "val1"};
+        var rsp_data = {rsp: "val2"};
+
+        im.requestSucceeds(JSON.stringify(rsp_data));
+        var p = api.post("http://www.example.com/", {data: req_data});
+        im.checkRequest("http.post", "http://www.example.com/",
+                        {
+                            headers: {
+                                'Content-Type':
+                                ['application/json; charset=utf-8']
+                            },
+                            data: JSON.stringify(req_data)
+                        });
+        p.add_callback(function (r) { assert.deepEqual(r, rsp_data); });
+        p.add_callback(done);
+    });
+
+
+    it("should decode JSON body response", function() {
+        var api = new JsonApi(new DummyIm());
+        var val = {a: 1, b: "2"};
+        assert.deepEqual(
+            api.decode_response_body(JSON.stringify(val)),
+            val);
+    });
+
+    it("should encode request data to JSON", function() {
+        var api = new JsonApi(new DummyIm());
+        var val = {a: 1, b: "2"};
+        assert.deepEqual(api.encode_request_data(val),
+                         JSON.stringify(val));
     });
 })
