@@ -36,13 +36,24 @@ describe("ImTester.check_state", function() {
     var api = mk_app();
     var tester = new test_utils.ImTester(api);
 
-    it("should pass on correct results", function() {
+    it("should pass on correct next_state and response", function() {
         tester.check_state({
             user: {},
             content: null,
             next_state: "intro",
             response: "Type something:",
         });
+    });
+
+    it("should fail on incorrect next_state", function() {
+        assert.throws(function () {
+            tester.check_state({
+                user: {},
+                content: null,
+                next_state: "unknown",
+                response: "Type something:",
+            });
+        }, assert.AssertionError);
     });
 });
 
@@ -51,10 +62,19 @@ describe("ImTester.check_close", function() {
     var api = mk_app();
     var tester = new test_utils.ImTester(api);
 
-    it("should pass on correct results", function() {
+    it("should pass on correct next_state", function() {
         tester.check_close({
             user: {},
             next_state: "intro"
         });
+    });
+
+    it("should fail on incorrect next_state", function() {
+        assert.throws(function () {
+            tester.check_close({
+                user: {},
+                next_state: "unknown"
+            });
+        }, assert.AssertionError);
     });
 });
