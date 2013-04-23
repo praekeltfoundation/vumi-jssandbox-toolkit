@@ -27,10 +27,16 @@ function DummyIm() {
             cmd[k] = cmd_opts[k];
         }
         assert(self.api.request.calledOnce);
-        assert(self.api.request.calledWith(
-            method,
-            sinon.match(cmd)
-        ));
+        try {
+            assert(self.api.request.calledWith(
+                method,
+                sinon.match(cmd)
+            ));
+        }
+        catch (e) {
+            console.log(self.api.request.args);
+            throw e;
+        }
     };
 }
 
@@ -126,6 +132,23 @@ describe("test HttpApi", function() {
                         {params: {a: 1, b: 2}});
         im.checkRequest("http.get", "http://www.example.com/?a=1&b=2",
                         {headers: {}});
+        p.add_callback(function (r) { assert.equal(r, "foo"); });
+        p.add_callback(done);
+    });
+
+    it("should add basic auth headers if requested", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im, {
+            auth: {username: "me", password: "pw"}
+        });
+        im.requestSucceeds("foo");
+        var p = api.get("http://www.example.com/");
+        im.checkRequest("http.get", "http://www.example.com/",
+                        {
+                            headers: {
+                                'Authorization': ['Basic bWU6cHc=']
+                            }
+                        });
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     });
