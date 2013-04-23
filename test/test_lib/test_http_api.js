@@ -34,21 +34,39 @@ function DummyIm() {
 }
 
 
-
 describe("test HttpApi", function() {
-    var im = new DummyIm();
-
     it("should be constructable", function() {
-        var api = new HttpApi(im);
+        var api = new HttpApi(new DummyIm());
     });
 
-    it("should respond when api_get is called", function(done) {
+    function simple_success_check(api_method, resource_method, done) {
+        var im = new DummyIm();
         var api = new HttpApi(im);
         im.requestSucceeds("foo");
-        var p = api.api_get("http://www.example.com/");
-        im.checkRequest('http.get', "http://www.example.com/", {});
+        var p = api[api_method]("http://www.example.com/");
+        im.checkRequest(resource_method, "http://www.example.com/", {});
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
+    }
+
+    it("should respond when .get(...) is called", function(done) {
+        simple_success_check('get', 'http.get', done);
+    });
+
+    it("should respond when .head(...) is called", function(done) {
+        simple_success_check('head', 'http.head', done);
+    });
+
+    it("should respond when .post(...) is called", function(done) {
+        simple_success_check('post', 'http.post', done);
+    });
+
+    it("should respond when .put(...) is called", function(done) {
+        simple_success_check('put', 'http.put', done);
+    });
+
+    it("should respond when .delete(...) is called", function(done) {
+        simple_success_check('delete', 'http.delete', done);
     });
 })
 
