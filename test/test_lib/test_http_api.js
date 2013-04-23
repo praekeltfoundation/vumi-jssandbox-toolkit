@@ -21,14 +21,15 @@ function DummyIm() {
         });
     };
 
-    self.checkRequest = function(method, url, headers) {
+    self.checkRequest = function(method, url, cmd_opts) {
+        var cmd = { url: url };
+        for (var k in cmd_opts) {
+            cmd[k] = cmd_opts[k];
+        }
         assert(self.api.request.calledOnce);
         assert(self.api.request.calledWith(
             method,
-            sinon.match({
-                url: url,
-                headers: headers
-            })
+            sinon.match(cmd)
         ));
     };
 }
@@ -44,7 +45,8 @@ describe("test HttpApi", function() {
         var api = new HttpApi(im);
         im.requestSucceeds("foo");
         var p = api[api_method]("http://www.example.com/");
-        im.checkRequest(resource_method, "http://www.example.com/", {});
+        im.checkRequest(resource_method, "http://www.example.com/",
+                        {headers: {}});
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     }
@@ -105,6 +107,28 @@ describe("test HttpApi", function() {
         p.add_callback(done);
     });
 
+    it("should send data if requested", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im);
+        im.requestSucceeds("foo");
+        var p = api.post("http://www.example.com/", {data: "bar"});
+        im.checkRequest("http.post", "http://www.example.com/",
+                        {headers: {}, data: "bar"});
+        p.add_callback(function (r) { assert.equal(r, "foo"); });
+        p.add_callback(done);
+    });
+
+    it("should add parameters if requested", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im);
+        im.requestSucceeds("foo");
+        var p = api.get("http://www.example.com/",
+                        {params: {a: 1, b: 2}});
+        im.checkRequest("http.get", "http://www.example.com/?a=1&b=2",
+                        {headers: {}});
+        p.add_callback(function (r) { assert.equal(r, "foo"); });
+        p.add_callback(done);
+    });
 })
 
 
