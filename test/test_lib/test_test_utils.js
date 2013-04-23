@@ -55,6 +55,18 @@ describe("ImTester.check_state", function() {
             });
         }, assert.AssertionError);
     });
+
+    it("should fail on incorrect response", function() {
+        assert.throws(function () {
+            tester.check_state({
+                user: {},
+                content: null,
+                next_state: "intro",
+                response: "Type something else:",
+                log_on_error: false
+            });
+        }, assert.AssertionError);
+    });
 });
 
 
