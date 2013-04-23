@@ -68,6 +68,43 @@ describe("test HttpApi", function() {
     it("should respond when .delete(...) is called", function(done) {
         simple_success_check('delete', 'http.delete', done);
     });
+
+    it("should return an appropriate failure on 404", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im);
+        im.api.request.callsArgWith(2, {
+            success: true,
+            code: 404,
+            body: "404 Not Found",
+            reason: null
+        });
+        var p = api.request("get", "http://www.example.com/");
+        im.checkRequest("http.get", "http://www.example.com/", {});
+        p.add_callback(function (r) {
+            assert.deepEqual(r, {
+                error: "<HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found>"
+            });
+        });
+        p.add_callback(done);
+    });
+
+    it("should return an appropriate failure on sandbox API failure", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im);
+        im.api.request.callsArgWith(2, {
+            success: false,
+            reason: "Something broke."
+        });
+        var p = api.request("get", "http://www.example.com/");
+        im.checkRequest("http.get", "http://www.example.com/", {});
+        p.add_callback(function (r) {
+            assert.deepEqual(r, {
+                error: "<HttpApiError: HTTP API GET to http://www.example.com/ failed: Something broke.>"
+            });
+        });
+        p.add_callback(done);
+    });
+
 })
 
 
