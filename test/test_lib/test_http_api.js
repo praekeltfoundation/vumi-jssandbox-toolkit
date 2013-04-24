@@ -12,7 +12,7 @@ function DummyIm() {
     self.log = sinon.spy();
     self.api = { request: sinon.stub() };
 
-    self.requestSucceeds = function(body) {
+    self.request_succeeds = function(body) {
         self.api.request.callsArgWith(2, {
             success: true,
             code: 200,
@@ -21,7 +21,7 @@ function DummyIm() {
         });
     };
 
-    self.checkRequest = function(method, url, cmd_opts) {
+    self.check_request = function(method, url, cmd_opts) {
         var cmd = { url: url };
         for (var k in cmd_opts) {
             cmd[k] = cmd_opts[k];
@@ -49,10 +49,10 @@ describe("test HttpApi", function() {
     function simple_success_check(api_method, resource_method, done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
-        im.requestSucceeds("foo");
+        im.request_succeeds("foo");
         var p = api[api_method]("http://www.example.com/");
-        im.checkRequest(resource_method, "http://www.example.com/",
-                        {headers: {}});
+        im.check_request(resource_method, "http://www.example.com/",
+                         {headers: {}});
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     }
@@ -87,7 +87,7 @@ describe("test HttpApi", function() {
             reason: null
         });
         var p = api.request("get", "http://www.example.com/");
-        im.checkRequest("http.get", "http://www.example.com/", {});
+        im.check_request("http.get", "http://www.example.com/", {});
         p.add_callback(function (r) {
             assert.deepEqual(r, {
                 error: "<HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found>"
@@ -104,7 +104,7 @@ describe("test HttpApi", function() {
             reason: "Something broke."
         });
         var p = api.request("get", "http://www.example.com/");
-        im.checkRequest("http.get", "http://www.example.com/", {});
+        im.check_request("http.get", "http://www.example.com/", {});
         p.add_callback(function (r) {
             assert.deepEqual(r, {
                 error: "<HttpApiError: HTTP API GET to http://www.example.com/ failed: Something broke.>"
@@ -116,10 +116,10 @@ describe("test HttpApi", function() {
     it("should send data if requested", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
-        im.requestSucceeds("foo");
+        im.request_succeeds("foo");
         var p = api.post("http://www.example.com/", {data: "bar"});
-        im.checkRequest("http.post", "http://www.example.com/",
-                        {headers: {}, data: "bar"});
+        im.check_request("http.post", "http://www.example.com/",
+                         {headers: {}, data: "bar"});
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     });
@@ -127,10 +127,10 @@ describe("test HttpApi", function() {
     it("should add parameters if requested", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
-        im.requestSucceeds("foo");
+        im.request_succeeds("foo");
         var p = api.get("http://www.example.com/",
                         {params: {a: 1, b: 2}});
-        im.checkRequest("http.get", "http://www.example.com/?a=1&b=2",
+        im.check_request("http.get", "http://www.example.com/?a=1&b=2",
                         {headers: {}});
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
@@ -141,14 +141,14 @@ describe("test HttpApi", function() {
         var api = new HttpApi(im, {
             auth: {username: "me", password: "pw"}
         });
-        im.requestSucceeds("foo");
+        im.request_succeeds("foo");
         var p = api.get("http://www.example.com/");
-        im.checkRequest("http.get", "http://www.example.com/",
-                        {
-                            headers: {
-                                'Authorization': ['Basic bWU6cHc=']
-                            }
-                        });
+        im.check_request("http.get", "http://www.example.com/",
+                         {
+                             headers: {
+                                 'Authorization': ['Basic bWU6cHc=']
+                             }
+                         });
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     });
@@ -166,16 +166,16 @@ describe("test JsonApi", function() {
         var req_data = {req: "val1"};
         var rsp_data = {rsp: "val2"};
 
-        im.requestSucceeds(JSON.stringify(rsp_data));
+        im.request_succeeds(JSON.stringify(rsp_data));
         var p = api.post("http://www.example.com/", {data: req_data});
-        im.checkRequest("http.post", "http://www.example.com/",
-                        {
-                            headers: {
-                                'Content-Type':
-                                ['application/json; charset=utf-8']
-                            },
-                            data: JSON.stringify(req_data)
-                        });
+        im.check_request("http.post", "http://www.example.com/",
+                         {
+                             headers: {
+                                 'Content-Type':
+                                 ['application/json; charset=utf-8']
+                             },
+                             data: JSON.stringify(req_data)
+                         });
         p.add_callback(function (r) { assert.deepEqual(r, rsp_data); });
         p.add_callback(done);
     });
