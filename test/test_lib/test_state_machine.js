@@ -11,6 +11,9 @@ function SingleStateIm(state) {
     if (state) {
         this.states.add_state(state);
     }
+    this.on_event = function(event) {
+        this.states.on_event(event);
+    };
 }
 
 
@@ -49,6 +52,16 @@ describe("test InteractionMachine", function() {
                 sim.im.switch_state("unknown");
             },
             states.StateError);
+    });
+    it('should generate an event after setup_config', function() {
+        var sim = new SingleStateIm();
+        var self = this;
+        sim.states.on_config_read = function(config) {
+            self.config = config;
+        };
+        assert.equal(self.config, undefined);
+        sim.on_event({event: 'config_read'});
+        assert.equal(self.config.event, 'config_read');
     });
 });
 
