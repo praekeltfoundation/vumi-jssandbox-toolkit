@@ -12,7 +12,7 @@ function SingleStateIm(state) {
         this.states.add_state(state);
     }
     this.on_event = function(event) {
-        this.states.on_event(event);
+        return this.states.on_event(event);
     };
 }
 
