@@ -60,6 +60,16 @@ describe("test InteractionMachine", function() {
         states.on_event({event: 'config_read'});
         assert.equal(store.config.event, 'config_read');
     });
+    it('should generate an event after a inbound_event event', function() {
+        var states = new state_machine.StateCreator("start");
+        var store = {};
+        states.on_inbound_event = function(config) {
+            store.config = config;
+        };
+        assert.equal(store.config, undefined);
+        states.on_event({event: 'inbound_event'});
+        assert.equal(store.config.event, 'inbound_event');
+    });
 });
 
 describe("test State", function() {
