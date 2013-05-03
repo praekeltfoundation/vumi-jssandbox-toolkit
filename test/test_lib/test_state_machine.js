@@ -63,12 +63,12 @@ describe("test InteractionMachine", function() {
     it('should generate an event after a inbound_event event', function() {
         var states = new state_machine.StateCreator("start");
         var store = {};
-        states.on_inbound_event = function(config) {
-            store.config = config;
+        states.on_inbound_event = function(event) {
+            store.event = event;
         };
         assert.equal(store.config, undefined);
         states.on_event({event: 'inbound_event'});
-        assert.equal(store.config.event, 'inbound_event');
+        assert.equal(store.event.event, 'inbound_event');
     });
 });
 
