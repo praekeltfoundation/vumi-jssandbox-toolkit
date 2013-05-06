@@ -14,7 +14,8 @@
     "jed": "0.5.x"
   },
   "devDependencies": {
-    "mocha": "1.7.x"
+    "mocha": "1.7.x",
+    "sinon": "1.6.x"
   },
   "keywords": [
     "vumi",
