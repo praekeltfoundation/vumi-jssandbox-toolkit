@@ -50,6 +50,67 @@ describe("test InteractionMachine", function() {
             },
             states.StateError);
     });
+    it('should generate an event after a config_read event', function() {
+        var states = new state_machine.StateCreator("start");
+        var store = {};
+        states.on_config_read = function(event) {
+            store.event = event;
+        };
+        assert.equal(store.config, undefined);
+        states.on_event({event: 'config_read', config: {foo: 'bar'}});
+        assert.equal(store.event.event, 'config_read');
+        assert.equal(store.event.config.foo, 'bar');
+    });
+    it('should generate an event after an inbound_event event', function() {
+        var states = new state_machine.StateCreator("start");
+        var store = {};
+        states.on_inbound_event = function(event) {
+            store.event = event;
+        };
+        assert.equal(store.config, undefined);
+        states.on_event({event: 'inbound_event'});
+        assert.equal(store.event.event, 'inbound_event');
+    });
+    it('should fire an inbound_event event on_inbound_event', function() {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "start", "Foo"));
+        var store = {};
+        sim.states.on_inbound_event = function(event) {
+            store.event = event;
+        };
+        sim.im.on_inbound_event({
+            cmd: "inbound-event",
+            msg: {
+                session_event: "new"
+            }
+        });
+        var event_data = store.event.data.event;
+        assert.equal(event_data.session_event, 'new');
+    });
+    it('should fire a config_read event on_inbound_message', function() {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "start", "Foo"));
+        var store = {};
+        sim.states.on_config_read = function(event) {
+            store.event = event;
+        };
+        sim.im.fetch_config_value = function(key, json, done) {
+            assert.equal(key, 'config');
+            assert.ok(json);
+            done({'sample': 'config'});
+        };
+        sim.im.on_inbound_message({
+            cmd: "inbound-message",
+            msg: {
+                from_addr: "from_addr",
+                content: "content",
+                message_id: "message_id",
+                session_event: "continue"
+            }
+        });
+        var config = store.event.data.config;
+        assert.equal(config.sample, 'config');
+    });
 });
 
 describe("test State", function() {
