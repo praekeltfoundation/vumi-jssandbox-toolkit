@@ -53,12 +53,13 @@ describe("test InteractionMachine", function() {
     it('should generate an event after a config_read event', function() {
         var states = new state_machine.StateCreator("start");
         var store = {};
-        states.on_config_read = function(config) {
-            store.config = config;
+        states.on_config_read = function(event) {
+            store.event = event;
         };
         assert.equal(store.config, undefined);
-        states.on_event({event: 'config_read'});
-        assert.equal(store.config.event, 'config_read');
+        states.on_event({event: 'config_read', config: {foo: 'bar'}});
+        assert.equal(store.event.event, 'config_read');
+        assert.equal(store.event.config.foo, 'bar');
     });
     it('should generate an event after a inbound_event event', function() {
         var states = new state_machine.StateCreator("start");
