@@ -71,7 +71,7 @@ describe("test InteractionMachine", function() {
         states.on_event({event: 'inbound_event'});
         assert.equal(store.event.event, 'inbound_event');
     });
-    it('should fire an inbound_event event on_inbound_message', function() {
+    it('should fire an inbound_event event on_inbound_event', function() {
         var sim = new SingleStateIm(
             new states.FreeText("start", "start", "Foo"));
         var store = {};
