@@ -71,6 +71,30 @@ describe("test InteractionMachine", function() {
         states.on_event({event: 'inbound_event'});
         assert.equal(store.event.event, 'inbound_event');
     });
+    it('should fire a config_read event on_inbound_message', function() {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "start", "Foo"));
+        var store = {};
+        sim.states.on_config_read = function(event) {
+            store.event = event;
+        };
+        sim.im.fetch_config_value = function(key, json, done) {
+            assert.equal(key, 'config');
+            assert.ok(json);
+            done({'sample': 'config'});
+        };
+        sim.im.on_inbound_message({
+            cmd: "inbound-message",
+            msg: {
+                from_addr: "from_addr",
+                content: "content",
+                message_id: "message_id",
+                session_event: "continue"
+            }
+        });
+        var config = store.event.data.config;
+        assert.equal(config.sample, 'config');
+    });
 });
 
 describe("test State", function() {
