@@ -40,15 +40,70 @@ describe("test InteractionMachine", function() {
             },
             states.StateError);
     });
-    it("should throw an error on switching to unknown states", function () {
+    it("should log an error and switch to the start state on unknown states", function () {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "next", "Foo"));
+        sim.im.user = {};
+        sim.im.config = {};
+        sim.im.switch_state("unknown");
+        assert.equal(sim.im.current_state.name, "start");
+        assert.deepEqual(sim.im.api.logs, [
+            "Unknown state 'unknown'. Switching to start state, 'start'."
+        ]);
+    });
+    it("should throw an error on switching to unknown start state", function () {
         var sim = new SingleStateIm();
         sim.im.user = {};
         sim.im.config = {};
         assert.throws(
             function () {
-                sim.im.switch_state("unknown");
+                sim.im.switch_state("start");
             },
             states.StateError);
+    });
+    it("should retrieve users from 'users.<from_addr>'" +
+       " if config.user_store isn't set", function(done) {
+        var sim = new SingleStateIm();
+        sim.im.config = {};
+        sim.im.api.kv_store["users.+27123"] = {foo: 1};
+        assert.equal(sim.im.user_key("+27123"), "users.+27123");
+        var p = sim.im.load_user("+27123");
+        p.add_callback(function () {
+            assert.deepEqual(sim.im.user, {foo: 1});
+        });
+        p.add_callback(done);
+    });
+    it("should retrieve users from 'users.<store>.<from_addr>'" +
+       " if config.user_store is set", function(done) {
+        var sim = new SingleStateIm();
+        sim.im.config = {user_store: "app1"};
+        sim.im.api.kv_store["users.app1.+27123"] = {foo: 2};
+        assert.equal(sim.im.user_key("+27123"), "users.app1.+27123");
+        var p = sim.im.load_user("+27123");
+        p.add_callback(function () {
+            assert.deepEqual(sim.im.user, {foo: 2});
+        });
+        p.add_callback(done);
+    });
+    it("should save users to 'users.<from_addr>'" +
+       " if config.user_store isn't set", function(done) {
+        var sim = new SingleStateIm();
+        sim.im.config = {};
+        var p = sim.im.store_user("+27123", {foo: 3});
+        p.add_callback(function () {
+            assert.deepEqual(sim.im.api.kv_store["users.+27123"], {foo: 3});
+        });
+        p.add_callback(done);
+    });
+    it("should save users to 'users.<store>.<from_addr>'" +
+       " if config.user_store is set", function(done) {
+        var sim = new SingleStateIm();
+        sim.im.config = {user_store: "app1"};
+        var p = sim.im.store_user("+27123", {foo: 4});
+        p.add_callback(function () {
+            assert.deepEqual(sim.im.api.kv_store["users.app1.+27123"], {foo: 4});
+        });
+        p.add_callback(done);
     });
     it('should generate an event after a config_read event', function() {
         var states = new state_machine.StateCreator("start");
