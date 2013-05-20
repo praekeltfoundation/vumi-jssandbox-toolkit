@@ -72,6 +72,7 @@ describe("DummyApi contacts resource", function () {
         var reply = capture_reply(
             "contacts.get_or_create", {delivery_class: "sms", addr: "+12345"});
         assert.equal(reply.success, true);
+        assert.equal(reply.created, false);
         assert.equal(reply.contact.msisdn, "+12345");
         assert.equal(reply.contact.name, "Bob");
         assert.equal(reply.contact.surname, null);
@@ -81,6 +82,7 @@ describe("DummyApi contacts resource", function () {
         var reply = capture_reply(
             "contacts.get_or_create", {delivery_class: "sms", addr: "+12345"});
         assert.equal(reply.success, true);
+        assert.equal(reply.created, true);
         assert.equal(reply.contact.msisdn, "+12345");
         assert.equal(reply.contact.name, null);
         assert.equal(reply.contact.surname, null);
