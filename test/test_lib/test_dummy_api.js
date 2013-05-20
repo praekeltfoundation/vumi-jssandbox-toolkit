@@ -31,24 +31,39 @@ describe("DummyApi (async)", function () {
 
 describe("DummyApi contacts resource", function () {
     var api;
-    var reply;
 
     beforeEach(function () {
         api = new DummyApi();
     });
 
-    var capture_reply = function(reply_cmd) {
-        reply = reply_cmd;
+    var capture_reply = function(cmd_name, cmd) {
+        var reply;
+        api.request(
+            cmd_name, cmd,
+            function (reply_cmd) {
+                reply = reply_cmd;
+            });
+        return reply;
+    };
+
+    var assert_fails = function(cmd_name, cmd, reason) {
+        var reply = capture_reply(cmd_name, cmd);
+        assert.equal(reply.success, false);
+        assert.equal(reply.reason, reason);
     };
 
     it("should implement contacts.get", function() {
         api.add_contact({msisdn: "+12345", name: "Bob"});
-        api.request("contacts.get",
-                    {delivery_class: "sms", addr: "+12345"},
-                    capture_reply);
+        var reply = capture_reply(
+            "contacts.get", {delivery_class: "sms", addr: "+12345"});
         assert.equal(reply.success, true);
         assert.equal(reply.contact.msisdn, "+12345");
         assert.equal(reply.contact.name, "Bob");
         assert.equal(reply.contact.surname, null);
+    });
+
+    it("contacts.get should fail to find non-existant contacts", function() {
+        assert_fails("contacts.get", {delivery_class: "sms", addr: "+12345"},
+                     "Contact not found");
     });
 });
