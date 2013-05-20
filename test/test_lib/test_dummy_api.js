@@ -86,5 +86,29 @@ describe("DummyApi contacts resource", function () {
         assert.equal(reply.contact.msisdn, "+12345");
         assert.equal(reply.contact.name, null);
         assert.equal(reply.contact.surname, null);
+        assert.equal(api.contact_store[reply.contact.key].msisdn, "+12345");
+    });
+
+    it("contacts.update should update existing contacts", function() {
+        var contact = api.add_contact({msisdn: "+12345", name: "Bob"});
+        var reply = capture_reply(
+            "contacts.update", {
+                key: contact.key,
+                fields: {
+                    name: "Bob",
+                    surname: "Smith"
+                }
+            });
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.msisdn, "+12345");
+        assert.equal(reply.contact.name, "Bob");
+        assert.equal(reply.contact.surname, "Smith");
+        assert.equal(contact.name, "Bob");
+        assert.equal(contact.surname, "Smith");
+    });
+
+    it("contacts.update should fail to update non-existant contacts", function() {
+        assert_fails("contacts.update", {key: "unknown", fields: {}},
+                     "Contact not found");
     });
 });
