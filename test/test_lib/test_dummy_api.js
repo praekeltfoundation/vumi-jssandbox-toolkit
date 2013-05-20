@@ -157,4 +157,23 @@ describe("DummyApi contacts resource", function () {
         assert_fails("contacts.update_subscriptions", {key: "unknown", fields: {}},
                      "Contact not found");
     });
+
+    it("contacts.new should create new contacts", function() {
+        var reply = capture_reply(
+            "contacts.new", {
+                contact: {
+                    name: "Bob",
+                    surname: "Smith",
+                    msisdn: "+12345"
+                }
+            });
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.name, "Bob");
+        assert.equal(reply.contact.surname, "Smith");
+        assert.equal(reply.contact.msisdn, "+12345");
+        var contact = api.find_contact("sms", "+12345");
+        assert.equal(contact.name, "Bob");
+        assert.equal(contact.surname, "Smith");
+        assert.equal(contact.msisdn, "+12345");
+    });
 });
