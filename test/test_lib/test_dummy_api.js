@@ -28,3 +28,27 @@ describe("DummyApi (async)", function () {
         .then(done, done);
     });
 });
+
+describe("DummyApi contacts resource", function () {
+    var api;
+    var reply;
+
+    beforeEach(function () {
+        api = new DummyApi();
+    });
+
+    var capture_reply = function(reply_cmd) {
+        reply = reply_cmd;
+    };
+
+    it("should implement contacts.get", function() {
+        api.add_contact({msisdn: "+12345", name: "Bob"});
+        api.request("contacts.get",
+                    {delivery_class: "sms", addr: "+12345"},
+                    capture_reply);
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.msisdn, "+12345");
+        assert.equal(reply.contact.name, "Bob");
+        assert.equal(reply.contact.surname, null);
+    });
+});
