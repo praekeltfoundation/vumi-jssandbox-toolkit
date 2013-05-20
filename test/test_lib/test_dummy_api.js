@@ -111,4 +111,50 @@ describe("DummyApi contacts resource", function () {
         assert_fails("contacts.update", {key: "unknown", fields: {}},
                      "Contact not found");
     });
+
+    it("contacts.update_extras should update existing contacts", function() {
+        var contact = api.add_contact({msisdn: "+12345", name: "Bob"});
+        var reply = capture_reply(
+            "contacts.update_extras", {
+                key: contact.key,
+                fields: {
+                    foo: "Foo",
+                    bar: "Bar",
+                }
+            });
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.msisdn, "+12345");
+        assert.equal(reply.contact['extras-foo'], "Foo");
+        assert.equal(reply.contact['extras-bar'], "Bar");
+        assert.equal(contact['extras-foo'], "Foo");
+        assert.equal(contact['extras-bar'], "Bar");
+    });
+
+    it("contacts.update_extras should fail to update non-existant contacts", function() {
+        assert_fails("contacts.update_extras", {key: "unknown", fields: {}},
+                     "Contact not found");
+    });
+
+    it("contacts.update_subscriptions should update existing contacts", function() {
+        var contact = api.add_contact({msisdn: "+12345", name: "Bob"});
+        var reply = capture_reply(
+            "contacts.update_subscriptions", {
+                key: contact.key,
+                fields: {
+                    foo: "Foo",
+                    bar: "Bar",
+                }
+            });
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.msisdn, "+12345");
+        assert.equal(reply.contact['subscription-foo'], "Foo");
+        assert.equal(reply.contact['subscription-bar'], "Bar");
+        assert.equal(contact['subscription-foo'], "Foo");
+        assert.equal(contact['subscription-bar'], "Bar");
+    });
+
+    it("contacts.update_subscriptions should fail to update non-existant contacts", function() {
+        assert_fails("contacts.update_subscriptions", {key: "unknown", fields: {}},
+                     "Contact not found");
+    });
 });
