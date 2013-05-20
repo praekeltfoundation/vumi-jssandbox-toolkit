@@ -52,7 +52,7 @@ describe("DummyApi contacts resource", function () {
         assert.equal(reply.reason, reason);
     };
 
-    it("should implement contacts.get", function() {
+    it("contacts.get should retrieve existing contacts", function() {
         api.add_contact({msisdn: "+12345", name: "Bob"});
         var reply = capture_reply(
             "contacts.get", {delivery_class: "sms", addr: "+12345"});
@@ -65,5 +65,24 @@ describe("DummyApi contacts resource", function () {
     it("contacts.get should fail to find non-existant contacts", function() {
         assert_fails("contacts.get", {delivery_class: "sms", addr: "+12345"},
                      "Contact not found");
+    });
+
+    it("contacts.get_or_create should retrieve existing contacts", function() {
+        api.add_contact({msisdn: "+12345", name: "Bob"});
+        var reply = capture_reply(
+            "contacts.get_or_create", {delivery_class: "sms", addr: "+12345"});
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.msisdn, "+12345");
+        assert.equal(reply.contact.name, "Bob");
+        assert.equal(reply.contact.surname, null);
+    });
+
+    it("contacts.get_or_create should create new contacts", function() {
+        var reply = capture_reply(
+            "contacts.get_or_create", {delivery_class: "sms", addr: "+12345"});
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.msisdn, "+12345");
+        assert.equal(reply.contact.name, null);
+        assert.equal(reply.contact.surname, null);
     });
 });
