@@ -166,6 +166,48 @@ describe("test InteractionMachine", function() {
         var config = store.event.data.config;
         assert.equal(config.sample, 'config');
     });
+    it('should handle FreeText.display that returns text', function(done) {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "start", "Foo"));
+        sim.api.done = function () {
+            var reply = sim.api.request_calls[0];
+            assert.equal(reply.content, "Foo");
+            done();
+        };
+        sim.im.on_inbound_message({
+            cmd: "inbound-message",
+            msg: {
+                from_addr: "from_addr",
+                content: "content",
+                message_id: "message_id",
+                session_event: "continue"
+            }
+        });
+    });
+    it('should handle Booklet.display that returns a promise', function(done) {
+        var sim = new SingleStateIm(
+            new states.BookletState("start", {
+                next: "start",
+                page_text: function (n) { return "Page " + n + "."; },
+                pages: 3,
+                footer_text: ""
+            })
+        );
+        sim.api.done = function () {
+            var reply = sim.api.request_calls[0];
+            assert.equal(reply.content, "Page 0.");
+            done();
+        };
+        sim.im.on_inbound_message({
+            cmd: "inbound-message",
+            msg: {
+                from_addr: "from_addr",
+                content: "content",
+                message_id: "message_id",
+                session_event: "continue"
+            }
+        });
+    });
 });
 
 describe("test State", function() {
