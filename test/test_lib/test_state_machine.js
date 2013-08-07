@@ -40,6 +40,13 @@ describe("test InteractionMachine", function() {
             },
             states.StateError);
     });
+    it("should return a promise when log is called", function() {
+        var sim = new SingleStateIm();
+        var p = sim.im.log('foo');
+        assert.ok(p.is_promise);
+        assert.ok(p.result.success);
+        assert.equal(p.result.cmd, "log.info");
+    });
     it("should log an error and switch to the start state on unknown states", function () {
         var sim = new SingleStateIm(
             new states.FreeText("start", "next", "Foo"));
