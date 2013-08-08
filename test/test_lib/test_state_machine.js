@@ -40,6 +40,13 @@ describe("test InteractionMachine", function() {
             },
             states.StateError);
     });
+    it("should return a promise when log is called", function() {
+        var sim = new SingleStateIm();
+        var p = sim.im.log('foo');
+        assert.ok(p.is_promise);
+        assert.ok(p.result.success);
+        assert.equal(p.result.cmd, "log.info");
+    });
     it("should log an error and switch to the start state on unknown states", function () {
         var sim = new SingleStateIm(
             new states.FreeText("start", "next", "Foo"));
@@ -51,15 +58,18 @@ describe("test InteractionMachine", function() {
             "Unknown state 'unknown'. Switching to start state, 'start'."
         ]);
     });
-    it("should throw an error on switching to unknown start state", function () {
+    it("should fall back to an error state if the start state is unknown", function () {
         var sim = new SingleStateIm();
         sim.im.user = {};
         sim.im.config = {};
-        assert.throws(
-            function () {
-                sim.im.switch_state("start");
-            },
-            states.StateError);
+
+        sim.im.switch_state("start");
+
+        assert.equal(sim.im.current_state.name, "__error__");
+        assert.deepEqual(
+          sim.im.api.logs,
+          ["Unknown state 'start'. Switching to start state, 'start'.",
+           "Unknown start state 'start'. Switching to error state."]);
     });
     it("should retrieve users from 'users.<from_addr>'" +
        " if config.user_store isn't set", function(done) {
