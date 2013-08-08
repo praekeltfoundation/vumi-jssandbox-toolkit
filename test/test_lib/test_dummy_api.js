@@ -29,6 +29,17 @@ describe("DummyApi (async)", function () {
     });
 });
 
+var capture_api_reply = function(api, cmd_name, cmd) {
+    var reply;
+    api.request(
+        cmd_name, cmd,
+        function (reply_cmd) {
+            reply = reply_cmd;
+        });
+    return reply;
+};
+
+
 describe("DummyApi contacts resource", function () {
     var api;
 
@@ -37,13 +48,7 @@ describe("DummyApi contacts resource", function () {
     });
 
     var capture_reply = function(cmd_name, cmd) {
-        var reply;
-        api.request(
-            cmd_name, cmd,
-            function (reply_cmd) {
-                reply = reply_cmd;
-            });
-        return reply;
+        return capture_api_reply(api, cmd_name, cmd);
     };
 
     var assert_fails = function(cmd_name, cmd, reason) {
@@ -201,5 +206,28 @@ describe("DummyApi contacts resource", function () {
     it("contacts.save should fail for non-existant contacts", function () {
         assert_fails("contacts.save", {contact: {key: "unknown"}},
                      "Contact not found");
+    });
+});
+
+describe("DummyApi logging resource", function () {
+    var api;
+
+    beforeEach(function () {
+        api = new DummyApi();
+    });
+
+    var capture_reply = function(cmd_name, cmd) {
+        return capture_api_reply(api, cmd_name, cmd);
+    };
+
+    it('should log calls on the known levels', function() {
+        var levels = ['info', 'debug', 'warning', 'error', 'critical'];
+        levels.forEach(function(level) {
+            var cmd = 'log.' + level;
+            var reply = capture_reply(cmd, {msg: level});
+            assert.equal(reply.success, true)
+            assert.equal(reply.cmd, cmd)
+            assert.equal(api.logs.pop(), level);
+        });
     });
 });
