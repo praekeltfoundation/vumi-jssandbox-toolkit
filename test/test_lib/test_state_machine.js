@@ -218,6 +218,27 @@ describe("test InteractionMachine", function() {
             }
         });
     });
+    it("should allow the current inbound message to be retrieved", function() {
+        var sim = new SingleStateIm(
+            new states.FreeText("start", "start", "Foo"));
+
+        assert.equal(sim.im.get_msg(), null);
+        sim.im.on_inbound_message({
+            cmd: "inbound-message",
+            msg: {
+                from_addr: "from_addr",
+                content: "content",
+                message_id: "message_id",
+                session_event: "continue"
+            }
+        });
+        assert.deepEqual(sim.im.get_msg(), {
+            from_addr: "from_addr",
+            content: "content",
+            message_id: "message_id",
+            session_event: "continue"
+        });
+    });
 });
 
 describe("test State", function() {
