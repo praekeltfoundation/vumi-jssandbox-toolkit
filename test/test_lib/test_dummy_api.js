@@ -264,7 +264,6 @@ describe('DummyApi Groups resource', function() {
         var reply = capture_reply(
             "groups.count_members", {key: 'group-1'});
         assert.equal(reply.success, true);
-        // currently hard coded
         assert.equal(reply.count, 2);
     });
 
