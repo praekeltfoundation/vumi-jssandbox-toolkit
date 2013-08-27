@@ -260,7 +260,7 @@ describe('DummyApi Groups resource', function() {
 
     it('should provide groups.count_members for smart groups', function() {
         api.add_group({key: 'group-1', query: 'foo'});
-        api.set_smart_group_query_contacts('foo', ['contact-1', 'contact-2']);
+        api.set_smart_group_query_results('foo', ['contact-1', 'contact-2']);
         var reply = capture_reply(
             "groups.count_members", {key: 'group-1'});
         assert.equal(reply.success, true);
