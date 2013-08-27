@@ -260,11 +260,12 @@ describe('DummyApi Groups resource', function() {
 
     it('should provide groups.count_members for smart groups', function() {
         api.add_group({key: 'group-1', query: 'foo'});
+        api.set_smart_group_query_contacts('foo', ['contact-1', 'contact-2']);
         var reply = capture_reply(
             "groups.count_members", {key: 'group-1'});
         assert.equal(reply.success, true);
         // currently hard coded
-        assert.equal(reply.count, 42);
+        assert.equal(reply.count, 2);
     });
 
     it('should provide groups.get', function() {
@@ -290,7 +291,7 @@ describe('DummyApi Groups resource', function() {
         reply = capture_reply(
             'groups.get_by_name', {name: 'Foo Group'});
         assert.equal(reply.success, false);
-        assert.equal(reply.reason, 'More than one group returned');
+        assert.equal(reply.reason, 'Multiple groups found');
 
         reply = capture_reply(
             'groups.get_by_name', {name: 'Bar Group'});
