@@ -115,6 +115,24 @@ describe("test InteractionMachine", function() {
         });
         p.add_callback(done);
     });
+    it('should complain loudly when storing a user fails', function(done) {
+        var sim = new SingleStateIm();
+        sim.im.config = {};
+
+        var api = sim.im.api;
+
+        // monkey patch to return a fail response with a reason
+        api._handle_kv_set = function(cmd, reply) {
+            api._reply_fail(cmd, reply, "Too many keys");
+        };
+
+        try {
+            sim.im.store_user("+27123", {foo: 3});
+        } catch (err) {
+            assert.equal(err.message, 'Too many keys');
+            done();
+        }
+    });
     it('should generate an event after a config_read event', function() {
         var states = new state_machine.StateCreator("start");
         var store = {};
