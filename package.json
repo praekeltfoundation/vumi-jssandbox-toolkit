@@ -25,5 +25,8 @@
     "examples"
   ],
   "author": "Praekelt Foundation <dev@praekeltfoundation.org>",
-  "license": "BSD"
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/praekelt/vumi-jssandbox-toolkit/issues"
+  }
 }
