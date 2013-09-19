@@ -90,7 +90,7 @@ describe("test HttpApi", function() {
         im.check_request("http.get", "http://www.example.com/", {});
         p.add_callback(function (r) {
             assert.deepEqual(r, {
-                error: "<HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found>"
+                error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found"
             });
         });
         p.add_callback(done);
@@ -107,7 +107,7 @@ describe("test HttpApi", function() {
         im.check_request("http.get", "http://www.example.com/", {});
         p.add_callback(function (r) {
             assert.deepEqual(r, {
-                error: "<HttpApiError: HTTP API GET to http://www.example.com/ failed: Something broke.>"
+                error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: Something broke."
             });
         });
         p.add_callback(done);
