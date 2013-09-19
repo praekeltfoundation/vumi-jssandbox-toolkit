@@ -207,6 +207,12 @@ describe("DummyApi contacts resource", function () {
         assert_fails("contacts.save", {contact: {key: "unknown"}},
                      "Contact not found");
     });
+
+    it("api.find_contact should fail for unknown address types", function() {
+        assert.throws(
+            function () { api.find_contact("unknown", "+12334") },
+            /Unsupported delivery class \(got: unknown with address \+12334\)/);
+    });
 });
 
 describe("DummyApi logging resource", function () {
