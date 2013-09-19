@@ -37,4 +37,10 @@ describe("test Promise", function() {
 
         assert.deepEqual(r, [1, 2, 3]);
     });
+    it("should throw a PromiseError when fired multiple times", function() {
+        var p = new promise.Promise();
+        p.callback();
+        assert.throws(p.callback, /Promise already fired\./);
+        assert.throws(p.callback, /Promise already fired\./);
+    });
 });
