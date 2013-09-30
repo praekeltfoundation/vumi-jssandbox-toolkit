@@ -2,25 +2,9 @@ var assert = require("assert");
 var vumigo = require("../../../lib");
 
 
+var DummyIm = vumigo.test_utils.DummyIm;
 var BookletState = vumigo.states.BookletState;
 var success = vumigo.promise.success;
-
-
-function DummyIm() {
-    var self = this;
-    self.user = {};
-
-    self.current_state = null;
-    self.answer = null;
-
-    self.set_user_state = function(state_name) {
-        self.current_state = state_name;
-    }
-
-    self.set_user_anser = function(state_name, answer) {
-        self.answer = null;
-    }
-}
 
 
 describe("BookletState", function () {
@@ -58,7 +42,7 @@ describe("BookletState", function () {
     });
 
     it("should allow the current page to be set", function () {
-        var user = {}
+        var user = {};
         booklet.set_current_page(user, 0);
         assert.equal(user.pages.booklet, 0);
         booklet.set_current_page(user, 2);
