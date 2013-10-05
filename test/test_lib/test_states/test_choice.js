@@ -4,6 +4,7 @@ var vumigo = require("../../../lib");
 
 var DummyIm = vumigo.test_utils.DummyIm;
 var ChoiceState = vumigo.states.ChoiceState;
+var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
 var success = vumigo.promise.success;
 
@@ -84,5 +85,42 @@ describe("ChoiceState", function () {
                 done();
             });
         });
+    });
+});
+
+describe("PaginatedChoiceState", function () {
+    var im,
+        choices;
+
+    function make_state(options) {
+        var state = new PaginatedChoiceState(
+          "color-state",
+          function(choice, done) {
+              done({
+                  red: 'red-state',
+                  blue: 'blue-state',
+              }[choice.value]);
+          },
+          "What is your favourite colour?",
+          choices,
+          null,
+          null,
+          options || {});
+
+        state.setup_state(im);
+        return state;
+    }
+
+    beforeEach(function () {
+        im = new DummyIm();
+        choices = [
+            new Choice('red', 'Red'),
+            new Choice('blue', 'Blue')
+        ];
+    });
+
+    it("should return all the choices if the text is already too long", function() {
+        var state = make_state({characters_per_page: 4});
+        assert.deepEqual(state.shorten_choices("12345", choices), choices);
     });
 });
