@@ -4,6 +4,7 @@ var vumigo = require("../../../lib");
 
 var DummyIm = vumigo.test_utils.DummyIm;
 var ChoiceState = vumigo.states.ChoiceState;
+var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
 var success = vumigo.promise.success;
 
@@ -83,6 +84,69 @@ describe("ChoiceState", function () {
                 assert.equal(im.current_state, 'red-state');
                 done();
             });
+        });
+    });
+});
+
+describe("PaginatedChoiceState", function () {
+    var im,
+        choices;
+
+    function make_state(options) {
+        var state = new PaginatedChoiceState(
+          "color-state",
+          function(choice, done) {
+              done({
+                  long: 'long-state',
+                  short: 'short-state',
+              }[choice.value]);
+          },
+          "What is your favourite colour?",
+          choices,
+          null,
+          null,
+          options || {});
+
+        state.setup_state(im);
+        return state;
+    }
+
+    function check_choices(choices, new_choices, new_labels) {
+        assert.deepEqual(
+            choices.map(function(c) { return c.value; }),
+            new_choices.map(function(c) { return c.value; })
+        );
+        assert.deepEqual(
+            new_choices.map(function(c) { return c.label; }),
+            new_labels
+        );
+    }
+
+    beforeEach(function () {
+        im = new DummyIm();
+        choices = [
+            new Choice('long', 'Long item name'),
+            new Choice('short', 'Short')
+        ];
+    });
+
+    describe("shorten_choices", function() {
+        it("should shorten choices if needed", function() {
+            var state = make_state({characters_per_page: 25});
+            var new_choices = state.shorten_choices("Choices:", choices);
+            check_choices(choices, new_choices, ["L...", "Short"]);
+        });
+
+        it("should not shorten choices if not needed", function() {
+            var state = make_state({characters_per_page: 100});
+            var new_choices = state.shorten_choices("Choices:", choices);
+            check_choices(choices, new_choices, ["Long item name", "Short"]);
+        });
+
+        it("should return all the choices if the text is already too long", function() {
+            var state = make_state({characters_per_page: 4});
+            var new_choices = state.shorten_choices("12345", choices);
+            check_choices(choices, new_choices, ["Long item name", "Short"]);
         });
     });
 });
