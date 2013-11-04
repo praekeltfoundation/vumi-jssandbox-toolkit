@@ -236,6 +236,23 @@ describe("test InteractionMachine", function() {
             }
         });
     });
+    it('should handle states that return false for send_reply', function(done) {
+        var sim = new SingleStateIm(new states.FreeText("start", "next", "Foo"));
+        sim.state.send_reply = function () { return false; }
+        sim.api.done = function () {
+            assert.deepEqual(sim.api.request_calls, []);
+            done();
+        };
+        sim.im.on_inbound_message({
+            cmd: "inbound-message",
+            msg: {
+                from_addr: "from_addr",
+                content: "content",
+                message_id: "message_id",
+                session_event: "continue"
+            }
+        });
+    });
     it("should allow a copy of the current inbound message to be retrieved",
     function() {
         var sim = new SingleStateIm(
@@ -267,22 +284,9 @@ describe("test InteractionMachine", function() {
     });
 });
 
-describe("test State", function() {
-    // TODO:
-});
-
 describe("test StateError", function() {
     it("should be creatable", function() {
         var se = new states.StateError("msg");
         assert.equal(se.message, "msg");
     });
-});
-
-describe("test ChoiceState", function() {
-});
-
-describe("test FreeText", function() {
-});
-
-describe("test EndState", function() {
 });
