@@ -284,22 +284,9 @@ describe("test InteractionMachine", function() {
     });
 });
 
-describe("test State", function() {
-    // TODO:
-});
-
 describe("test StateError", function() {
     it("should be creatable", function() {
         var se = new states.StateError("msg");
         assert.equal(se.message, "msg");
     });
-});
-
-describe("test ChoiceState", function() {
-});
-
-describe("test FreeText", function() {
-});
-
-describe("test EndState", function() {
 });
