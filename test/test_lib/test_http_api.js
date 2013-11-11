@@ -168,7 +168,7 @@ describe("test HttpApi", function() {
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     });
-})
+});
 
 
 describe("test JsonApi", function() {
@@ -211,4 +211,4 @@ describe("test JsonApi", function() {
         assert.deepEqual(api.encode_request_data(val),
                          JSON.stringify(val));
     });
-})
+});
