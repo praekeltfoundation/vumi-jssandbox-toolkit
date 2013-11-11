@@ -12,10 +12,12 @@ function DummyIm() {
     self.log = sinon.spy();
     self.api = { request: sinon.stub() };
 
-    self.request_succeeds = function(body) {
+    self.request_succeeds = function(body, code) {
+        code = code || 200;
+
         self.api.request.callsArgWith(2, {
             success: true,
-            code: 200,
+            code: code,
             body: body,
             reason: null
         });
@@ -80,14 +82,12 @@ describe("test HttpApi", function() {
     it("should return an appropriate failure on 404", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
-        im.api.request.callsArgWith(2, {
-            success: true,
-            code: 404,
-            body: "404 Not Found",
-            reason: null
-        });
+
+        im.request_succeeds("404 Not Found", 404);
+
         var p = api.request("get", "http://www.example.com/");
         im.check_request("http.get", "http://www.example.com/", {});
+
         p.add_callback(function (r) {
             assert.deepEqual(r, {
                 error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found"
@@ -100,15 +100,9 @@ describe("test HttpApi", function() {
         var im = new DummyIm();
         var api = new HttpApi(im);
 
-        im.api.request.callsArgWith(2, {
-            success: true,
-            code: 201,
-            body: "201 Created",
-            reason: null
-        });
+        im.request_succeeds("201 Created", 201);
 
         var p = api.get("http://www.example.com/");
-
         im.check_request(
             'http.get',
             "http://www.example.com/",
