@@ -6,6 +6,15 @@ var http_api = require("../../lib/http_api.js");
 var HttpApi = http_api.HttpApi;
 var JsonApi = http_api.JsonApi;
 
+function ToyApi(im, url, opts) {
+    var self = this;
+    HttpApi.call(self, im, url, opts);
+
+    self.decode_response_body = function(body) {
+      throw Error("You shall not parse");
+    };
+}
+
 
 function DummyIm() {
     var self = this;
@@ -93,6 +102,35 @@ describe("test HttpApi", function() {
                 error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found"
             });
         });
+        p.add_callback(done);
+    });
+
+    it("should return an appropriate failure if the body cannot be parsed",
+    function(done) {
+        var im = new DummyIm();
+        var api = new ToyApi(im);
+
+        im.api.request.callsArgWith(2, {
+            success: true,
+            code: 200,
+            body: "foo",
+            reason: null
+        });
+
+        var p = api.request("get", "http://www.example.com/");
+        im.check_request("http.get", "http://www.example.com/", {});
+
+        p.add_callback(function (r) {
+            assert.deepEqual(r, {
+                error: [
+                    "HttpApiError: HTTP API GET to http://www.example.com/",
+                    "failed: Could not parse response",
+                    "(Error: You shall not parse)",
+                    "[response body: foo]"
+                ].join(" ")
+            });
+        });
+
         p.add_callback(done);
     });
 
