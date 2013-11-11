@@ -13,7 +13,9 @@ function DummyIm() {
     self.api = { request: sinon.stub() };
 
     self.request_succeeds = function(body, code) {
-        code = code || 200;
+        if (typeof code === "undefined") {
+            code = 200;
+        }
 
         self.api.request.callsArgWith(2, {
             success: true,
