@@ -96,6 +96,28 @@ describe("test HttpApi", function() {
         p.add_callback(done);
     });
 
+    it("should accept responses in the 200 range", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im);
+
+        im.api.request.callsArgWith(2, {
+            success: true,
+            code: 201,
+            body: "201 Created",
+            reason: null
+        });
+
+        var p = api.get("http://www.example.com/");
+
+        im.check_request(
+          'http.get',
+          "http://www.example.com/",
+           {headers: {}});
+
+        p.add_callback(function (r) { assert.equal(r, "201 Created"); });
+        p.add_callback(done);
+    });
+
     it("should return an appropriate failure on sandbox API failure", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
