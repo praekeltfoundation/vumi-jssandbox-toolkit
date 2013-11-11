@@ -154,16 +154,23 @@ describe("test HttpApi", function() {
     it("should return an appropriate failure on sandbox API failure", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
+
         im.api.request.callsArgWith(2, {
             success: false,
             reason: "Something broke."
         });
+
         var p = api.request("get", "http://www.example.com/");
         im.check_request("http.get", "http://www.example.com/", {});
+
         p.add_callback(function (r) {
-            assert.deepEqual(r, {
-                error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: Something broke."
-            });
+            var error_msg = [
+                "HTTP API GET to http://www.example.com/ failed:",
+                "Something broke."
+            ].join(" ");
+
+            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
+            assert(im.log.calledWith(error_msg));
         });
         p.add_callback(done);
     });
