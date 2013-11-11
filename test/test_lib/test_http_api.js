@@ -112,12 +112,7 @@ describe("test HttpApi", function() {
         var im = new DummyIm();
         var api = new ToyApi(im);
 
-        im.api.request.callsArgWith(2, {
-            success: true,
-            code: 200,
-            body: "foo",
-            reason: null
-        });
+        im.request_succeeds("foo", 200);
 
         var p = api.request("get", "http://www.example.com/");
         im.check_request("http.get", "http://www.example.com/", {});
