@@ -100,9 +100,14 @@ describe("test HttpApi", function() {
         im.check_request("http.get", "http://www.example.com/", {});
 
         p.add_callback(function (r) {
-            assert.deepEqual(r, {
-                error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found"
-            });
+            var error_msg = [
+                "HTTP API GET to http://www.example.com/ failed:",
+                "404 Not Found"
+            ].join(" ");
+
+
+            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
+            assert(im.log.calledWith(error_msg));
         });
         p.add_callback(done);
     });
@@ -111,21 +116,21 @@ describe("test HttpApi", function() {
     function(done) {
         var im = new DummyIm();
         var api = new ToyApi(im);
-
         im.request_succeeds("foo", 200);
 
         var p = api.request("get", "http://www.example.com/");
         im.check_request("http.get", "http://www.example.com/", {});
 
         p.add_callback(function (r) {
-            assert.deepEqual(r, {
-                error: [
-                    "HttpApiError: HTTP API GET to http://www.example.com/",
-                    "failed: Could not parse response",
-                    "(Error: You shall not parse)",
-                    "[response body: foo]"
-                ].join(" ")
-            });
+            var error_msg = [
+                "HTTP API GET to http://www.example.com/",
+                "failed: Could not parse response",
+                "(Error: You shall not parse)",
+                "[response body: foo]"
+            ].join(" ");
+
+            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
+            assert(im.log.calledWith(error_msg));
         });
         p.add_callback(done);
     });
