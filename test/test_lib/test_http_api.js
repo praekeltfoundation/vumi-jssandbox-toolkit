@@ -110,9 +110,9 @@ describe("test HttpApi", function() {
         var p = api.get("http://www.example.com/");
 
         im.check_request(
-          'http.get',
-          "http://www.example.com/",
-           {headers: {}});
+            'http.get',
+            "http://www.example.com/",
+            {headers: {}});
 
         p.add_callback(function (r) { assert.equal(r, "201 Created"); });
         p.add_callback(done);
