@@ -6,16 +6,29 @@ var http_api = require("../../lib/http_api.js");
 var HttpApi = http_api.HttpApi;
 var JsonApi = http_api.JsonApi;
 
+function ToyApi(im, url, opts) {
+    var self = this;
+    HttpApi.call(self, im, url, opts);
+
+    self.decode_response_body = function(body) {
+      throw Error("You shall not parse");
+    };
+}
+
 
 function DummyIm() {
     var self = this;
     self.log = sinon.spy();
     self.api = { request: sinon.stub() };
 
-    self.request_succeeds = function(body) {
+    self.request_succeeds = function(body, code) {
+        if (typeof code === "undefined") {
+            code = 200;
+        }
+
         self.api.request.callsArgWith(2, {
             success: true,
-            code: 200,
+            code: code,
             body: body,
             reason: null
         });
@@ -80,35 +93,84 @@ describe("test HttpApi", function() {
     it("should return an appropriate failure on 404", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
-        im.api.request.callsArgWith(2, {
-            success: true,
-            code: 404,
-            body: "404 Not Found",
-            reason: null
-        });
+
+        im.request_succeeds("404 Not Found", 404);
+
         var p = api.request("get", "http://www.example.com/");
         im.check_request("http.get", "http://www.example.com/", {});
+
         p.add_callback(function (r) {
-            assert.deepEqual(r, {
-                error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: 404 Not Found"
-            });
+            var error_msg = [
+                "HTTP API GET to http://www.example.com/ failed:",
+                "404 Not Found"
+            ].join(" ");
+
+
+            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
+            assert(im.log.calledWith(error_msg));
         });
+        p.add_callback(done);
+    });
+
+    it("should return an appropriate failure if the body cannot be parsed",
+    function(done) {
+        var im = new DummyIm();
+        var api = new ToyApi(im);
+        im.request_succeeds("foo", 200);
+
+        var p = api.request("get", "http://www.example.com/");
+        im.check_request("http.get", "http://www.example.com/", {});
+
+        p.add_callback(function (r) {
+            var error_msg = [
+                "HTTP API GET to http://www.example.com/",
+                "failed: Could not parse response",
+                "(Error: You shall not parse)",
+                "[response body: foo]"
+            ].join(" ");
+
+            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
+            assert(im.log.calledWith(error_msg));
+        });
+        p.add_callback(done);
+    });
+
+    it("should accept responses in the 200 range", function(done) {
+        var im = new DummyIm();
+        var api = new HttpApi(im);
+
+        im.request_succeeds("201 Created", 201);
+
+        var p = api.get("http://www.example.com/");
+        im.check_request(
+            'http.get',
+            "http://www.example.com/",
+            {headers: {}});
+
+        p.add_callback(function (r) { assert.equal(r, "201 Created"); });
         p.add_callback(done);
     });
 
     it("should return an appropriate failure on sandbox API failure", function(done) {
         var im = new DummyIm();
         var api = new HttpApi(im);
+
         im.api.request.callsArgWith(2, {
             success: false,
             reason: "Something broke."
         });
+
         var p = api.request("get", "http://www.example.com/");
         im.check_request("http.get", "http://www.example.com/", {});
+
         p.add_callback(function (r) {
-            assert.deepEqual(r, {
-                error: "HttpApiError: HTTP API GET to http://www.example.com/ failed: Something broke."
-            });
+            var error_msg = [
+                "HTTP API GET to http://www.example.com/ failed:",
+                "Something broke."
+            ].join(" ");
+
+            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
+            assert(im.log.calledWith(error_msg));
         });
         p.add_callback(done);
     });
@@ -152,7 +214,7 @@ describe("test HttpApi", function() {
         p.add_callback(function (r) { assert.equal(r, "foo"); });
         p.add_callback(done);
     });
-})
+});
 
 
 describe("test JsonApi", function() {
@@ -195,4 +257,4 @@ describe("test JsonApi", function() {
         assert.deepEqual(api.encode_request_data(val),
                          JSON.stringify(val));
     });
-})
+});
