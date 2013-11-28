@@ -47,4 +47,31 @@ describe("utils", function() {
                 .then(done, done);
         });
     });
+
+    describe("set_defaults", function() {
+        it("should set defaults on the object", function() {
+            var obj = {
+                a: 'foo',
+                c: null,
+                d: false,
+                e: undefined
+            };
+
+            assert.equal(obj, utils.set_defaults(obj, {
+                a: 'bar',
+                b: 'baz',
+                c: 'qux',
+                d: 'quux',
+                e: 'corge'
+            }));
+
+           assert.deepEqual(obj, {
+               a: 'foo',
+               b: 'baz',
+               c: null,
+               d: false,
+               e: undefined
+           });
+        });
+    });
 });
