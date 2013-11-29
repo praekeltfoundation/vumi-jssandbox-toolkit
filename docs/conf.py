@@ -44,6 +44,9 @@ source_suffix = '.rst'
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
 
+# The primary domain
+primary_domain = 'js'
+
 # The master toctree document.
 master_doc = 'index'
 
