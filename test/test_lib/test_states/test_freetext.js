@@ -13,7 +13,9 @@ describe("Freetext", function () {
     beforeEach(function () {
         im = new DummyIm();
 
-        state = new FreeText('state-1', 'state-2', 'Eggs?', {
+        state = new FreeText('state-1', {
+            next: 'state-2',
+            question: 'Eggs?',
             error: 'Sigh',
             check: function(content) {
                 return content == 'A lemon';
@@ -126,4 +128,3 @@ describe("Freetext", function () {
         });
     });
 });
-

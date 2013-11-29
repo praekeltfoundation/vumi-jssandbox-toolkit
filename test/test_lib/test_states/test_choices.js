@@ -7,26 +7,27 @@ var ChoiceState = vumigo.states.ChoiceState;
 var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
 var success = vumigo.promise.success;
+var utils = vumigo.utils;
 
 
 describe("ChoiceState", function () {
     var im;
 
     function make_state(opts) {
-        var state = new ChoiceState(
-          "color-state",
-          function(choice) {
-              return {
-                  red: 'red-state',
-                  blue: 'blue-state',
-              }[choice.value];
-          },
-          "What is your favourite colour?", [
-              new Choice('red', 'Red'),
-              new Choice('blue', 'Blue')
-          ],
-          opts);
+        opts = utils.set_defaults(opts || {}, {
+            question: "What is your favourite colour?",
+            choices: [
+                new Choice('red', 'Red'),
+                new Choice('blue', 'Blue')],
+            next: function(choice) {
+                return {
+                    red: 'red-state',
+                    blue: 'blue-state',
+                }[choice.value];
+            }
+        });
 
+        var state = new ChoiceState("color-state", opts);
         state.setup_state(im);
         return state;
     }
@@ -101,18 +102,20 @@ describe("PaginatedChoiceState", function () {
         choices;
 
     function make_state(opts) {
-        var state = new PaginatedChoiceState(
-          "color-state",
-          function(choice, done) {
-              return {
-                  long: 'long-state',
-                  short: 'short-state'
-              }[choice.value];
-          },
-          "What is your favourite colour?",
-          choices,
-          opts);
+        opts = utils.set_defaults(opts || {}, {
+            question: "What is your favourite colour?",
+            choices: [
+                new Choice('red', 'Red'),
+                new Choice('blue', 'Blue')],
+            next: function(choice) {
+                return {
+                    long: 'long-state',
+                    short: 'short-state'
+                }[choice.value];
+            }
+        });
 
+        var state = new PaginatedChoiceState("color-state", opts);
         state.setup_state(im);
         return state;
     }

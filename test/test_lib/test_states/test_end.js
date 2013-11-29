@@ -12,7 +12,10 @@ describe("EndState", function () {
 
     beforeEach(function () {
         im = new DummyIm();
-        state = new EndState('state-1', 'state-2', 'hello goodbye');
+        state = new EndState('state-1', {
+            next: 'state-2',
+            text: 'hello goodbye'
+        });
         state.setup_state(im);
     });
 
