@@ -9,8 +9,9 @@ Welcome to Vumi Javascript Sandbox Toolkit's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   state_machine.rst
 
 
 Indices and tables
