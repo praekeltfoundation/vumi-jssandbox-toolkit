@@ -29,6 +29,7 @@ import os
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinxcontrib.autojs',
     'sphinx.ext.todo',
 ]
 
