@@ -6,12 +6,15 @@
 Welcome to Vumi Javascript Sandbox Toolkit's documentation!
 ===========================================================
 
-Contents:
+This is the sandbox toolkit for making writing Javascript applications for
+Vumi Go's Javascript sandbox.
 
 .. toctree::
    :maxdepth: 1
 
    state_machine.rst
+
+See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
 
 Indices and tables
