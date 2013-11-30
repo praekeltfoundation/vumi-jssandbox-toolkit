@@ -13,6 +13,7 @@ Vumi Go's Javascript sandbox.
    :maxdepth: 1
 
    state_machine.rst
+   states.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
