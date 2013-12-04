@@ -14,6 +14,7 @@ Vumi Go's Javascript sandbox.
 
    state_machine.rst
    states.rst
+   http_api.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
