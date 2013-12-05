@@ -206,6 +206,14 @@ describe("DummyApi contacts resource", function () {
     it("contacts.save should fail for non-existant contacts", function () {
         assert_fails("contacts.save", {contact: {key: "unknown"}},
                      "Contact not found");
+    })
+
+    it("contacts.search should retrieve existing contacts using exact matches", function() {
+        api.add_contact({msisdn: "+12345", name: "Bob"});
+        var reply = capture_reply(
+            "contacts.search", {msisdn: "+12345"});
+        assert.equal(reply.success, true);
+        assert.equal(reply.results, "+12345");
     });
 
     it("api.find_contact should fail for unknown address types", function() {
