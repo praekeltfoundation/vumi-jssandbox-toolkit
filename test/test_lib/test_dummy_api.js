@@ -214,6 +214,13 @@ describe("DummyApi contacts resource", function () {
             "contacts.search", {msisdn: "+12345"});
         assert.equal(reply.success, true);
         assert.equal(reply.contacts[0].msisdn, "+12345");
+
+        // should return no results
+        var reply = capture_reply(
+            "contacts.search", {msisdn: "+12345", name: 'Ted'});
+        assert.equal(reply.success, true);
+        assert.equal(reply.contacts.length, 0);
+
     });
 
     it("api.find_contact should fail for unknown address types", function() {
