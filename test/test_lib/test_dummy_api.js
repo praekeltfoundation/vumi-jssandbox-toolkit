@@ -208,18 +208,39 @@ describe("DummyApi contacts resource", function () {
                      "Contact not found");
     });
 
-    it("contacts.search should retrieve existing contacts using exact matches", function() {
-        api.add_contact({msisdn: "+12345", name: "Bob"});
-        var reply = capture_reply(
-            "contacts.search", {msisdn: "+12345"});
-        assert.equal(reply.success, true);
-        assert.equal(reply.contacts[0].msisdn, "+12345");
+    it("contacts.get_by_key should retrieve existing contact", function () {
+        api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
 
-        // should return no results
+        // should retrieve 1 result
         var reply = capture_reply(
-            "contacts.search", {msisdn: "+12345", name: 'Ted'});
+            "contacts.get_by_key", {key: "1"});
         assert.equal(reply.success, true);
-        assert.equal(reply.contacts.length, 0);
+        assert.equal(reply.contact.key, "1");
+
+        // should fail if contact does not exist
+        var reply = capture_reply(
+            "contacts.get_by_key", {key: "790"});
+        assert.equal(reply.success, false);
+    });
+
+    it("contacts.search should retrieve existing contact keys", function () {
+
+        api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
+        api.add_contact({key: "2", msisdn: "+12346", name: "Fred"});
+        api.set_contact_search_results('name:"Bob"', ['1']);
+
+        // should retrieve 1 result
+        var reply = capture_reply(
+            "contacts.search", {query: 'name:"Bob"'});
+        assert.equal(reply.success, true);
+        assert.equal(reply.keys.length, 1);
+        assert.equal(reply.keys[0], 1);
+
+        // should return 0 results
+        var reply = capture_reply(
+            "contacts.search", {query: 'name:"Anton"'});
+        assert.equal(reply.success, true);
+        assert.equal(reply.keys.length, 0);
 
     });
 
