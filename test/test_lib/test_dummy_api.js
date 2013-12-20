@@ -226,8 +226,6 @@ describe("DummyApi contacts resource", function () {
         assert.equal(reply.success, false);
     });
 
-
-
     it("contacts.search should retrieve existing contact keys", function () {
 
         api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
@@ -239,7 +237,6 @@ describe("DummyApi contacts resource", function () {
         assert.equal(reply.success, true);
         assert.equal(reply.keys.length, 1);
         assert.equal(reply.keys[0], 1);
-
     });
 
     it("contacts.search should retrieve 0 results for a query which matches " +
@@ -251,7 +248,6 @@ describe("DummyApi contacts resource", function () {
             "contacts.search", {query: 'name:"Anton"'});
         assert.equal(reply.success, true);
         assert.equal(reply.keys.length, 0);
-
     });
 
     it("api.find_contact should fail for unknown address types", function() {
