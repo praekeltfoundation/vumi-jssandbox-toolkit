@@ -12,4 +12,3 @@ States are the building blocks of sandbox applications.
 .. autojs:: ../lib/states/end.js
 
 .. autojs:: ../lib/states/freetext.js
-

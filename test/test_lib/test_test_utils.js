@@ -14,11 +14,17 @@ function TestStateCreator() {
     StateCreator.call(self, "intro");
 
     self.add_state(new FreeText(
-        "intro", "end_state",
-        "Type something:"
+        "intro",
+        {
+            next: "end_state",
+            question: "Type something:"
+        }
     ));
     self.add_state(new EndState(
-        "end_state", "Goodbye!"
+        "end_state",
+        {
+            question: "Goodbye!"
+        }
     ));
 }
 

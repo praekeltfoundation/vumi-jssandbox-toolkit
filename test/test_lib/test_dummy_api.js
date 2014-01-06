@@ -208,6 +208,48 @@ describe("DummyApi contacts resource", function () {
                      "Contact not found");
     });
 
+    it("contacts.get_by_key should retrieve existing contact", function () {
+        api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
+
+        // should retrieve 1 result
+        var reply = capture_reply(
+            "contacts.get_by_key", {key: "1"});
+        assert.equal(reply.success, true);
+        assert.equal(reply.contact.key, "1");
+    });
+
+    it("contacts.get_by_key should fail if contact does not exist",
+       function () {
+        // should fail if contact does not exist
+        var reply = capture_reply(
+            "contacts.get_by_key", {key: "790"});
+        assert.equal(reply.success, false);
+    });
+
+    it("contacts.search should retrieve existing contact keys", function () {
+
+        api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
+        api.set_contact_search_results('name:"Bob"', ['1']);
+
+        // should retrieve 1 result
+        var reply = capture_reply(
+            "contacts.search", {query: 'name:"Bob"'});
+        assert.equal(reply.success, true);
+        assert.equal(reply.keys.length, 1);
+        assert.equal(reply.keys[0], 1);
+    });
+
+    it("contacts.search should retrieve 0 results for a query which matches " +
+       "no contacts",
+       function () {
+
+        // should return 0 results
+        var reply = capture_reply(
+            "contacts.search", {query: 'name:"Anton"'});
+        assert.equal(reply.success, true);
+        assert.equal(reply.keys.length, 0);
+    });
+
     it("api.find_contact should fail for unknown address types", function() {
         assert.throws(
             function () { api.find_contact("unknown", "+12334") },
