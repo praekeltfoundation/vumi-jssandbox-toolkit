@@ -15,7 +15,7 @@ describe("State", function () {
 
     describe(".setup_state", function() {
         it("should link the interaction machine to the state", function() {
-            var state = State('luke-the-state'); 
+            var state = new State('luke-the-state'); 
 
             assert.strictEqual(state.im, null);
             state.setup_state(im);
