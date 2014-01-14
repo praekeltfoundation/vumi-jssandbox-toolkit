@@ -1,45 +1,123 @@
+var Q = require("q");
 var assert = require("assert");
+
 var state_machine = require("../../lib/state_machine");
 var states = require("../../lib/states");
 var dummy_api = require("../../lib/dummy_api");
 
-function SingleStateIm(state) {
-    this.state = state;
-    this.states = new state_machine.StateCreator(state ? state.name : "start");
-    this.api = new dummy_api.DummyApi();
-    this.im = new state_machine.InteractionMachine(this.api, this.states);
-    if (state) {
-        this.states.add_state(state);
+
+var FreeText = states.FreeText;
+var EndState = states.EndState;
+
+
+describe("InteractionMachine", function() {
+    var states;
+    var api;
+    var im;
+
+    function setup(start_state) {
+        api = new dummy_api.DummyApi();
+        states = new state_machine.StateCreator(start_state);
+        im = new state_machine.InteractionMachine(api, states);
+
+        return im
+            .setup_config()
+            .then(function() {
+                return im.new_user();
+            });
     }
-}
 
+    function on_im_event(event_type) {
+        var d = Q.defer();
+        var old = im.on_event;
 
-describe("test InteractionMachine", function() {
-    it("should be creatable", function() {
-        var sim = new SingleStateIm();
-        assert.ok(sim.im);
+        im.on_event = function(e) {
+            if (e.event == event_type) {
+                d.resolve(e);
+            }
+
+            return old.call(self, e);
+        };
+
+        return d.promise;
+    }
+
+    beforeEach(function(done) {
+        setup("start").nodeify(done);
     });
-    it("should implement switch_state", function() {
-        var sim = new SingleStateIm(
-            new states.FreeText("start", "next", "Foo"));
-        var done = 0;
-        sim.im.user = {};
-        sim.im.config = {};
-        var p = sim.im.switch_state("start");
-        p.add_callback(function () {done += 1;});
-        assert.equal(done, 1);
-        assert.equal(sim.im.current_state, sim.state);
+
+    describe("switch_state", function() {
+        var state1;
+        var state2;
+
+        beforeEach(function(done) {
+            setup("state1")
+                .then(function() {
+                    state1 = new FreeText({
+                        name: "state1",
+                        next: "end",
+                        question: "foo"
+                    });
+
+                    state2 = new EndState({
+                        name: "state2",
+                        text: "bar"
+                    });
+
+                    states.add_state(state1);
+                    states.add_state(state2);
+                })
+                .nodeify(done);
+        });
+
+        it("should switch to the given state", function(done) {
+            assert.strictEqual(im.get_current_state(), null);
+
+            im.switch_state("state1").then(function() {
+                assert.equal(im.get_current_state(), state1);
+            }).nodeify(done);
+        });
+
+        it("fire a state exit event before changing state", function(done) {
+            im.switch_state("state1").then(function() {
+                assert.strictEqual(im.get_current_state(), state1);
+
+                var p = on_im_event('state_exit').then(function(e) {
+                    assert.equal(im.get_current_state(), state1);
+                    assert.equal(e.data.state, state1);
+                });
+
+                im.switch_state("state2");
+                return p;
+            }).nodeify(done);
+        });
+
+        it("fire a state enter event after changing state", function(done) {
+            im.switch_state("state1").then(function() {
+                assert.strictEqual(im.get_current_state(), state1);
+
+                var p = on_im_event('state_enter').then(function(e) {
+                    assert.equal(im.get_current_state(), state2);
+                    assert.equal(e.data.state, state2);
+                });
+
+                im.switch_state("state2");
+                return p;
+            }).nodeify(done);
+        });
     });
+
     it("should throw an error on duplicate states", function() {
         var sim = new SingleStateIm(
-            new states.FreeText("start", "next", "Foo"));
+            new FreeText("start", "next", "Foo"));
         assert.throws(
             function () {
                 sim.states.add_state(
-                    new states.FreeText("start", "next", "Duplicate"));
+                    new FreeText("start", "next", "Duplicate"));
             },
             states.StateError);
     });
+
     it("should return a promise when log is called", function() {
         var sim = new SingleStateIm();
         var p = sim.im.log('foo');
@@ -47,9 +125,10 @@ describe("test InteractionMachine", function() {
         assert.ok(p.result.success);
         assert.equal(p.result.cmd, "log.info");
     });
+
     it("should log an error and switch to the start state on unknown states", function () {
         var sim = new SingleStateIm(
-            new states.FreeText("start", "next", "Foo"));
+            new FreeText("start", "next", "Foo"));
         sim.im.user = {};
         sim.im.config = {};
         sim.im.switch_state("unknown");
@@ -58,6 +137,7 @@ describe("test InteractionMachine", function() {
             "Unknown state 'unknown'. Switching to start state, 'start'."
         ]);
     });
+
     it("should fall back to an error state if the start state is unknown", function () {
         var sim = new SingleStateIm();
         sim.im.user = {};
@@ -71,6 +151,7 @@ describe("test InteractionMachine", function() {
           ["Unknown state 'start'. Switching to start state, 'start'.",
            "Unknown start state 'start'. Switching to error state."]);
     });
+
     it("should retrieve users from 'users.<from_addr>'" +
        " if config.user_store isn't set", function(done) {
         var sim = new SingleStateIm();
@@ -83,6 +164,7 @@ describe("test InteractionMachine", function() {
         });
         p.add_callback(done);
     });
+
     it("should retrieve users from 'users.<store>.<from_addr>'" +
        " if config.user_store is set", function(done) {
         var sim = new SingleStateIm();
@@ -95,6 +177,7 @@ describe("test InteractionMachine", function() {
         });
         p.add_callback(done);
     });
+
     it("should save users to 'users.<from_addr>'" +
        " if config.user_store isn't set", function(done) {
         var sim = new SingleStateIm();
@@ -105,6 +188,7 @@ describe("test InteractionMachine", function() {
         });
         p.add_callback(done);
     });
+
     it("should save users to 'users.<store>.<from_addr>'" +
        " if config.user_store is set", function(done) {
         var sim = new SingleStateIm();
@@ -115,6 +199,7 @@ describe("test InteractionMachine", function() {
         });
         p.add_callback(done);
     });
+
     it('should complain loudly when storing a user fails', function(done) {
         var sim = new SingleStateIm();
         sim.im.config = {};
@@ -133,6 +218,7 @@ describe("test InteractionMachine", function() {
             done();
         }
     });
+
     it('should generate an event after a config_read event', function() {
         var states = new state_machine.StateCreator("start");
         var store = {};
@@ -144,6 +230,7 @@ describe("test InteractionMachine", function() {
         assert.equal(store.event.event, 'config_read');
         assert.equal(store.event.config.foo, 'bar');
     });
+
     it('should generate an event after an inbound_event event', function() {
         var states = new state_machine.StateCreator("start");
         var store = {};
@@ -154,9 +241,10 @@ describe("test InteractionMachine", function() {
         states.on_event({event: 'inbound_event'});
         assert.equal(store.event.event, 'inbound_event');
     });
+
     it('should fire an inbound_event event on_inbound_event', function() {
         var sim = new SingleStateIm(
-            new states.FreeText("start", "start", "Foo"));
+            new FreeText("start", "start", "Foo"));
         var store = {};
         sim.states.on_inbound_event = function(event) {
             store.event = event;
@@ -170,9 +258,10 @@ describe("test InteractionMachine", function() {
         var event_data = store.event.data.event;
         assert.equal(event_data.session_event, 'new');
     });
+
     it('should fire a config_read event on_inbound_message', function() {
         var sim = new SingleStateIm(
-            new states.FreeText("start", "start", "Foo"));
+            new FreeText("start", "start", "Foo"));
         var store = {};
         sim.states.on_config_read = function(event) {
             store.event = event;
@@ -196,7 +285,7 @@ describe("test InteractionMachine", function() {
     });
     it('should handle FreeText.display that returns text', function(done) {
         var sim = new SingleStateIm(
-            new states.FreeText("start", "start", "Foo"));
+            new FreeText("start", "start", "Foo"));
         sim.api.done = function () {
             var reply = sim.api.request_calls[0];
             assert.equal(reply.content, "Foo");
@@ -237,8 +326,8 @@ describe("test InteractionMachine", function() {
         });
     });
     it('should handle states that return false for send_reply', function(done) {
-        var sim = new SingleStateIm(new states.FreeText("start", "next", "Foo"));
-        sim.state.send_reply = function () { return false; }
+        var sim = new SingleStateIm(new FreeText("start", "next", "Foo"));
+        sim.state.send_reply = function () { return false; };
         sim.api.done = function () {
             assert.deepEqual(sim.api.request_calls, []);
             done();
@@ -253,10 +342,11 @@ describe("test InteractionMachine", function() {
             }
         });
     });
+
     it("should allow a copy of the current inbound message to be retrieved",
     function() {
         var sim = new SingleStateIm(
-            new states.FreeText("start", "start", "Foo"));
+            new FreeText("start", "start", "Foo"));
 
         assert.equal(sim.im.get_msg(), null);
         sim.im.on_inbound_message({
@@ -284,7 +374,7 @@ describe("test InteractionMachine", function() {
     });
 });
 
-describe("test StateError", function() {
+describe("StateError", function() {
     it("should be creatable", function() {
         var se = new states.StateError("msg");
         assert.equal(se.message, "msg");
