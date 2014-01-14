@@ -18,7 +18,8 @@ describe("BookletState", function () {
 
     beforeEach(function () {
         im = new DummyIm();
-        booklet = new BookletState("booklet", {
+        booklet = new BookletState({
+            name: "booklet",
             next: "next_state",
             pages: 3,
             page_text: page_text

@@ -15,6 +15,7 @@ describe("ChoiceState", function () {
 
     function make_state(opts) {
         opts = utils.set_defaults(opts || {}, {
+            name: "color-state",
             question: "What is your favourite colour?",
             choices: [
                 new Choice('red', 'Red'),
@@ -27,7 +28,7 @@ describe("ChoiceState", function () {
             }
         });
 
-        var state = new ChoiceState("color-state", opts);
+        var state = new ChoiceState(opts);
         state.setup_state(im);
         return state;
     }
@@ -103,6 +104,7 @@ describe("PaginatedChoiceState", function () {
 
     function make_state(opts) {
         opts = utils.set_defaults(opts || {}, {
+            name: "color-state",
             question: "What is your favourite colour?",
             choices: [
                 new Choice('red', 'Red'),
@@ -115,7 +117,7 @@ describe("PaginatedChoiceState", function () {
             }
         });
 
-        var state = new PaginatedChoiceState("color-state", opts);
+        var state = new PaginatedChoiceState(opts);
         state.setup_state(im);
         return state;
     }

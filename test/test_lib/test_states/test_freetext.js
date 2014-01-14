@@ -13,7 +13,8 @@ describe("Freetext", function () {
     beforeEach(function () {
         im = new DummyIm();
 
-        state = new FreeText('state-1', {
+        state = new FreeText({
+            name: 'state-1',
             next: 'state-2',
             question: 'Eggs?',
             error: 'Sigh',

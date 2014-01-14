@@ -12,7 +12,8 @@ describe("EndState", function () {
 
     beforeEach(function () {
         im = new DummyIm();
-        state = new EndState('state-1', {
+        state = new EndState({
+            name: 'state-1',
             next: 'state-2',
             text: 'hello goodbye'
         });
