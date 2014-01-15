@@ -4,6 +4,7 @@ var vumigo = require("../../../lib");
 
 var EndState = vumigo.states.EndState;
 var DummyIm = vumigo.test_utils.DummyIm;
+var DummyI8n = vumigo.test_utils.DummyI8n;
 var SessionNewEvent = vumigo.state_machine.SessionNewEvent;
 
 
@@ -45,19 +46,9 @@ describe("EndState", function () {
     });
 
     describe(".translate", function() {
-        var i18n;
-
-        beforeEach(function() {
-            i18n = {
-                gettext: function(s) {
-                    return s.toUpperCase();
-                }
-            };
-        });
-
         it("should translate the state's text", function() {
             assert.equal(state.display(), 'hello goodbye');
-            state.translate(i18n);
+            state.translate(new DummyI8n());
             assert.equal(state.display(), 'HELLO GOODBYE');
         });
     });

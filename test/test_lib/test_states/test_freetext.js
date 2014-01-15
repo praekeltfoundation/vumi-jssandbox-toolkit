@@ -4,6 +4,7 @@ var vumigo = require("../../../lib");
 
 var FreeText = vumigo.states.FreeText;
 var DummyIm = vumigo.test_utils.DummyIm;
+var DummyI8n = vumigo.test_utils.DummyI8n;
 
 
 describe("Freetext", function () {
@@ -76,25 +77,15 @@ describe("Freetext", function () {
     });
 
     describe(".translate", function() {
-        var i18n;
-
-        beforeEach(function() {
-            i18n = {
-                gettext: function(s) {
-                    return s.toUpperCase();
-                }
-            };
-        });
-
         it("should translate the question", function() {
             assert.equal(state.question_text, 'Eggs?');
-            state.translate(i18n);
+            state.translate(new DummyI8n());
             assert.equal(state.question_text, 'EGGS?');
         });
 
         it("should translate the error text", function() {
             assert.equal(state.error_text, 'Sigh');
-            state.translate(i18n);
+            state.translate(new DummyI8n());
             assert.equal(state.error_text, 'SIGH');
         });
     });
