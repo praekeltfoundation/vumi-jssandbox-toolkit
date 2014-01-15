@@ -41,59 +41,44 @@ describe("ChoiceState", function () {
         it("should accept a number-based answers", function (done) {
             var state = make_state();
 
-            state
-                .input_event("1")
-                .then(function() {
-                    assert.equal(im.user.current_state, 'red-state');
-                })
-                .then(done, done);
-            });
+            state.emit.input("1").then(function() {
+                assert.equal(im.user.current_state, 'red-state');
+            }).nodeify(done);
         });
 
         it("should not accept label-based answers", function(done) {
             var state = make_state();
 
-            state
-                .input_event("Red")
-                .then(function() {
-                    assert.equal(im.user.current_state, null);
-                })
-                .then(done, done);
+            state.emit.input("Red").then(function() {
+                assert.equal(im.user.current_state, null);
+            }).nodeify(done);
         });
+    });
 
     describe("if the 'accept_labels' option is set", function() {
         it("should accept label-based answers", function(done) {
             var state = make_state({accept_labels: true});
 
-            state
-                .input_event("Red")
-                .then(function() {
-                    assert.equal(im.user.current_state, 'red-state');
-                })
-                .then(done, done);
+            state.emit.input("Red").then(function() {
+                assert.equal(im.user.current_state, 'red-state');
+            }).nodeify(done);
         });
 
         it("should be case insensitive with label-based answers",
         function(done) {
             var state = make_state({accept_labels: true});
 
-            state
-                .input_event("reD")
-                .then(function() {
-                    assert.equal(im.user.current_state, 'red-state');
-                })
-                .then(done, done);
+            state.emit.input("reD").then(function() {
+                assert.equal(im.user.current_state, 'red-state');
+            }).nodeify(done);
         });
 
         it("should accept number-based answers", function(done) {
             var state = make_state({accept_labels: true});
 
-            state
-                .input_event("1")
-                .then(function() {
-                    assert.equal(im.user.current_state, 'red-state');
-                })
-                .then(done, done);
+            state.emit.input("1").then(function() {
+                assert.equal(im.user.current_state, 'red-state');
+            }).done(done);
         });
     });
 });
@@ -154,7 +139,8 @@ describe("PaginatedChoiceState", function () {
             check_choices(choices, new_choices, ["Long item name", "Short"]);
         });
 
-        it("should return all the choices if the text is already too long", function() {
+        it("should return all the choices if the text is already too long",
+        function() {
             var state = make_state({characters_per_page: 4});
             var new_choices = state.shorten_choices("12345", choices);
             check_choices(choices, new_choices, ["Long item name", "Short"]);

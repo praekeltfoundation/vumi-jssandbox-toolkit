@@ -2,13 +2,14 @@ var assert = require("assert");
 var vumigo = require("../../../lib");
 
 
-var DummyIm = vumigo.test_utils.DummyIm;
 var FreeText = vumigo.states.FreeText;
+var DummyIm = vumigo.test_utils.DummyIm;
 
 
 describe("Freetext", function () {
     var im;
     var state;
+    var simulate;
 
     beforeEach(function () {
         im = new DummyIm();
@@ -22,33 +23,26 @@ describe("Freetext", function () {
                 return content == 'A lemon';
             }
         });
-
         state.setup_state(im);
     });
 
-    describe(".input_event", function() {
+    describe("on state:input", function() {
         describe("if the user response is valid", function() {
             it("should set the user's current state to the next state",
             function(done) {
                 assert.strictEqual(im.user.current_state, null);
 
-                state
-                    .input_event('A lemon')
-                    .then(function() {
-                        assert.equal(im.user.current_state, 'state-2');
-                    })
-                    .then(done, done);
+                state.emit.input('A lemon').then(function() {
+                    assert.equal(im.user.current_state, 'state-2');
+                }).nodeify(done);
             });
 
             it("should save the user's response", function(done) {
                 assert.strictEqual(im.user.answers['state-1'], undefined);
 
-                state
-                    .input_event('A lemon')
-                    .then(function() {
-                        assert.equal(im.user.answers['state-1'], 'A lemon');
-                    })
-                    .then(done, done);
+                state.emit.input('A lemon').then(function() {
+                    assert.equal(im.user.answers['state-1'], 'A lemon');
+                }).nodeify(done);
             });
         });
 
@@ -56,36 +50,27 @@ describe("Freetext", function () {
             it("should not set the user's state", function(done) {
                 assert.strictEqual(im.user.current_state, null);
 
-                state
-                    .input_event('Not a lemon')
-                    .then(function() {
-                        assert.equal(im.user.current_state, null);
-                    })
-                    .then(done, done);
+                state.emit.input('Not a lemon').then(function() {
+                    assert.equal(im.user.current_state, null);
+                }).nodeify(done);
             });
 
             it("should not save the user's state", function(done) {
                 assert.strictEqual(im.user.answers['state-1'], undefined);
 
-                state
-                    .input_event('Not a lemon')
-                    .then(function() {
-                        assert.strictEqual(
-                            im.user.answers['state-1'],
-                            undefined);
-                    })
-                    .then(done, done);
+                state.emit.input('Not a lemon').then(function() {
+                    assert.strictEqual(
+                        im.user.answers['state-1'],
+                        undefined);
+                }).nodeify(done);
             });
 
             it("should put the state in an error state", function(done) {
                 assert(!state.in_error);
 
-                state
-                    .input_event('Not a lemon')
-                    .then(function() {
-                        assert(state.in_error);
-                    })
-                    .then(done, done);
+                state.emit.input('Not a lemon').then(function() {
+                    assert(state.in_error);
+                }).nodeify(done);
             });
         });
     });

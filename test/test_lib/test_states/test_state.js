@@ -4,7 +4,16 @@ var vumigo = require("../../../lib");
 
 var DummyIm = vumigo.test_utils.DummyIm;
 var State = vumigo.states.State;
+var StateError = vumigo.states.StateError;
+var StateSetupEvent = vumigo.states.StateSetupEvent;
 
+
+describe("StateError", function() {
+    it("should be creatable", function() {
+        var se = new StateError("msg");
+        assert.equal(se.message, "msg");
+    });
+});
 
 describe("State", function () {
     var im;
@@ -22,7 +31,7 @@ describe("State", function () {
             assert.strictEqual(state.im, im);
         });
 
-        it("should invoke the associated handler", function(done) {
+        it("should emit a state:setup event", function(done) {
             var state = new State({
                 name: 'luke-the-state',
                 handlers: {
@@ -33,39 +42,12 @@ describe("State", function () {
                 }
             }); 
 
+            state.on('state:setup', function(e) {
+                assert.equal(e.state, state);
+                done();
+            });
+
             state.setup_state(im);
-        });
-    });
-
-    describe(".on_enter", function() {
-        it("should invoke the associated handler", function(done) {
-            var state = new State({
-                name: 'luke-the-state',
-                handlers: {
-                    on_enter: function() {
-                        assert.equal(this, state);
-                        done();
-                    }
-                }
-            }); 
-
-            state.on_enter();
-        });
-    });
-
-    describe(".on_exit", function() {
-        it("should invoke the associated handler", function(done) {
-            var state = new State({
-                name: 'luke-the-state',
-                handlers: {
-                    on_exit: function() {
-                        assert.equal(this, state);
-                        done();
-                    }
-                }
-            }); 
-
-            state.on_exit();
         });
     });
 

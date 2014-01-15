@@ -2,16 +2,19 @@ var assert = require("assert");
 var vumigo = require("../../../lib");
 
 
-var DummyIm = vumigo.test_utils.DummyIm;
 var EndState = vumigo.states.EndState;
+var DummyIm = vumigo.test_utils.DummyIm;
+var SessionNewEvent = vumigo.state_machine.SessionNewEvent;
 
 
 describe("EndState", function () {
     var im;
     var state;
+    var simulate;
 
     beforeEach(function () {
         im = new DummyIm();
+
         state = new EndState({
             name: 'state-1',
             next: 'state-2',
@@ -20,30 +23,24 @@ describe("EndState", function () {
         state.setup_state(im);
     });
 
-    describe(".input_event", function() {
+    describe("on state:input", function() {
         it("should set the user's current state to the next state",
         function(done) {
             assert.strictEqual(im.user.current_state, null);
 
-            state
-                .input_event('A lemon')
-                .then(function() {
-                    assert.equal(im.user.current_state, 'state-2');
-                })
-                .then(done, done);
+            state.emit.input('A lemon').then(function() {
+                assert.equal(im.user.current_state, 'state-2');
+            }).nodeify(done);
         });
     });
 
-    describe(".new_session_event", function() {
-        it("should fake an input event", function(done) {
+    describe(".on im session:new", function() {
+        it("should simulate an input event", function(done) {
             assert.strictEqual(im.user.current_state, null);
 
-            state
-                .new_session_event()
-                .then(function() {
-                    assert.equal(im.user.current_state, 'state-2');
-                })
-                .then(done, done);
+            im.emit(new SessionNewEvent(im)).then(function() {
+                assert.equal(im.user.current_state, 'state-2');
+            }).nodeify(done);
         });
     });
 
