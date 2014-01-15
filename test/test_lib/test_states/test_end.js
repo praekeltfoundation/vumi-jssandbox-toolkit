@@ -35,7 +35,7 @@ describe("EndState", function () {
         });
     });
 
-    describe(".on im session:new", function() {
+    describe("on im session:new", function() {
         it("should simulate an input event", function(done) {
             assert.strictEqual(im.user.current_state, null);
 
