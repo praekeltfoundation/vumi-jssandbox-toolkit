@@ -16,5 +16,8 @@ module.exports = {
         },
         "yes" : [null, "hai"],
         "no" : [null, "iie"]
+    }),
+    config: JSON.stringify({
+        metric_store_name: 'luke_the_store'
     })
 };

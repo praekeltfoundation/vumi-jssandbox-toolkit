@@ -1,22 +1,40 @@
 var assert = require("assert");
-var dummy_api = require("../../lib/dummy_api");
-var metrics = require("../../lib/metrics");
 
+var vumigo = require("../../lib");
+var test_utils = vumigo.test_utils;
+
+var dummy_api = require("../../lib/dummy_api");
 var DummyApi = dummy_api.DummyApi;
+
+var metrics = require("../../lib/metrics");
 var MetricStore = metrics.MetricStore;
 
 describe("MetricStore", function() {
-    var api;
-    var store;
+    var im;
+    var metrics;
 
-    beforeEach(function() {
-        api = new DummyApi();
-        store = new MetricStore(api, 'luke_the_store');
+    beforeEach(function(done) {
+        test_utils.make_im().then(function(new_im) {
+            im = new_im;
+            metrics = im.metrics;
+        }).nodeify(done);
+    });
+
+    describe(".setup", function() {
+        it("should emit a 'setup' event", function(done) {
+            metrics = new MetricStore(im);
+
+            metrics.on('setup', function() {
+                done();
+            });
+
+            metrics.setup();
+        });
     });
 
     describe(".fire", function() {
         it("should return the status of the fire call", function(done) {
-            store
+            metrics
                 .fire('yaddle-the-metric', 23,  'sum')
                 .then(function(success) {
                     assert(success);
@@ -25,14 +43,14 @@ describe("MetricStore", function() {
         });
 
         it("should record the metric", function(done) {
-            assert.deepEqual(api.metrics, {});
+            assert.deepEqual(im.api.metrics, {});
 
-            store.fire('yoda_the_metric', 23,  'sum');
-            store.fire('yoda_the_metric', 42,  'sum');
-            store.fire('yaddle_the_metric', 22,  'avg');
+            metrics.fire('yoda_the_metric', 23,  'sum');
+            metrics.fire('yoda_the_metric', 42,  'sum');
+            metrics.fire('yaddle_the_metric', 22,  'avg');
 
-            api.pending_calls_complete().then(function() {
-                assert.deepEqual(api.metrics, {
+            im.api.pending_calls_complete().then(function() {
+                assert.deepEqual(im.api.metrics, {
                     luke_the_store:{
                         yoda_the_metric: {
                             agg: 'sum',
@@ -50,7 +68,7 @@ describe("MetricStore", function() {
 
     describe(".fire_sum", function() {
         it("should return the status of the fire call", function(done) {
-            store
+            metrics
                 .fire_sum('yaddle-the-metric', 23)
                 .then(function(success) {
                     assert(success);
@@ -59,14 +77,14 @@ describe("MetricStore", function() {
         });
 
         it("should record the metric", function(done) {
-            assert.deepEqual(api.metrics, {});
+            assert.deepEqual(im.api.metrics, {});
 
-            store.fire_sum('yoda_the_metric', 23);
-            store.fire_sum('yoda_the_metric', 42);
-            store.fire_sum('yaddle_the_metric', 22);
+            metrics.fire_sum('yoda_the_metric', 23);
+            metrics.fire_sum('yoda_the_metric', 42);
+            metrics.fire_sum('yaddle_the_metric', 22);
 
-            api.pending_calls_complete().then(function() {
-                assert.deepEqual(api.metrics, {
+            im.api.pending_calls_complete().then(function() {
+                assert.deepEqual(im.api.metrics, {
                     luke_the_store:{
                         yoda_the_metric: {
                             agg: 'sum',
@@ -84,7 +102,7 @@ describe("MetricStore", function() {
 
     describe(".fire_avg", function() {
         it("should return the status of the fire call", function(done) {
-            store
+            metrics
                 .fire_avg('yaddle-the-metric', 23)
                 .then(function(success) {
                     assert(success);
@@ -93,14 +111,14 @@ describe("MetricStore", function() {
         });
 
         it("should record the metric", function(done) {
-            assert.deepEqual(api.metrics, {});
+            assert.deepEqual(im.api.metrics, {});
 
-            store.fire_avg('yoda_the_metric', 23);
-            store.fire_avg('yoda_the_metric', 42);
-            store.fire_avg('yaddle_the_metric', 22);
+            metrics.fire_avg('yoda_the_metric', 23);
+            metrics.fire_avg('yoda_the_metric', 42);
+            metrics.fire_avg('yaddle_the_metric', 22);
 
-            api.pending_calls_complete().then(function() {
-                assert.deepEqual(api.metrics, {
+            im.api.pending_calls_complete().then(function() {
+                assert.deepEqual(im.api.metrics, {
                     luke_the_store:{
                         yoda_the_metric: {
                             agg: 'avg',
@@ -118,7 +136,7 @@ describe("MetricStore", function() {
 
     describe(".fire_min", function() {
         it("should return the status of the fire call", function(done) {
-            store
+            metrics
                 .fire_min('yaddle-the-metric', 23)
                 .then(function(success) {
                     assert(success);
@@ -127,14 +145,14 @@ describe("MetricStore", function() {
         });
 
         it("should record the metric", function(done) {
-            assert.deepEqual(api.metrics, {});
+            assert.deepEqual(im.api.metrics, {});
 
-            store.fire_min('yoda_the_metric', 23);
-            store.fire_min('yoda_the_metric', 42);
-            store.fire_min('yaddle_the_metric', 22);
+            metrics.fire_min('yoda_the_metric', 23);
+            metrics.fire_min('yoda_the_metric', 42);
+            metrics.fire_min('yaddle_the_metric', 22);
 
-            api.pending_calls_complete().then(function() {
-                assert.deepEqual(api.metrics, {
+            im.api.pending_calls_complete().then(function() {
+                assert.deepEqual(im.api.metrics, {
                     luke_the_store:{
                         yoda_the_metric: {
                             agg: 'min',
@@ -152,7 +170,7 @@ describe("MetricStore", function() {
 
     describe(".fire_max", function() {
         it("should return the status of the fire call", function(done) {
-            store
+            metrics
                 .fire_max('yaddle-the-metric', 23)
                 .then(function(success) {
                     assert(success);
@@ -161,14 +179,14 @@ describe("MetricStore", function() {
         });
 
         it("should record the metric", function(done) {
-            assert.deepEqual(api.metrics, {});
+            assert.deepEqual(im.api.metrics, {});
 
-            store.fire_max('yoda_the_metric', 23);
-            store.fire_max('yoda_the_metric', 42);
-            store.fire_max('yaddle_the_metric', 22);
+            metrics.fire_max('yoda_the_metric', 23);
+            metrics.fire_max('yoda_the_metric', 42);
+            metrics.fire_max('yaddle_the_metric', 22);
 
-            api.pending_calls_complete().then(function() {
-                assert.deepEqual(api.metrics, {
+            im.api.pending_calls_complete().then(function() {
+                assert.deepEqual(im.api.metrics, {
                     luke_the_store:{
                         yoda_the_metric: {
                             agg: 'max',
@@ -186,7 +204,7 @@ describe("MetricStore", function() {
 
     describe(".fire_inc", function() {
         it("should return the status of the fire call", function(done) {
-            store
+            metrics
                 .fire_inc('yaddle-the-metric', 23)
                 .then(function(success) {
                     assert(success);
@@ -195,14 +213,14 @@ describe("MetricStore", function() {
         });
 
         it("should record the metric", function(done) {
-            assert.deepEqual(api.metrics, {});
+            assert.deepEqual(im.api.metrics, {});
 
-            store.fire_inc('yoda_the_metric');
-            store.fire_inc('yoda_the_metric');
-            store.fire_inc('yaddle_the_metric');
+            metrics.fire_inc('yoda_the_metric');
+            metrics.fire_inc('yoda_the_metric');
+            metrics.fire_inc('yaddle_the_metric');
 
-            api.pending_calls_complete().then(function() {
-                assert.deepEqual(api.metrics, {
+            im.api.pending_calls_complete().then(function() {
+                assert.deepEqual(im.api.metrics, {
                     luke_the_store:{
                         yoda_the_metric: {
                             agg: 'sum',
