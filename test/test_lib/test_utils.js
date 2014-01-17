@@ -41,8 +41,14 @@ describe("utils", function() {
                b: 'baz',
                c: null,
                d: false,
-               e: undefined
+               e: 'corge'
            });
+        });
+
+        it("should not set defaults that are undefined", function() {
+            var obj = {};
+            utils.set_defaults(obj, {foo: obj.foo});
+            assert.deepEqual(obj, {});
         });
     });
 });
