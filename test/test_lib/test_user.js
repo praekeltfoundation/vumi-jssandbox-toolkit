@@ -21,7 +21,10 @@ describe("User", function() {
             addr: '+27123456789',
             lang: 'af',
             answers: {start: 'yes'},
-            current_state_name: 'start'
+            state: {
+                name: 'start',
+                metadata: {foo: 'bar'}
+            }
         }));
     });
 
@@ -43,12 +46,16 @@ describe("User", function() {
             user.setup('+27123456789', {
                 lang: 'af',
                 answers: {start: 'yes'},
-                current_state_name: 'start'
+                state: {
+                    name: 'start',
+                    metadata: {foo: 'bar'}
+                }
             }).then(function() {
                 assert.equal(user.addr, '+27123456789');
                 assert.equal(user.lang, 'af');
                 assert.equal(user.get_answer('start'), 'yes');
-                assert.equal(user.current_state_name, 'start');
+                assert.equal(user.state.name, 'start');
+                assert.deepEqual(user.state.metadata, {foo: 'bar'});
                 assert.equal(user.i18n.gettext('yes'), 'ja');
             }).nodeify(done);
         });
@@ -79,7 +86,8 @@ describe("User", function() {
                     assert.equal(user.addr, '+27123456789');
                     assert.equal(user.lang, 'af');
                     assert.equal(user.get_answer('start'), 'yes');
-                    assert.equal(user.current_state_name, 'start');
+                    assert.equal(user.state.name, 'start');
+                    assert.deepEqual(user.state.metadata, {foo: 'bar'});
                     assert.equal(user.i18n.gettext('yes'), 'ja');
                 }).nodeify(done);
             });
@@ -110,7 +118,8 @@ describe("User", function() {
                     assert.equal(user.addr, '+27123456789');
                     assert.equal(user.lang, 'af');
                     assert.equal(user.get_answer('start'), 'yes');
-                    assert.equal(user.current_state_name, 'start');
+                    assert.equal(user.state.name, 'start');
+                    assert.deepEqual(user.state.metadata, {foo: 'bar'});
                     assert.equal(user.i18n.gettext('yes'), 'ja');
                 }).nodeify(done);
             });
@@ -175,5 +184,37 @@ describe("User", function() {
                 assert.equal(user.i18n.gettext('yes'), 'hai');
             }).nodeify(done);
         });
+    });
+
+    describe(".set_state", function() {
+        it("should record the name of the user's current state", function() {
+            assert.equal(user.state.name, 'start');
+            user.set_state('tea');
+            assert.equal(user.state.name, 'tea');
+        });
+
+        it("should reset the user's state metadata", function() {
+            assert.deepEqual(user.state.metadata, {foo: 'bar'});
+            user.set_state('tea', {baz: 'qux'});
+            assert.deepEqual(user.state.metadata, {baz: 'qux'});
+        });
+    });
+
+    describe(".update_state_metadata", function() {
+        it("should update the user's state metadata", function() {
+            assert.deepEqual(user.state.metadata, {foo: 'bar'});
+            user.update_state_metadata({baz: 'qux'});
+            assert.deepEqual(user.state.metadata, {
+                foo: 'bar',
+                baz: 'qux'
+            });
+        });
+
+        it("should overwrite already defined metadata properties", function() {
+            assert.deepEqual(user.state.metadata, {foo: 'bar'});
+            user.update_state_metadata({foo: 'qux'});
+            assert.deepEqual(user.state.metadata, {foo: 'qux'});
+        });
+
     });
 });

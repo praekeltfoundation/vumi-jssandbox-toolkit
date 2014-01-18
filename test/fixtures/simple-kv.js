@@ -3,6 +3,9 @@ module.exports = {
         addr: '+27123456789',
         lang: 'af',
         answers: {start: 'yes'},
-        current_state_name: 'start'
+        state: {
+            name: 'start',
+            metadata: {foo: 'bar'}
+        }
     }
 };
