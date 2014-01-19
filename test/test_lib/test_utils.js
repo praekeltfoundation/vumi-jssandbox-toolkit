@@ -4,18 +4,19 @@ var assert = require("assert");
 var utils = require("../../lib/utils");
 
 describe("utils", function() {
-    describe("call_possible_function", function() {
+    describe("maybe_call", function() {
         it("should handle functions", function() {
-          assert.equal(
-              utils.call_possible_function(
-                  function(b, c) { return this.a + b + c; },
-                  {a: 'foo'},
-                  ['bar', 'baz']),
-              'foobarbaz');
+            function f(b, c) {
+                return this.a + b + c;
+            }
+
+            assert.equal(
+                utils.maybe_call(f, {a: 'foo'}, ['bar', 'baz']),
+                'foobarbaz');
         });
 
         it("should handle non-functions", function() {
-            assert.equal(utils.call_possible_function('foo'), 'foo');
+            assert.equal(utils.maybe_call('foo'), 'foo');
         });
     });
 
