@@ -96,6 +96,27 @@ describe("utils", function() {
         });
     });
 
+    describe(".inherit", function() {
+        it("should set up the child's prototype chain", function() {
+            var Parent = function() {};
+            var Child = utils.inherit(Parent, function() {});
+
+            var c = new Child();
+            assert(c instanceof Parent);
+            assert(c instanceof Child);
+        });
+
+        it("should set the parent's static methods on the child",
+        function() {
+            var Parent = function() {};
+            Parent.foo = 'bar';
+
+            var Child = utils.inherit(Parent, function() {});
+            assert.equal(Child.extend, Parent.extend);
+            assert.equal(Child.foo, Parent.foo);
+        });
+    });
+
     describe("Extendable", function() {
         var Extendable = utils.Extendable;
 
