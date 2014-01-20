@@ -2,8 +2,6 @@ var Q = require("q");
 var assert = require("assert");
 
 var events = require("../../lib/events");
-
-
 var Event = events.Event;
 var Eventable = events.Eventable;
 
@@ -13,6 +11,13 @@ describe("Eventable", function() {
 
     beforeEach(function() {
         eventable = new Eventable();
+    });
+
+    it("should be extendable", function() {
+        var Thing = Eventable.extend(function() {});
+        var thing = new Thing();
+        assert(thing instanceof Eventable);
+        assert(thing instanceof Thing);
     });
 
     describe("emit", function() {
