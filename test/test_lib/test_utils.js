@@ -95,4 +95,36 @@ describe("utils", function() {
             });
         });
     });
+
+    describe("Extendable", function() {
+        var Extendable = utils.Extendable;
+
+        describe(".extend", function() {
+            it("should set up the child's prototype chain", function() {
+                var Parent = Extendable.extend(function() {});
+                var Child = Parent.extend(function() {});
+
+                var p = new Parent();
+                var c = new Child();
+
+                assert(p instanceof Extendable);
+                assert(p instanceof Parent);
+
+                assert(c instanceof Extendable);
+                assert(c instanceof Parent);
+                assert(c instanceof Child);
+            });
+
+            it("should set the parent's static methods on the child",
+            function() {
+                var Parent = Extendable.extend(function() {});
+                assert.equal(Parent.extend, Extendable.extend);
+                Parent.foo = 'bar';
+
+                var Child = Parent.extend(function() {});
+                assert.equal(Child.extend, Parent.extend);
+                assert.equal(Child.foo, Parent.foo);
+            });
+        });
+    });
 });
