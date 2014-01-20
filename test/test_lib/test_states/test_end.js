@@ -3,53 +3,53 @@ var vumigo = require("../../../lib");
 
 
 var EndState = vumigo.states.EndState;
-var DummyIm = vumigo.test_utils.DummyIm;
-var DummyI8n = vumigo.test_utils.DummyI8n;
-var SessionNewEvent = vumigo.state_machine.SessionNewEvent;
+var test_utils = vumigo.test_utils;
+var SessionNewEvent = vumigo.interaction_machine.SessionNewEvent;
 
 
 describe("EndState", function () {
     var im;
     var state;
-    var simulate;
 
-    beforeEach(function () {
-        im = new DummyIm();
+    beforeEach(function (done) {
+        test_utils.make_im().then(function(new_im) {
+            im = new_im;
 
-        state = new EndState({
-            name: 'state-1',
-            next: 'state-2',
-            text: 'hello goodbye'
-        });
-        state.setup_state(im);
+            state = new EndState('state-1', {
+                next: 'state-2',
+                text: 'goodbye'
+            });
+
+            return state.setup(im);
+        }).nodeify(done);
     });
 
     describe("on state:input", function() {
         it("should set the user's current state to the next state",
         function(done) {
-            assert.strictEqual(im.user.current_state, null);
+            assert.notEqual(im.user.state.name, 'state-2');
 
             state.emit.input('A lemon').then(function() {
-                assert.equal(im.user.current_state, 'state-2');
+                assert.equal(im.user.state.name, 'state-2');
             }).nodeify(done);
         });
     });
 
     describe("on im session:new", function() {
         it("should simulate an input event", function(done) {
-            assert.strictEqual(im.user.current_state, null);
+            assert.notEqual(im.user.state.name, 'state-2');
 
             im.emit(new SessionNewEvent(im)).then(function() {
-                assert.equal(im.user.current_state, 'state-2');
+                assert.equal(im.user.state.name, 'state-2');
             }).nodeify(done);
         });
     });
 
     describe(".translate", function() {
         it("should translate the state's text", function() {
-            assert.equal(state.display(), 'hello goodbye');
-            state.translate(new DummyI8n());
-            assert.equal(state.display(), 'HELLO GOODBYE');
+            assert.equal(state.display(), 'goodbye');
+            state.translate(im.user.i18n);
+            assert.equal(state.display(), 'totsiens');
         });
     });
 });

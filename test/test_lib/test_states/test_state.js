@@ -1,8 +1,7 @@
 var assert = require("assert");
+
 var vumigo = require("../../../lib");
-
-
-var DummyIm = vumigo.test_utils.DummyIm;
+var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 var StateError = vumigo.states.StateError;
 var StateSetupEvent = vumigo.states.StateSetupEvent;
@@ -17,48 +16,54 @@ describe("StateError", function() {
 
 describe("State", function () {
     var im;
+    var state;
 
-    beforeEach(function () {
-        im = new DummyIm();
+    beforeEach(function(done) {
+        test_utils.make_im().then(function(new_im) {
+            im = new_im;
+            state = new State('luke-the-state');
+            return state.setup(im);
+        }).nodeify(done);
     });
 
-    describe(".setup_state", function() {
+    describe(".setup", function() {
         it("should link the interaction machine to the state", function() {
-            var state = new State({name: 'luke-the-state'}); 
-
+            var state = new State('luke-the-state'); 
             assert.strictEqual(state.im, null);
-            state.setup_state(im);
+            state.setup(im);
             assert.strictEqual(state.im, im);
         });
 
-        it("should emit a state:setup event", function(done) {
-            var state = new State({
-                name: 'luke-the-state',
-                handlers: {
-                    setup_state: function() {
-                        assert.equal(this, state);
-                        done();
-                    }
-                }
-            }); 
+        it("should emit a 'setup' event", function(done) {
+            var state = new State('luke-the-state');
 
-            state.on('state:setup', function(e) {
-                assert.equal(e.state, state);
+            state.on('setup', function(e) {
+                assert.equal(e.instance, state);
                 done();
             });
 
-            state.setup_state(im);
+            state.setup(im);
         });
     });
 
     describe(".save_response", function() {
         it("should store the given user response", function() {
-            var state = new State({name: 'luke-the-state'}); 
-            state.setup_state(im);
-
-            assert.strictEqual(im.user.answers['luke-the-state'], undefined);
+            assert(typeof im.user.get_answer('luke-the-state') == 'undefined');
             state.save_response('foo');
-            assert.strictEqual(im.user.answers['luke-the-state'], 'foo');
+            assert.equal(im.user.get_answer('luke-the-state'), 'foo');
+        });
+    });
+
+    describe(".emit", function() {
+        describe(".input", function() {
+            it("should emit a 'state:input' event", function(done) {
+                state.on('state:input', function(e) {
+                    assert.equal(e.state, state);
+                    done();
+                });
+
+                state.emit.input();
+            });
         });
     });
 });

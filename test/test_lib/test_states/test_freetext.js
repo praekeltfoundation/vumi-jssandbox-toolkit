@@ -3,66 +3,66 @@ var vumigo = require("../../../lib");
 
 
 var FreeText = vumigo.states.FreeText;
-var DummyIm = vumigo.test_utils.DummyIm;
-var DummyI8n = vumigo.test_utils.DummyI8n;
+var test_utils = vumigo.test_utils;
 
 
 describe("Freetext", function () {
     var im;
     var state;
-    var simulate;
 
-    beforeEach(function () {
-        im = new DummyIm();
+    beforeEach(function(done) {
+        test_utils.make_im().then(function(new_im) {
+            im = new_im;
 
-        state = new FreeText({
-            name: 'state-1',
-            next: 'state-2',
-            question: 'Eggs?',
-            error: 'Sigh',
-            check: function(content) {
-                return content == 'A lemon';
-            }
-        });
-        state.setup_state(im);
+            state = new FreeText('state-1', {
+                next: 'state-2',
+                question: 'yes?',
+                error: 'no!',
+                check: function(content) {
+                    return content == 'A lemon';
+                }
+            });
+
+            return state.setup(im);
+        }).nodeify(done);
     });
 
     describe("on state:input", function() {
         describe("if the user response is valid", function() {
             it("should set the user's current state to the next state",
             function(done) {
-                assert.strictEqual(im.user.current_state, null);
+                assert.notEqual(im.user.state.name, 'state-2');
 
                 state.emit.input('A lemon').then(function() {
-                    assert.equal(im.user.current_state, 'state-2');
+                    assert.equal(im.user.state.name, 'state-2');
                 }).nodeify(done);
             });
 
             it("should save the user's response", function(done) {
-                assert.strictEqual(im.user.answers['state-1'], undefined);
+                assert(typeof im.user.get_answer('state-1') == 'undefined');
 
                 state.emit.input('A lemon').then(function() {
-                    assert.equal(im.user.answers['state-1'], 'A lemon');
+                    assert.equal(im.user.get_answer('state-1'), 'A lemon');
                 }).nodeify(done);
             });
         });
 
         describe("if the user response is invalid", function() {
             it("should not set the user's state", function(done) {
-                assert.strictEqual(im.user.current_state, null);
+                var old_state_name = im.user.state.name;
+                assert.notEqual(old_state_name, 'state-2');
 
                 state.emit.input('Not a lemon').then(function() {
-                    assert.equal(im.user.current_state, null);
+                    assert.equal(im.user.state.name, old_state_name);
                 }).nodeify(done);
             });
 
             it("should not save the user's state", function(done) {
-                assert.strictEqual(im.user.answers['state-1'], undefined);
+                assert(typeof im.user.get_answer('state-1') == 'undefined');
 
                 state.emit.input('Not a lemon').then(function() {
-                    assert.strictEqual(
-                        im.user.answers['state-1'],
-                        undefined);
+                    var answer = im.user.get_answer('state-1');
+                    assert(typeof answer == 'undefined');
                 }).nodeify(done);
             });
 
@@ -78,29 +78,29 @@ describe("Freetext", function () {
 
     describe(".translate", function() {
         it("should translate the question", function() {
-            assert.equal(state.question_text, 'Eggs?');
-            state.translate(new DummyI8n());
-            assert.equal(state.question_text, 'EGGS?');
+            assert.equal(state.question_text, 'yes?');
+            state.translate(im.user.i18n);
+            assert.equal(state.question_text, 'ja?');
         });
 
         it("should translate the error text", function() {
-            assert.equal(state.error_text, 'Sigh');
-            state.translate(new DummyI8n());
-            assert.equal(state.error_text, 'SIGH');
+            assert.equal(state.error_text, 'no!');
+            state.translate(im.user.i18n);
+            assert.equal(state.error_text, 'nee!');
         });
     });
 
     describe(".display", function() {
         describe("if the state is not in an error", function() {
             it("should display the given question text", function() {
-                assert.equal(state.display(), 'Eggs?');
+                assert.equal(state.display(), 'yes?');
             });
         });
 
         describe("if the state is in an error", function() {
             it("should display the given error text", function() {
                 state.in_error = true;
-                assert.equal(state.display(), 'Sigh');
+                assert.equal(state.display(), 'no!');
             });
         });
     });
