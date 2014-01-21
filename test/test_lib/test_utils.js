@@ -146,6 +146,18 @@ describe("utils", function() {
                 assert.equal(Child.extend, Parent.extend);
                 assert.equal(Child.foo, Parent.foo);
             });
+
+            describe("the returned constructor function", function() {
+                it("should pass `this` to the actual constructor as an arg",
+                function() {
+                    var Thing = Extendable.extend(function(self, foo) {
+                        self.foo = foo;
+                    });
+
+                    var thing = new Thing('bar');
+                    assert.equal(thing.foo, 'bar');
+                });
+            });
         });
     });
 });
