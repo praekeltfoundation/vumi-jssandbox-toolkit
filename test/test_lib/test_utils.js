@@ -148,44 +148,4 @@ describe("utils", function() {
             });
         });
     });
-
-    describe("BaseError", function() {
-        var BaseError = utils.BaseError;
-
-        describe(".suberror", function() {
-            it("should set up the prototype chain correctly", function() {
-                var ParentError = BaseError.suberror('parent');
-                var ChildError = ParentError.suberror('child');
-
-                var p = new ParentError();
-                assert(p instanceof Error);
-                assert(p instanceof ParentError);
-
-                var c = new ChildError();
-                assert(c instanceof Error);
-                assert(c instanceof ParentError);
-                assert(c instanceof ChildError);
-            });
-
-            describe("the returned constructor function", function() {
-                it("have its error name set", function() {
-                    var TestError = BaseError.suberror('test');
-                    var e = new TestError();
-                    assert.equal(e.name, 'test');
-                });
-
-                it("should allow a default error message", function() {
-                    var TestError = BaseError.suberror('test', ':(');
-                    var e = new TestError();
-                    assert.equal(e.message, ':(');
-                });
-
-                it("should set the instance's error message", function() {
-                    var TestError = BaseError.suberror('test', ':(');
-                    var e = new TestError('aah');
-                    assert.equal(e.message, 'aah');
-                });
-            });
-        });
-    });
 });

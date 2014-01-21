@@ -6,45 +6,6 @@ var Event = events.Event;
 var Eventable = events.Eventable;
 
 
-describe("Event", function() {
-    describe(".subevent", function() {
-        it("should set up the prototype chain correctly", function(){
-            var ParentEvent = Event.subevent('parent');
-            var ChildEvent = ParentEvent.subevent('child');
-
-            var p = new ParentEvent();
-            assert(p instanceof Event);
-            assert(p instanceof ParentEvent);
-
-            var c = new ChildEvent();
-            assert(c instanceof Event);
-            assert(c instanceof ParentEvent);
-            assert(c instanceof ChildEvent);
-        });
-
-        describe("the returned constructor function", function() {
-            it("should construct events correctly", function() {
-                var TestEvent = Event.subevent('test', function(a) {
-                    var self = this;
-                    self.a = a;
-                    self.b = 'bar';
-                });
-
-                var e = new TestEvent('foo');
-                assert.equal(e.name, 'test');
-                assert.equal(e.a, 'foo');
-                assert.equal(e.b, 'bar');
-            });
-
-            it("should allow the constructor to be optional", function() {
-                var TestEvent = Event.subevent('test');
-                var e = new TestEvent();
-                assert.equal(e.name, 'test');
-            });
-        });
-    });
-});
-
 describe("Eventable", function() {
     var eventable;
 
