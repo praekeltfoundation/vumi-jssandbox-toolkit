@@ -25,10 +25,9 @@ describe("Event", function() {
         describe("the returned constructor function", function() {
             it("should construct events correctly", function() {
                 var TestEvent = Event.subevent('test', function(a) {
-                    return {
-                        a: a,
-                        b: 'bar'
-                    };
+                    var self = this;
+                    self.a = a;
+                    self.b = 'bar';
                 });
 
                 var e = new TestEvent('foo');
@@ -37,7 +36,7 @@ describe("Event", function() {
                 assert.equal(e.b, 'bar');
             });
 
-            it("should allow the data function to be optional", function() {
+            it("should allow the constructor to be optional", function() {
                 var TestEvent = Event.subevent('test');
                 var e = new TestEvent();
                 assert.equal(e.name, 'test');
