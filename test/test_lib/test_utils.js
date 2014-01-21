@@ -117,6 +117,27 @@ describe("utils", function() {
         });
     });
 
+    describe(".url_encode", function() {
+        it("should url encode an object of parameters", function() {
+            assert.equal('a=foo&b=bar&c=null', utils.url_encode({
+                a: 'foo',
+                b: 'bar',
+                c: null
+            }));
+        });
+    });
+
+    describe(".starts_with", function() {
+        it("should determine whether the one string starts with the other",
+        function() {
+            assert(utils.starts_with('', ''));
+            assert(utils.starts_with('foo', ''));
+            assert(utils.starts_with('foo', 'foo'));
+            assert(utils.starts_with('foobar', 'foo'));
+            assert(!utils.starts_with('foobar', 'foobarbaz'));
+        });
+    });
+
     describe("Extendable", function() {
         var Extendable = utils.Extendable;
 

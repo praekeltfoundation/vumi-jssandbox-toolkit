@@ -1,260 +1,349 @@
 var assert = require("assert");
-var sinon = require("sinon");
-var http_api = require("../../lib/http_api.js");
 
-
+var vumigo = require("../../lib");
+var test_utils = vumigo.test_utils;
+var http_api = vumigo.http_api;
 var HttpApi = http_api.HttpApi;
 var JsonApi = http_api.JsonApi;
+var HttpApiError = http_api.HttpApiError;
 
-function ToyApi(im, url, opts) {
-    var self = this;
-    HttpApi.call(self, im, url, opts);
+var BadToyApi = HttpApi.extend(function(self, im, opts) {
+    HttpApi.call(self, im, opts);
 
     self.decode_response_body = function(body) {
       throw Error("You shall not parse");
     };
-}
+});
 
+describe("HttpApi", function() {
+    var im;
+    var api;
 
-function DummyIm() {
-    var self = this;
-    self.log = sinon.spy();
-    self.api = { request: sinon.stub() };
-
-    self.request_succeeds = function(body, code) {
-        if (typeof code === "undefined") {
-            code = 200;
-        }
-
-        self.api.request.callsArgWith(2, {
-            success: true,
-            code: code,
-            body: body,
-            reason: null
+    function make_api(opts) {
+        return test_utils.make_im().then(function(new_im) {
+            im = new_im;
+            api = new HttpApi(im, opts);
+            return api;
         });
-    };
-
-    self.check_request = function(method, url, cmd_opts) {
-        var cmd = { url: url };
-        for (var k in cmd_opts) {
-            cmd[k] = cmd_opts[k];
-        }
-        assert(self.api.request.calledOnce);
-        try {
-            assert(self.api.request.calledWith(
-                method,
-                sinon.match(cmd)
-            ));
-        }
-        catch (e) {
-            console.log(self.api.request.args);
-            throw e;
-        }
-    };
-}
-
-
-describe("test HttpApi", function() {
-    it("should be constructable", function() {
-        var api = new HttpApi(new DummyIm());
-    });
-
-    function simple_success_check(api_method, resource_method, done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im);
-        im.request_succeeds("foo");
-        var p = api[api_method]("http://www.example.com/");
-        im.check_request(resource_method, "http://www.example.com/",
-                         {headers: {}});
-        p.add_callback(function (r) { assert.equal(r, "foo"); });
-        p.add_callback(done);
     }
 
-    it("should respond when .get(...) is called", function(done) {
-        simple_success_check('get', 'http.get', done);
+    beforeEach(function(done) {
+        make_api().nodeify(done);
     });
 
-    it("should respond when .head(...) is called", function(done) {
-        simple_success_check('head', 'http.head', done);
-    });
+    describe(".get", function() {
+        it("should perform GET requests", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'GET',
+                    url: 'http://foo.com/',
+                },
+                response: {
+                    body: '{"foo": "bar"}'
+                }
+            });
 
-    it("should respond when .post(...) is called", function(done) {
-        simple_success_check('post', 'http.post', done);
-    });
-
-    it("should respond when .put(...) is called", function(done) {
-        simple_success_check('put', 'http.put', done);
-    });
-
-    it("should respond when .delete(...) is called", function(done) {
-        simple_success_check('delete', 'http.delete', done);
-    });
-
-    it("should return an appropriate failure on 404", function(done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im);
-
-        im.request_succeeds("404 Not Found", 404);
-
-        var p = api.request("get", "http://www.example.com/");
-        im.check_request("http.get", "http://www.example.com/", {});
-
-        p.add_callback(function (r) {
-            var error_msg = [
-                "HTTP API GET to http://www.example.com/ failed:",
-                "404 Not Found"
-            ].join(" ");
-
-
-            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
-            assert(im.log.calledWith(error_msg));
+            api.get('http://foo.com/').then(function(data) {
+                assert.equal(data, '{"foo": "bar"}');
+            }).nodeify(done);
         });
-        p.add_callback(done);
     });
 
-    it("should return an appropriate failure if the body cannot be parsed",
-    function(done) {
-        var im = new DummyIm();
-        var api = new ToyApi(im);
-        im.request_succeeds("foo", 200);
+    describe(".head", function() {
+        it("should perform HEAD requests", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'HEAD',
+                    url: 'http://foo.com/',
+                }
+            });
 
-        var p = api.request("get", "http://www.example.com/");
-        im.check_request("http.get", "http://www.example.com/", {});
-
-        p.add_callback(function (r) {
-            var error_msg = [
-                "HTTP API GET to http://www.example.com/",
-                "failed: Could not parse response",
-                "(Error: You shall not parse)",
-                "[response body: foo]"
-            ].join(" ");
-
-            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
-            assert(im.log.calledWith(error_msg));
+            api.head('http://foo.com/').then(function(data) {
+                assert.strictEqual(data, null);
+            }).nodeify(done);
         });
-        p.add_callback(done);
     });
 
-    it("should accept responses in the 200 range", function(done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im);
+    describe(".post", function() {
+        it("should perform POST requests", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'POST',
+                    url: 'http://foo.com/',
+                    content_type: 'application/json',
+                    body: '{"lerp": "larp"}',
+                },
+                response: {
+                    body: '{"foo": "bar"}'
+                }
+            });
 
-        im.request_succeeds("201 Created", 201);
-
-        var p = api.get("http://www.example.com/");
-        im.check_request(
-            'http.get',
-            "http://www.example.com/",
-            {headers: {}});
-
-        p.add_callback(function (r) { assert.equal(r, "201 Created"); });
-        p.add_callback(done);
+            api.post('http://foo.com/', {
+                data: '{"lerp": "larp"}',
+                headers: {'Content-Type': ['application/json']}
+            }).then(function(data) {
+                assert.strictEqual(data, '{"foo": "bar"}');
+            }).nodeify(done);
+        });
     });
 
-    it("should return an appropriate failure on sandbox API failure", function(done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im);
+    describe(".put", function() {
+        it("should perform PUT requests", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'PUT',
+                    url: 'http://foo.com/',
+                    body: '{"lerp": "larp"}',
+                    content_type: 'application/json',
+                },
+                response: {
+                    body: '{"foo": "bar"}'
+                }
+            });
 
-        im.api.request.callsArgWith(2, {
-            success: false,
-            reason: "Something broke."
+            api.put('http://foo.com/', {
+                data: '{"lerp": "larp"}',
+                headers: {'Content-Type': ['application/json']}
+            }).then(function(data) {
+                assert.strictEqual(data, '{"foo": "bar"}');
+            }).nodeify(done);
+        });
+    });
+
+    describe(".delete", function() {
+        it("should perform DELETE requests", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'DELETE',
+                    url: 'http://foo.com/',
+                    content_type: 'application/json',
+                    body: '{"lerp": "larp"}',
+                },
+                response: {
+                    body: '{"foo": "bar"}'
+                }
+            });
+
+            api.delete('http://foo.com/', {
+                data: '{"lerp": "larp"}',
+                headers: {'Content-Type': ['application/json']}
+            }).then(function(data) {
+                assert.strictEqual(data, '{"foo": "bar"}');
+            }).nodeify(done);
+        });
+    });
+
+    describe(".request", function() {
+        it("should accept responses in the 200 range", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'GET',
+                    url: 'http://foo.com/'
+                },
+                response: {
+                    code: 201,
+                    body: '201 Created'
+                }
+            });
+
+            api.request('get', 'http://foo.com/').then(function(data) {
+                assert.equal(data, '201 Created');
+            }).nodeify(done);
         });
 
-        var p = api.request("get", "http://www.example.com/");
-        im.check_request("http.get", "http://www.example.com/", {});
+        it("should support request body data", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    url: 'http://foo.com/',
+                    method: 'POST',
+                    body: 'ping'
+                }
+            });
 
-        p.add_callback(function (r) {
-            var error_msg = [
-                "HTTP API GET to http://www.example.com/ failed:",
-                "Something broke."
-            ].join(" ");
-
-            assert.deepEqual(r, {error: "HttpApiError: " + error_msg});
-            assert(im.log.calledWith(error_msg));
+            api.request("post", 'http://foo.com/', {
+                data: 'ping',
+            }).then(function() {
+                var request = im.api.http_requests[0];
+                assert.equal(request.body, 'ping');
+            }).nodeify(done);
         });
-        p.add_callback(done);
-    });
 
-    it("should send data if requested", function(done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im);
-        im.request_succeeds("foo");
-        var p = api.post("http://www.example.com/", {data: "bar"});
-        im.check_request("http.post", "http://www.example.com/",
-                         {headers: {}, data: "bar"});
-        p.add_callback(function (r) { assert.equal(r, "foo"); });
-        p.add_callback(done);
-    });
+        it("should support request url params", function(done) {
+            im.api.add_http_fixture({
+                request: {
+                    method: 'GET',
+                    url: 'http://foo.com/?a=1&b=2',
+                }
+            });
 
-    it("should add parameters if requested", function(done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im);
-        im.request_succeeds("foo");
-        var p = api.get("http://www.example.com/",
-                        {params: {a: 1, b: 2}});
-        im.check_request("http.get", "http://www.example.com/?a=1&b=2",
-                        {headers: {}});
-        p.add_callback(function (r) { assert.equal(r, "foo"); });
-        p.add_callback(done);
-    });
-
-    it("should add basic auth headers if requested", function(done) {
-        var im = new DummyIm();
-        var api = new HttpApi(im, {
-            auth: {username: "me", password: "pw"}
+            api.get('http://foo.com/', {
+                params: {
+                    a: 1,
+                    b: 2
+                }
+            }).then(function(data) {
+                var request = im.api.http_requests[0];
+                assert.equal(request.url, 'http://foo.com/?a=1&b=2');
+            }).nodeify(done);
         });
-        im.request_succeeds("foo");
-        var p = api.get("http://www.example.com/");
-        im.check_request("http.get", "http://www.example.com/",
-                         {
-                             headers: {
-                                 'Authorization': ['Basic bWU6cHc=']
-                             }
-                         });
-        p.add_callback(function (r) { assert.equal(r, "foo"); });
-        p.add_callback(done);
+
+        it("should support basic auth", function(done) {
+            make_api({
+                auth: {
+                    username: 'me',
+                    password: 'pw'
+                }
+            }).then(function() {
+                im.api.add_http_fixture({
+                    request: {
+                        method: 'GET',
+                        url: 'http://foo.com/',
+                    }
+                });
+
+                return api.get('http://foo.com/');
+            }).then(function() {
+                var request = im.api.http_requests[0];
+                assert.deepEqual(
+                    request.headers.Authorization,
+                    ['Basic bWU6cHc=']);
+            }).nodeify(done);
+        });
+
+        describe("if the response code is in the error range", function() {
+            it("should throw an error", function(done) {
+                im.api.add_http_fixture({
+                    request: {
+                        method: 'GET',
+                        url: 'http://foo.com/'
+                    },
+                    response: {
+                        code: 404,
+                        body: '404 Not Found'
+                    }
+                });
+
+                api.request("get", "http://foo.com/").catch(function(e) {
+                    assert(e instanceof HttpApiError);
+                    assert.equal(e.message, [
+                        'HTTP API GET to http://foo.com/ failed:',
+                        '404 Not Found [Response Body: 404 Not Found]'
+                    ].join(" "));
+                }).nodeify(done);
+            });
+        });
+
+        describe("if the body cannot be parsed", function() {
+            beforeEach(function() {
+                api.decode_response_body = function() {
+                    throw Error("You shall not parse");
+                };
+            });
+
+            it("should throw an error", function(done) {
+                im.api.add_http_fixture({
+                    request: {
+                        method: 'GET',
+                        url: 'http://foo.com/'
+                    },
+                    response: {
+                        code: 200,
+                        body: '{"foo": "bar"}'
+                    }
+                });
+
+                api.request('get', 'http://foo.com/').catch(function(e) {
+                    assert(e instanceof HttpApiError);
+                    assert.equal(e.message, [
+                        'HTTP API GET to http://foo.com/ failed:',
+                        'Could not parse response',
+                        '(Error: You shall not parse)',
+                        '[Response Body: {"foo": "bar"}]'
+                    ].join(" "));
+                }).nodeify(done);
+            });
+        });
+
+        describe("if the sandbox api replies with a failure", function() {
+            beforeEach(function() {
+                im.api.request = function(cmd_name, cmd_data, reply) {
+                    reply({
+                        success: false,
+                        reason: 'No apparent reason'
+                    });
+                };
+            });
+
+            it("should throw an error", function(done) {
+                im.api.add_http_fixture({
+                    request: {
+                        method: 'GET',
+                        url: 'http://foo.com/'
+                    },
+                    response: {
+                        code: 200,
+                        body: '{"foo": "bar"}'
+                    }
+                });
+
+                api.request('get', 'http://foo.com/').catch(function(e) {
+                    assert(e instanceof HttpApiError);
+                    assert.equal(e.message, [
+                        'HTTP API GET to http://foo.com/ failed:',
+                        'No apparent reason'
+                    ].join(" "));
+                }).nodeify(done);
+            });
+        });
     });
 });
 
 
-describe("test JsonApi", function() {
-    it("should be constructable", function() {
-        var api = new JsonApi(new DummyIm());
+describe("JsonApi", function() {
+    function make_api(opts) {
+        return test_utils.make_im().then(function(new_im) {
+            im = new_im;
+            api = new JsonApi(im, opts);
+            return api;
+        });
+    }
+
+    beforeEach(function(done) {
+        make_api().nodeify(done);
     });
 
-    it("should perform simple request", function (done) {
-        var im = new DummyIm();
-        var api = new JsonApi(im);
-        var req_data = {req: "val1"};
-        var rsp_data = {rsp: "val2"};
+    it("should decode JSON body response", function(done) {
+        im.api.add_http_fixture({
+            request: {
+                method: 'GET',
+                url: 'http://foo.com/',
+                content_type: 'application/json; charset=utf-8'
+            },
+            response: {
+                body: '{"foo": "bar"}'
+            }
+        });
 
-        im.request_succeeds(JSON.stringify(rsp_data));
-        var p = api.post("http://www.example.com/", {data: req_data});
-        im.check_request("http.post", "http://www.example.com/",
-                         {
-                             headers: {
-                                 'Content-Type':
-                                 ['application/json; charset=utf-8']
-                             },
-                             data: JSON.stringify(req_data)
-                         });
-        p.add_callback(function (r) { assert.deepEqual(r, rsp_data); });
-        p.add_callback(done);
+        api.request('get', 'http://foo.com/').then(function(data) {
+            assert.deepEqual(data, {foo: 'bar'});
+        }).nodeify(done);
     });
 
+    it("should encode request data to JSON", function(done) {
+        im.api.add_http_fixture({
+            request: {
+                url: 'http://foo.com/',
+                method: 'POST',
+                body: '{"lerp": "larp"}',
+                content_type: 'application/json; charset=utf-8'
+            }
+        });
 
-    it("should decode JSON body response", function() {
-        var api = new JsonApi(new DummyIm());
-        var val = {a: 1, b: "2"};
-        assert.deepEqual(
-            api.decode_response_body(JSON.stringify(val)),
-            val);
-    });
-
-    it("should encode request data to JSON", function() {
-        var api = new JsonApi(new DummyIm());
-        var val = {a: 1, b: "2"};
-        assert.deepEqual(api.encode_request_data(val),
-                         JSON.stringify(val));
+        api.request("post", 'http://foo.com/', {
+            data: {lerp: 'larp'},
+        }).then(function() {
+            var request = im.api.http_requests[0];
+            assert.equal(request.body, '{"lerp":"larp"}');
+        }).nodeify(done);
     });
 });
