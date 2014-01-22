@@ -12,9 +12,14 @@ Vumi Go's Javascript sandbox.
 .. toctree::
    :maxdepth: 1
 
-   state_machine.rst
+   interaction_machine.rst
+   state_creator.rst
    states.rst
+   user.rst
+   config.rst
    http_api.rst
+   metrics.rst
+   events.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
