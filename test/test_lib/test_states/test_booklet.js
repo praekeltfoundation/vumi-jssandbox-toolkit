@@ -57,7 +57,7 @@ describe("BookletState", function () {
 
             it("should not change state", function (done) {
                 booklet.emit.input("x").then(function() {
-                    assert.equal(im.user.state.name, 'booklet');
+                    assert.equal(im.user.state.get_name(), 'booklet');
                 }).nodeify(done);
             });
         });
@@ -73,7 +73,7 @@ describe("BookletState", function () {
 
             it("should not change state", function (done) {
                 booklet.emit.input("x").then(function() {
-                    assert.equal(im.user.state.name, 'booklet');
+                    assert.equal(im.user.state.get_name(), 'booklet');
                 }).nodeify(done);
             });
         });
@@ -81,7 +81,7 @@ describe("BookletState", function () {
         describe("if the input given was for the exiting", function() {
             it("should go to next state", function (done) {
                 booklet.emit.input("0").then(function() {
-                    assert.equal(im.user.state.name, "next_state");
+                    assert.equal(im.user.state.get_name(), "next_state");
                 }).nodeify(done);
             });
         });
@@ -97,7 +97,7 @@ describe("BookletState", function () {
 
             it("should not change state", function (done) {
                 booklet.emit.input("2").then(function() {
-                    assert.equal(im.user.state.name, 'booklet');
+                    assert.equal(im.user.state.get_name(), 'booklet');
                 }).nodeify(done);
             });
         });

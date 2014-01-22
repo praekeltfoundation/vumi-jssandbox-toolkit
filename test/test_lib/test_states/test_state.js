@@ -7,13 +7,6 @@ var StateError = vumigo.states.StateError;
 var StateSetupEvent = vumigo.states.StateSetupEvent;
 
 
-describe("StateError", function() {
-    it("should be creatable", function() {
-        var se = new StateError("msg");
-        assert.equal(se.message, "msg");
-    });
-});
-
 describe("State", function () {
     var im;
     var state;
