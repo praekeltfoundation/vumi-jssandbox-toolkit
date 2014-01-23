@@ -398,3 +398,62 @@ describe('DummyApi Groups resource', function() {
     });
 
 });
+
+
+describe('DummyApi fixture loading', function() {
+
+    var api;
+
+    beforeEach(function() {
+        api = new DummyApi();
+    });
+
+    var capture_reply = function(cmd_name, cmd) {
+        return capture_api_reply(api, cmd_name, cmd);
+    };
+
+    it('should accept fixtures that are JSON', function() {
+        api.add_http_fixture({
+            method: 'get',
+            url: 'http://foo/',
+            body: {
+                bar: 'baz'
+            }
+        });
+        var reply = capture_reply('http.get', {
+            url: 'http://foo/'
+        });
+        assert.equal(reply.body, JSON.stringify({bar: 'baz'}));
+    });
+
+    it('should accept fixtures that are plain/text', function() {
+        api.add_http_fixture({
+            method: 'get',
+            url: 'http://foo/',
+            content_type: 'text/plain',
+            body: "plain text please"
+        });
+        var reply = capture_reply('http.get', {
+            url: 'http://foo/'
+        });
+        assert.ok(reply.success);
+        assert.equal(reply.body, "plain text please");
+    });
+
+    it('should accept new encoders for fixtures', function() {
+        api.add_fixture_encoder('foo/bar', function (data) {
+            return 'foo' + data + 'bar';
+        });
+        api.add_http_fixture({
+            method: 'get',
+            url: 'http://foo/',
+            content_type: 'foo/bar',
+            body: "baz"
+        });
+        var reply = capture_reply('http.get', {
+            url: 'http://foo/'
+        });
+        assert.ok(reply.success);
+        assert.equal(reply.body, "foobazbar");
+    });
+});
