@@ -47,7 +47,7 @@ describe("App", function () {
         it("should throw an error if the state has the wrong name");
     });
 
-    describe(".switch_state", function() {
+    describe(".create_state", function() {
         it("should invoke the creator associated with the request state");
         it("should check the result of the creator");
 
