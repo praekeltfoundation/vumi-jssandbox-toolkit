@@ -61,30 +61,31 @@ describe("Eventable", function() {
             }));
         });
 
-        it("should return a promise that is only fulfilled once all its " +
-        "listeners are done", function(done) {
-            var d1 = Q.defer();
-            var d2 = Q.defer();
+        describe("once all associated listeners are done", function() {
+            it("should fulfill the returned promise", function(done) {
+                var d1 = Q.defer();
+                var d2 = Q.defer();
 
-            eventable
-                .on('foo', function() {
-                    return d1.promise;
-                })
-                .on('foo', function() {
-                    return d2.promise;
+                eventable
+                    .on('foo', function() {
+                        return d1.promise;
+                    })
+                    .on('foo', function() {
+                        return d2.promise;
+                    });
+
+                var p = eventable.emit(new Event('foo')).then(function() {
+                    assert(d1.promise.isFulfilled());
+                    assert(d2.promise.isFulfilled());
                 });
 
-            var p = eventable.emit(new Event('foo')).then(function() {
-                assert(d1.promise.isFulfilled());
-                assert(d2.promise.isFulfilled());
+                assert(d1.promise.isPending());
+                assert(d2.promise.isPending());
+                d1.resolve();
+                d2.resolve();
+
+                return p;
             });
-
-            assert(d1.promise.isPending());
-            assert(d2.promise.isPending());
-            d1.resolve();
-            d2.resolve();
-
-            return p;
         });
     });
 });
