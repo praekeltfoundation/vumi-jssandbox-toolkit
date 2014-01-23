@@ -30,16 +30,7 @@ describe("App", function () {
     });
 
     describe(".add_state", function() {
-        it("should add an 'identity' state creator with the given state");
-    });
-
-    describe(".start_state_creator", function() {
-        it("should invoke the requested start state");
-
-        describe("if the requested start state does not exist", function() {
-            it("should log an error");
-            it("should return an error state");
-        });
+        it("should add a 'functor' state creator with the given state");
     });
 
     describe(".check_created_state", function() {
@@ -58,6 +49,21 @@ describe("App", function () {
         describe("if the state does not exist", function() {
             it("should invoke the start state creator");
             it("should log a message");
+        });
+    });
+
+    describe(".creators", function() {
+        describe(".__start__", function() {
+            it("should invoke the requested start state");
+
+            describe("if the requested start state does not exist", function() {
+                it("should log an error");
+                it("should return an error state");
+            });
+        });
+
+        describe(".__error__", function() {
+            it("should create an EndState with a null `next` value");
         });
     });
 });
