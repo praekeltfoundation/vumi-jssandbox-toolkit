@@ -453,7 +453,6 @@ describe('DummyApi fixture loading', function() {
             body: "baz"
         });
         var reply = capture_reply('http.get', {
-            method: 'get',
             url: 'http://foo/'
         });
         assert.ok(reply.success);
