@@ -13,7 +13,7 @@ Vumi Go's Javascript sandbox.
    :maxdepth: 1
 
    interaction_machine.rst
-   state_creator.rst
+   app.rst
    states.rst
    user.rst
    config.rst

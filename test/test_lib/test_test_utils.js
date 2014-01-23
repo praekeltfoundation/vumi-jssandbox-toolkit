@@ -4,14 +4,14 @@ var vumigo = require("../../lib");
 
 var DummyApi = vumigo.dummy_api.DummyApi;
 var InteractionMachine = vumigo.state_machine.InteractionMachine;
-var StateCreator = vumigo.state_machine.StateCreator;
+var App = vumigo.state_machine.App;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
 
 
-function TestStateCreator() {
+function TestApp() {
     var self = this;
-    StateCreator.call(self, "intro");
+    App.call(self, "intro");
 
     self.add_state(new FreeText(
         "intro",
@@ -31,7 +31,7 @@ function TestStateCreator() {
 
 function mk_app() {
     var api = new DummyApi();
-    var states = new TestStateCreator();
+    var states = new TestApp();
     var im = new InteractionMachine(api, states);
     im.attach();
     return api;

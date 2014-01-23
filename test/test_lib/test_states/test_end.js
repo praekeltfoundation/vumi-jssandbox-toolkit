@@ -20,7 +20,7 @@ describe("EndState", function () {
                 text: 'goodbye'
             });
 
-            im.state_creator.add_state(state);
+            im.app.add_state(state);
             return im.switch_state('state_1');
         }).nodeify(done);
     });

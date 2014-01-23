@@ -2,17 +2,17 @@ var assert = require("assert");
 
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
-var StateCreator = vumigo.StateCreator;
+var App = vumigo.App;
 
 
-describe("StateCreator", function () {
+describe("App", function () {
     var im;
-    var states;
+    var app;
 
     beforeEach(function(done) {
         test_utils.make_im().then(function(new_im) {
             im = new_im;
-            states = im.state_creator;
+            app = im.app;
         }).nodeify(done);
     });
 
