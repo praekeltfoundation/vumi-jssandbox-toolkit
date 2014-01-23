@@ -14,21 +14,21 @@ describe("State", function () {
     beforeEach(function(done) {
         test_utils.make_im().then(function(new_im) {
             im = new_im;
-            state = new State('luke-the-state');
+            state = new State('luke_the_state');
             return state.setup(im);
         }).nodeify(done);
     });
 
     describe(".setup", function() {
         it("should link the interaction machine to the state", function() {
-            var state = new State('luke-the-state'); 
+            var state = new State('luke_the_state'); 
             assert.strictEqual(state.im, null);
             state.setup(im);
             assert.strictEqual(state.im, im);
         });
 
         it("should emit a 'setup' event", function(done) {
-            var state = new State('luke-the-state');
+            var state = new State('luke_the_state');
 
             state.on('setup', function(e) {
                 assert.equal(e.instance, state);
@@ -41,9 +41,9 @@ describe("State", function () {
 
     describe(".save_response", function() {
         it("should store the given user response", function() {
-            assert(typeof im.user.get_answer('luke-the-state') == 'undefined');
+            assert(typeof im.user.get_answer('luke_the_state') == 'undefined');
             state.save_response('foo');
-            assert.equal(im.user.get_answer('luke-the-state'), 'foo');
+            assert.equal(im.user.get_answer('luke_the_state'), 'foo');
         });
     });
 
@@ -57,6 +57,46 @@ describe("State", function () {
 
                 state.emit.input();
             });
+        });
+    });
+
+    describe(".continue_session", function() {
+        it("should be allowed to be a function", function() {
+            var state = new State('luke_the_state', {
+                continue_session: function() {
+                    return false;
+                }
+            });
+
+            assert.equal(state.continue_session(), false);
+        });
+
+        it("should be allowed to be a non-function", function() {
+            var state = new State('luke_the_state', {
+                continue_session: false
+            });
+
+            assert.equal(state.continue_session(), true);
+        });
+    });
+
+    describe(".send_reply", function() {
+        it("should be allowed to be a function", function() {
+            var state = new State('luke_the_state', {
+                send_reply: function() {
+                    return false;
+                }
+            });
+
+            assert.equal(state.send_reply(), false);
+        });
+
+        it("should be allowed to be a non-function", function() {
+            var state = new State('luke_the_state', {
+                send_reply: false
+            });
+
+            assert.equal(state.send_reply(), true);
         });
     });
 });
