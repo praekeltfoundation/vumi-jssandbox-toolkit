@@ -1,7 +1,7 @@
 var Q = require("q");
 var assert = require("assert");
 
-var events = require("../../lib/events");
+var events = require("../lib/events");
 var Event = events.Event;
 var Eventable = events.Eventable;
 

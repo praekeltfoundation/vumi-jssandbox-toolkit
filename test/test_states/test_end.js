@@ -1,5 +1,5 @@
 var assert = require("assert");
-var vumigo = require("../../../lib");
+var vumigo = require("../../lib");
 
 
 var EndState = vumigo.states.EndState;

@@ -1,12 +1,12 @@
 var assert = require("assert");
 
-var vumigo = require("../../lib");
+var vumigo = require("../lib");
 var test_utils = vumigo.test_utils;
 
-var dummy_api = require("../../lib/dummy_api");
+var dummy_api = require("../lib/dummy_api");
 var DummyApi = dummy_api.DummyApi;
 
-var metrics = require("../../lib/metrics");
+var metrics = require("../lib/metrics");
 var MetricStore = metrics.MetricStore;
 
 describe("MetricStore", function() {

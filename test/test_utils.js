@@ -1,7 +1,7 @@
 var Q = require('q');
 
 var assert = require("assert");
-var utils = require("../../lib/utils");
+var utils = require("../lib/utils");
 
 describe("utils", function() {
     describe("maybe_call", function() {
