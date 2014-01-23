@@ -10,8 +10,8 @@ describe("Freetext", function () {
     var im;
     var state;
 
-    beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+    beforeEach(function() {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
 
             state = new FreeText('state_1', {
@@ -25,53 +25,53 @@ describe("Freetext", function () {
 
             im.app.add_state(state);
             return im.switch_state('state_1');
-        }).nodeify(done);
+        });
     });
 
     describe("on state:input", function() {
         describe("if the user response is valid", function() {
             it("should set the user's current state to the next state",
-            function(done) {
+            function() {
                 assert.equal(im.user.state.get_name(), 'state_1');
 
-                state.emit.input('A lemon').then(function() {
+                return state.emit.input('A lemon').then(function() {
                     assert.equal(im.user.state.get_name(), 'state_2');
-                }).nodeify(done);
+                });
             });
 
-            it("should save the user's response", function(done) {
+            it("should save the user's response", function() {
                 assert(typeof im.user.get_answer('state_1') == 'undefined');
 
-                state.emit.input('A lemon').then(function() {
+                return state.emit.input('A lemon').then(function() {
                     assert.equal(im.user.get_answer('state_1'), 'A lemon');
-                }).nodeify(done);
+                });
             });
         });
 
         describe("if the user response is invalid", function() {
-            it("should not set the user's state", function(done) {
+            it("should not set the user's state", function() {
                 assert.equal(im.user.state.get_name(), 'state_1');
 
-                state.emit.input('Not a lemon').then(function() {
+                return state.emit.input('Not a lemon').then(function() {
                     assert.equal(im.user.state.get_name(), 'state_1');
-                }).nodeify(done);
+                });
             });
 
-            it("should not save the user's state", function(done) {
+            it("should not save the user's state", function() {
                 assert(typeof im.user.get_answer('state_1') == 'undefined');
 
-                state.emit.input('Not a lemon').then(function() {
+                return state.emit.input('Not a lemon').then(function() {
                     var answer = im.user.get_answer('state_1');
                     assert(typeof answer == 'undefined');
-                }).nodeify(done);
+                });
             });
 
-            it("should put the state in an error state", function(done) {
+            it("should put the state in an error state", function() {
                 assert(!state.in_error);
 
-                state.emit.input('Not a lemon').then(function() {
+                return state.emit.input('Not a lemon').then(function() {
                     assert(state.in_error);
-                }).nodeify(done);
+                });
             });
         });
     });

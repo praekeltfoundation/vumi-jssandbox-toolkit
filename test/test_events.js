@@ -48,15 +48,17 @@ describe("Eventable", function() {
                     return d2.promise;
                 });
 
-            eventable.emit(new Event('foo')).then(function() {
+            var p = eventable.emit(new Event('foo')).then(function() {
                 assert(d1.promise.isFulfilled());
                 assert(d2.promise.isFulfilled());
-            }).nodeify(done);
+            });
 
             assert(d1.promise.isPending());
             assert(d2.promise.isPending());
             d1.resolve();
             d2.resolve();
+
+            return p;
         });
     });
 });

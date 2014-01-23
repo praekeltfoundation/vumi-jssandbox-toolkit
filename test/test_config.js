@@ -10,11 +10,11 @@ describe("SandboxConfig", function() {
     var im;
     var config;
 
-    beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+    beforeEach(function() {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             config = im.sandbox_config;
-        }).nodeify(done);
+        });
     });
 
     describe(".setup", function() {
@@ -30,17 +30,17 @@ describe("SandboxConfig", function() {
     });
     
     describe(".get", function() {
-        it("should retrieve the config value", function(done) {
-            config.get('foo').then(function(value) {
+        it("should retrieve the config value", function() {
+            return config.get('foo').then(function(value) {
                 assert.deepEqual(JSON.parse(value), {bar: 'baz'});
-            }).nodeify(done);
+            });
         });
 
         describe("if the 'json' option is true", function() {
-            it("should parse the config value as JSON", function(done) {
-                config.get('foo', {json: true}).then(function(value) {
+            it("should parse the config value as JSON", function() {
+                return config.get('foo', {json: true}).then(function(value) {
                     assert.deepEqual(value, {bar: 'baz'});
-                }).nodeify(done);
+                });
             });
         });
     });
@@ -52,10 +52,10 @@ describe("IMConfig", function() {
     var config;
 
     beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             config = im.config;
-        }).nodeify(done);
+        });
     });
 
     describe(".setup", function() {
@@ -70,10 +70,10 @@ describe("IMConfig", function() {
         });
 
         it("setup the config from its value in the sandbox config",
-        function(done) {
-            config.setup().then(function() {
+        function() {
+            return config.setup().then(function() {
                 assert.equal(config.get('lerp'), 'larp');
-            }).nodeify(done);
+            });
         });
     });
 });

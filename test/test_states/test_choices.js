@@ -41,55 +41,55 @@ describe("ChoiceState", function () {
             });
     }
 
-    beforeEach(function (done) {
-        make_state().nodeify(done);
+    beforeEach(function () {
+        return make_state();
     });
 
     describe("if the 'accept_labels' option is not set", function() {
-        it("should accept a number-based answers", function (done) {
+        it("should accept a number-based answers", function () {
             assert.equal(im.user.state.get_name(), 'color_state');
 
-            state.emit.input("1").then(function() {
+            return state.emit.input("1").then(function() {
                 assert.equal(im.user.state.get_name(), 'red_state');
-            }).nodeify(done);
+            });
         });
 
-        it("should not accept label-based answers", function(done) {
-            state.emit.input("Red").then(function() {
+        it("should not accept label-based answers", function() {
+            return state.emit.input("Red").then(function() {
                 assert.equal(im.user.state.get_name(), 'color_state');
-            }).nodeify(done);
+            });
         });
     });
 
     describe("if the 'accept_labels' option is set", function() {
-        it("should accept label-based answers", function(done) {
-            make_state({accept_labels: true}).then(function(state) {
+        it("should accept label-based answers", function() {
+            return make_state({accept_labels: true}).then(function(state) {
                 assert.equal(im.user.state.get_name(), 'color_state');
 
                 state.emit.input("Red").then(function() {
                     assert.equal(im.user.state.get_name(), 'red_state');
-                }).nodeify(done);
+                });
             });
         });
 
         it("should be case insensitive with label-based answers",
-        function(done) {
-            make_state({accept_labels: true}).then(function(state) {
+        function() {
+            return make_state({accept_labels: true}).then(function(state) {
                 assert.equal(im.user.state.get_name(), 'color_state');
 
                 state.emit.input("reD").then(function() {
                     assert.equal(im.user.state.get_name(), 'red_state');
-                }).nodeify(done);
+                });
             });
         });
 
         it("should accept number-based answers", function(done) {
-            make_state({accept_labels: true}).then(function(state) {
+            return make_state({accept_labels: true}).then(function(state) {
                 assert.equal(im.user.state.get_name(), 'color_state');
 
                 state.emit.input("1").then(function() {
                     assert.equal(im.user.state.get_name(), 'red_state');
-                }).nodeify(done);
+                });
             });
         });
     });
@@ -131,13 +131,13 @@ describe("PaginatedChoiceState", function () {
         return choices.map(function(c) { return c.serialize(); });
     }
 
-    beforeEach(function (done) {
-        make_state().nodeify(done);
+    beforeEach(function () {
+        return make_state();
     });
 
     describe("shorten_choices", function() {
-        it("should shorten choices if needed", function(done) {
-            make_state({characters_per_page: 25}).then(function(state) {
+        it("should shorten choices if needed", function() {
+            return make_state({characters_per_page: 25}).then(function(state) {
                 var choices = state.current_choices();
                 choices = state.shorten_choices('Choices:', choices);
 
@@ -148,11 +148,13 @@ describe("PaginatedChoiceState", function () {
                     value: 'short',
                     label: 'Short'
                 }]);
-            }).nodeify(done);
+            });
         });
 
-        it("should not shorten choices if not needed", function(done) {
-            make_state({characters_per_page: 100}).then(function(state) {
+        it("should not shorten choices if not needed", function() {
+            return make_state({
+                characters_per_page: 100
+            }).then(function(state) {
                 var choices = state.current_choices();
                 choices = state.shorten_choices('Choices:', choices);
 
@@ -163,12 +165,14 @@ describe("PaginatedChoiceState", function () {
                     value: 'short',
                     label: 'Short'
                 }]);
-            }).nodeify(done);
+            });
         });
 
         it("should return all the choices if the text is already too long",
-        function(done) {
-            make_state({characters_per_page: 4}).then(function(state) {
+        function() {
+            return make_state({
+                characters_per_page: 4
+            }).then(function(state) {
                 var choices = state.current_choices();
                 choices = state.shorten_choices('12345', choices);
 
@@ -179,7 +183,7 @@ describe("PaginatedChoiceState", function () {
                     value: 'short',
                     label: 'Short'
                 }]);
-            }).nodeify(done);
+            });
         });
     });
 });

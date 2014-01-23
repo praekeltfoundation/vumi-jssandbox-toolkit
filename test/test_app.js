@@ -9,11 +9,11 @@ describe("App", function () {
     var im;
     var app;
 
-    beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+    beforeEach(function() {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             app = im.app;
-        }).nodeify(done);
+        });
     });
 
     describe(".setup", function() {

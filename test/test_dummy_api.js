@@ -21,7 +21,7 @@ describe("DummyApi", function () {
         api = new DummyApi();
     });
 
-    it("should dispatch commands asynchronously", function(done) {
+    it("should dispatch commands asynchronously", function() {
         var has_reply = false;
 
         api_request("kv.get", {key: "foo"}).then(function (reply) {
@@ -32,9 +32,9 @@ describe("DummyApi", function () {
 
         // check reply wasn't called immediately
         assert(!has_reply);
-        api.pending_calls_complete().then(function () {
+        return api.pending_calls_complete().then(function () {
             assert(has_reply);
-        }).nodeify(done);
+        });
     });
 
     describe("find_contact", function() {
@@ -47,18 +47,18 @@ describe("DummyApi", function () {
     });
 
     describe("Contacts Resource", function () {
-        var assert_fails = function(cmd_name, cmd, reason) {
+        function assert_fails(cmd_name, cmd, reason) {
             return api_request(cmd_name, cmd).then(function(reply) {
                 assert(!reply.success);
                 assert.equal(reply.reason, reason);
             });
-        };
+        }
 
         describe("contacts.get", function() {
-            it("should retrieve existing contacts", function(done) {
+            it("should retrieve existing contacts", function() {
                 api.add_contact({msisdn: "+12345", name: "Bob"});
 
-                api_request("contacts.get", {
+                return api_request("contacts.get", {
                     delivery_class: "sms",
                     addr: "+12345"
                 }).then(function(reply) {
@@ -66,25 +66,25 @@ describe("DummyApi", function () {
                     assert.equal(reply.contact.msisdn, "+12345");
                     assert.equal(reply.contact.name, "Bob");
                     assert.equal(reply.contact.surname, null);
-                }).nodeify(done);
+                });
             });
 
-            it("should fail to find non-existant contacts", function(done) {
-                assert_fails(
-                    "contacts.get", {
+            it("should fail to find non-existant contacts", function() {
+                return assert_fails(
+                    "contacts.get",
+                    {
                         delivery_class: "sms",
                         addr: "+12345"
                     },
-                    "Contact not found"
-                ).nodeify(done);
+                    "Contact not found");
             });
         });
 
         describe("contacts.get_or_create", function() {
-            it("retrieve existing contacts", function(done) {
+            it("retrieve existing contacts", function() {
                 api.add_contact({msisdn: "+12345", name: "Bob"});
 
-                api_request("contacts.get_or_create", {
+                return api_request("contacts.get_or_create", {
                     delivery_class: "sms",
                     addr: "+12345"
                 }).then(function(reply) {
@@ -93,11 +93,11 @@ describe("DummyApi", function () {
                     assert.equal(reply.contact.msisdn, "+12345");
                     assert.equal(reply.contact.name, "Bob");
                     assert.equal(reply.contact.surname, null);
-                }).nodeify(done);
+                });
             });
 
-            it("should create new contacts", function(done) {
-                api_request("contacts.get_or_create", {
+            it("should create new contacts", function() {
+                return api_request("contacts.get_or_create", {
                     delivery_class: "sms",
                     addr: "+12345"
                 }).then(function(reply) {
@@ -109,18 +109,18 @@ describe("DummyApi", function () {
 
                     var contact = api.contact_store[reply.contact.key];
                     assert.equal(contact.msisdn, "+12345");
-                }).nodeify(done);
+                });
             });
         });
 
         describe("contacts.update", function() {
-            it("should update existing contacts", function(done) {
+            it("should update existing contacts", function() {
                 var contact = api.add_contact({
                     msisdn: "+12345",
                     name: "Bob"
                 });
 
-                api_request("contacts.update", {
+                return api_request("contacts.update", {
                     key: contact.key,
                     fields: {
                         name: "Bob",
@@ -133,25 +133,25 @@ describe("DummyApi", function () {
                     assert.equal(reply.contact.surname, "Smith");
                     assert.equal(contact.name, "Bob");
                     assert.equal(contact.surname, "Smith");
-                }).nodeify(done);
+                });
             });
 
-            it("should fail to update non-existant contacts", function(done) {
-                assert_fails(
-                    "contacts.update", {
+            it("should fail to update non-existant contacts", function() {
+                return assert_fails(
+                    "contacts.update",
+                    {
                         key: "unknown",
                         fields: {}
                     },
-                    "Contact not found"
-                ).nodeify(done);
+                    "Contact not found");
             });
         });
 
         describe("contacts.update_extras", function() {
-            it("should update existing contacts", function(done) {
+            it("should update existing contacts", function() {
                 var contact = api.add_contact({msisdn: "+12345", name: "Bob"});
 
-                api_request("contacts.update_extras", {
+                return api_request("contacts.update_extras", {
                     key: contact.key,
                     fields: {
                         foo: "Foo",
@@ -164,25 +164,25 @@ describe("DummyApi", function () {
                     assert.equal(reply.contact['extras-bar'], "Bar");
                     assert.equal(contact['extras-foo'], "Foo");
                     assert.equal(contact['extras-bar'], "Bar");
-                }).nodeify(done);
+                });
             });
 
-            it("should fail to update non-existant contacts", function(done) {
-                assert_fails(
-                    "contacts.update_extras", {
+            it("should fail to update non-existant contacts", function() {
+                return assert_fails(
+                    "contacts.update_extras",
+                    {
                         key: "unknown",
                         fields: {}
                     },
-                    "Contact not found"
-                ).nodeify(done);
+                    "Contact not found");
             });
         });
 
         describe("contacts.update_subscriptions", function() {
-            it("should update existing contacts", function(done) {
+            it("should update existing contacts", function() {
                 var contact = api.add_contact({msisdn: "+12345", name: "Bob"});
 
-                api_request("contacts.update_subscriptions", {
+                return api_request("contacts.update_subscriptions", {
                     key: contact.key,
                     fields: {
                         foo: "Foo",
@@ -196,23 +196,23 @@ describe("DummyApi", function () {
 
                     assert.equal(contact['subscription-foo'], "Foo");
                     assert.equal(contact['subscription-bar'], "Bar");
-                }).nodeify(done);
+                });
             });
 
-            it("should fail to update non-existant contacts", function(done) {
-                assert_fails(
-                    "contacts.update_subscriptions", {
+            it("should fail to update non-existant contacts", function() {
+                return assert_fails(
+                    "contacts.update_subscriptions",
+                    {
                         key: "unknown",
                         fields: {}
                     },
-                    "Contact not found"
-                ).nodeify(done);
+                    "Contact not found");
             });
         });
 
         describe("contacts.new", function() {
-            it("should create new contacts", function(done) {
-                api_request("contacts.new", {
+            it("should create new contacts", function() {
+                return api_request("contacts.new", {
                     contact: {
                         name: "Bob",
                         surname: "Smith",
@@ -228,15 +228,15 @@ describe("DummyApi", function () {
                     assert.equal(contact.name, "Bob");
                     assert.equal(contact.surname, "Smith");
                     assert.equal(contact.msisdn, "+12345");
-                }).nodeify(done);
+                });
             });
         });
 
         describe("contacts.save", function() {
-            it("should save existing contacts", function(done) {
+            it("should save existing contacts", function() {
                 var contact = api.add_contact({msisdn: "+12345", name: "Bob"});
 
-                api_request("contacts.save", {
+                return api_request("contacts.save", {
                     contact: {
                         key: contact.key,
                         msisdn: "+12345",
@@ -253,72 +253,70 @@ describe("DummyApi", function () {
                     assert.equal(contact.msisdn, "+12345");
                     assert.equal(contact.name, "Robert");
                     assert.equal(contact.surname, "Smith");
-                }).nodeify(done);
+                });
             });
 
-            it("should fail for non-existant contacts", function (done) {
-                assert_fails(
+            it("should fail for non-existant contacts", function () {
+                return assert_fails(
                     "contacts.save",
                     {contact: {key: "unknown"}},
-                    "Contact not found"
-                ).nodeify(done);
+                    "Contact not found");
             });
         });
 
         describe("contacts.get_by_key", function() {
-            it("should retrieve existing contact", function (done) {
+            it("should retrieve existing contact", function () {
                 api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
 
                 // should retrieve 1 result
-                api_request(
+                return api_request(
                     "contacts.get_by_key",
                     {key: "1"}
                 ).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.contact.key, "1");
-                }).nodeify(done);
+                });
             });
 
-            it("should fail if contact does not exist", function (done) {
-                assert_fails(
+            it("should fail if contact does not exist", function () {
+                return assert_fails(
                     "contacts.get_by_key",
                     {key: "790"},
-                    "Contact not found"
-                ).nodeify(done);
+                    "Contact not found");
             });
         });
 
         describe("contacts.search", function() {
-            it("should retrieve existing contact keys", function (done) {
+            it("should retrieve existing contact keys", function () {
                 api.add_contact({key: "1", msisdn: "+12345", name: "Bob"});
                 api.set_contact_search_results('name:"Bob"', ['1']);
 
-                api_request("contacts.search", {
+                return api_request("contacts.search", {
                     query: 'name:"Bob"'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.keys.length, 1);
                     assert.equal(reply.keys[0], 1);
-                }).nodeify(done);
+                });
             });
 
             it("should retrieve 0 results for a query which matches no " +
-            "contacts", function (done) {
-                api_request("contacts.search", {
+            "contacts", function () {
+                return api_request("contacts.search",{
                     query: 'name:"Anton"'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.keys.length, 0);
-                }).nodeify(done);
+                });
             });
         });
     });
 
     describe("Logging Resource", function () {
-        it("should log calls on the known levels", function(done) {
+        it("should log calls on the known levels", function() {
             var levels = ['info', 'debug', 'warning', 'error', 'critical'];
 
-            Q.all(levels.map(function(level) {
+            return Q.all(levels.map(function(level) {
                 var cmd = 'log.' + level;
                 return api_request(cmd, {msg: level}).then(function(reply) {
                     assert(reply.success);
@@ -326,25 +324,25 @@ describe("DummyApi", function () {
                 });
             })).then(function() {
                 assert.deepEqual(api.logs, levels);
-            }).nodeify(done);
+            });
         });
     });
 
     describe('Groups Resource', function() {
         describe("groups.count_members", function() {
-            it("should allow counting of static groups", function(done) {
+            it("should allow counting of static groups", function() {
                 api.add_group({key: 'group-1'});
                 api.add_contact({groups:['group-1']});
 
-                api_request("groups.count_members", {
+                return api_request("groups.count_members", {
                     key: 'group-1'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.count, 1);
-                }).nodeify(done);
+                });
             });
 
-            it("should allow counting of smart groups", function(done) {
+            it("should allow counting of smart groups", function() {
                 api.add_group({
                     key: 'group-1',
                     query: 'foo'
@@ -352,25 +350,25 @@ describe("DummyApi", function () {
                 api.set_smart_group_query_results(
                     'foo', ['contact-1', 'contact-2']);
 
-                api_request("groups.count_members", {
+                return api_request("groups.count_members", {
                     key: 'group-1'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.count, 2);
-                }).nodeify(done);
+                });
             });
         });
 
         describe("groups.get", function() {
-            it("should retrieve a group by its key", function(done) {
+            it("should retrieve a group by its key", function() {
                 api.add_group({key: 'group-1', name: 'Group 1'});
-                api_request('groups.get', {
+                return api_request('groups.get', {
                     key: 'group-1'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.group.key, 'group-1');
                     assert.equal(reply.group.name, 'Group 1');
-                }).nodeify(done);
+                });
             });
         });
 
@@ -403,42 +401,42 @@ describe("DummyApi", function () {
                     assert.equal(reply.reason, 'Group not found');
                 }));
 
-                Q.all(checks).nodeify(done);
+                return Q.all(checks);
             });
         });
 
         describe("groups.get_or_create_by_name", function() {
             it("should retrieve a group by name if it already exists",
-            function(done) {
+            function() {
                 var group = api.add_group({
                     key: 'group-1',
                     name: 'Group 1'
                 });
 
-                api_request('groups.get_or_create_by_name', {
+                return api_request('groups.get_or_create_by_name', {
                     name: 'Group 1'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert(!reply.created);
                     assert.equal(reply.group.name, 'Group 1');
                     assert.equal(reply.group.key, group.key);
-                }).nodeify(done);
+                });
             });
 
             it("should create a new group if it does not already exist",
-            function(done) {
+            function() {
                 api_request('groups.get_or_create_by_name', {
                     name: 'Group 1'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert(reply.created);
                     assert.equal(reply.group.name, 'Group 1');
-                }).nodeify(done);
+                });
             });
         });
 
         describe("groups.list", function() {
-            it("should list the available groups", function(done) {
+            it("should list the available groups", function() {
                 api.add_group({key: 'group-1', name: 'Group 1'});
                 api.add_group({key: 'group-2', name: 'Group 2'});
 
@@ -446,7 +444,7 @@ describe("DummyApi", function () {
                     assert(reply.success);
                     assert.equal(reply.groups[0].key, 'group-1');
                     assert.equal(reply.groups[1].key, 'group-2');
-                }).nodeify(done);
+                });
             });
         });
 
@@ -457,32 +455,32 @@ describe("DummyApi", function () {
                 api.set_group_search_results('query 1', ['group-1', 'group-2']);
             });
 
-            it("should retrieve groups matching the query", function(done) {
-                api_request('groups.search', {
+            it("should retrieve groups matching the query", function() {
+                return api_request('groups.search', {
                     query: 'query 1'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.groups[0].key, 'group-1');
                     assert.equal(reply.groups[1].key, 'group-2');
-                }).nodeify(done);
+                });
             });
 
             it("should return an 0 results if no groups matched the query",
-            function(done) {
-                api_request('groups.search', {
+            function() {
+                return api_request('groups.search', {
                     query: 'no-results'
                 }).then(function(reply) {
                     assert(reply.success);
                     assert.equal(reply.groups.length, 0);
-                }).nodeify(done);
+                });
             });
         });
 
         describe("groups.update", function() {
-            it("should update details of the relevant group", function(done) {
+            it("should update details of the relevant group", function() {
                 api.add_group({key: 'group-1', name: 'Group 1'});
 
-                api_request('groups.update', {
+                return api_request('groups.update', {
                     key: 'group-1',
                     name: 'Foo Group'
                 }).then(function(reply) {
@@ -491,7 +489,7 @@ describe("DummyApi", function () {
 
                     var group = api.group_store['group-1'];
                     assert.equal(group.name, 'Foo Group');
-                }).nodeify(done);
+                });
             });
         });
     });

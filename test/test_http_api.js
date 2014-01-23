@@ -27,12 +27,12 @@ describe("HttpApi", function() {
         });
     }
 
-    beforeEach(function(done) {
-        make_api().nodeify(done);
+    beforeEach(function() {
+        return make_api();
     });
 
     describe(".get", function() {
-        it("should perform GET requests", function(done) {
+        it("should perform GET requests", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'GET',
@@ -43,14 +43,14 @@ describe("HttpApi", function() {
                 }
             });
 
-            api.get('http://foo.com/').then(function(data) {
+            return api.get('http://foo.com/').then(function(data) {
                 assert.equal(data, '{"foo": "bar"}');
-            }).nodeify(done);
+            });
         });
     });
 
     describe(".head", function() {
-        it("should perform HEAD requests", function(done) {
+        it("should perform HEAD requests", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'HEAD',
@@ -58,14 +58,14 @@ describe("HttpApi", function() {
                 }
             });
 
-            api.head('http://foo.com/').then(function(data) {
+            return api.head('http://foo.com/').then(function(data) {
                 assert.strictEqual(data, null);
-            }).nodeify(done);
+            });
         });
     });
 
     describe(".post", function() {
-        it("should perform POST requests", function(done) {
+        it("should perform POST requests", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'POST',
@@ -78,17 +78,17 @@ describe("HttpApi", function() {
                 }
             });
 
-            api.post('http://foo.com/', {
+            return api.post('http://foo.com/', {
                 data: '{"lerp": "larp"}',
                 headers: {'Content-Type': ['application/json']}
             }).then(function(data) {
                 assert.strictEqual(data, '{"foo": "bar"}');
-            }).nodeify(done);
+            });
         });
     });
 
     describe(".put", function() {
-        it("should perform PUT requests", function(done) {
+        it("should perform PUT requests", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'PUT',
@@ -101,17 +101,17 @@ describe("HttpApi", function() {
                 }
             });
 
-            api.put('http://foo.com/', {
+            return api.put('http://foo.com/', {
                 data: '{"lerp": "larp"}',
                 headers: {'Content-Type': ['application/json']}
             }).then(function(data) {
                 assert.strictEqual(data, '{"foo": "bar"}');
-            }).nodeify(done);
+            });
         });
     });
 
     describe(".delete", function() {
-        it("should perform DELETE requests", function(done) {
+        it("should perform DELETE requests", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'DELETE',
@@ -129,12 +129,12 @@ describe("HttpApi", function() {
                 headers: {'Content-Type': ['application/json']}
             }).then(function(data) {
                 assert.strictEqual(data, '{"foo": "bar"}');
-            }).nodeify(done);
+            });
         });
     });
 
     describe(".request", function() {
-        it("should accept responses in the 200 range", function(done) {
+        it("should accept responses in the 200 range", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'GET',
@@ -148,10 +148,10 @@ describe("HttpApi", function() {
 
             api.request('get', 'http://foo.com/').then(function(data) {
                 assert.equal(data, '201 Created');
-            }).nodeify(done);
+            });
         });
 
-        it("should support request body data", function(done) {
+        it("should support request body data", function() {
             im.api.add_http_fixture({
                 request: {
                     url: 'http://foo.com/',
@@ -160,15 +160,15 @@ describe("HttpApi", function() {
                 }
             });
 
-            api.request("post", 'http://foo.com/', {
+            return api.request("post", 'http://foo.com/', {
                 data: 'ping',
             }).then(function() {
                 var request = im.api.http_requests[0];
                 assert.equal(request.body, 'ping');
-            }).nodeify(done);
+            });
         });
 
-        it("should support request url params", function(done) {
+        it("should support request url params", function() {
             im.api.add_http_fixture({
                 request: {
                     method: 'GET',
@@ -176,7 +176,7 @@ describe("HttpApi", function() {
                 }
             });
 
-            api.get('http://foo.com/', {
+            return api.get('http://foo.com/', {
                 params: {
                     a: 1,
                     b: 2
@@ -184,11 +184,11 @@ describe("HttpApi", function() {
             }).then(function(data) {
                 var request = im.api.http_requests[0];
                 assert.equal(request.url, 'http://foo.com/?a=1&b=2');
-            }).nodeify(done);
+            });
         });
 
-        it("should support basic auth", function(done) {
-            make_api({
+        it("should support basic auth", function() {
+            return make_api({
                 auth: {
                     username: 'me',
                     password: 'pw'
@@ -207,11 +207,11 @@ describe("HttpApi", function() {
                 assert.deepEqual(
                     request.headers.Authorization,
                     ['Basic bWU6cHc=']);
-            }).nodeify(done);
+            });
         });
 
         describe("if the response code is in the error range", function() {
-            it("should throw an error", function(done) {
+            it("should throw an error", function() {
                 im.api.add_http_fixture({
                     request: {
                         method: 'GET',
@@ -223,13 +223,14 @@ describe("HttpApi", function() {
                     }
                 });
 
-                api.request("get", "http://foo.com/").catch(function(e) {
+                var p = api.request("get", "http://foo.com/");
+                return p.catch(function(e) {
                     assert(e instanceof HttpApiError);
                     assert.equal(e.message, [
                         'HTTP API GET to http://foo.com/ failed:',
                         '404 Not Found [Response Body: 404 Not Found]'
                     ].join(" "));
-                }).nodeify(done);
+                });
             });
         });
 
@@ -252,7 +253,8 @@ describe("HttpApi", function() {
                     }
                 });
 
-                api.request('get', 'http://foo.com/').catch(function(e) {
+                var p = api.request('get', 'http://foo.com/');
+                return p.catch(function(e) {
                     assert(e instanceof HttpApiError);
                     assert.equal(e.message, [
                         'HTTP API GET to http://foo.com/ failed:',
@@ -260,7 +262,7 @@ describe("HttpApi", function() {
                         '(Error: You shall not parse)',
                         '[Response Body: {"foo": "bar"}]'
                     ].join(" "));
-                }).nodeify(done);
+                });
             });
         });
 
@@ -274,7 +276,7 @@ describe("HttpApi", function() {
                 };
             });
 
-            it("should throw an error", function(done) {
+            it("should throw an error", function() {
                 im.api.add_http_fixture({
                     request: {
                         method: 'GET',
@@ -286,13 +288,14 @@ describe("HttpApi", function() {
                     }
                 });
 
-                api.request('get', 'http://foo.com/').catch(function(e) {
+                var p = api.request('get', 'http://foo.com/');
+                return p.catch(function(e) {
                     assert(e instanceof HttpApiError);
                     assert.equal(e.message, [
                         'HTTP API GET to http://foo.com/ failed:',
                         'No apparent reason'
                     ].join(" "));
-                }).nodeify(done);
+                });
             });
         });
     });
@@ -300,6 +303,9 @@ describe("HttpApi", function() {
 
 
 describe("JsonApi", function() {
+    var im;
+    var api;
+
     function make_api(opts) {
         return test_utils.make_im().then(function(new_im) {
             im = new_im;
@@ -308,11 +314,11 @@ describe("JsonApi", function() {
         });
     }
 
-    beforeEach(function(done) {
-        make_api().nodeify(done);
+    beforeEach(function() {
+        return make_api();
     });
 
-    it("should decode JSON body response", function(done) {
+    it("should decode JSON body response", function() {
         im.api.add_http_fixture({
             request: {
                 method: 'GET',
@@ -324,12 +330,12 @@ describe("JsonApi", function() {
             }
         });
 
-        api.request('get', 'http://foo.com/').then(function(data) {
+        return api.request('get', 'http://foo.com/').then(function(data) {
             assert.deepEqual(data, {foo: 'bar'});
-        }).nodeify(done);
+        });
     });
 
-    it("should encode request data to JSON", function(done) {
+    it("should encode request data to JSON", function() {
         im.api.add_http_fixture({
             request: {
                 url: 'http://foo.com/',
@@ -339,11 +345,11 @@ describe("JsonApi", function() {
             }
         });
 
-        api.request("post", 'http://foo.com/', {
+        return api.request("post", 'http://foo.com/', {
             data: {lerp: 'larp'},
         }).then(function() {
             var request = im.api.http_requests[0];
             assert.equal(request.body, '{"lerp":"larp"}');
-        }).nodeify(done);
+        });
     });
 });

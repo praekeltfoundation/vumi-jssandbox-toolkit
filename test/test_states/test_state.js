@@ -11,12 +11,12 @@ describe("State", function () {
     var im;
     var state;
 
-    beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+    beforeEach(function() {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             state = new State('luke_the_state');
             return state.setup(im);
-        }).nodeify(done);
+        });
     });
 
     describe(".setup", function() {

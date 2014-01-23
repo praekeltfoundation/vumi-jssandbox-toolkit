@@ -159,11 +159,11 @@ describe("User", function() {
     var im;
     var user;
 
-    beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+    beforeEach(function() {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             user = im.user;
-        }).nodeify(done);
+        });
     });
 
     it("should be JSON serializable", function() {
@@ -192,8 +192,8 @@ describe("User", function() {
             user.setup('+27123456789');
         });
 
-        it("should setup the user", function(done) {
-            user.setup('+27123456789', {
+        it("should setup the user", function() {
+            return user.setup('+27123456789', {
                 lang: 'af',
                 answers: {start: 'yes'},
                 state: {
@@ -207,7 +207,7 @@ describe("User", function() {
                 assert.equal(user.state.get_name(), 'start');
                 assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
                 assert.equal(user.i18n.gettext('yes'), 'ja');
-            }).nodeify(done);
+            });
         });
     });
 
@@ -231,15 +231,15 @@ describe("User", function() {
 
     describe(".load", function() {
         describe("if the user exists", function() {
-            it("should load the user", function(done) {
-                user.load('+27123456789').then(function() {
+            it("should load the user", function() {
+                return user.load('+27123456789').then(function() {
                     assert.equal(user.addr, '+27123456789');
                     assert.equal(user.lang, 'af');
                     assert.equal(user.get_answer('start'), 'yes');
                     assert.equal(user.state.get_name(), 'start');
                     assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
                     assert.equal(user.i18n.gettext('yes'), 'ja');
-                }).nodeify(done);
+                });
             });
 
             it("should emit a 'user:load' event", function(done) {
@@ -263,15 +263,15 @@ describe("User", function() {
 
     describe(".load_or_create", function() {
         describe("if the user exists", function() {
-            it("should load the user", function(done) {
-                user.load('+27123456789').then(function() {
+            it("should load the user", function() {
+                return user.load('+27123456789').then(function() {
                     assert.equal(user.addr, '+27123456789');
                     assert.equal(user.lang, 'af');
                     assert.equal(user.get_answer('start'), 'yes');
                     assert.equal(user.state.get_name(), 'start');
                     assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
                     assert.equal(user.i18n.gettext('yes'), 'ja');
-                }).nodeify(done);
+                });
             });
 
             it("should emit a 'user:load' event", function(done) {
@@ -285,10 +285,10 @@ describe("User", function() {
         });
 
         describe("if the user does not exist", function() {
-            it("should create a new user", function(done) {
-                user.load_or_create('i-do-not-exist').then(function() {
+            it("should create a new user", function() {
+                return user.load_or_create('i-do-not-exist').then(function() {
                     assert.equal(user.addr, 'i-do-not-exist');
-                }).nodeify(done);
+                });
             });
 
             it("should emit a 'user:new' event", function(done) {
@@ -328,11 +328,11 @@ describe("User", function() {
     });
 
     describe(".set_lang", function() {
-        it("should change the user's language", function(done) {
-            user.set_lang('jp').then(function() {
+        it("should change the user's language", function() {
+            return user.set_lang('jp').then(function() {
                 assert.equal(user.lang, 'jp');
                 assert.equal(user.i18n.gettext('yes'), 'hai');
-            }).nodeify(done);
+            });
         });
     });
 });

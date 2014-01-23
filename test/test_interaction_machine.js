@@ -8,10 +8,10 @@ var InteractionMachine = vumigo.InteractionMachine;
 describe("InteractionMachine", function () {
     var im;
 
-    beforeEach(function(done) {
-        test_utils.make_im().then(function(new_im) {
+    beforeEach(function() {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
-        }).nodeify(done);
+        });
     });
 
     describe(".setup", function() {

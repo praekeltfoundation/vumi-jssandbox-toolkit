@@ -12,7 +12,7 @@ describe("EndState", function () {
     var state;
 
     beforeEach(function (done) {
-        test_utils.make_im().then(function(new_im) {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
 
             state = new EndState('state_1', {
@@ -22,28 +22,28 @@ describe("EndState", function () {
 
             im.app.add_state(state);
             return im.switch_state('state_1');
-        }).nodeify(done);
+        });
     });
 
 
     describe("on state:input", function() {
         it("should set the user's current state to the next state",
-        function(done) {
+        function() {
             assert.equal(im.user.state.get_name(), 'state_1');
 
-            state.emit.input('A lemon').then(function() {
+            return state.emit.input('A lemon').then(function() {
                 assert.equal(im.user.state.get_name(), 'state_2');
-            }).nodeify(done);
+            });
         });
     });
 
     describe("on im session:new", function() {
-        it("should simulate an input event", function(done) {
+        it("should simulate an input event", function() {
             assert.equal(im.user.state.get_name(), 'state_1');
 
-            im.emit(new SessionNewEvent(im)).then(function() {
+            return im.emit(new SessionNewEvent(im)).then(function() {
                 assert.equal(im.user.state.get_name(), 'state_2');
-            }).nodeify(done);
+            });
         });
     });
 
