@@ -4,6 +4,23 @@ var assert = require("assert");
 var utils = require("../lib/utils");
 
 describe("utils", function() {
+    describe("functor", function() {
+        describe("if the object is a function", function() {
+            it("should simply return the object", function() {
+                function f() {}
+                assert.equal(utils.functor(f), f);
+            });
+        });
+
+        describe("if the object is not a function", function() {
+            it("should wrap the object in a function", function() {
+                var obj = {};
+                var f = utils.functor(obj);
+                assert.equal(f(), obj);
+            });
+        });
+    });
+
     describe("maybe_call", function() {
         it("should handle functions", function() {
             function f(b, c) {
