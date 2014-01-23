@@ -71,6 +71,45 @@ describe("UserStateData", function() {
         });
     });
 
+    describe(".change", function() {
+        beforeEach(function() {
+            state = new UserStateData();
+        });
+
+        it("should reset the user's state", function() {
+            assert(typeof state.get_name() == 'undefined');
+            assert.deepEqual(state.get_metadata(), {});
+
+            state.change('test_state', {foo: 'bar'});
+            assert.equal(state.get_name(), 'test_state');
+
+            assert.equal(state.get_name(), 'test_state');
+            assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+        });
+
+        describe("if a null state was given", function() {
+            it("should not reset the user", function() {
+                state.reset('test_state', {foo: 'bar'});
+
+                state.change(null);
+
+                assert.equal(state.get_name(), 'test_state');
+                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+            });
+        });
+
+        describe("if an undefined state was given", function() {
+            it("should not reset the user", function() {
+                state.reset('test_state', {foo: 'bar'});
+
+                state.change();
+
+                assert.equal(state.get_name(), 'test_state');
+                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+            });
+        });
+    });
+
     describe(".update_metadata", function() {
         it("should update the metadata", function() {
             assert.deepEqual(state.get_metadata(), {foo: 'bar'});
