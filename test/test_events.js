@@ -20,7 +20,33 @@ describe("Eventable", function() {
         assert(thing instanceof Thing);
     });
 
-    describe("emit", function() {
+    describe(".once", function() {
+        describe(".promised", function() {
+            describe("once the event is emitted", function() {
+                it("should fulfull the returned promise", function() {
+                    return eventable
+                        .once.promised('foo')
+                        .then(function(event) {
+                            assert.equal(event.name, 'foo');
+                        })
+                        .thenResolve(eventable.emit(new Event('foo')));
+                });
+
+                it("should remove the event listener", function() {
+                    var p = eventable.once.promised('foo');
+
+                    assert.equal(eventable.listeners('foo').length, 1);
+                    p = p.thenResolve(eventable.emit(new Event('foo')));
+
+                    return p.then(function() {
+                        assert.equal(eventable.listeners('foo').length, 0);
+                    });
+                });
+            });
+        });
+    });
+
+    describe(".emit", function() {
         it("should emit the event", function(done) {
             eventable.on('foo', function(event) {
                 assert.equal(event.name, 'foo');
