@@ -421,7 +421,6 @@ describe('DummyApi fixture loading', function() {
             }
         });
         var reply = capture_reply('http.get', {
-            method: 'get',
             url: 'http://foo/'
         });
         assert.equal(reply.body, JSON.stringify({bar: 'baz'}));
@@ -435,7 +434,6 @@ describe('DummyApi fixture loading', function() {
             body: "plain text please"
         });
         var reply = capture_reply('http.get', {
-            method: 'get',
             url: 'http://foo/'
         });
         assert.ok(reply.success);
