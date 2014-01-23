@@ -4,7 +4,7 @@
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "./utils/test.sh test/"
   },
   "repository": {
     "type": "git",
