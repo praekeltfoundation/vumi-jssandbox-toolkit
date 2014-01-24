@@ -81,7 +81,10 @@ An `example mashup <https://github.com/smn/go-google-maps>`_
 combining USSD, Google Map's APIs and SMS. See how all these fit together
 to create a super useful application that does geolocation and
 delivery of directions via USSD & SMS.
-This demo is available in South Africa on ``*120*8864*1105#``.
+
+.. note::
+
+    This application is available in South Africa on ``*120*8864*1105#``.
 
 Ushahidi
 ~~~~~~~~
@@ -90,7 +93,10 @@ We're big fans of Ushahidi_, the crisis mapping tool. This
 `Ushahidi USSD app <https://github.com/smn/go-ushahidi>`_
 is another mashup of USSD and the Ushahidi API. Allows
 reporting of geolocated events via USSD to hosted Ushahidi instances.
-This demo is available in South Africa on ``*120*8864*1087#``.
+
+.. note::
+
+    This application is available in South Africa on ``*120*8864*1087#``.
 
 
 Indices and tables
