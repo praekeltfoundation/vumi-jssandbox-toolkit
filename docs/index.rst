@@ -19,7 +19,7 @@ Vumi Go's Javascript sandbox.
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
 Example Applications
-====================
+--------------------
 
 To get you started, here are some example applications that may be
 useful as an example or reference.
@@ -38,7 +38,7 @@ Groups Example
 Want to access `Vumi Go <https://go.vumi.org/>`_'s groups?
 The `Go Groups <https://github.com/smn/go-groups>`_
 application shows you how to do that. It's a simple application that
-let's you create, list, and search for groups via USSD.
+lets you create, list, and search for groups via USSD.
 
 Key Value Store Example
 ~~~~~~~~~~~~~~~~~~~~~~~
