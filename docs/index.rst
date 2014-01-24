@@ -89,8 +89,8 @@ delivery of directions via USSD & SMS.
 Ushahidi
 ~~~~~~~~
 
-We're big fans of Ushahidi_, the crisis mapping tool. This
-`Ushahidi USSD app <https://github.com/smn/go-ushahidi>`_
+We're big fans of `Ushahidi <http://ushahidi.com/>`_, the crisis
+mapping tool. This `Ushahidi USSD app <https://github.com/smn/go-ushahidi>`_
 is another mashup of USSD and the Ushahidi API. Allows
 reporting of geolocated events via USSD to hosted Ushahidi instances.
 
