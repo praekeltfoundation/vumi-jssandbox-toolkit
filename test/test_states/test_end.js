@@ -11,7 +11,7 @@ describe("EndState", function () {
     var im;
     var state;
 
-    beforeEach(function (done) {
+    beforeEach(function() {
         return test_utils.make_im().then(function(new_im) {
             im = new_im;
 

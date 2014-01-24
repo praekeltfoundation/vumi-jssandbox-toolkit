@@ -83,7 +83,7 @@ describe("ChoiceState", function () {
             });
         });
 
-        it("should accept number-based answers", function(done) {
+        it("should accept number-based answers", function() {
             return make_state({accept_labels: true}).then(function(state) {
                 assert.equal(im.user.state.get_name(), 'color_state');
 

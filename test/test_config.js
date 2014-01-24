@@ -18,14 +18,12 @@ describe("SandboxConfig", function() {
     });
 
     describe(".setup", function() {
-        it("should emit a 'setup' event", function(done) {
+        beforeEach(function() {
             config = new SandboxConfig(im);
+        });
 
-            config.on('setup', function() {
-                done();
-            });
-
-            config.setup();
+        it("should emit a 'setup' event", function() {
+            return config.once.resolved('setup').thenResolve(config.setup());
         });
     });
     
@@ -51,7 +49,7 @@ describe("IMConfig", function() {
     var im;
     var config;
 
-    beforeEach(function(done) {
+    beforeEach(function() {
         return test_utils.make_im().then(function(new_im) {
             im = new_im;
             config = im.config;
@@ -59,14 +57,14 @@ describe("IMConfig", function() {
     });
 
     describe(".setup", function() {
-        it("should emit a 'setup' event", function(done) {
+        var config;
+
+        beforeEach(function() {
             config = new IMConfig(im);
+        });
 
-            config.on('setup', function() {
-                done();
-            });
-
-            config.setup();
+        it("should emit a 'setup' event", function() {
+            return config.once.resolved('setup').thenResolve(config.setup());
         });
 
         it("setup the config from its value in the sandbox config",

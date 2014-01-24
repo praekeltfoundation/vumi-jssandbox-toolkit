@@ -373,7 +373,7 @@ describe("DummyApi", function () {
         });
 
         describe("groups.get_by_name", function() {
-            it("should retrieve a group by its name", function(done) {
+            it("should retrieve a group by its name", function() {
                 api.add_group({key: 'group-1', name: 'Group 1'});
                 api.add_group({key: 'group-2', name: 'Foo Group'});
                 api.add_group({key: 'group-3', name: 'Foo Group'});

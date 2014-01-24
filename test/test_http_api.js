@@ -241,7 +241,7 @@ describe("HttpApi", function() {
                 };
             });
 
-            it("should throw an error", function(done) {
+            it("should throw an error", function() {
                 im.api.add_http_fixture({
                     request: {
                         method: 'GET',

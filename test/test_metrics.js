@@ -21,14 +21,14 @@ describe("MetricStore", function() {
     });
 
     describe(".setup", function() {
-        it("should emit a 'setup' event", function(done) {
+        var metrics;
+
+        beforeEach(function() {
             metrics = new MetricStore(im);
+        });
 
-            metrics.on('setup', function() {
-                done();
-            });
-
-            metrics.setup();
+        it("should emit a 'setup' event", function() {
+            return metrics.once.resolved('setup').thenResolve(metrics.setup());
         });
     });
 

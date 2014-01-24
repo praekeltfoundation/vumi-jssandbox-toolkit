@@ -183,13 +183,13 @@ describe("User", function() {
             user = new User(im);
         });
 
-        it("should emit a 'setup' event", function(done) {
-            user.on('setup', function(e) {
-                assert.strictEqual(user, e.instance);
-                done();
-            });
-
-            user.setup('+27123456789');
+        it("should emit a 'setup' event", function() {
+            return user
+                .once.resolved('setup')
+                .then(function(e) {
+                    assert.strictEqual(user, e.instance);
+                })
+                .thenResolve(user.setup('+27123456789'));
         });
 
         it("should setup the user", function() {
@@ -213,19 +213,15 @@ describe("User", function() {
 
     describe(".create", function() {
         it("should emit a 'user:new' event after setting up",
-        function(done) {
-            var setup = false;
+        function() {
+            setup = user.once.resolved('setup');
 
-            user.on('setup', function() {
-                setup = true;
-            });
-
-            user.on('user:new', function() {
-                assert(setup);
-                done();
-            });
-
-            user.create('1234');
+            return user
+                .once.resolved('user:new')
+                .then(function() {
+                    assert(setup.isFulfilled());
+                })
+                .thenResolve(user.create('1234'));
         });
     });
 
@@ -242,20 +238,22 @@ describe("User", function() {
                 });
             });
 
-            it("should emit a 'user:load' event", function(done) {
-                user.on('user:load', function(e) {
-                    assert.equal(user, e.user);
-                    done();
-                });
-
-                user.load('+27123456789');
+            it("should emit a 'user:load' event", function() {
+                return user
+                    .once.resolved('user:load')
+                    .then(function(e) {
+                        assert.equal(user, e.user);
+                    })
+                    .thenResolve(user.load('+27123456789'));
             });
         });
 
         describe("if the user does not exist", function() {
-            it("should throw an error", function(done) {
-                user.load('i-do-not-exist').catch(function() {
-                    done();
+            it("should throw an error", function() {
+                return user.load('i-do-not-exist').catch(function(e) {
+                    assert.equal(
+                        e.message,
+                        "Failed to load user 'i-do-not-exist'");
                 });
             });
         });
@@ -274,13 +272,13 @@ describe("User", function() {
                 });
             });
 
-            it("should emit a 'user:load' event", function(done) {
-                user.on('user:load', function(e) {
-                    assert.equal(user, e.user);
-                    done();
-                });
-
-                user.load('+27123456789');
+            it("should emit a 'user:load' event", function() {
+                return user
+                    .once.resolved('user:load')
+                    .then(function(e) {
+                        assert.equal(user, e.user);
+                    })
+                    .thenResolve(user.load('+27123456789'));
             });
         });
 
@@ -291,13 +289,13 @@ describe("User", function() {
                 });
             });
 
-            it("should emit a 'user:new' event", function(done) {
-                user.on('user:new', function(e) {
-                    assert.equal(user, e.user);
-                    done();
-                });
-
-                user.load_or_create('i-do-not-exist');
+            it("should emit a 'user:new' event", function() {
+                return user
+                    .once.resolved('user:new')
+                    .then(function(e) {
+                        assert.equal(user, e.user);
+                    })
+                    .thenResolve(user.load_or_create('i-do-not-exist'));
             });
         });
     });
@@ -317,13 +315,13 @@ describe("User", function() {
                 });
         });
 
-        it("should emit a 'user:save' event", function(done) {
-            user.on('user:save', function(e) {
-                assert.equal(e.user, user);
-                done();
-            });
-
-            user.save();
+        it("should emit a 'user:save' event", function() {
+            return user
+                .once.resolved('user:save')
+                .then(function(e) {
+                    assert.equal(e.user, user);
+                })
+                .thenResolve(user.save());
         });
     });
 

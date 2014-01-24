@@ -47,22 +47,22 @@ describe("Eventable", function() {
     });
 
     describe(".emit", function() {
-        it("should emit the event", function(done) {
-            eventable.on('foo', function(event) {
-                assert.equal(event.name, 'foo');
-                assert.equal(event.a, 'lerp');
-                assert.equal(event.b, 'larp');
-                done();
-            });
-
-            eventable.emit(new Event('foo', {
-                a: 'lerp',
-                b: 'larp'
-            }));
+        it("should emit the event", function() {
+            return eventable
+                .once.resolved('foo')
+                .then(function(event) {
+                    assert.equal(event.name, 'foo');
+                    assert.equal(event.a, 'lerp');
+                    assert.equal(event.b, 'larp');
+                })
+                .thenResolve(eventable.emit(new Event('foo', {
+                    a: 'lerp',
+                    b: 'larp'
+                })));
         });
 
         describe("once all associated listeners are done", function() {
-            it("should fulfill the returned promise", function(done) {
+            it("should fulfill the returned promise", function() {
                 var d1 = Q.defer();
                 var d2 = Q.defer();
 

@@ -27,15 +27,15 @@ describe("State", function () {
             assert.strictEqual(state.im, im);
         });
 
-        it("should emit a 'setup' event", function(done) {
+        it("should emit a 'setup' event", function() {
             var state = new State('luke_the_state');
 
-            state.on('setup', function(e) {
-                assert.equal(e.instance, state);
-                done();
-            });
-
-            state.setup(im);
+            return state
+                .once.resolved('setup')
+                .then(function(e) {
+                    assert.equal(e.instance, state);
+                })
+                .thenResolve(state.setup(im));
         });
     });
 
@@ -49,13 +49,13 @@ describe("State", function () {
 
     describe(".emit", function() {
         describe(".input", function() {
-            it("should emit a 'state:input' event", function(done) {
-                state.on('state:input', function(e) {
-                    assert.equal(e.state, state);
-                    done();
-                });
-
-                state.emit.input();
+            it("should emit a 'state:input' event", function() {
+                return state
+                    .once.resolved('state:input')
+                    .then(function(e) {
+                        assert.equal(e.state, state);
+                    })
+                    .thenResolve(state.emit.input());
             });
         });
     });
@@ -68,7 +68,7 @@ describe("State", function () {
                 }
             });
 
-            assert.equal(state.continue_session(), false);
+            assert(!state.continue_session());
         });
 
         it("should be allowed to be a non-function", function() {
@@ -76,7 +76,7 @@ describe("State", function () {
                 continue_session: false
             });
 
-            assert.equal(state.continue_session(), true);
+            assert(!state.continue_session());
         });
     });
 
@@ -88,7 +88,7 @@ describe("State", function () {
                 }
             });
 
-            assert.equal(state.send_reply(), false);
+            assert(!state.send_reply());
         });
 
         it("should be allowed to be a non-function", function() {
@@ -96,7 +96,7 @@ describe("State", function () {
                 send_reply: false
             });
 
-            assert.equal(state.send_reply(), true);
+            assert(!state.send_reply());
         });
     });
 });
