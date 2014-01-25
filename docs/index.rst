@@ -32,6 +32,13 @@ A `bare bones application <https://github.com/smn/go-jsbox-skeleton>`_
 that you can use as a starting point. It's ready for you to read, adapt,
 unit-test, deploy and use on your phone within minutes.
 
+Contacts Example
+~~~~~~~~~~~~~~~~
+
+You can create, update and remove contact information in Vumi Go's contact
+database. Here is an `example application <https://github.com/smn/go-contacts>`
+that shows you how.
+
 Groups Example
 ~~~~~~~~~~~~~~
 
