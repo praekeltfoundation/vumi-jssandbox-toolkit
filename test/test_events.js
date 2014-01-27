@@ -24,23 +24,25 @@ describe("Eventable", function() {
         describe(".resolved", function() {
             describe("once the event is emitted", function() {
                 it("should fulfull the returned promise", function() {
+                    var p = eventable.once.resolved('foo');
                     return eventable
-                        .once.resolved('foo')
+                        .emit(new Event('foo'))
+                        .thenResolve(p)
                         .then(function(event) {
                             assert.equal(event.name, 'foo');
-                        })
-                        .thenResolve(eventable.emit(new Event('foo')));
+                        });
                 });
 
                 it("should remove the event listener", function() {
                     var p = eventable.once.resolved('foo');
-
                     assert.equal(eventable.listeners('foo').length, 1);
-                    p = p.thenResolve(eventable.emit(new Event('foo')));
 
-                    return p.then(function() {
-                        assert.equal(eventable.listeners('foo').length, 0);
-                    });
+                    return eventable
+                        .emit(new Event('foo'))
+                        .thenResolve(p)
+                        .then(function() {
+                            assert.equal(eventable.listeners('foo').length, 0);
+                        });
                 });
             });
         });

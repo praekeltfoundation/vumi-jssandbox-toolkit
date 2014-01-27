@@ -29,13 +29,13 @@ describe("State", function () {
 
         it("should emit a 'setup' event", function() {
             var state = new State('luke_the_state');
-
+            var p = state.once.resolved('setup');
             return state
-                .once.resolved('setup')
+                .setup(im)
+                .thenResolve(p)
                 .then(function(e) {
                     assert.equal(e.instance, state);
-                })
-                .thenResolve(state.setup(im));
+                });
         });
     });
 
@@ -50,12 +50,13 @@ describe("State", function () {
     describe(".emit", function() {
         describe(".input", function() {
             it("should emit a 'state:input' event", function() {
+                var p = state.once.resolved('state:input');
                 return state
-                    .once.resolved('state:input')
+                    .emit.input()
+                    .thenResolve(p)
                     .then(function(e) {
                         assert.equal(e.state, state);
-                    })
-                    .thenResolve(state.emit.input());
+                    });
             });
         });
     });

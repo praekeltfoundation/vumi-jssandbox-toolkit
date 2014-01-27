@@ -184,12 +184,13 @@ describe("User", function() {
         });
 
         it("should emit a 'setup' event", function() {
+            var p = user.once.resolved('setup');
             return user
-                .once.resolved('setup')
+                .setup('+27123456789')
+                .thenResolve(p)
                 .then(function(e) {
                     assert.strictEqual(user, e.instance);
-                })
-                .thenResolve(user.setup('+27123456789'));
+                });
         });
 
         it("should setup the user", function() {
@@ -214,14 +215,15 @@ describe("User", function() {
     describe(".create", function() {
         it("should emit a 'user:new' event after setting up",
         function() {
-            setup = user.once.resolved('setup');
+            var setup = user.once.resolved('setup');
+            var p = user.once.resolved('user:new');
 
             return user
-                .once.resolved('user:new')
+                .create('1234')
+                .thenResolve(p)
                 .then(function() {
                     assert(setup.isFulfilled());
-                })
-                .thenResolve(user.create('1234'));
+                });
         });
     });
 
@@ -239,12 +241,13 @@ describe("User", function() {
             });
 
             it("should emit a 'user:load' event", function() {
+                var p = user.once.resolved('user:load');
                 return user
-                    .once.resolved('user:load')
+                    .load('+27123456789')
+                    .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
-                    })
-                    .thenResolve(user.load('+27123456789'));
+                    });
             });
         });
 
@@ -273,12 +276,13 @@ describe("User", function() {
             });
 
             it("should emit a 'user:load' event", function() {
+                var p = user.once.resolved('user:load');
                 return user
-                    .once.resolved('user:load')
+                    .load('+27123456789')
+                    .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
-                    })
-                    .thenResolve(user.load('+27123456789'));
+                    });
             });
         });
 
@@ -290,12 +294,13 @@ describe("User", function() {
             });
 
             it("should emit a 'user:new' event", function() {
+                var p = user.once.resolved('user:new');
                 return user
-                    .once.resolved('user:new')
+                    .load_or_create('i-do-not-exist')
+                    .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
-                    })
-                    .thenResolve(user.load_or_create('i-do-not-exist'));
+                    });
             });
         });
     });
@@ -316,12 +321,13 @@ describe("User", function() {
         });
 
         it("should emit a 'user:save' event", function() {
+            var p = user.once.resolved('user:save');
             return user
-                .once.resolved('user:save')
+                .save()
+                .thenResolve(p)
                 .then(function(e) {
                     assert.equal(e.user, user);
-                })
-                .thenResolve(user.save());
+                });
         });
     });
 

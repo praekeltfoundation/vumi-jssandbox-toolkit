@@ -23,7 +23,8 @@ describe("SandboxConfig", function() {
         });
 
         it("should emit a 'setup' event", function() {
-            return config.once.resolved('setup').thenResolve(config.setup());
+            var p = config.once.resolved('setup');
+            return config.setup().thenResolve(p);
         });
     });
     
@@ -64,7 +65,8 @@ describe("IMConfig", function() {
         });
 
         it("should emit a 'setup' event", function() {
-            return config.once.resolved('setup').thenResolve(config.setup());
+            var p = config.once.resolved('setup');
+            return config.setup().thenResolve(p);
         });
 
         it("setup the config from its value in the sandbox config",

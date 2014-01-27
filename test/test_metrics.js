@@ -28,7 +28,8 @@ describe("MetricStore", function() {
         });
 
         it("should emit a 'setup' event", function() {
-            return metrics.once.resolved('setup').thenResolve(metrics.setup());
+            var p = metrics.once.resolved('setup');
+            return metrics.setup().thenResolve(p);
         });
     });
 
