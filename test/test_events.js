@@ -76,17 +76,36 @@ describe("Eventable", function() {
                         return d2.promise;
                     });
 
+                assert(d1.promise.isPending());
+                assert(d2.promise.isPending());
+
                 var p = eventable.emit(new Event('foo')).then(function() {
                     assert(d1.promise.isFulfilled());
                     assert(d2.promise.isFulfilled());
                 });
 
-                assert(d1.promise.isPending());
-                assert(d2.promise.isPending());
                 d1.resolve();
                 d2.resolve();
 
                 return p;
+            });
+        });
+
+        describe("if one of the associated listeners throws an error",
+        function() {
+            it("should reject the returned promise with the error",
+            function() {
+                var error = new Error(':(');
+                eventable.on('foo', function() {});
+                eventable.on('foo', function() { throw error; });
+
+                eventable.on('error', function() {
+                    console.log('sadasd');
+                });
+
+                return eventable.emit(new Event('foo')).catch(function(e) {
+                    assert.strictEqual(e, error);
+                });
             });
         });
     });
