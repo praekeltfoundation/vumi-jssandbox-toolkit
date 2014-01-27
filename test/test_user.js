@@ -160,7 +160,8 @@ describe("User", function() {
     var user;
 
     beforeEach(function() {
-        return test_utils.make_im().then(function(new_im) {
+        var msg = require('../test/fixtures/simple-msg-2').call();
+        return test_utils.make_im({msg: msg}).then(function(new_im) {
             im = new_im;
             user = im.user;
         });
@@ -168,9 +169,9 @@ describe("User", function() {
 
     it("should be JSON serializable", function() {
         assert.equal(JSON.stringify(user), JSON.stringify({
-            addr: '+27123456789',
+            addr: '+27987654321',
             lang: 'af',
-            answers: {start: 'yes'},
+            answers: {start: 'ja'},
             state: {
                 name: 'start',
                 metadata: {foo: 'bar'}
@@ -186,7 +187,7 @@ describe("User", function() {
         it("should emit a 'setup' event", function() {
             var p = user.once.resolved('setup');
             return user
-                .setup('+27123456789')
+                .setup('+27987654321')
                 .thenResolve(p)
                 .then(function(e) {
                     assert.strictEqual(user, e.instance);
@@ -194,7 +195,7 @@ describe("User", function() {
         });
 
         it("should setup the user", function() {
-            return user.setup('+27123456789', {
+            return user.setup('+27987654321', {
                 lang: 'af',
                 answers: {start: 'yes'},
                 state: {
@@ -202,7 +203,7 @@ describe("User", function() {
                     metadata: {foo: 'bar'}
                 }
             }).then(function() {
-                assert.equal(user.addr, '+27123456789');
+                assert.equal(user.addr, '+27987654321');
                 assert.equal(user.lang, 'af');
                 assert.equal(user.get_answer('start'), 'yes');
                 assert.equal(user.state.get_name(), 'start');
@@ -230,10 +231,10 @@ describe("User", function() {
     describe(".load", function() {
         describe("if the user exists", function() {
             it("should load the user", function() {
-                return user.load('+27123456789').then(function() {
-                    assert.equal(user.addr, '+27123456789');
+                return user.load('+27987654321').then(function() {
+                    assert.equal(user.addr, '+27987654321');
                     assert.equal(user.lang, 'af');
-                    assert.equal(user.get_answer('start'), 'yes');
+                    assert.equal(user.get_answer('start'), 'ja');
                     assert.equal(user.state.get_name(), 'start');
                     assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
                     assert.equal(user.i18n.gettext('yes'), 'ja');
@@ -243,7 +244,7 @@ describe("User", function() {
             it("should emit a 'user:load' event", function() {
                 var p = user.once.resolved('user:load');
                 return user
-                    .load('+27123456789')
+                    .load('+27987654321')
                     .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
@@ -265,20 +266,20 @@ describe("User", function() {
     describe(".load_or_create", function() {
         describe("if the user exists", function() {
             it("should load the user", function() {
-                return user.load('+27123456789').then(function() {
-                    assert.equal(user.addr, '+27123456789');
+                return user.load('+27987654321').then(function() {
+                    assert.equal(user.addr, '+27987654321');
                     assert.equal(user.lang, 'af');
-                    assert.equal(user.get_answer('start'), 'yes');
+                    assert.equal(user.get_answer('start'), 'ja');
                     assert.equal(user.state.get_name(), 'start');
                     assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
-                    assert.equal(user.i18n.gettext('yes'), 'ja');
+                    assert.equal(user.i18n.gettext('no'), 'nee');
                 });
             });
 
             it("should emit a 'user:load' event", function() {
                 var p = user.once.resolved('user:load');
                 return user
-                    .load('+27123456789')
+                    .load('+27987654321')
                     .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
@@ -313,7 +314,7 @@ describe("User", function() {
                 .save()
                 .then(function() {
                     user = new User();
-                    return user.load('+27123456789');
+                    return user.load('+27987654321');
                 })
                 .then(function() {
                     assert.equal(user.get_answert('why'), 'no');

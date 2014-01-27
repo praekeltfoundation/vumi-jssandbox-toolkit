@@ -10,6 +10,8 @@ module.exports = function() {
             'no' : [null, 'nee'],
             'yes?' : [null, 'ja?'],
             'no!' : [null, 'nee!'],
+            'hello': [null, 'hallo'],
+            'hello?': [null, 'hallo?'],
             'goodbye': [null, 'totsiens']
         }),
         'translation.jp': JSON.stringify({
