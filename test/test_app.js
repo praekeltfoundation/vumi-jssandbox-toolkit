@@ -237,12 +237,12 @@ describe("App", function () {
 
         it("should setup its states set", function() {
             var p = app.states.once.resolved('setup');
-            app.setup(im).thenResolve(p);
+            return app.setup(im).thenResolve(p);
         });
 
         it("should emit a 'setup' event", function() {
             var p = app.once.resolved('setup');
-            app.setup(im).thenResolve(p);
+            return app.setup(im).thenResolve(p);
         });
     });
 });
