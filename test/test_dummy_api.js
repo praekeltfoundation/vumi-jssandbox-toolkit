@@ -37,7 +37,15 @@ describe("DummyApi", function () {
         });
     });
 
-    describe("find_contact", function() {
+    describe(".in_logs", function() {
+        it("should determine whether the message is in the logs", function() {
+            assert(!api.in_logs('foo'));
+            api.log_info('foo');
+            assert(api.in_logs('foo'));
+        });
+    });
+
+    describe(".find_contact", function() {
         it("should fail for unknown address types", function() {
             assert.throws(
                 function () { api.find_contact("unknown", "+12334"); },

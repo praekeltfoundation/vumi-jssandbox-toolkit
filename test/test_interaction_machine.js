@@ -16,15 +16,12 @@ var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
 
 describe("InteractionMachine", function () {
     var im;
+    var api;
     var msg;
 
     var app;
     var start_state;
     var end_state;
-
-    function in_logs(msg) {
-        return im.api.logs.indexOf(msg) > -1;
-    }
 
     beforeEach(function() {
         msg = require('../test/fixtures/simple-msg').call();
@@ -43,6 +40,7 @@ describe("InteractionMachine", function () {
 
         return test_utils.make_im({app: app}).then(function(new_im) {
             im = new_im;
+            api = im.api;
         });
     });
 
@@ -105,15 +103,15 @@ describe("InteractionMachine", function () {
 
     describe(".attach", function() {
         beforeEach(function() {
-            delete im.api.im;
-            delete im.api.on_unknown_command;
-            delete im.api.on_inbound_message;
-            delete im.api.on_inbound_event;
+            delete api.im;
+            delete api.on_unknown_command;
+            delete api.on_inbound_message;
+            delete api.on_inbound_event;
         });
 
         it("should attach the im to the api", function() {
             im.attach();
-            assert.strictEqual(im.api.im, im);
+            assert.strictEqual(api.im, im);
         });
 
         describe("when api.on_unknown_command is invoked", function() {
@@ -127,7 +125,7 @@ describe("InteractionMachine", function () {
                 im.attach();
 
                 var p = im.once.resolved('unknown_command');
-                im.api.on_unknown_command(cmd);
+                api.on_unknown_command(cmd);
                 return p;
             });
 
@@ -135,7 +133,7 @@ describe("InteractionMachine", function () {
                 im.attach();
 
                 var p = im.once.resolved('im:shutdown');
-                im.api.on_unknown_command(cmd);
+                api.on_unknown_command(cmd);
                 return p;
             });
 
@@ -147,7 +145,7 @@ describe("InteractionMachine", function () {
                 im.on('unknown_command', function() { throw error; });
                 var p = im.once.resolved('im:error');
 
-                im.api.on_unknown_command(cmd);
+                api.on_unknown_command(cmd);
 
                 return p.then(function(event) {
                     assert.strictEqual(event.error, error);
@@ -166,7 +164,7 @@ describe("InteractionMachine", function () {
                 im.attach();
 
                 var p = im.once.resolved('inbound_event');
-                im.api.on_inbound_event(cmd);
+                api.on_inbound_event(cmd);
                 return p;
             });
 
@@ -174,7 +172,7 @@ describe("InteractionMachine", function () {
                 im.attach();
 
                 var p = im.once.resolved('im:shutdown');
-                im.api.on_unknown_command(cmd);
+                api.on_unknown_command(cmd);
                 return p;
             });
 
@@ -186,7 +184,7 @@ describe("InteractionMachine", function () {
                 im.on('inbound_event', function() { throw error; });
                 var p = im.once.resolved('im:error');
 
-                im.api.on_inbound_event(cmd);
+                api.on_inbound_event(cmd);
 
                 return p.then(function(event) {
                     assert.strictEqual(event.error, error);
@@ -204,14 +202,14 @@ describe("InteractionMachine", function () {
             it("should emit an 'inbound_message' event", function() {
                 im.attach();
                 var p = im.once.resolved('inbound_message');
-                im.api.on_inbound_message(cmd);
+                api.on_inbound_message(cmd);
                 return p;
             });
 
             it("should shutdown the im after event handling", function() {
                 im.attach();
                 var p = im.once.resolved('im:shutdown');
-                return im.api.on_inbound_message(cmd);
+                return api.on_inbound_message(cmd);
             });
 
             it("should handle any errors thrown by the event listeners",
@@ -221,7 +219,7 @@ describe("InteractionMachine", function () {
                 var p = im.once.resolved('im:error');
 
                 im.on('inbound_message', function() { throw error; });
-                im.api.on_inbound_message(cmd);
+                api.on_inbound_message(cmd);
 
                 return p.then(function(event) {
                     assert.strictEqual(event.error, error);
@@ -335,25 +333,25 @@ describe("InteractionMachine", function () {
 
     describe(".log", function() {
         it("should log the requested message", function() {
-            assert(!in_logs('wah wah'));
+            assert(!api.in_logs('wah wah'));
             return im.log('wah wah').then(function() {
-                assert(in_logs('wah wah'));
+                assert(api.in_logs('wah wah'));
             });
         });
     });
 
     describe(".err", function() {
         it("should log the error", function() {
-            assert(!in_logs(':('));
+            assert(!api.in_logs(':('));
             return im.err(new Error(':(')).then(function() {
-                assert(in_logs(':('));
+                assert(api.in_logs(':('));
             });
         });
 
         it("should terminate the sandbox", function() {
-            assert.equal(im.api.done_calls, 0);
+            assert.equal(api.done_calls, 0);
             return im.err(new Error(':(')).then(function() {
-                assert.equal(im.api.done_calls, 1);
+                assert.equal(api.done_calls, 1);
             });
         });
     });
@@ -365,18 +363,18 @@ describe("InteractionMachine", function () {
         });
 
         it("should terminate the sandbox", function() {
-            assert.equal(im.api.done_calls, 0);
+            assert.equal(api.done_calls, 0);
             return im.done().then(function() {
-                assert.equal(im.api.done_calls, 1);
+                assert.equal(api.done_calls, 1);
             });
         });
     });
 
     describe(".api_request", function() {
         it("should make a promise-based api request", function() {
-            assert(!in_logs('arrg'));
+            assert(!api.in_logs('arrg'));
             im.api_request('log.info', {msg: 'arrg'}).then(function() {
-                assert(in_logs('arrg'));
+                assert(api.in_logs('arrg'));
             });
         });
     });
@@ -391,7 +389,7 @@ describe("InteractionMachine", function () {
 
         it("should use the state's display content in the reply", function() {
             return im.reply(msg).then(function() {
-                var reply = im.api.request_calls[0];
+                var reply = api.request_calls[0];
                 assert.deepEqual(reply.content, 'hello?');
             });
         });
@@ -404,7 +402,7 @@ describe("InteractionMachine", function () {
             it("should translate the state's display content in the reply",
             function() {
                 return im.reply(msg).then(function() {
-                    var reply = im.api.request_calls[0];
+                    var reply = api.request_calls[0];
                     assert.deepEqual(reply.content, 'hallo?');
                 });
             });
@@ -424,7 +422,7 @@ describe("InteractionMachine", function () {
             it("should set the reply message to not continue the session",
             function() {
                 return im.reply(msg).then(function() {
-                    var reply = im.api.request_calls[0];
+                    var reply = api.request_calls[0];
                     assert.deepEqual(reply.continue_session, false);
                 });
             });
@@ -442,7 +440,7 @@ describe("InteractionMachine", function () {
 
             it("should not send a reply", function() {
                 return im.reply(msg).then(function() {
-                    assert.equal(im.api.request_calls.length, 0);
+                    assert.equal(api.request_calls.length, 0);
                 });
             });
         });
@@ -497,10 +495,10 @@ describe("InteractionMachine", function () {
 
     describe("on 'unknown_command'", function() {
         it("should log the command", function() {
-            assert(!in_logs('Received unknown command: {"bad":"cmd"}'));
+            assert(!api.in_logs('Received unknown command: {"bad":"cmd"}'));
             var e = new UnknownCommandEvent(im, {bad: 'cmd'});
             return im.emit(e).then(function() {
-                assert(in_logs('Received unknown command: {"bad":"cmd"}'));
+                assert(api.in_logs('Received unknown command: {"bad":"cmd"}'));
             });
         });
     });
@@ -572,7 +570,7 @@ describe("InteractionMachine", function () {
 
             it("should reply to the message", function() {
                 return im.emit(event).then(function() {
-                    assert.deepEqual(im.api.request_calls, [{
+                    assert.deepEqual(api.request_calls, [{
                         content: 'hello?',
                         in_reply_to: '1',
                         continue_session: true,
@@ -595,7 +593,7 @@ describe("InteractionMachine", function () {
 
             it("should reply to the message", function() {
                 return im.emit(event).then(function() {
-                    assert.deepEqual(im.api.request_calls, [{
+                    assert.deepEqual(api.request_calls, [{
                         content: 'goodbye',
                         in_reply_to: '1',
                         continue_session: false,
