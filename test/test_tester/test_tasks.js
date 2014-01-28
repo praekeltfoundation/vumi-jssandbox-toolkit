@@ -113,6 +113,12 @@ describe("AppTesterTasks", function() {
             tasks.reset();
             assert.equal(tasks.length, 0);
         });
+
+        it("should clear the task data", function() {
+            tasks.data.black = 'moth';
+            tasks.reset();
+            assert.deepEqual(tasks.data, {});
+        });
     });
 
     describe(".schedule", function() {
