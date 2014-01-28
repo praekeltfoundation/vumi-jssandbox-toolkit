@@ -13,19 +13,14 @@ function TestApp() {
     var self = this;
     App.call(self, "intro");
 
-    self.add_state(new FreeText(
-        "intro",
-        {
-            next: "end_state",
-            question: "Type something:"
-        }
-    ));
-    self.add_state(new EndState(
-        "end_state",
-        {
-            question: "Goodbye!"
-        }
-    ));
+    self.states.add(new FreeText("intro", {
+        next: "end_state",
+        question: "Type something:"
+    }));
+
+    self.states.add(new EndState("end_state", {
+        question: "Goodbye!"
+    }));
 }
 
 

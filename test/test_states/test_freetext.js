@@ -23,7 +23,7 @@ describe("Freetext", function () {
                 }
             });
 
-            im.app.add_state(state);
+            im.app.states.add(state);
             return im.switch_state('state_1');
         });
     });

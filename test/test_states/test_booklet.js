@@ -25,7 +25,7 @@ describe("BookletState", function() {
                 page_text: page_text
             });
 
-            im.app.add_state(booklet);
+            im.app.states.add(booklet);
             return im.switch_state('booklet');
         });
     });

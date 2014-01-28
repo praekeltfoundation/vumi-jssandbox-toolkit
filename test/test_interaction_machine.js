@@ -31,12 +31,12 @@ describe("InteractionMachine", function () {
             question: 'hello?',
             next: 'end'
         });
-        app.add_state(start_state);
+        app.states.add(start_state);
 
         end_state = new EndState('end', {
             text: 'goodbye'
         });
-        app.add_state(end_state);
+        app.states.add(end_state);
 
         return test_utils.make_im({app: app}).then(function(new_im) {
             im = new_im;
@@ -434,7 +434,7 @@ describe("InteractionMachine", function () {
                     text: 'goodbye',
                     send_reply: false
                 });
-                im.app.add_state(state);
+                im.app.states.add(state);
                 im.user.state.change(state);
             });
 

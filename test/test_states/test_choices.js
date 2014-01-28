@@ -36,7 +36,7 @@ describe("ChoiceState", function () {
             })
             .then(function() {
                 state = new ChoiceState(opts.name, opts);
-                im.app.add_state(state);
+                im.app.states.add(state);
                 return im.switch_state(opts.name).thenResolve(state);
             });
     }
@@ -122,7 +122,7 @@ describe("PaginatedChoiceState", function () {
             })
             .then(function() {
                 state = new PaginatedChoiceState(opts.name, opts);
-                im.app.add_state(state);
+                im.app.states.add(state);
                 return im.switch_state('color_state').thenResolve(state);
             });
     }
