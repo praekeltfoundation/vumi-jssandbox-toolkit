@@ -1,4 +1,4 @@
-State Creator
-=============
+App
+===
 
 .. autojs:: ../lib/app.js
