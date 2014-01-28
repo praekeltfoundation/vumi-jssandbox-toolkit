@@ -32,10 +32,10 @@ describe("Freetext", function () {
         describe("if the user response is valid", function() {
             it("should set the user's current state to the next state",
             function() {
-                assert.equal(im.user.state.get_name(), 'state_1');
+                assert.equal(im.user.state.name, 'state_1');
 
                 return state.emit.input('A lemon').then(function() {
-                    assert.equal(im.user.state.get_name(), 'state_2');
+                    assert.equal(im.user.state.name, 'state_2');
                 });
             });
 
@@ -50,10 +50,10 @@ describe("Freetext", function () {
 
         describe("if the user response is invalid", function() {
             it("should not set the user's state", function() {
-                assert.equal(im.user.state.get_name(), 'state_1');
+                assert.equal(im.user.state.name, 'state_1');
 
                 return state.emit.input('Not a lemon').then(function() {
-                    assert.equal(im.user.state.get_name(), 'state_1');
+                    assert.equal(im.user.state.name, 'state_1');
                 });
             });
 

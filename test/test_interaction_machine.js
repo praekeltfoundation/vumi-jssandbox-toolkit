@@ -531,7 +531,7 @@ describe("InteractionMachine", function () {
             it("should switch to the user's current state", function() {
                 assert.strictEqual(im.state, null);
                 return im.emit(event).then(function() {
-                    assert.equal(im.state.name, im.user.state.get_name());
+                    assert.equal(im.state.name, im.user.state.name);
                 });
             });
         });

@@ -30,43 +30,43 @@ describe("UserStateData", function() {
 
         describe(".reset(state)", function() {
             it("should reset itself using a state instance", function() {
-                assert(typeof state.get_name() == 'undefined');
-                assert.deepEqual(state.get_metadata(), {});
+                assert(typeof state.name == 'undefined');
+                assert.deepEqual(state.metadata, {});
 
                 var s = new State('test_state');
                 s.metadata = {foo: 'bar'};
                 state.reset(s);
 
-                assert.equal(state.get_name(), 'test_state');
-                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+                assert.equal(state.name, 'test_state');
+                assert.deepEqual(state.metadata, {foo: 'bar'});
             });
         });
 
         describe(".reset(opts)", function() {
             it("should reset itself using an options object", function() {
-                assert(typeof state.get_name() == 'undefined');
-                assert.deepEqual(state.get_metadata(), {});
+                assert(typeof state.name == 'undefined');
+                assert.deepEqual(state.metadata, {});
 
                 state.reset({
                     name : 'test_state',
                     metadata: {foo: 'bar'}
                 });
 
-                assert.equal(state.get_name(), 'test_state');
-                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+                assert.equal(state.name, 'test_state');
+                assert.deepEqual(state.metadata, {foo: 'bar'});
             });
         });
 
         describe(".reset(name, metadata)", function() {
             it("should reset itself using the given name and metadata",
             function() {
-                assert(typeof state.get_name() == 'undefined');
-                assert.deepEqual(state.get_metadata(), {});
+                assert(typeof state.name == 'undefined');
+                assert.deepEqual(state.metadata, {});
 
                 state.reset('test_state', {foo: 'bar'});
 
-                assert.equal(state.get_name(), 'test_state');
-                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+                assert.equal(state.name, 'test_state');
+                assert.deepEqual(state.metadata, {foo: 'bar'});
             });
         });
     });
@@ -77,14 +77,14 @@ describe("UserStateData", function() {
         });
 
         it("should reset the user's state", function() {
-            assert(typeof state.get_name() == 'undefined');
-            assert.deepEqual(state.get_metadata(), {});
+            assert(typeof state.name == 'undefined');
+            assert.deepEqual(state.metadata, {});
 
             state.change('test_state', {foo: 'bar'});
-            assert.equal(state.get_name(), 'test_state');
+            assert.equal(state.name, 'test_state');
 
-            assert.equal(state.get_name(), 'test_state');
-            assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+            assert.equal(state.name, 'test_state');
+            assert.deepEqual(state.metadata, {foo: 'bar'});
         });
 
         describe("if a null state was given", function() {
@@ -93,8 +93,8 @@ describe("UserStateData", function() {
 
                 state.change(null);
 
-                assert.equal(state.get_name(), 'test_state');
-                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+                assert.equal(state.name, 'test_state');
+                assert.deepEqual(state.metadata, {foo: 'bar'});
             });
         });
 
@@ -104,26 +104,26 @@ describe("UserStateData", function() {
 
                 state.change();
 
-                assert.equal(state.get_name(), 'test_state');
-                assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+                assert.equal(state.name, 'test_state');
+                assert.deepEqual(state.metadata, {foo: 'bar'});
             });
         });
     });
 
     describe(".update_metadata", function() {
         it("should update the metadata", function() {
-            assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+            assert.deepEqual(state.metadata, {foo: 'bar'});
             state.update_metadata({baz: 'qux'});
-            assert.deepEqual(state.get_metadata(), {
+            assert.deepEqual(state.metadata, {
                 foo: 'bar',
                 baz: 'qux'
             });
         });
 
         it("should overwrite already defined metadata properties", function() {
-            assert.deepEqual(state.get_metadata(), {foo: 'bar'});
+            assert.deepEqual(state.metadata, {foo: 'bar'});
             state.update_metadata({foo: 'qux'});
-            assert.deepEqual(state.get_metadata(), {foo: 'qux'});
+            assert.deepEqual(state.metadata, {foo: 'qux'});
         });
     });
 
@@ -206,8 +206,8 @@ describe("User", function() {
                 assert.equal(user.addr, '+27987654321');
                 assert.equal(user.lang, 'af');
                 assert.equal(user.get_answer('start'), 'yes');
-                assert.equal(user.state.get_name(), 'start');
-                assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
+                assert.equal(user.state.name, 'start');
+                assert.deepEqual(user.state.metadata, {foo: 'bar'});
                 assert.equal(user.i18n.gettext('yes'), 'ja');
             });
         });
@@ -235,8 +235,8 @@ describe("User", function() {
                     assert.equal(user.addr, '+27987654321');
                     assert.equal(user.lang, 'af');
                     assert.equal(user.get_answer('start'), 'ja');
-                    assert.equal(user.state.get_name(), 'start');
-                    assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
+                    assert.equal(user.state.name, 'start');
+                    assert.deepEqual(user.state.metadata, {foo: 'bar'});
                     assert.equal(user.i18n.gettext('yes'), 'ja');
                 });
             });
@@ -270,8 +270,8 @@ describe("User", function() {
                     assert.equal(user.addr, '+27987654321');
                     assert.equal(user.lang, 'af');
                     assert.equal(user.get_answer('start'), 'ja');
-                    assert.equal(user.state.get_name(), 'start');
-                    assert.deepEqual(user.state.get_metadata(), {foo: 'bar'});
+                    assert.equal(user.state.name, 'start');
+                    assert.deepEqual(user.state.metadata, {foo: 'bar'});
                     assert.equal(user.i18n.gettext('no'), 'nee');
                 });
             });

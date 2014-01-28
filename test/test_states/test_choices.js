@@ -47,16 +47,16 @@ describe("ChoiceState", function () {
 
     describe("if the 'accept_labels' option is not set", function() {
         it("should accept a number-based answers", function () {
-            assert.equal(im.user.state.get_name(), 'color_state');
+            assert.equal(im.user.state.name, 'color_state');
 
             return state.emit.input("1").then(function() {
-                assert.equal(im.user.state.get_name(), 'red_state');
+                assert.equal(im.user.state.name, 'red_state');
             });
         });
 
         it("should not accept label-based answers", function() {
             return state.emit.input("Red").then(function() {
-                assert.equal(im.user.state.get_name(), 'color_state');
+                assert.equal(im.user.state.name, 'color_state');
             });
         });
     });
@@ -64,10 +64,10 @@ describe("ChoiceState", function () {
     describe("if the 'accept_labels' option is set", function() {
         it("should accept label-based answers", function() {
             return make_state({accept_labels: true}).then(function(state) {
-                assert.equal(im.user.state.get_name(), 'color_state');
+                assert.equal(im.user.state.name, 'color_state');
 
                 state.emit.input("Red").then(function() {
-                    assert.equal(im.user.state.get_name(), 'red_state');
+                    assert.equal(im.user.state.name, 'red_state');
                 });
             });
         });
@@ -75,20 +75,20 @@ describe("ChoiceState", function () {
         it("should be case insensitive with label-based answers",
         function() {
             return make_state({accept_labels: true}).then(function(state) {
-                assert.equal(im.user.state.get_name(), 'color_state');
+                assert.equal(im.user.state.name, 'color_state');
 
                 state.emit.input("reD").then(function() {
-                    assert.equal(im.user.state.get_name(), 'red_state');
+                    assert.equal(im.user.state.name, 'red_state');
                 });
             });
         });
 
         it("should accept number-based answers", function() {
             return make_state({accept_labels: true}).then(function(state) {
-                assert.equal(im.user.state.get_name(), 'color_state');
+                assert.equal(im.user.state.name, 'color_state');
 
                 state.emit.input("1").then(function() {
-                    assert.equal(im.user.state.get_name(), 'red_state');
+                    assert.equal(im.user.state.name, 'red_state');
                 });
             });
         });
