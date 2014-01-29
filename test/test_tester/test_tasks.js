@@ -183,6 +183,108 @@ describe("AppTesterTasks", function() {
                 assert.equal(tasks.length, 0);
             });
         });
+
+        it("should invoke the before each hook before each task", function() {
+            var record = [];
+
+            tasks.before.each = function() {
+                record.push('before-eached');
+            };
+
+            tasks.schedule('spam', function() {
+                record.push('spammed');
+            });
+
+            tasks.schedule('ham', function() {
+                record.push('hammed');
+            });
+
+            assert.deepEqual(record, []);
+            return tasks.run().then(function() {
+                assert.deepEqual(record, [
+                    'before-eached',
+                    'spammed',
+                    'before-eached',
+                    'hammed'
+                ]);
+            });
+        });
+
+        it("should invoke the after each hook after each task", function() {
+            var record = [];
+
+            tasks.after.each = function() {
+                record.push('after-eached');
+            };
+
+            tasks.schedule('spam', function() {
+                record.push('spammed');
+            });
+
+            tasks.schedule('ham', function() {
+                record.push('hammed');
+            });
+
+            assert.deepEqual(record, []);
+            return tasks.run().then(function() {
+                assert.deepEqual(record, [
+                    'spammed',
+                    'after-eached',
+                    'hammed',
+                    'after-eached',
+                ]);
+            });
+        });
+
+        it("should invoke the before hook before all tasks", function() {
+            var record = [];
+
+            tasks.before= function() {
+                record.push('befored');
+            };
+
+            tasks.schedule('spam', function() {
+                record.push('spammed');
+            });
+
+            tasks.schedule('ham', function() {
+                record.push('hammed');
+            });
+
+            assert.deepEqual(record, []);
+            return tasks.run().then(function() {
+                assert.deepEqual(record, [
+                    'befored',
+                    'spammed',
+                    'hammed'
+                ]);
+            });
+        });
+
+        it("should invoke the after hook after all tasks", function() {
+            var record = [];
+
+            tasks.after = function() {
+                record.push('aftered');
+            };
+
+            tasks.schedule('spam', function() {
+                record.push('spammed');
+            });
+
+            tasks.schedule('ham', function() {
+                record.push('hammed');
+            });
+
+            assert.deepEqual(record, []);
+            return tasks.run().then(function() {
+                assert.deepEqual(record, [
+                    'spammed',
+                    'hammed',
+                    'aftered',
+                ]);
+            });
+        });
     });
 });
 
