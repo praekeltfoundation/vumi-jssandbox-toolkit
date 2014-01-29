@@ -117,4 +117,13 @@ describe("AppTester Setup Tasks", function() {
             });
         });
     });
+
+    describe(".setup.user.lang", function() {
+        it("should set the user's language", function() {
+            return tester.setup.user.lang('af').run().then(function() {
+                var user = api.kv_store['users.+27123456789'];
+                assert.equal(user.lang, 'af');
+            });
+        });
+    });
 });
