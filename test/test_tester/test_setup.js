@@ -74,7 +74,7 @@ describe("AppTester Setup Tasks", function() {
                     addr: '+81',
                     lang: 'jp'
                 }).run().then(function() {
-                    var user = api.kv_store['users.+81'];
+                    var user = api.kv_store['users.default.+81'];
                     assert.equal(user.lang, 'jp');
                     assert.equal(user.addr, '+81');
                 });
@@ -89,7 +89,7 @@ describe("AppTester Setup Tasks", function() {
                     user.lang = 'jp';
                     return user;
                 }).run().then(function() {
-                    var user = api.kv_store['users.+81'];
+                    var user = api.kv_store['users.default.+81'];
                     assert.equal(user.lang, 'jp');
                     assert.equal(user.addr, '+81');
                 });
@@ -107,7 +107,7 @@ describe("AppTester Setup Tasks", function() {
                         };
                     });
                 }).run().then(function() {
-                    var user = api.kv_store['users.+81'];
+                    var user = api.kv_store['users.default.+81'];
                     assert.equal(user.lang, 'jp');
                     assert.equal(user.addr, '+81');
                 });
@@ -121,7 +121,7 @@ describe("AppTester Setup Tasks", function() {
     describe(".setup.user.lang", function() {
         it("should set the user's language", function() {
             return tester.setup.user.lang('af').run().then(function() {
-                var user = api.kv_store['users.+27123456789'];
+                var user = api.kv_store['users.default.+27123456789'];
                 assert.equal(user.lang, 'af');
             });
         });
@@ -130,7 +130,7 @@ describe("AppTester Setup Tasks", function() {
     describe(".setup.user.addr", function() {
         it("should set the user's address", function() {
             return tester.setup.user.addr('+2798765').run().then(function() {
-                var user = api.kv_store['users.+2798765'];
+                var user = api.kv_store['users.default.+2798765'];
                 assert.equal(user.addr, '+2798765');
             });
         });
@@ -142,7 +142,7 @@ describe("AppTester Setup Tasks", function() {
                 initial_state: 'coffee',
                 coffee_state: 'yes'
             }).run().then(function() {
-                var user = api.kv_store['users.+27123456789'];
+                var user = api.kv_store['users.default.+27123456789'];
                 assert.equal(user.answers.initial_state, 'coffee');
                 assert.equal(user.answers.coffee_state, 'yes');
             });
@@ -155,7 +155,7 @@ describe("AppTester Setup Tasks", function() {
                 .setup.user.answer('initial_state', 'coffee')
                 .run()
                 .then(function() {
-                    var user = api.kv_store['users.+27123456789'];
+                    var user = api.kv_store['users.default.+27123456789'];
                     assert.deepEqual(user.answers.initial_state, 'coffee');
                 });
         });
