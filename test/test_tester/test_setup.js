@@ -232,4 +232,59 @@ describe("AppTester Setup Tasks", function() {
                 });
         });
     });
+
+    describe(".setup.config", function() {
+        describe(".setup.user(obj)", function() {
+            it("should update the user data with the given properties",
+            function() {
+                return tester
+                    .setup.config({foo: 'bar'})
+                    .setup.config({baz: 'qux'})
+                    .run()
+                    .then(function() {
+                        var config = api.config_store.config;
+                        assert.equal(config.foo, 'bar');
+                        assert.equal(config.baz, 'qux');
+                    });
+            });
+        });
+
+        describe(".setup.user(fn)", function() {
+            it("should update the user data with the function's result",
+            function() {
+                return tester
+                    .setup.config(function(config) {
+                        config.foo = 'bar';
+                        return config;
+                    })
+                    .setup.config(function(config) {
+                        config.baz = 'qux';
+                        return config;
+                    })
+                    .run()
+                    .then(function() {
+                        var config = api.config_store.config;
+                        assert.equal(config.foo, 'bar');
+                        assert.equal(config.baz, 'qux');
+                    });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                var d = Q.defer();
+
+                var p = tester.setup.config(function() {
+                    return d.promise.then(function() {
+                        return {foo: 'bar'};
+                    });
+                }).run().then(function() {
+                    var config = api.config_store.config;
+                    assert.equal(config.foo, 'bar');
+                });
+
+                d.resolve();
+                return p;
+            });
+        });
+    });
 });
