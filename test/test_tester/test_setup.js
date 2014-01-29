@@ -287,4 +287,56 @@ describe("AppTester Setup Tasks", function() {
             });
         });
     });
+
+    describe(".setup.kv", function() {
+        describe(".setup.kv(obj)", function() {
+            it("should update the kv data with the given properties",
+            function() {
+                return tester
+                    .setup.kv({foo: 'bar'})
+                    .setup.kv({baz: 'qux'})
+                    .run()
+                    .then(function() {
+                        assert.equal(api.kv_store.foo, 'bar');
+                        assert.equal(api.kv_store.baz, 'qux');
+                    });
+            });
+        });
+
+        describe(".setup.kv(fn)", function() {
+            it("should update the kv data with the function's result",
+            function() {
+                return tester
+                    .setup.kv(function(kv) {
+                        kv.foo = 'bar';
+                        return kv;
+                    })
+                    .setup.kv(function(kv) {
+                        kv.baz = 'qux';
+                        return kv;
+                    })
+                    .run()
+                    .then(function() {
+                        assert.equal(api.kv_store.foo, 'bar');
+                        assert.equal(api.kv_store.baz, 'qux');
+                    });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                var d = Q.defer();
+
+                var p = tester.setup.kv(function() {
+                    return d.promise.then(function() {
+                        return {foo: 'bar'};
+                    });
+                }).run().then(function() {
+                    assert.equal(api.kv_store.foo, 'bar');
+                });
+
+                d.resolve();
+                return p;
+            });
+        });
+    });
 });
