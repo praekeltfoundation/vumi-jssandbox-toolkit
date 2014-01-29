@@ -70,29 +70,36 @@ describe("AppTester Setup Tasks", function() {
         describe(".setup.user(obj)", function() {
             it("should update the user data with the given properties",
             function() {
-                return tester.setup.user({
-                    addr: '+81',
-                    lang: 'jp'
-                }).run().then(function() {
-                    var user = api.kv_store['users.default.+81'];
-                    assert.equal(user.lang, 'jp');
-                    assert.equal(user.addr, '+81');
-                });
+                return tester
+                    .setup.user({addr: '+81'})
+                    .setup.user({lang: 'jp'})
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+81'];
+                        assert.equal(user.lang, 'jp');
+                        assert.equal(user.addr, '+81');
+                    });
             });
         });
 
         describe(".setup.user(fn)", function() {
             it("should update the user data with the function's result",
             function() {
-                return tester.setup.user(function(user) {
-                    user.addr = '+81';
-                    user.lang = 'jp';
-                    return user;
-                }).run().then(function() {
-                    var user = api.kv_store['users.default.+81'];
-                    assert.equal(user.lang, 'jp');
-                    assert.equal(user.addr, '+81');
-                });
+                return tester
+                    .setup.user(function(user) {
+                        user.addr = '+81';
+                        return user;
+                    })
+                    .setup.user(function(user) {
+                        user.lang = 'jp';
+                        return user;
+                    })
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+81'];
+                        assert.equal(user.lang, 'jp');
+                        assert.equal(user.addr, '+81');
+                    });
             });
 
             it("should allow the function to return its result via a promise",
