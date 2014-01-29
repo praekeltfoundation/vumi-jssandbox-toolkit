@@ -1,7 +1,7 @@
 module.exports = function() {
     return {
         'users.+27123456789': {
-            addr: '+27987654321',
+            addr: '+27123456789',
             lang: 'en',
             answers: {start: 'hi'},
             state: {
@@ -10,7 +10,7 @@ module.exports = function() {
             }
         },
         'users.+27987654321': {
-            addr: '+27123456789',
+            addr: '+27987654321',
             lang: 'af',
             answers: {start: 'ja'},
             state: {
