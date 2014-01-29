@@ -106,15 +106,9 @@ describe("InteractionMachine", function () {
 
     describe(".attach", function() {
         beforeEach(function() {
-            delete api.im;
             delete api.on_unknown_command;
             delete api.on_inbound_message;
             delete api.on_inbound_event;
-        });
-
-        it("should attach the im to the api", function() {
-            im.attach();
-            assert.strictEqual(api.im, im);
         });
 
         describe("when api.on_unknown_command is invoked", function() {
