@@ -24,7 +24,7 @@ describe("InteractionMachine", function () {
     var end_state;
 
     beforeEach(function() {
-        msg = require('../test/fixtures/simple-msg').call();
+        msg = require('../test/fixtures/simple-msg-2').call();
         app = new App('start');
 
         start_state = new FreeText('start', {
@@ -38,7 +38,10 @@ describe("InteractionMachine", function () {
         });
         app.states.add(end_state);
 
-        return test_utils.make_im({app: app}).then(function(new_im) {
+        return test_utils.make_im({
+            app: app,
+            msg: msg
+        }).then(function(new_im) {
             im = new_im;
             api = im.api;
         });
@@ -401,7 +404,7 @@ describe("InteractionMachine", function () {
 
             it("should translate the state's display content in the reply",
             function() {
-                return im.reply(msg).then(function() {
+                return im.reply(msg, {translate: true}).then(function() {
                     var reply = api.request_calls[0];
                     assert.deepEqual(reply.content, 'hallo?');
                 });
@@ -572,7 +575,7 @@ describe("InteractionMachine", function () {
                 return im.emit(event).then(function() {
                     assert.deepEqual(api.request_calls, [{
                         content: 'hello?',
-                        in_reply_to: '1',
+                        in_reply_to: '2',
                         continue_session: true,
                         cmd: 'outbound.reply_to'
                     }]);
@@ -595,7 +598,7 @@ describe("InteractionMachine", function () {
                 return im.emit(event).then(function() {
                     assert.deepEqual(api.request_calls, [{
                         content: 'goodbye',
-                        in_reply_to: '1',
+                        in_reply_to: '2',
                         continue_session: false,
                         cmd: 'outbound.reply_to'
                     }]);
