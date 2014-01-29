@@ -1,3 +1,4 @@
+var Q = require('q');
 var assert = require('assert');
 
 var app = require('../../lib/app');
@@ -10,12 +11,14 @@ var tasks = require('../../lib/tester/tasks');
 var TaskMethodError = tester.TaskMethodError;
 
 describe("AppTester Setup Tasks", function() {
+    var api;
     var app;
     var tester;
 
     beforeEach(function() {
         app = new App('start');
         tester = new AppTester(app);
+        api = tester.api;
     });
 
     describe("if interaction tasks have already been scheduled", function() {
@@ -60,6 +63,58 @@ describe("AppTester Setup Tasks", function() {
                 .then(function() {
                     assert.equal(tester.api.config_store.foo, 'bar');
                 });
+        });
+    });
+
+    describe(".setup.user", function() {
+        describe("if an object is given", function() {
+            it("should update the user data with the given properties",
+            function() {
+                return tester.setup.user({
+                    addr: '+81',
+                    lang: 'jp'
+                }).run().then(function() {
+                    var user = api.kv_store['users.+81'];
+                    assert.equal(user.lang, 'jp');
+                    assert.equal(user.addr, '+81');
+                });
+            });
+        });
+
+        describe("if a function is given", function() {
+            it("should update the user data with the function's result",
+            function() {
+                return tester.setup.user(function(user) {
+                    user.addr = '+81';
+                    user.lang = 'jp';
+                    return user;
+                }).run().then(function() {
+                    var user = api.kv_store['users.+81'];
+                    assert.equal(user.lang, 'jp');
+                    assert.equal(user.addr, '+81');
+                });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                var d = Q.defer();
+
+                var p = tester.setup.user(function() {
+                    return d.promise.then(function() {
+                        return {
+                            addr: '+81',
+                            lang: 'jp'
+                        };
+                    });
+                }).run().then(function() {
+                    var user = api.kv_store['users.+81'];
+                    assert.equal(user.lang, 'jp');
+                    assert.equal(user.addr, '+81');
+                });
+
+                d.resolve();
+                return p;
+            });
         });
     });
 });
