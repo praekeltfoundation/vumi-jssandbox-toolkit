@@ -128,7 +128,7 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.user.addr", function() {
-        it("should set the user's language", function() {
+        it("should set the user's address", function() {
             return tester.setup.user.addr('+2798765').run().then(function() {
                 var user = api.kv_store['users.+2798765'];
                 assert.equal(user.addr, '+2798765');
