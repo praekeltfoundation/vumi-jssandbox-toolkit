@@ -25,27 +25,22 @@ var ToyTasks = AppTesterTasks.extend(function(self, tester) {
         }
     };
 
-    self.methods.lerp = function(obj) {
-        obj.lerped = true;
-        return obj;
+    self.methods.lerp = function() {
+        self.data.record.push('lerped');
     };
 
-    self.methods.lerp.larp = function(obj) {
-        self.methods.lerp(obj);
-        obj.larped = true;
-        return obj;
+    self.methods.lerp.larp = function() {
+        self.data.record.push('larped');
     };
 
     self.methods.foo = {};
 
-    self.methods.foo.bar = function(obj) {
-        obj.barred = true;
-        return obj;
+    self.methods.foo.bar = function() {
+        self.data.record.push('barred');
     };
 
-    self.methods.foo.baz = function(obj) {
-        obj.bazzed = true;
-        return obj;
+    self.methods.foo.baz = function() {
+        self.data.record.push('bazzed');
     };
 });
 
@@ -65,11 +60,13 @@ var FlyingToyTasks = ToyTasks.extend(function(self, tester) {
 describe("AppTesterTasks", function() {
     var tester;
     var tasks;
+    var record;
 
     beforeEach(function() {
         tester = new AppTester(new App('start'));
         tasks = new ToyTasks(tester);
         tester.tasks.add('toys', tasks);
+        record = tasks.data.record = [];
     });
 
     describe(".attach", function() {
@@ -79,20 +76,19 @@ describe("AppTesterTasks", function() {
 
             tasks.attach();
 
-            var obj = {};
             return tester
-                .foo.bar(obj)
-                .foo.baz(obj)
-                .lerp(obj)
-                .lerp.larp(obj)
+                .foo.bar()
+                .foo.baz()
+                .lerp()
+                .lerp.larp()
                 .run()
                 .then(function() {
-                    assert.deepEqual(obj, {
-                        barred: true,
-                        bazzed: true,
-                        lerped: true,
-                        larped: true
-                    });
+                    assert.deepEqual(record, [
+                        'barred',
+                        'bazzed',
+                        'lerped',
+                        'larped'
+                    ]);
                 });
         });
         
