@@ -34,16 +34,38 @@ describe("AppTester Interaction Tasks", function() {
         });
     });
 
-    describe(".setup", function() {
-        it("should call the given function with the api", function() {
-            return tester
-                .setup(function(api) {
-                    api.config_store.foo = 'bar';
-                })
-                .run()
-                .then(function() {
-                    assert.equal(tester.api.config_store.foo, 'bar');
-                });
+    describe("message sending", function() {
+        it("should send the message into the sandbox");
+        it("should use the same shutdown handling as the sandbox");
+        it("should use the same error handling as the sandbox");
+        it("should use rethrow sandbox errors");
+    });
+
+    describe(".input", function() {
+        describe(".input(obj)", function() {
+            it("should update the properties of the message");
         });
+
+        describe(".input(fn)", function() {
+            it("should update the message with the function's result");
+            it("should allow the function to return its result via a promise");
+        });
+
+        describe(".input(content)", function() {
+            it("should update the content of the message");
+        });
+
+        describe(".input()", function() {
+            it("should update the content of the message to null");
+            it("should default the session event to 'new'");
+        });
+    });
+
+    describe(".input.content", function() {
+        it("should update the content of the message");
+    });
+
+    describe(".input.session_event", function() {
+        it("should update the session event of the message");
     });
 });
