@@ -213,9 +213,22 @@ describe("User", function() {
         });
     });
 
+    describe(".reset", function() {
+        it("should emit a 'user:reset' event after setting up", function() {
+            var setup = user.once.resolved('setup');
+            var p = user.once.resolved('user:reset');
+
+            return user
+                .reset('1234')
+                .thenResolve(p)
+                .then(function() {
+                    assert(setup.isFulfilled());
+                });
+        });
+    });
+
     describe(".create", function() {
-        it("should emit a 'user:new' event after setting up",
-        function() {
+        it("should emit a 'user:new' event after setting up", function() {
             var setup = user.once.resolved('setup');
             var p = user.once.resolved('user:new');
 

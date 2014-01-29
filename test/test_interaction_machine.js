@@ -512,13 +512,21 @@ describe("InteractionMachine", function () {
             return im.emit(event).thenResolve(p);
         });
 
-        describe("if the message content is set to '!restart'", function() {
+        describe("if the message content is set to '!reset'", function() {
+            beforeEach(function() {
+                msg.content = '!reset';
+            });
+
             it("should reset the message content to an empty string",
             function() {
-                msg.content = '!restart';
                 return im.emit(event).then(function() {
                     assert.strictEqual(im.msg.content, '');
                 });
+            });
+
+            it("should reset the user", function() {
+                var p = im.user.once.resolved('user:reset');
+                return im.emit(event).thenResolve(p);
             });
         });
 
