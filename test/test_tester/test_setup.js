@@ -234,8 +234,8 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.config", function() {
-        describe(".setup.user(obj)", function() {
-            it("should update the user data with the given properties",
+        describe(".setup.config(obj)", function() {
+            it("should update the config data with the given properties",
             function() {
                 return tester
                     .setup.config({foo: 'bar'})
@@ -249,8 +249,8 @@ describe("AppTester Setup Tasks", function() {
             });
         });
 
-        describe(".setup.user(fn)", function() {
-            it("should update the user data with the function's result",
+        describe(".setup.config(fn)", function() {
+            it("should update the config data with the function's result",
             function() {
                 return tester
                     .setup.config(function(config) {
