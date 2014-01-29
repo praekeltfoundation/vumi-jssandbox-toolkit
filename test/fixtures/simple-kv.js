@@ -1,6 +1,6 @@
 module.exports = function() {
     return {
-        'users.+27123456789': {
+        'users.default.+27123456789': {
             addr: '+27123456789',
             lang: 'en',
             answers: {start: 'hi'},
@@ -9,7 +9,7 @@ module.exports = function() {
                 metadata: {}
             }
         },
-        'users.+27987654321': {
+        'users.default.+27987654321': {
             addr: '+27987654321',
             lang: 'af',
             answers: {start: 'ja'},

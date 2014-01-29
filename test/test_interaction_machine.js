@@ -106,15 +106,9 @@ describe("InteractionMachine", function () {
 
     describe(".attach", function() {
         beforeEach(function() {
-            delete api.im;
             delete api.on_unknown_command;
             delete api.on_inbound_message;
             delete api.on_inbound_event;
-        });
-
-        it("should attach the im to the api", function() {
-            im.attach();
-            assert.strictEqual(api.im, im);
         });
 
         describe("when api.on_unknown_command is invoked", function() {
@@ -518,13 +512,21 @@ describe("InteractionMachine", function () {
             return im.emit(event).thenResolve(p);
         });
 
-        describe("if the message content is set to '!restart'", function() {
+        describe("if the message content is set to '!reset'", function() {
+            beforeEach(function() {
+                msg.content = '!reset';
+            });
+
             it("should reset the message content to an empty string",
             function() {
-                msg.content = '!restart';
                 return im.emit(event).then(function() {
                     assert.strictEqual(im.msg.content, '');
                 });
+            });
+
+            it("should reset the user", function() {
+                var p = im.user.once.resolved('user:reset');
+                return im.emit(event).thenResolve(p);
             });
         });
 
