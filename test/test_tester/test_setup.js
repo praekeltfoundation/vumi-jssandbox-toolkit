@@ -135,4 +135,29 @@ describe("AppTester Setup Tasks", function() {
             });
         });
     });
+
+    describe(".setup.user.answers", function() {
+        it("should set the user's answers", function() {
+            return tester.setup.user.answers({
+                initial_state: 'coffee',
+                coffee_state: 'yes'
+            }).run().then(function() {
+                var user = api.kv_store['users.+27123456789'];
+                assert.equal(user.answers.initial_state, 'coffee');
+                assert.equal(user.answers.coffee_state, 'yes');
+            });
+        });
+    });
+
+    describe(".setup.user.answer", function() {
+        it("should set the user's answer to the given state", function() {
+            return tester
+                .setup.user.answer('initial_state', 'coffee')
+                .run()
+                .then(function() {
+                    var user = api.kv_store['users.+27123456789'];
+                    assert.deepEqual(user.answers.initial_state, 'coffee');
+                });
+        });
+    });
 });
