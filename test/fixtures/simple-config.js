@@ -25,7 +25,7 @@ module.exports = function() {
         }),
         config: JSON.stringify({
             lerp: 'larp',
-            metric_store_name: 'luke_the_store'
+            metric_store: 'luke_the_store'
         }),
         foo: JSON.stringify({bar: 'baz'})
     };
