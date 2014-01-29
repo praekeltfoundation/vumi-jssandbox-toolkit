@@ -67,7 +67,7 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.user", function() {
-        describe("if an object is given", function() {
+        describe(".setup.user(obj)", function() {
             it("should update the user data with the given properties",
             function() {
                 return tester.setup.user({
@@ -81,7 +81,7 @@ describe("AppTester Setup Tasks", function() {
             });
         });
 
-        describe("if a function is given", function() {
+        describe(".setup.user(fn)", function() {
             it("should update the user data with the function's result",
             function() {
                 return tester.setup.user(function(user) {
@@ -133,6 +133,71 @@ describe("AppTester Setup Tasks", function() {
                 var user = api.kv_store['users.default.+2798765'];
                 assert.equal(user.addr, '+2798765');
             });
+        });
+    });
+
+    describe(".setup.user.state", function() {
+        describe(".setup.user.state(obj)", function() {
+            it("should set the user's state's name", function() {
+                return tester
+                    .setup.user.state({name: 'initial_state'})
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.equal(user.state.name, 'initial_state');
+                    });
+            });
+
+            it("should set the user's state metadata", function() {
+                return tester
+                    .setup.user.state({
+                        name: 'initial_state',
+                        metadata: {foo: 'bar'}
+                    })
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                    });
+            });
+        });
+
+        describe(".setup.user.state(name, metadata)", function() {
+            it("should set the user's state's name", function() {
+                return tester
+                    .setup.user.state('initial_state')
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.equal(user.state.name, 'initial_state');
+                    });
+            });
+
+            it("should set the user's state metadata", function() {
+                return tester
+                    .setup.user.state('initial_state', {foo: 'bar'})
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                    });
+            });
+        });
+    });
+
+    describe(".setup.user.state.metadata", function() {
+        it("should update the user's state metadata", function() {
+            return tester
+                .setup.user.state.metadata({foo: 'bar'})
+                .setup.user.state.metadata({baz: 'qux'})
+                .run()
+                .then(function() {
+                    var user = api.kv_store['users.default.+27123456789'];
+                    assert.deepEqual(user.state.metadata, {
+                        foo: 'bar',
+                        baz: 'qux'
+                    });
+                });
         });
     });
 
