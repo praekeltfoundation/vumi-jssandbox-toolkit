@@ -11,11 +11,13 @@ var TaskMethodError = tester.TaskMethodError;
 
 describe("AppTester Setup Tasks", function() {
     var app;
+    var api;
     var tester;
 
     beforeEach(function() {
         app = new App('start');
         tester = new AppTester(app);
+        api = tester.api;
     });
 
     describe("if interaction tasks have already been scheduled", function() {
@@ -58,7 +60,7 @@ describe("AppTester Setup Tasks", function() {
                 })
                 .run()
                 .then(function() {
-                    assert.equal(tester.api.config_store.foo, 'bar');
+                    assert.equal(api.config_store.foo, 'bar');
                 });
         });
     });
