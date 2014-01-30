@@ -1,3 +1,4 @@
+var Q = require('q');
 var assert = require('assert');
 
 var app = require('../../lib/app');
@@ -10,6 +11,7 @@ var tasks = require('../../lib/tester/tasks');
 var TaskMethodError = tester.TaskMethodError;
 
 describe("AppTester Setup Tasks", function() {
+    var api;
     var app;
     var api;
     var tester;
@@ -62,6 +64,259 @@ describe("AppTester Setup Tasks", function() {
                 .then(function() {
                     assert.equal(api.config_store.foo, 'bar');
                 });
+        });
+    });
+
+    describe(".setup.user", function() {
+        describe(".setup.user(obj)", function() {
+            it("should update the user data with the given properties",
+            function() {
+                return tester
+                    .setup.user({addr: '+81'})
+                    .setup.user({lang: 'jp'})
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+81'];
+                        assert.equal(user.lang, 'jp');
+                        assert.equal(user.addr, '+81');
+                    });
+            });
+        });
+
+        describe(".setup.user(fn)", function() {
+            it("should update the user data with the function's result",
+            function() {
+                return tester
+                    .setup.user(function(user) {
+                        user.addr = '+81';
+                        return user;
+                    })
+                    .setup.user(function(user) {
+                        user.lang = 'jp';
+                        return user;
+                    })
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+81'];
+                        assert.equal(user.lang, 'jp');
+                        assert.equal(user.addr, '+81');
+                    });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                return tester.setup.user(function() {
+                    return Q({
+                        addr: '+81',
+                        lang: 'jp'
+                    });
+                }).run().then(function() {
+                    var user = api.kv_store['users.default.+81'];
+                    assert.equal(user.lang, 'jp');
+                    assert.equal(user.addr, '+81');
+                });
+            });
+        });
+    });
+
+    describe(".setup.user.lang", function() {
+        it("should set the user's language", function() {
+            return tester.setup.user.lang('af').run().then(function() {
+                var user = api.kv_store['users.default.+27123456789'];
+                assert.equal(user.lang, 'af');
+            });
+        });
+    });
+
+    describe(".setup.user.addr", function() {
+        it("should set the user's address", function() {
+            return tester.setup.user.addr('+2798765').run().then(function() {
+                var user = api.kv_store['users.default.+2798765'];
+                assert.equal(user.addr, '+2798765');
+            });
+        });
+    });
+
+    describe(".setup.user.state", function() {
+        describe(".setup.user.state(obj)", function() {
+            it("should set the user's state's name", function() {
+                return tester
+                    .setup.user.state({name: 'initial_state'})
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.equal(user.state.name, 'initial_state');
+                    });
+            });
+
+            it("should set the user's state metadata", function() {
+                return tester
+                    .setup.user.state({
+                        name: 'initial_state',
+                        metadata: {foo: 'bar'}
+                    })
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                    });
+            });
+        });
+
+        describe(".setup.user.state(name, metadata)", function() {
+            it("should set the user's state's name", function() {
+                return tester
+                    .setup.user.state('initial_state')
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.equal(user.state.name, 'initial_state');
+                    });
+            });
+
+            it("should set the user's state metadata", function() {
+                return tester
+                    .setup.user.state('initial_state', {foo: 'bar'})
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.default.+27123456789'];
+                        assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                    });
+            });
+        });
+    });
+
+    describe(".setup.user.state.metadata", function() {
+        it("should update the user's state metadata", function() {
+            return tester
+                .setup.user.state.metadata({foo: 'bar'})
+                .setup.user.state.metadata({baz: 'qux'})
+                .run()
+                .then(function() {
+                    var user = api.kv_store['users.default.+27123456789'];
+                    assert.deepEqual(user.state.metadata, {
+                        foo: 'bar',
+                        baz: 'qux'
+                    });
+                });
+        });
+    });
+
+    describe(".setup.user.answers", function() {
+        it("should set the user's answers", function() {
+            return tester.setup.user.answers({
+                initial_state: 'coffee',
+                coffee_state: 'yes'
+            }).run().then(function() {
+                var user = api.kv_store['users.default.+27123456789'];
+                assert.equal(user.answers.initial_state, 'coffee');
+                assert.equal(user.answers.coffee_state, 'yes');
+            });
+        });
+    });
+
+    describe(".setup.user.answer", function() {
+        it("should set the user's answer to the given state", function() {
+            return tester
+                .setup.user.answer('initial_state', 'coffee')
+                .run()
+                .then(function() {
+                    var user = api.kv_store['users.default.+27123456789'];
+                    assert.deepEqual(user.answers.initial_state, 'coffee');
+                });
+        });
+    });
+
+    describe(".setup.config", function() {
+        describe(".setup.config(obj)", function() {
+            it("should update the config data with the given properties",
+            function() {
+                return tester
+                    .setup.config({foo: 'bar'})
+                    .setup.config({baz: 'qux'})
+                    .run()
+                    .then(function() {
+                        var config = api.config_store.config;
+                        assert.equal(config.foo, 'bar');
+                        assert.equal(config.baz, 'qux');
+                    });
+            });
+        });
+
+        describe(".setup.config(fn)", function() {
+            it("should update the config data with the function's result",
+            function() {
+                return tester
+                    .setup.config(function(config) {
+                        config.foo = 'bar';
+                        return config;
+                    })
+                    .setup.config(function(config) {
+                        config.baz = 'qux';
+                        return config;
+                    })
+                    .run()
+                    .then(function() {
+                        var config = api.config_store.config;
+                        assert.equal(config.foo, 'bar');
+                        assert.equal(config.baz, 'qux');
+                    });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                return tester.setup.config(function() {
+                    return Q({foo: 'bar'});
+                }).run().then(function() {
+                    var config = api.config_store.config;
+                    assert.equal(config.foo, 'bar');
+                });
+            });
+        });
+    });
+
+    describe(".setup.kv", function() {
+        describe(".setup.kv(obj)", function() {
+            it("should update the kv data with the given properties",
+            function() {
+                return tester
+                    .setup.kv({foo: 'bar'})
+                    .setup.kv({baz: 'qux'})
+                    .run()
+                    .then(function() {
+                        assert.equal(api.kv_store.foo, 'bar');
+                        assert.equal(api.kv_store.baz, 'qux');
+                    });
+            });
+        });
+
+        describe(".setup.kv(fn)", function() {
+            it("should update the kv data with the function's result",
+            function() {
+                return tester
+                    .setup.kv(function(kv) {
+                        kv.foo = 'bar';
+                        return kv;
+                    })
+                    .setup.kv(function(kv) {
+                        kv.baz = 'qux';
+                        return kv;
+                    })
+                    .run()
+                    .then(function() {
+                        assert.equal(api.kv_store.foo, 'bar');
+                        assert.equal(api.kv_store.baz, 'qux');
+                    });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                return tester.setup.kv(function() {
+                    return Q({foo: 'bar'});
+                }).run().then(function() {
+                    assert.equal(api.kv_store.foo, 'bar');
+                });
+            });
         });
     });
 });
