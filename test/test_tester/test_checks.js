@@ -64,7 +64,9 @@ describe("AppTester Check Tasks", function() {
         describe(".assertion", function() {
             it("should allow both a message and diff to be shown", function() {
                 var e = catch_err(function() {
-                    checks.assertion(assert.equal, 0, 1, {
+                    checks.assertion(function() {
+                        assert.equal(0, 1);
+                    }, {
                         diff: true,
                         msg: 'foo'
                     });
@@ -76,7 +78,9 @@ describe("AppTester Check Tasks", function() {
 
             it("should allow only showing a message and no diff", function() {
                 var e = catch_err(function() {
-                    checks.assertion(assert.equal, 0, 1, {
+                    checks.assertion(function() {
+                        assert.equal(0, 1);
+                    }, {
                         diff: false,
                         msg: 'foo'
                     });
@@ -160,6 +164,35 @@ describe("AppTester Check Tasks", function() {
                     });
                     assert(e.showDiff);
                 });
+            });
+        });
+
+        describe(".assert.fail", function() {
+            it("should throw an AssertionError", function() {
+                assert.throws(function() {
+                    checks.assert.fail(1, 2, {op: '<'});
+                }, AssertionError);
+            });
+
+            it("should show not show a diff", function() {
+                var e = catch_err(function() {
+                    checks.assert.fail(1, 2, {op: '<'});
+                });
+                assert(!e.showDiff);
+            });
+
+            it("should show the operator comparison if given", function() {
+                var e = catch_err(function() {
+                    checks.assert.fail(1, 2, {op: '<'});
+                });
+                assert.equal(e.message, "1 < 2");
+            });
+
+            it("should show the reason if given", function() {
+                var e = catch_err(function() {
+                    checks.assert.fail(1, 2, {msg: 'small'});
+                });
+                assert.equal(e.message, 'small');
             });
         });
     });
