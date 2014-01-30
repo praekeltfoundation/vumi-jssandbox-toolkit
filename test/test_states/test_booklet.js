@@ -30,7 +30,7 @@ describe("BookletState", function() {
         });
     });
 
-    describe(".setup'", function() {
+    describe(".setup", function() {
         it("should set the initial page", function() {
             booklet = new BookletState('name', {
                 next: "next_state",
