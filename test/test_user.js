@@ -323,14 +323,14 @@ describe("User", function() {
         it("should save the user", function() {
             user.set_answer('why', 'no');
 
-            user
+            return user
                 .save()
                 .then(function() {
-                    user = new User();
+                    user = new User(im);
                     return user.load('+27987654321');
                 })
                 .then(function() {
-                    assert.equal(user.get_answert('why'), 'no');
+                    assert.equal(user.get_answer('why'), 'no');
                 });
         });
 
