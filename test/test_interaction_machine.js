@@ -154,7 +154,12 @@ describe("InteractionMachine", function () {
             var cmd;
 
             beforeEach(function() {
-                cmd = {msg: {session_event: 'new'}};
+                cmd = {
+                    msg: {
+                        user_message_id: '1',
+                        event_type: 'ack'
+                    }
+                };
             });
 
             it("should emit an 'inbound_event' event", function() {
