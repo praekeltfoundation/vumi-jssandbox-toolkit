@@ -1,6 +1,8 @@
 States
 ======
 
+States are the building blocks of sandbox applications.
+
 .. autojs:: ../lib/states/state.js
 
 .. autojs:: ../lib/states/booklet.js
