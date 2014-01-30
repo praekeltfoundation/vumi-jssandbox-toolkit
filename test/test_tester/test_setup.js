@@ -104,23 +104,16 @@ describe("AppTester Setup Tasks", function() {
 
             it("should allow the function to return its result via a promise",
             function() {
-                var d = Q.defer();
-
-                var p = tester.setup.user(function() {
-                    return d.promise.then(function() {
-                        return {
-                            addr: '+81',
-                            lang: 'jp'
-                        };
+                return tester.setup.user(function() {
+                    return Q({
+                        addr: '+81',
+                        lang: 'jp'
                     });
                 }).run().then(function() {
                     var user = api.kv_store['users.default.+81'];
                     assert.equal(user.lang, 'jp');
                     assert.equal(user.addr, '+81');
                 });
-
-                d.resolve();
-                return p;
             });
         });
     });
@@ -271,19 +264,12 @@ describe("AppTester Setup Tasks", function() {
 
             it("should allow the function to return its result via a promise",
             function() {
-                var d = Q.defer();
-
-                var p = tester.setup.config(function() {
-                    return d.promise.then(function() {
-                        return {foo: 'bar'};
-                    });
+                return tester.setup.config(function() {
+                    return Q({foo: 'bar'});
                 }).run().then(function() {
                     var config = api.config_store.config;
                     assert.equal(config.foo, 'bar');
                 });
-
-                d.resolve();
-                return p;
             });
         });
     });
@@ -324,18 +310,11 @@ describe("AppTester Setup Tasks", function() {
 
             it("should allow the function to return its result via a promise",
             function() {
-                var d = Q.defer();
-
-                var p = tester.setup.kv(function() {
-                    return d.promise.then(function() {
-                        return {foo: 'bar'};
-                    });
+                return tester.setup.kv(function() {
+                    return Q({foo: 'bar'});
                 }).run().then(function() {
                     assert.equal(api.kv_store.foo, 'bar');
                 });
-
-                d.resolve();
-                return p;
             });
         });
     });
