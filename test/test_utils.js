@@ -136,11 +136,18 @@ describe("utils", function() {
 
     describe(".url_encode", function() {
         it("should url encode an object of parameters", function() {
-            assert.equal('a=foo&b=bar&c=null', utils.url_encode({
-                a: 'foo',
-                b: 'bar',
-                c: null
-            }));
+            assert.equal(
+                'a=foo&b=bar&c=null',
+                utils.url_encode([{
+                    name: 'a',
+                    value: 'foo'
+                }, {
+                    name: 'b',
+                    value: 'bar'
+                }, {
+                    name: 'c',
+                    value: null
+                }]));
         });
     });
 

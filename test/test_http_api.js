@@ -177,10 +177,13 @@ describe("HttpApi", function() {
             });
 
             return api.get('http://foo.com/', {
-                params: {
-                    a: 1,
-                    b: 2
-                }
+                params: [{
+                    name :'a',
+                    value: 1
+                }, {
+                    name :'b',
+                    value: 2
+                }]
             }).then(function(data) {
                 var request = im.api.http_requests[0];
                 assert.equal(request.url, 'http://foo.com/?a=1&b=2');
