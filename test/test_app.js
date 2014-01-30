@@ -31,8 +31,8 @@ describe("AppStates", function () {
         });
 
         it("should emit a 'setup' event", function() {
-            var p = app.once.resolved('setup');
-            states.setup().thenResolve(p);
+            var p = states.once.resolved('setup');
+            return states.setup().thenResolve(p);
         });
     });
 

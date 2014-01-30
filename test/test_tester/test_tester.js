@@ -61,6 +61,18 @@ describe("AppTester", function() {
             tester.reset();
             assert.deepEqual(tester.data, {});
         });
+
+        it("should use a new interaction machine", function() {
+            var im = tester.im;
+            tester.reset();
+            assert.notEqual(tester.im, im);
+        });
+
+        it("should use a new api", function() {
+            var api = tester.api;
+            tester.reset();
+            assert.notEqual(tester.api, api);
+        });
     });
 
     describe(".run", function() {

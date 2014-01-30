@@ -13,6 +13,7 @@ var TaskMethodError = tester.TaskMethodError;
 describe("AppTester Setup Tasks", function() {
     var api;
     var app;
+    var api;
     var tester;
 
     beforeEach(function() {
@@ -61,7 +62,7 @@ describe("AppTester Setup Tasks", function() {
                 })
                 .run()
                 .then(function() {
-                    assert.equal(tester.api.config_store.foo, 'bar');
+                    assert.equal(api.config_store.foo, 'bar');
                 });
         });
     });
