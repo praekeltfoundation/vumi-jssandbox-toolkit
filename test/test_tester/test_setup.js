@@ -4,22 +4,50 @@ var assert = require('assert');
 var app = require('../../lib/app');
 var App = app.App;
 
+var states = require('../../lib/states');
+var EndState = states.EndState;
+var Choice = states.Choice;
+var ChoiceState = states.ChoiceState;
+
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
 
 var tasks = require('../../lib/tester/tasks');
 var TaskMethodError = tester.TaskMethodError;
 
+
 describe("AppTester Setup Tasks", function() {
     var api;
     var app;
-    var api;
     var tester;
 
     beforeEach(function() {
         app = new App('start');
         tester = new AppTester(app);
         api = tester.api;
+
+        app.states.add(new ChoiceState('initial_state', {
+            question: "Tea or coffee?",
+            choices: [
+                new Choice('tea', 'Tea'),
+                new Choice('coffee', 'Coffee')
+            ],
+            next: function(choice) {
+                return {
+                    tea: 'cofee_state',
+                    coffee: 'tea_state'
+                }[choice.value];
+            }
+        }));
+
+
+        app.states.add(new EndState('coffee_state', {
+            text: 'Cool'
+        }));
+
+        app.states.add(new EndState('tea_state', {
+            send_reply: false
+        }));
     });
 
     describe("if interaction tasks have already been scheduled", function() {
@@ -189,6 +217,7 @@ describe("AppTester Setup Tasks", function() {
     describe(".setup.user.state.metadata", function() {
         it("should update the user's state metadata", function() {
             return tester
+                .setup.user.state('initial_state')
                 .setup.user.state.metadata({foo: 'bar'})
                 .setup.user.state.metadata({baz: 'qux'})
                 .run()
@@ -236,7 +265,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.config({baz: 'qux'})
                     .run()
                     .then(function() {
-                        var config = api.config_store.config;
+                        var config = JSON.parse(api.config_store.config);
                         assert.equal(config.foo, 'bar');
                         assert.equal(config.baz, 'qux');
                     });
@@ -257,7 +286,7 @@ describe("AppTester Setup Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        var config = api.config_store.config;
+                        var config = JSON.parse(api.config_store.config);
                         assert.equal(config.foo, 'bar');
                         assert.equal(config.baz, 'qux');
                     });
@@ -268,7 +297,7 @@ describe("AppTester Setup Tasks", function() {
                 return tester.setup.config(function() {
                     return Q({foo: 'bar'});
                 }).run().then(function() {
-                    var config = api.config_store.config;
+                    var config = JSON.parse(api.config_store.config);
                     assert.equal(config.foo, 'bar');
                 });
             });
