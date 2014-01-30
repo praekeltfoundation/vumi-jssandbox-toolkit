@@ -10,6 +10,7 @@ var tasks = require('../../lib/tester/tasks');
 var TaskMethodError = tester.TaskMethodError;
 
 describe("AppTester Interaction Tasks", function() {
+    var im;
     var app;
     var tester;
     var tasks;
@@ -18,6 +19,8 @@ describe("AppTester Interaction Tasks", function() {
         app = new App('start');
         tester = new AppTester(app);
         tasks = tester.tasks.get('interactions');
+
+        im = tester.im;
     });
 
     describe("if checking tasks have already been scheduled", function() {
@@ -49,14 +52,14 @@ describe("AppTester Interaction Tasks", function() {
 
         it("should send the message into the sandbox", function() {
             return tasks.send(msg).then(function() {
-                assert.equal(tester.im.msg.message_id, '1');
-                assert.equal(tester.im.msg.content, 'hello');
-                assert.equal(tester.im.msg.session_event, 'resume');
+                assert.equal(im.msg.message_id, '1');
+                assert.equal(im.msg.content, 'hello');
+                assert.equal(im.msg.session_event, 'resume');
             });
         });
 
         it("should use the same shutdown handling as the im", function() {
-            var p = tester.im.once.resolved('im:shutdown');
+            var p = im.once.resolved('im:shutdown');
             return tasks.send(msg).thenResolve(p);
         });
 
@@ -72,7 +75,7 @@ describe("AppTester Interaction Tasks", function() {
             });
 
             it("should use the same error handling as the im", function() {
-                var p = tester.im.once.resolved('im:error');
+                var p = im.once.resolved('im:error');
 
                 return tasks
                     .send(msg)
@@ -97,8 +100,8 @@ describe("AppTester Interaction Tasks", function() {
                     .input({session_event: 'resume'})
                     .run()
                     .then(function() {
-                        assert.equal(tester.im.msg.content, 'hello');
-                        assert.equal(tester.im.msg.session_event, 'resume');
+                        assert.equal(im.msg.content, 'hello');
+                        assert.equal(im.msg.session_event, 'resume');
                     });
             });
         });
@@ -117,8 +120,8 @@ describe("AppTester Interaction Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        assert.equal(tester.im.msg.content, 'hello');
-                        assert.equal(tester.im.msg.session_event, 'resume');
+                        assert.equal(im.msg.content, 'hello');
+                        assert.equal(im.msg.session_event, 'resume');
                     });
             });
 
@@ -132,8 +135,8 @@ describe("AppTester Interaction Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        assert.equal(tester.im.msg.content, 'hello');
-                        assert.equal(tester.im.msg.session_event, 'resume');
+                        assert.equal(im.msg.content, 'hello');
+                        assert.equal(im.msg.session_event, 'resume');
                     });
             });
         });
@@ -141,7 +144,7 @@ describe("AppTester Interaction Tasks", function() {
         describe(".input(content)", function() {
             it("should update the content of the message", function() {
                 return tester.input('hello').run().then(function() {
-                    assert.equal(tester.im.msg.content, 'hello');
+                    assert.equal(im.msg.content, 'hello');
                 });
             });
         });
@@ -149,13 +152,13 @@ describe("AppTester Interaction Tasks", function() {
         describe(".input()", function() {
             it("should update the content of the message to null", function() {
                 return tester.input().run().then(function() {
-                    assert.strictEqual(tester.im.msg.content, null);
+                    assert.strictEqual(im.msg.content, null);
                 });
             });
 
             it("should default the session event to 'new'", function() {
                 return tester.input().run().then(function() {
-                    assert.strictEqual(tester.im.msg.session_event, 'new');
+                    assert.strictEqual(im.msg.session_event, 'new');
                 });
             });
         });
@@ -164,7 +167,7 @@ describe("AppTester Interaction Tasks", function() {
     describe(".input.content", function() {
         it("should update the content of the message", function() {
             return tester.input.content('hello').run().then(function() {
-                assert.equal(tester.im.msg.content, 'hello');
+                assert.equal(im.msg.content, 'hello');
             });
         });
     });
@@ -172,7 +175,7 @@ describe("AppTester Interaction Tasks", function() {
     describe(".input.session_event", function() {
         it("should update the session event of the message", function() {
             return tester.input.session_event('close').run().then(function() {
-                assert.equal(tester.im.msg.session_event, 'close');
+                assert.equal(im.msg.session_event, 'close');
             });
         });
     });
