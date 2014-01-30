@@ -1,5 +1,6 @@
 var Q = require('q');
 var assert = require('assert');
+var AssertionError = assert.AssertionError;
 
 var app = require('../../lib/app');
 var App = app.App;
@@ -17,6 +18,7 @@ describe("AppTester Check Tasks", function() {
     var api;
     var app;
     var tester;
+    var checks;
 
     beforeEach(function() {
         app = new App('start');
@@ -45,7 +47,121 @@ describe("AppTester Check Tasks", function() {
         }));
 
         tester = new AppTester(app);
+        checks = tester.tasks.get('checks');
         api = tester.api;
+    });
+
+    describe("helpers", function() {
+        function catch_err(fn) {
+            try {
+                fn();
+            }
+            catch (e) {
+                return e;
+            }
+        }
+
+        describe(".assertion", function() {
+            it("should allow both a message and diff to be shown", function() {
+                var e = catch_err(function() {
+                    checks.assertion(assert.equal, 0, 1, {
+                        diff: true,
+                        msg: 'foo'
+                    });
+                });
+
+                assert(e.showDiff);
+                assert.equal(e.message, 'foo: expected');
+            });
+
+            it("should allow only showing a message and no diff", function() {
+                var e = catch_err(function() {
+                    checks.assertion(assert.equal, 0, 1, {
+                        diff: false,
+                        msg: 'foo'
+                    });
+                });
+
+                assert(!e.showDiff);
+                assert.equal(e.message, 'foo');
+            });
+        });
+
+        describe(".assert", function() {
+            describe("if the value is truthy", function() {
+                it("should not throw an error", function() {
+                    checks.assert(1);
+                });
+            });
+
+            describe("if the value is falsy", function() {
+                it("should throw an AssertionError", function() {
+                    assert.throws(function() {
+                        checks.assert(0);
+                    }, AssertionError);
+                });
+
+                it("should show a diff there is no message", function() {
+                    var e = catch_err(function() {
+                        checks.assert(0);
+                    });
+                    assert(e.showDiff);
+                });
+
+                it("shouldn't show a diff if there is a message", function() {
+                    var e = catch_err(function() {
+                        checks.assert(0, {msg: 'foo'});
+                    });
+                    assert(!e.showDiff);
+                });
+            });
+        });
+
+        describe(".assert.deepEqual", function() {
+            describe("if the values are deeply equal", function() {
+                it("should not throw an error", function() {
+                    checks.assert.deepEqual({foo: 'bar'}, {foo: 'bar'});
+                });
+            });
+
+            describe("if the values are not deeply equal", function() {
+                it("should throw an AssertionError", function() {
+                    assert.throws(function() {
+                        checks.assert.deepEqual({foo: 'bar'}, {foo: 'baz'});
+                    }, AssertionError);
+                });
+
+                it("should show a diff", function() {
+                    var e = catch_err(function() {
+                        checks.assert.deepEqual({foo: 'bar'}, {foo: 'baz'});
+                    });
+                    assert(e.showDiff);
+                });
+            });
+        });
+
+        describe(".assert.strictEqual", function() {
+            describe("if the values are strictly equal", function() {
+                it("should not throw an error", function() {
+                    checks.assert.strictEqual(1, 1);
+                });
+            });
+
+            describe("if the values are not strictly equal", function() {
+                it("should throw an AssertionError", function() {
+                    assert.throws(function() {
+                        checks.assert.strictEqual(1, '1');
+                    }, AssertionError);
+                });
+
+                it("should show a diff", function() {
+                    var e = catch_err(function() {
+                        checks.assert.strictEqual(1, '1');
+                    });
+                    assert(e.showDiff);
+                });
+            });
+        });
     });
 
     describe(".check", function() {
