@@ -20,6 +20,7 @@ Vumi Go's Javascript sandbox.
    http_api.rst
    metrics.rst
    events.rst
+   tester.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
