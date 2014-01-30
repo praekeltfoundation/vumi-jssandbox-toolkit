@@ -91,29 +91,89 @@ describe("AppTester Interaction Tasks", function() {
 
     describe(".input", function() {
         describe(".input(obj)", function() {
-            it("should update the properties of the message");
+            it("should update the properties of the message", function() {
+                return tester
+                    .input({content: 'hello'})
+                    .input({session_event: 'resume'})
+                    .run()
+                    .then(function() {
+                        assert.equal(tester.im.msg.content, 'hello');
+                        assert.equal(tester.im.msg.session_event, 'resume');
+                    });
+            });
         });
 
         describe(".input(fn)", function() {
-            it("should update the message with the function's result");
-            it("should allow the function to return its result via a promise");
+            it("should update the message with the function's result",
+            function() {
+                return tester
+                    .input(function(msg) {
+                        msg.content = 'hello';
+                        return msg;
+                    })
+                    .input(function(msg) {
+                        msg.session_event = 'resume';
+                        return msg;
+                    })
+                    .run()
+                    .then(function() {
+                        assert.equal(tester.im.msg.content, 'hello');
+                        assert.equal(tester.im.msg.session_event, 'resume');
+                    });
+            });
+
+            it("should allow the function to return its result via a promise",
+            function() {
+                return tester
+                    .input(function(msg) {
+                        msg.content = 'hello';
+                        msg.session_event = 'resume';
+                        return Q(msg);
+                    })
+                    .run()
+                    .then(function() {
+                        assert.equal(tester.im.msg.content, 'hello');
+                        assert.equal(tester.im.msg.session_event, 'resume');
+                    });
+            });
         });
 
         describe(".input(content)", function() {
-            it("should update the content of the message");
+            it("should update the content of the message", function() {
+                return tester.input('hello').run().then(function() {
+                    assert.equal(tester.im.msg.content, 'hello');
+                });
+            });
         });
 
         describe(".input()", function() {
-            it("should update the content of the message to null");
-            it("should default the session event to 'new'");
+            it("should update the content of the message to null", function() {
+                return tester.input().run().then(function() {
+                    assert.strictEqual(tester.im.msg.content, null);
+                });
+            });
+
+            it("should default the session event to 'new'", function() {
+                return tester.input().run().then(function() {
+                    assert.strictEqual(tester.im.msg.session_event, 'new');
+                });
+            });
         });
     });
 
     describe(".input.content", function() {
-        it("should update the content of the message");
+        it("should update the content of the message", function() {
+            return tester.input.content('hello').run().then(function() {
+                assert.equal(tester.im.msg.content, 'hello');
+            });
+        });
     });
 
     describe(".input.session_event", function() {
-        it("should update the session event of the message");
+        it("should update the session event of the message", function() {
+            return tester.input.session_event('close').run().then(function() {
+                assert.equal(tester.im.msg.session_event, 'close');
+            });
+        });
     });
 });
