@@ -99,10 +99,6 @@ describe("Eventable", function() {
                 eventable.on('foo', function() {});
                 eventable.on('foo', function() { throw error; });
 
-                eventable.on('error', function() {
-                    console.log('sadasd');
-                });
-
                 return eventable.emit(new Event('foo')).catch(function(e) {
                     assert.strictEqual(e, error);
                 });
