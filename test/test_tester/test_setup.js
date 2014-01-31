@@ -112,21 +112,22 @@ describe("AppTester Setup Tasks", function() {
         });
 
         describe(".setup.user(fn)", function() {
-            it("should update the user data with the function's result",
+            it("should set the user data with the function's result",
             function() {
                 return tester
                     .setup.user(function(user) {
                         user.addr = '+81';
+                        user.lang = 'jp';
                         return user;
                     })
                     .setup.user(function(user) {
-                        user.lang = 'jp';
+                        delete user.lang;
                         return user;
                     })
                     .run()
                     .then(function() {
                         var user = api.kv_store['users.default.+81'];
-                        assert.equal(user.lang, 'jp');
+                        assert.notEqual(user.lang, 'jp');
                         assert.equal(user.addr, '+81');
                     });
             });
@@ -273,22 +274,23 @@ describe("AppTester Setup Tasks", function() {
         });
 
         describe(".setup.config(fn)", function() {
-            it("should update the config data with the function's result",
+            it("should set the config data with the function's result",
             function() {
                 return tester
                     .setup.config(function(config) {
                         config.foo = 'bar';
+                        config.baz = 'qux';
                         return config;
                     })
                     .setup.config(function(config) {
-                        config.baz = 'qux';
+                        delete config.baz;
                         return config;
                     })
                     .run()
                     .then(function() {
                         var config = JSON.parse(api.config_store.config);
                         assert.equal(config.foo, 'bar');
-                        assert.equal(config.baz, 'qux');
+                        assert(!('baz' in config));
                     });
             });
 
@@ -320,21 +322,22 @@ describe("AppTester Setup Tasks", function() {
         });
 
         describe(".setup.kv(fn)", function() {
-            it("should update the kv data with the function's result",
+            it("should set the kv data with the function's result",
             function() {
                 return tester
                     .setup.kv(function(kv) {
                         kv.foo = 'bar';
+                        kv.baz = 'qux';
                         return kv;
                     })
                     .setup.kv(function(kv) {
-                        kv.baz = 'qux';
+                        delete kv.baz;
                         return kv;
                     })
                     .run()
                     .then(function() {
                         assert.equal(api.kv_store.foo, 'bar');
-                        assert.equal(api.kv_store.baz, 'qux');
+                        assert(!('baz' in api.kv_store));
                     });
             });
 
