@@ -40,7 +40,6 @@ describe("AppTester Setup Tasks", function() {
             }
         }));
 
-
         app.states.add(new EndState('coffee_state', {
             text: 'Cool'
         }));
