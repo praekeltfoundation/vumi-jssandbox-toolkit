@@ -122,15 +122,15 @@ describe("AppTester Interaction Tasks", function() {
         });
 
         describe(".input(fn)", function() {
-            it("should update the message with the function's result",
+            it("should set the message with the function's result",
             function() {
                 return tester
                     .input(function(msg) {
                         msg.content = 'hello';
+                        msg.session_event = 'resume';
                         return msg;
                     })
                     .input(function(msg) {
-                        msg.session_event = 'resume';
                         return msg;
                     })
                     .run()
