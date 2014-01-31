@@ -1,3 +1,4 @@
+var Q = require('q');
 var assert = require('assert');
 
 var app = require('../../lib/app');
@@ -92,6 +93,20 @@ describe("AppTester Interaction Tasks", function() {
         });
     });
 
+    describe(".start()", function() {
+        it("should update the content of the message to null", function() {
+            return tester.start().run().then(function() {
+                assert.strictEqual(im.msg.content, null);
+            });
+        });
+
+        it("should default the session event to 'new'", function() {
+            return tester.start().run().then(function() {
+                assert.strictEqual(im.msg.session_event, 'new');
+            });
+        });
+    });
+
     describe(".input", function() {
         describe(".input(obj)", function() {
             it("should update the properties of the message", function() {
@@ -147,6 +162,12 @@ describe("AppTester Interaction Tasks", function() {
                     assert.equal(im.msg.content, 'hello');
                 });
             });
+
+            it("should default the session event to 'resume'", function() {
+                return tester.input('hello').run().then(function() {
+                    assert.strictEqual(im.msg.session_event, 'resume');
+                });
+            });
         });
 
         describe(".input()", function() {
@@ -168,6 +189,12 @@ describe("AppTester Interaction Tasks", function() {
         it("should update the content of the message", function() {
             return tester.input.content('hello').run().then(function() {
                 assert.equal(im.msg.content, 'hello');
+            });
+        });
+
+        it("should default the session event to 'resume'", function() {
+            return tester.input.content('hello').run().then(function() {
+                assert.strictEqual(im.msg.session_event, 'resume');
             });
         });
     });
