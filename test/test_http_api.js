@@ -5,7 +5,11 @@ var test_utils = vumigo.test_utils;
 var http_api = vumigo.http_api;
 var HttpApi = http_api.HttpApi;
 var JsonApi = http_api.JsonApi;
-var HttpApiError = http_api.HttpApiError;
+var HttpRequest = http_api.HttpRequest;
+var HttpResponse = http_api.HttpResponse;
+var HttpResponseError = http_api.HttpResponseError;
+var HttpRequestError = http_api.HttpRequestError;
+
 
 var BadToyApi = HttpApi.extend(function(self, im, opts) {
     HttpApi.call(self, im, opts);
@@ -15,20 +19,65 @@ var BadToyApi = HttpApi.extend(function(self, im, opts) {
     };
 });
 
+describe("HttpRequestError", function() {
+    describe(".message", function() {
+        it("should include the request");
+        it("should include the error reason if available");
+    });
+});
+
+describe("HttpResponseError", function() {
+    describe(".message", function() {
+        it("should include the response");
+        it("should include the error reason if available");
+    });
+});
+
+describe("HttpRequest", function() {
+    describe(".send", function() {
+        it("should issue a corresponding api request");
+        it("should add url params if available");
+        it("should add a request if available");
+    });
+
+    describe(".encode", function() {
+        it("should encode the request's body if available");
+    });
+
+    describe(".toString", function() {
+        it("should include the body if available");
+        it("should include the params if available");
+        it("should stringify the request");
+    });
+});
+
+describe("HttpResponse", function() {
+    describe(".decode", function() {
+        it("should decode the response's data if available");
+    });
+
+    describe(".toString", function() {
+        it("should include the body if available");
+        it("should stringify the response");
+    });
+});
+
 describe("HttpApi", function() {
     var im;
     var api;
 
     function make_api(opts) {
         return test_utils.make_im().then(function(new_im) {
-            im = new_im;
-            api = new HttpApi(im, opts);
-            return api;
+            var im = new_im;
+            return new HttpApi(im, opts);
         });
     }
 
     beforeEach(function() {
-        return make_api();
+        return make_api().then(function(new_api) {
+            api = new_api;
+            im = api.im;
+        });
     });
 
     describe(".get", function() {
