@@ -328,7 +328,7 @@ describe("AppTester Check Tasks", function() {
                 var called = false;
 
                 return tester.input().check.user(function(user) {
-                    assert.strictEqual(user, im.user);
+                    assert.deepEqual(user.serialize(), user.serialize());
                     called = true;
                 }).run().then(function() {
                     assert(called);
