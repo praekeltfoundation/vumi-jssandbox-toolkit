@@ -137,14 +137,35 @@ describe("HttpRequest", function() {
     });
 });
 
-describe.skip("HttpResponse", function() {
+describe("HttpResponse", function() {
+    var request;
+
+    beforeEach(function() {
+        request = new HttpRequest('GET', 'http://foo.com/');
+    });
+
     describe(".decode", function() {
-        it("should decode the response's data if available");
+        it("should decode the response's data if available", function() {
+            var response = new HttpResponse(request, 404, {
+                body: '{"foo":"bar"}'
+            });
+            response.decode(JSON.parse);
+            assert.deepEqual(response.data, {foo: 'bar'});
+        });
     });
 
     describe(".toString", function() {
-        it("should include the body if available");
-        it("should stringify the response");
+        it("should include the code", function() {
+            var response = new HttpResponse(request, 404);
+            assert(response.toString().indexOf(404) > -1);
+        });
+
+        it("should include the body if available", function() {
+            var response = new HttpResponse(request, 404, {
+                body: '{"foo":"bar"}'
+            });
+            assert(response.toString().indexOf('{"foo":"bar"}') > -1);
+        });
     });
 });
 
