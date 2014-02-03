@@ -11,14 +11,6 @@ var HttpResponseError = http_api.HttpResponseError;
 var HttpRequestError = http_api.HttpRequestError;
 
 
-var BadToyApi = HttpApi.extend(function(self, im, opts) {
-    HttpApi.call(self, im, opts);
-
-    self.decode_response_body = function(body) {
-      throw Error("You shall not parse");
-    };
-});
-
 describe("HttpRequestError", function() {
     var request;
 
@@ -78,6 +70,15 @@ describe("HttpRequest", function() {
                 name: 'http.get',
                 data: {url: 'http://foo.com/'}
             });
+        });
+
+        it("should include the request headers if available", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                headers: {foo: ['bar']}
+            });
+
+            var cmd = request.to_cmd();
+            assert.deepEqual(cmd.data.headers, {foo: ['bar']});
         });
 
         it("should include the url params if available", function() {
@@ -169,14 +170,15 @@ describe("HttpResponse", function() {
     });
 });
 
-describe.skip("HttpApi", function() {
+describe("HttpApi", function() {
     var im;
     var api;
 
     function make_api(opts) {
         return test_utils.make_im().then(function(new_im) {
-            var im = new_im;
-            return new HttpApi(im, opts);
+            im = new_im;
+            api = new HttpApi(im, opts);
+            return api;
         });
     }
 
@@ -199,8 +201,9 @@ describe.skip("HttpApi", function() {
                 }
             });
 
-            return api.get('http://foo.com/').then(function(data) {
-                assert.equal(data, '{"foo": "bar"}');
+            return api.get('http://foo.com/').then(function(response) {
+                assert.equal(response.code, 200);
+                assert.equal(response.data, '{"foo": "bar"}');
             });
         });
     });
@@ -214,8 +217,9 @@ describe.skip("HttpApi", function() {
                 }
             });
 
-            return api.head('http://foo.com/').then(function(data) {
-                assert.strictEqual(data, null);
+            return api.head('http://foo.com/').then(function(response) {
+                assert.equal(response.code, 200);
+                assert.strictEqual(response.data, null);
             });
         });
     });
@@ -237,8 +241,9 @@ describe.skip("HttpApi", function() {
             return api.post('http://foo.com/', {
                 data: '{"lerp": "larp"}',
                 headers: {'Content-Type': ['application/json']}
-            }).then(function(data) {
-                assert.strictEqual(data, '{"foo": "bar"}');
+            }).then(function(response) {
+                assert.equal(response.code, 200);
+                assert.strictEqual(response.data, '{"foo": "bar"}');
             });
         });
     });
@@ -260,8 +265,9 @@ describe.skip("HttpApi", function() {
             return api.put('http://foo.com/', {
                 data: '{"lerp": "larp"}',
                 headers: {'Content-Type': ['application/json']}
-            }).then(function(data) {
-                assert.strictEqual(data, '{"foo": "bar"}');
+            }).then(function(response) {
+                assert.equal(response.code, 200);
+                assert.strictEqual(response.data, '{"foo": "bar"}');
             });
         });
     });
@@ -283,8 +289,9 @@ describe.skip("HttpApi", function() {
             return api.delete('http://foo.com/', {
                 data: '{"lerp": "larp"}',
                 headers: {'Content-Type': ['application/json']}
-            }).then(function(data) {
-                assert.strictEqual(data, '{"foo": "bar"}');
+            }).then(function(response) {
+                assert.equal(response.code, 200);
+                assert.strictEqual(response.data, '{"foo": "bar"}');
             });
         });
     });
@@ -302,9 +309,12 @@ describe.skip("HttpApi", function() {
                 }
             });
 
-            return api.request('get', 'http://foo.com/').then(function(data) {
-                assert.equal(data, '201 Created');
-            });
+            return api
+                .request('get', 'http://foo.com/')
+                .then(function(response) {
+                    assert.equal(response.code, 201);
+                    assert.equal(response.data, '201 Created');
+                });
         });
 
         it("should support request body data", function() {
@@ -384,11 +394,9 @@ describe.skip("HttpApi", function() {
 
                 var p = api.request("get", "http://foo.com/");
                 return p.catch(function(e) {
-                    assert(e instanceof HttpApiError);
-                    assert.equal(e.message, [
-                        'HTTP API GET to http://foo.com/ failed:',
-                        '404 Not Found [Response Body: 404 Not Found]'
-                    ].join(" "));
+                    assert(e instanceof HttpResponseError);
+                    assert.equal(e.response.code, 404);
+                    assert.equal(e.response.body, '404 Not Found');
                 });
             });
         });
@@ -414,13 +422,12 @@ describe.skip("HttpApi", function() {
 
                 var p = api.request('get', 'http://foo.com/');
                 return p.catch(function(e) {
-                    assert(e instanceof HttpApiError);
-                    assert.equal(e.message, [
-                        'HTTP API GET to http://foo.com/ failed:',
-                        'Could not parse response',
-                        '(Error: You shall not parse)',
-                        '[Response Body: {"foo": "bar"}]'
-                    ].join(" "));
+                    assert(e instanceof HttpResponseError);
+                    assert.equal(e.reason, [
+                        "Could not parse response",
+                        "(Error: You shall not parse)"].join(' '));
+                    assert.equal(e.response.code, 200);
+                    assert.equal(e.response.body, '{"foo": "bar"}');
                 });
             });
         });
@@ -449,11 +456,10 @@ describe.skip("HttpApi", function() {
 
                 var p = api.request('get', 'http://foo.com/');
                 return p.catch(function(e) {
-                    assert(e instanceof HttpApiError);
-                    assert.equal(e.message, [
-                        'HTTP API GET to http://foo.com/ failed:',
-                        'No apparent reason'
-                    ].join(" "));
+                    assert(e instanceof HttpRequestError);
+                    assert.equal(e.reason, 'No apparent reason');
+                    assert.equal(e.request.url, 'http://foo.com/');
+                    assert.equal(e.request.method, 'GET');
                 });
             });
         });
@@ -489,8 +495,8 @@ describe("JsonApi", function() {
             }
         });
 
-        return api.request('get', 'http://foo.com/').then(function(data) {
-            assert.deepEqual(data, {foo: 'bar'});
+        return api.request('get', 'http://foo.com/').then(function(response) {
+            assert.deepEqual(response.data, {foo: 'bar'});
         });
     });
 
@@ -506,9 +512,8 @@ describe("JsonApi", function() {
 
         return api.request("post", 'http://foo.com/', {
             data: {lerp: 'larp'},
-        }).then(function() {
-            var request = im.api.http_requests[0];
-            assert.equal(request.body, '{"lerp":"larp"}');
+        }).then(function(response) {
+            assert.equal(response.request.body, '{"lerp":"larp"}');
         });
     });
 });
