@@ -20,16 +20,45 @@ var BadToyApi = HttpApi.extend(function(self, im, opts) {
 });
 
 describe("HttpRequestError", function() {
+    var request;
+    var error;
+
+    beforeEach(function() {
+        request = new HttpRequest('GET', 'http://foo.com/');
+        error = new HttpRequestError(request);
+    });
+
     describe(".message", function() {
-        it("should include the request");
-        it("should include the error reason if available");
+        it("should include the request", function() {
+            assert(error.message.indexOf(request) > -1);
+        });
+
+        it("should include the error reason if available", function() {
+            var error = new HttpRequestError(request, 'Sigh');
+            assert(error.message.indexOf('Sigh') > -1);
+        });
     });
 });
 
 describe("HttpResponseError", function() {
+    var response;
+    var error;
+
+    beforeEach(function() {
+        var request = new HttpRequest('GET', 'http://foo.com/');
+        response = new HttpResponse(request, 404);
+        error = new HttpResponseError(response);
+    });
+
     describe(".message", function() {
-        it("should include the response");
-        it("should include the error reason if available");
+        it("should include the response", function() {
+            assert(error.message.indexOf(response) > -1);
+        });
+
+        it("should include the error reason if available", function() {
+            var error = new HttpResponseError(response, 'Sigh');
+            assert(error.message.indexOf('Sigh') > -1);
+        });
     });
 });
 
@@ -51,7 +80,7 @@ describe("HttpRequest", function() {
     });
 });
 
-describe("HttpResponse", function() {
+describe.skip("HttpResponse", function() {
     describe(".decode", function() {
         it("should decode the response's data if available");
     });
@@ -62,7 +91,7 @@ describe("HttpResponse", function() {
     });
 });
 
-describe("HttpApi", function() {
+describe.skip("HttpApi", function() {
     var im;
     var api;
 
