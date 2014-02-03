@@ -21,15 +21,14 @@ var BadToyApi = HttpApi.extend(function(self, im, opts) {
 
 describe("HttpRequestError", function() {
     var request;
-    var error;
 
     beforeEach(function() {
         request = new HttpRequest('GET', 'http://foo.com/');
-        error = new HttpRequestError(request);
     });
 
     describe(".message", function() {
         it("should include the request", function() {
+            var error = new HttpRequestError(request);
             assert(error.message.indexOf(request) > -1);
         });
 
@@ -42,16 +41,15 @@ describe("HttpRequestError", function() {
 
 describe("HttpResponseError", function() {
     var response;
-    var error;
 
     beforeEach(function() {
         var request = new HttpRequest('GET', 'http://foo.com/');
         response = new HttpResponse(request, 404);
-        error = new HttpResponseError(response);
     });
 
     describe(".message", function() {
         it("should include the response", function() {
+            var error = new HttpResponseError(response);
             assert(error.message.indexOf(response) > -1);
         });
 
@@ -63,20 +61,79 @@ describe("HttpResponseError", function() {
 });
 
 describe("HttpRequest", function() {
-    describe(".send", function() {
-        it("should issue a corresponding api request");
-        it("should add url params if available");
-        it("should add a request if available");
+    describe(".encode", function() {
+        it("should encode the request's body if available", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                data: {foo: 'bar'}
+            });
+            request.encode(JSON.stringify);
+            assert.deepEqual(request.body, '{"foo":"bar"}');
+        });
     });
 
-    describe(".encode", function() {
-        it("should encode the request's body if available");
+    describe(".to_cmd", function() {
+        it("should convert the request to a sandbox API command", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/');
+            assert.deepEqual(request.to_cmd(), {
+                name: 'http.get',
+                data: {url: 'http://foo.com/'}
+            });
+        });
+
+        it("should include the url params if available", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                params: [{
+                    name: 'bar',
+                    value: 'baz'
+                }]
+            });
+
+            var cmd = request.to_cmd();
+            assert.equal(cmd.data.url, 'http://foo.com/?bar=baz');
+        });
+
+        it("should include the request body if available", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                data: {foo: 'bar'}
+            });
+            request.encode(JSON.stringify);
+
+            var cmd = request.to_cmd();
+            assert.equal(cmd.data.data, '{"foo":"bar"}');
+        });
     });
 
     describe(".toString", function() {
-        it("should include the body if available");
-        it("should include the params if available");
-        it("should stringify the request");
+        it("should include the request method", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/');
+            assert(request.toString().indexOf('GET') > -1);
+        });
+
+        it("should include the url", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/');
+            assert(request.toString().indexOf('http://foo.com/') > -1);
+        });
+
+        it("should include the body if available", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                data: {foo: 'bar'}
+            });
+            request.encode(JSON.stringify);
+
+            assert(request.toString().indexOf('{"foo":"bar"}') > -1);
+        });
+
+        it("should include the params if available", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                params: [{
+                    name: 'bar',
+                    value: 'baz'
+                }]
+            });
+
+            var request_str = request.toString();
+            assert(request_str.indexOf('[{"name":"bar","value":"baz"}]') > -1);
+        });
     });
 });
 
