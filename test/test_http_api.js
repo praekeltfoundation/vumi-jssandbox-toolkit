@@ -62,6 +62,19 @@ describe("HttpRequest", function() {
             request.encode();
             assert.deepEqual(request.body, '{"foo":"bar"}');
         });
+
+        it("should throw an error if encoding fails", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                data: {foo: 'bar'},
+                encoder: function() {
+                    throw Error("You shall not parse");
+                }
+            });
+
+            assert.throws(function() {
+                request.encode();
+            }, HttpRequestError);
+        });
     });
 
     describe(".to_cmd", function() {
@@ -156,6 +169,19 @@ describe("HttpResponse", function() {
             });
             response.decode();
             assert.deepEqual(response.data, {foo: 'bar'});
+        });
+
+        it("should throw an error if decoding fails", function() {
+            var response = new HttpResponse(request, 404, {
+                body: '{"foo":"bar"}',
+                decoder: function() {
+                    throw Error("You shall not parse");
+                }
+            });
+
+            assert.throws(function() {
+                response.decode();
+            }, HttpResponseError);
         });
     });
 
@@ -406,13 +432,11 @@ describe("HttpApi", function() {
         });
 
         describe("if the body cannot be parsed", function() {
-            beforeEach(function() {
+            it("should throw an error", function() {
                 api.decode_response_body = function() {
                     throw Error("You shall not parse");
                 };
-            });
 
-            it("should throw an error", function() {
                 im.api.add_http_fixture({
                     request: {
                         method: 'GET',
