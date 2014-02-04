@@ -56,9 +56,10 @@ describe("HttpRequest", function() {
     describe(".encode", function() {
         it("should encode the request's body if available", function() {
             var request = new HttpRequest('GET', 'http://foo.com/', {
-                data: {foo: 'bar'}
+                data: {foo: 'bar'},
+                encoder: JSON.stringify
             });
-            request.encode(JSON.stringify);
+            request.encode();
             assert.deepEqual(request.body, '{"foo":"bar"}');
         });
     });
@@ -95,9 +96,10 @@ describe("HttpRequest", function() {
 
         it("should include the request body if available", function() {
             var request = new HttpRequest('GET', 'http://foo.com/', {
-                data: {foo: 'bar'}
+                data: {foo: 'bar'},
+                encoder: JSON.stringify
             });
-            request.encode(JSON.stringify);
+            request.encode();
 
             var cmd = request.to_cmd();
             assert.equal(cmd.data.data, '{"foo":"bar"}');
@@ -117,9 +119,10 @@ describe("HttpRequest", function() {
 
         it("should include the body if available", function() {
             var request = new HttpRequest('GET', 'http://foo.com/', {
-                data: {foo: 'bar'}
+                data: {foo: 'bar'},
+                encoder: JSON.stringify
             });
-            request.encode(JSON.stringify);
+            request.encode();
 
             assert(request.toString().indexOf('{"foo":"bar"}') > -1);
         });
@@ -148,9 +151,10 @@ describe("HttpResponse", function() {
     describe(".decode", function() {
         it("should decode the response's data if available", function() {
             var response = new HttpResponse(request, 404, {
-                body: '{"foo":"bar"}'
+                body: '{"foo":"bar"}',
+                decoder: JSON.parse
             });
-            response.decode(JSON.parse);
+            response.decode();
             assert.deepEqual(response.data, {foo: 'bar'});
         });
     });
