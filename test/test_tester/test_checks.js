@@ -352,23 +352,27 @@ describe("AppTester Check Tasks", function() {
 
         it("should check arbitrary user properties", function() {
             return tester
-                .check.user.properties({addr: '+27123456788'})
+                .setup.user({
+                    lang: 'en',
+                    addr: '+27123456787'
+                })
+                .check.user.properties({
+                    lang: 'jp',
+                    addr: '+27123456788'
+                })
                 .run()
                 .catch(function(e) {
                     assert.equal(
                         e.msg,
-                        "Unexpected value for user property 'addr'");
-                    assert.deepEqual(e.expected, '+27123456788');
-                    assert.deepEqual(e.actual, '+27123456789');
-                });
-        });
-
-        it("should check if the user properties are known", function() {
-            return tester
-                .check.user.properties({lerp: 'larp'})
-                .run()
-                .catch(function(e) {
-                    assert.equal(e.msg, "Unknown user property 'lerp'");
+                        "Unexpected values for user properties");
+                    assert.deepEqual(e.actual, {
+                        lang: 'en',
+                        addr: '+27123456787'
+                    });
+                    assert.deepEqual(e.expected, {
+                        lang: 'jp',
+                        addr: '+27123456788'
+                    });
                 });
         });
     });
