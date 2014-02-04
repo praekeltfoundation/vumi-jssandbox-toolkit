@@ -891,8 +891,19 @@ describe("AppTester Check Tasks", function() {
                     assert.equal(
                         e.msg, 
                         "Expecting no replies from the app to the user");
-                    assert.equal(e.expected, 0);
-                    assert.equal(e.actual, 1);
+
+                    assert.deepEqual(e.expected, []);
+
+                    assert.deepEqual(e.actual, [{
+                        cmd: 'outbound.reply_to',
+                        in_reply_to: '1',
+                        continue_session: true,
+                        content: [
+                            'Tea or coffee?',
+                            '1. Tea',
+                            '2. Coffee'
+                        ].join('\n')
+                    }]);
                 });
         });
     });
