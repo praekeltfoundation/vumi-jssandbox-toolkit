@@ -769,19 +769,9 @@ describe("AppTester Check Tasks", function() {
                 .run()
                 .catch(function(e) {
                     assert.equal(e.msg, [
-                        "Unexpected value for reply property",
-                        "'in_reply_to'"].join(' '));
-                    assert.equal(e.expected, 2);
-                    assert.equal(e.actual, 1);
-                });
-        });
-
-        it("should check if the reply properties are known", function() {
-            return tester
-                .check.reply.properties({lerp: 'larp'})
-                .run()
-                .catch(function(e) {
-                    assert.equal(e.msg, "Unknown reply property 'lerp'");
+                        "Unexpected values for reply properties"].join(' '));
+                    assert.deepEqual(e.actual, {in_reply_to: '1'});
+                    assert.deepEqual(e.expected, {in_reply_to: '2'});
                 });
         });
 
