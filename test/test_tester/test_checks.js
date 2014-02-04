@@ -273,52 +273,25 @@ describe("AppTester Check Tasks", function() {
 
     describe(".check.user", function() {
         describe(".check.user(obj)", function() {
-            it("should check the user's state if given", function() {
+            it("should check that the user strictly equals obj", function() {
                 return tester
                     .input()
-                    .check.user({state: {name: 'tea_state'}})
-                    .run()
-                    .catch(function(e) {
-                        assert.equal(e.msg, "Unexpected state name");
-                        assert.equal(e.expected, 'tea_state');
-                        assert.equal(e.actual, 'initial_state');
-                    });
-            });
-
-            it("should check the user's answers if given", function() {
-                return tester
-                    .setup.user.state('initial_state')
-                    .input('1')
-                    .check.user({
-                        answers: {initial_state: '2'}
-                    })
-                    .run()
-                    .catch(function(e) {
-                        assert.equal(e.msg, "Unexpected user answers");
-                        assert.deepEqual(e.expected, {initial_state: '2'});
-                        assert.deepEqual(e.actual, {initial_state: '1'});
-                    });
-            });
-
-            it("should check arbitrary user properties", function() {
-                return tester
-                    .check.user({addr: '+27123456788'})
-                    .run()
-                    .catch(function(e) {
-                        assert.equal(
-                            e.msg,
-                            "Unexpected value for user property 'addr'");
-                        assert.deepEqual(e.expected, '+27123456788');
-                        assert.deepEqual(e.actual, '+27123456789');
-                    });
-            });
-
-            it("should check if the user properties are known", function() {
-                return tester
                     .check.user({lerp: 'larp'})
                     .run()
                     .catch(function(e) {
-                        assert.equal(e.msg, "Unknown user property 'lerp'");
+                        assert.equal(e.msg, "Unexpected user properties");
+
+                        assert.deepEqual(e.actual, {
+                            addr: "+27123456789",
+                            lang: null,
+                            answers: {},
+                            state: {
+                                name: "initial_state",
+                                metadata: {}
+                            }
+                        });
+
+                        assert.deepEqual(e.expected, {lerp: 'larp'});
                     });
             });
         });
