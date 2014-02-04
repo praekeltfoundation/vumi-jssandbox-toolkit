@@ -273,7 +273,7 @@ describe("AppTester Check Tasks", function() {
 
     describe(".check.user", function() {
         describe(".check.user(obj)", function() {
-            it("should check that the user strictly equals obj", function() {
+            it("should check that the user deep equals obj", function() {
                 return tester
                     .input()
                     .check.user({lerp: 'larp'})
@@ -449,7 +449,7 @@ describe("AppTester Check Tasks", function() {
         });
 
         describe(".check.state(obj)", function() {
-            it("should check that the state strictly equals obj", function() {
+            it("should check that the state deep equals obj", function() {
                 return tester
                     .setup.user.state({
                         name: 'initial_state',
@@ -590,7 +590,7 @@ describe("AppTester Check Tasks", function() {
         });
 
         describe(".check.reply(obj)", function() {
-            it("should check the content of the sent reply", function(){
+            it("should check the sent reply deep equals obj", function(){
                 return tester
                     .input()
                     .check.reply({
@@ -598,36 +598,20 @@ describe("AppTester Check Tasks", function() {
                     })
                     .run()
                     .catch(function(e) {
-                        assert.equal(e.msg, "Unexpected reply content");
-                        assert.equal(e.expected, 'Spam?');
-                        assert.equal(e.actual, [
-                            'Tea or coffee?',
-                            '1. Tea',
-                            '2. Coffee'
-                        ].join('\n'));
-                    });
-            });
+                        assert.equal(e.msg, "Unexpected reply");
 
-            it("should check the properties of the sent reply", function() {
-                return tester
-                    .input()
-                    .check.reply({in_reply_to: '2'})
-                    .run()
-                    .catch(function(e) {
-                        assert.equal(e.msg, [
-                            "Unexpected value for reply property",
-                            "'in_reply_to'"].join(' '));
-                        assert.equal(e.expected, 2);
-                        assert.equal(e.actual, 1);
-                    });
-            });
+                        assert.deepEqual(e.actual, {
+                            cmd: 'outbound.reply_to',
+                            in_reply_to: '1',
+                            continue_session: true,
+                            content: [
+                                'Tea or coffee?',
+                                '1. Tea',
+                                '2. Coffee'
+                            ].join('\n')
+                        });
 
-            it("should check if the reply properties are known", function() {
-                return tester
-                    .check.reply({lerp: 'larp'})
-                    .run()
-                    .catch(function(e) {
-                        assert.equal(e.msg, "Unknown reply property 'lerp'");
+                        assert.deepEqual(e.expected, {content: 'Spam?'});
                     });
             });
 
