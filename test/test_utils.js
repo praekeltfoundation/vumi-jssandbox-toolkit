@@ -5,7 +5,7 @@ var utils = require("../lib/utils");
 
 describe("utils", function() {
     describe("pop_prop", function() {
-        it("should the given property off the object", function() {
+        it("should pop the given property off the object", function() {
             var obj = {
                 r: 'j',
                 d: '2'
