@@ -326,12 +326,23 @@ describe("AppTester Check Tasks", function() {
         it("should check the user's state if given", function() {
             return tester
                 .input()
-                .check.user.properties({state: {name: 'tea_state'}})
+                .check.user.properties({
+                    state: {
+                        name: 'tea_state',
+                        metadata: {}
+                    }
+                })
                 .run()
                 .catch(function(e) {
-                    assert.equal(e.msg, "Unexpected state name");
-                    assert.equal(e.expected, 'tea_state');
-                    assert.equal(e.actual, 'initial_state');
+                    assert.equal(e.msg, "Unexpected state");
+                    assert.deepEqual(e.actual, {
+                        name: 'initial_state',
+                        metadata: {}
+                    });
+                    assert.deepEqual(e.expected, {
+                        name: 'tea_state',
+                        metadata: {}
+                    });
                 });
         });
 
@@ -438,31 +449,29 @@ describe("AppTester Check Tasks", function() {
         });
 
         describe(".check.state(obj)", function() {
-            it("should check the current state's name", function() {
+            it("should check that the state strictly equals obj", function() {
                 return tester
-                    .input()
-                    .check.state({name: 'tea_state'})
-                    .run()
-                    .catch(function(e) {
-                        assert.equal(e.msg, "Unexpected state name");
-                        assert.equal(e.expected, 'tea_state');
-                        assert.equal(e.actual, 'initial_state');
-                    });
-            });
-
-            it("should check the current state's metadata if given",
-            function() {
-                return tester
-                    .setup.user.state('initial_state', {foo: 'bar'})
+                    .setup.user.state({
+                        name: 'initial_state',
+                        metadata: {foo: 'bar'}
+                    })
                     .check.state({
                         name: 'initial_state',
                         metadata: {foo: 'baz'}
                     })
                     .run()
                     .catch(function(e) {
-                        assert.equal(e.msg, "Unexpected state metadata");
-                        assert.deepEqual(e.expected, {foo: 'baz'});
-                        assert.deepEqual(e.actual, {foo: 'bar'});
+                        assert.equal(e.msg, "Unexpected state");
+
+                        assert.deepEqual(e.actual, {
+                            name: 'initial_state',
+                            metadata: {foo: 'bar'}
+                        });
+
+                        assert.deepEqual(e.expected, {
+                            name: 'initial_state',
+                            metadata: {foo: 'baz'}
+                        });
                     });
             });
         });
