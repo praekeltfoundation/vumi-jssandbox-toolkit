@@ -269,6 +269,23 @@ describe("AppTester Check Tasks", function() {
                     ].join('\n'));
                 });
         });
+
+        it("should check the char limit if given", function() {
+            return tester
+                .input()
+                .check.interaction({
+                    state: 'initial_state',
+                    char_limit: 2
+                })
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, [
+                        "The reply content's character count was longer than",
+                        "the expected limit: 31 > 2"].join(' '));
+                    assert.equal(e.expected, 2);
+                    assert.equal(e.actual, 31);
+                });
+        });
     });
 
     describe(".check.user", function() {
@@ -928,7 +945,6 @@ describe("AppTester Check Tasks", function() {
                 .check.reply.char_limit(3)
                 .run()
                 .catch(function(e) {
-
                     assert.equal(e.msg, [
                         "The reply content's character count was longer than",
                         "the expected limit: 31 > 3"].join(' '));
