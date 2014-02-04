@@ -32,8 +32,8 @@ describe("AppTester Check Tasks", function() {
             ],
             next: function(choice) {
                 return {
-                    tea: 'coffee_state',
-                    coffee: 'tea_state'
+                    tea: 'tea_state',
+                    coffee: 'coffee_state'
                 }[choice.value];
             }
         }));
