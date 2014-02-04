@@ -22,7 +22,7 @@ describe("AppTester Setup Tasks", function() {
     var tester;
 
     beforeEach(function() {
-        app = new App('start');
+        app = new App('initial_state');
         tester = new AppTester(app);
         api = tester.api;
 
@@ -348,6 +348,25 @@ describe("AppTester Setup Tasks", function() {
                     assert.equal(api.kv_store.foo, 'bar');
                 });
             });
+        });
+    });
+
+    describe(".setup.char_limit", function() {
+        it("should change the char limit used in the checking phase", function() {
+            return tester
+                .setup.char_limit(2)
+                .setup.char_limit(3)
+                .input()
+                .check.reply([
+                    'Tea or coffee?',
+                    '1. Tea',
+                    '2. Coffee'].join('\n'))
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, [
+                        "The reply content's character count was longer",
+                        "than the expected limit: 31 > 3"].join(' '));
+                });
         });
     });
 });

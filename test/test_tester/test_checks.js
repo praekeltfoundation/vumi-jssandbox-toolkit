@@ -552,6 +552,22 @@ describe("AppTester Check Tasks", function() {
                         assert.equal(e.actual, 2);
                     });
             });
+
+            it("should check the reply char limit", function() {
+                return tester
+                    .setup.char_limit(2)
+                    .input()
+                    .check.reply([
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'].join('\n'))
+                    .run()
+                    .catch(function(e) {
+                        assert.equal(e.msg, [
+                            "The reply content's character count was longer",
+                            "than the expected limit: 31 > 2"].join(' '));
+                    });
+            });
         });
 
         describe(".check.reply(re)", function() {
@@ -585,6 +601,22 @@ describe("AppTester Check Tasks", function() {
                             "to the user"].join(' '));
                         assert.equal(e.expected, 1);
                         assert.equal(e.actual, 2);
+                    });
+            });
+
+            it("should check the reply char limit", function() {
+                return tester
+                    .setup.char_limit(2)
+                    .input()
+                    .check.reply(new RegExp([
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'].join('\n')))
+                    .run()
+                    .catch(function(e) {
+                        assert.equal(e.msg, [
+                            "The reply content's character count was longer",
+                            "than the expected limit: 31 > 2"].join(' '));
                     });
             });
         });
@@ -635,6 +667,24 @@ describe("AppTester Check Tasks", function() {
                         assert.equal(e.actual, 2);
                     });
             });
+
+            it("should check the reply char limit", function() {
+                return tester
+                    .setup.char_limit(2)
+                    .input()
+                    .check.reply({
+                        content: [
+                            'Tea or coffee?',
+                            '1. Tea',
+                            '2. Coffee'].join('\n')
+                    })
+                    .run()
+                    .catch(function(e) {
+                        assert.equal(e.msg, [
+                            "The reply content's character count was longer",
+                            "than the expected limit: 31 > 2"].join(' '));
+                    });
+            });
         });
 
         describe(".check.reply(fn)", function() {
@@ -663,6 +713,19 @@ describe("AppTester Check Tasks", function() {
                             "to the user"].join(' '));
                         assert.equal(e.expected, 1);
                         assert.equal(e.actual, 2);
+                    });
+            });
+
+            it("should check the reply char limit", function() {
+                return tester
+                    .setup.char_limit(2)
+                    .input()
+                    .check.reply(function() {})
+                    .run()
+                    .catch(function(e) {
+                        assert.equal(e.msg, [
+                            "The reply content's character count was longer",
+                            "than the expected limit: 31 > 2"].join(' '));
                     });
             });
 
@@ -742,6 +805,24 @@ describe("AppTester Check Tasks", function() {
                     assert.equal(e.actual, 2);
                 });
         });
+
+        it("should check the reply char limit", function() {
+            return tester
+                .setup.char_limit(2)
+                .input()
+                .check.reply.properties({
+                    content: [
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'].join('\n')
+                })
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, [
+                        "The reply content's character count was longer",
+                        "than the expected limit: 31 > 2"].join(' '));
+                });
+        });
     });
 
     describe(".check.reply.content", function() {
@@ -780,6 +861,22 @@ describe("AppTester Check Tasks", function() {
                         assert.equal(e.actual, 2);
                     });
             });
+
+            it("should check the reply char limit", function() {
+                return tester
+                    .setup.char_limit(2)
+                    .input()
+                    .check.reply.content([
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'].join('\n'))
+                    .run()
+                    .catch(function(e) {
+                        assert.equal(e.msg, [
+                            "The reply content's character count was longer",
+                            "than the expected limit: 31 > 2"].join(' '));
+                    });
+            });
         });
 
         describe(".check.reply.content(re)", function() {
@@ -815,6 +912,22 @@ describe("AppTester Check Tasks", function() {
                         assert.equal(e.actual, 2);
                     });
             });
+
+            it("should check the reply char limit", function() {
+                return tester
+                    .setup.char_limit(2)
+                    .input()
+                    .check.reply.content(new RegExp([
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'].join('\n')))
+                    .run()
+                    .catch(function(e) {
+                        assert.equal(e.msg, [
+                            "The reply content's character count was longer",
+                            "than the expected limit: 31 > 2"].join(' '));
+                    });
+            });
         });
     });
 
@@ -828,7 +941,7 @@ describe("AppTester Check Tasks", function() {
 
                     assert.equal(e.msg, [
                         "The reply content's character count was longer than",
-                        "expected limit: 31 > 3"].join(' '));
+                        "the expected limit: 31 > 3"].join(' '));
                     assert.equal(e.expected, 3);
                     assert.equal(e.actual, 31);
                 });
