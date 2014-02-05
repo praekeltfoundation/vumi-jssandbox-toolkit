@@ -4,6 +4,7 @@ var vumigo = require("../lib");
 var test_utils = vumigo.test_utils;
 var SandboxConfig = vumigo.config.SandboxConfig;
 var IMConfig = vumigo.config.IMConfig;
+var IMConfigError = vumigo.config.IMConfigError;
 
 
 describe("SandboxConfig", function() {
@@ -57,6 +58,16 @@ describe("IMConfig", function() {
         });
     });
 
+    describe(".validation", function() {
+        it("should check for the app's name", function() {
+            var e = test_utils.catch_err(function() {
+                config.validate({});
+            });
+            assert(e instanceof IMConfigError);
+            assert.equal(e.message, "No 'name' config property found");
+        });
+    });
+
     describe(".setup", function() {
         var config;
 
@@ -73,6 +84,19 @@ describe("IMConfig", function() {
         function() {
             return config.setup().then(function() {
                 assert.equal(config.get('lerp'), 'larp');
+            });
+        });
+
+        it("should validate the config", function() {
+            return test_utils.make_im({
+                config: {config: '{}'}
+            })
+            .then(function() {
+                var config = new IMConfig(im);
+                return config.setup();
+            })
+            .catch(function(e) {
+                assert(e instanceof IMConfigError);
             });
         });
     });
