@@ -244,20 +244,22 @@ describe("User", function() {
     describe(".load", function() {
         describe("if the user exists", function() {
             it("should load the user", function() {
-                return user.load('+27987654321').then(function() {
-                    assert.equal(user.addr, '+27987654321');
-                    assert.equal(user.lang, 'af');
-                    assert.equal(user.get_answer('start'), 'ja');
-                    assert.equal(user.state.name, 'start');
-                    assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                    assert.equal(user.i18n.gettext('yes'), 'ja');
-                });
+                return user
+                    .load('+27987654321', {store_name: 'test_app'})
+                    .then(function() {
+                        assert.equal(user.addr, '+27987654321');
+                        assert.equal(user.lang, 'af');
+                        assert.equal(user.get_answer('start'), 'ja');
+                        assert.equal(user.state.name, 'start');
+                        assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                        assert.equal(user.i18n.gettext('yes'), 'ja');
+                    });
             });
 
             it("should emit a 'user:load' event", function() {
                 var p = user.once.resolved('user:load');
                 return user
-                    .load('+27987654321')
+                    .load('+27987654321', {store_name: 'test_app'})
                     .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
@@ -267,11 +269,13 @@ describe("User", function() {
 
         describe("if the user does not exist", function() {
             it("should throw an error", function() {
-                return user.load('i-do-not-exist').catch(function(e) {
-                    assert.equal(
-                        e.message,
-                        "Failed to load user 'i-do-not-exist'");
-                });
+                return user
+                    .load('i-do-not-exist', {store_name: 'test_app'})
+                    .catch(function(e) {
+                        assert.equal(
+                            e.message,
+                            "Failed to load user 'i-do-not-exist'");
+                    });
             });
         });
     });
@@ -279,20 +283,22 @@ describe("User", function() {
     describe(".load_or_create", function() {
         describe("if the user exists", function() {
             it("should load the user", function() {
-                return user.load('+27987654321').then(function() {
-                    assert.equal(user.addr, '+27987654321');
-                    assert.equal(user.lang, 'af');
-                    assert.equal(user.get_answer('start'), 'ja');
-                    assert.equal(user.state.name, 'start');
-                    assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                    assert.equal(user.i18n.gettext('no'), 'nee');
-                });
+                return user
+                    .load('+27987654321', {store_name: 'test_app'})
+                    .then(function() {
+                        assert.equal(user.addr, '+27987654321');
+                        assert.equal(user.lang, 'af');
+                        assert.equal(user.get_answer('start'), 'ja');
+                        assert.equal(user.state.name, 'start');
+                        assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                        assert.equal(user.i18n.gettext('no'), 'nee');
+                    });
             });
 
             it("should emit a 'user:load' event", function() {
                 var p = user.once.resolved('user:load');
                 return user
-                    .load('+27987654321')
+                    .load('+27987654321', {store_name: 'test_app'})
                     .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
@@ -302,15 +308,17 @@ describe("User", function() {
 
         describe("if the user does not exist", function() {
             it("should create a new user", function() {
-                return user.load_or_create('i-do-not-exist').then(function() {
-                    assert.equal(user.addr, 'i-do-not-exist');
-                });
+                return user
+                    .load_or_create('i-do-not-exist', {store_name: 'test_app'})
+                    .then(function() {
+                        assert.equal(user.addr, 'i-do-not-exist');
+                    });
             });
 
             it("should emit a 'user:new' event", function() {
                 var p = user.once.resolved('user:new');
                 return user
-                    .load_or_create('i-do-not-exist')
+                    .load_or_create('i-do-not-exist', {store_name: 'test_app'})
                     .thenResolve(p)
                     .then(function(e) {
                         assert.equal(user, e.user);
@@ -327,7 +335,7 @@ describe("User", function() {
                 .save()
                 .then(function() {
                     user = new User(im);
-                    return user.load('+27987654321');
+                    return user.load('+27987654321', {store_name: 'test_app'});
                 })
                 .then(function() {
                     assert.equal(user.get_answer('why'), 'no');

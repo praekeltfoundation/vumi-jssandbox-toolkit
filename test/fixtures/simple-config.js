@@ -24,9 +24,8 @@ module.exports = function() {
             'no' : [null, 'iie']
         }),
         config: JSON.stringify({
-            name: 'anakin_the_app',
-            lerp: 'larp',
-            metric_store: 'luke_the_store'
+            name: 'test_app',
+            lerp: 'larp'
         }),
         foo: JSON.stringify({bar: 'baz'})
     };
