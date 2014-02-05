@@ -372,6 +372,21 @@ describe("AppTester Check Tasks", function() {
                 });
         });
 
+        it("should check the user's metadata if given", function() {
+            return tester
+                .setup.user.metadata({foo: 'bar'})
+                .input()
+                .check.user.properties({
+                    metadata: {foo: 'baz'}
+                })
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, "Unexpected user metadata");
+                    assert.deepEqual(e.actual, {foo: 'bar'});
+                    assert.deepEqual(e.expected, {foo: 'baz'});
+                });
+        });
+
         it("should check arbitrary user properties", function() {
             return tester
                 .setup.user({
