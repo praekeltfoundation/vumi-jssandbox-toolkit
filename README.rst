@@ -23,7 +23,7 @@ To build the docs locally::
     (ve)$ cd docs
     (ve)$ make html
 
-You'll find the docs in `docs/_build/html/index.html`
+You'll find the docs in ``docs/_build/html/index.html``.
 
 You can contact the Vumi development team in the following ways:
 
