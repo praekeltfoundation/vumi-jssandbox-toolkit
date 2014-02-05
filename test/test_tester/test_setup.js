@@ -256,6 +256,22 @@ describe("AppTester Setup Tasks", function() {
         });
     });
 
+    describe(".setup.user.metadata", function() {
+        it("should update the user's metadata", function() {
+            return tester
+                .setup.user.metadata({foo: 'bar'})
+                .setup.user.metadata({baz: 'qux'})
+                .run()
+                .then(function() {
+                    var user = api.kv_store['users.test_app.+27123456789'];
+                    assert.deepEqual(user.metadata, {
+                        foo: 'bar',
+                        baz: 'qux'
+                    });
+                });
+        });
+    });
+
     describe(".setup.config", function() {
         describe(".setup.config(obj)", function() {
             it("should update the config data with the given properties",

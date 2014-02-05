@@ -295,6 +295,7 @@ describe("AppTester Check Tasks", function() {
                             addr: "+27123456789",
                             lang: null,
                             answers: {},
+                            metadata: {},
                             state: {
                                 name: "initial_state",
                                 metadata: {}
@@ -371,6 +372,21 @@ describe("AppTester Check Tasks", function() {
                 });
         });
 
+        it("should check the user's metadata if given", function() {
+            return tester
+                .setup.user.metadata({foo: 'bar'})
+                .input()
+                .check.user.properties({
+                    metadata: {foo: 'baz'}
+                })
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, "Unexpected user metadata");
+                    assert.deepEqual(e.actual, {foo: 'bar'});
+                    assert.deepEqual(e.expected, {foo: 'baz'});
+                });
+        });
+
         it("should check arbitrary user properties", function() {
             return tester
                 .setup.user({
@@ -426,6 +442,20 @@ describe("AppTester Check Tasks", function() {
                         "Unexpected user answer to state 'initial_state'");
                     assert.deepEqual(e.expected, '2');
                     assert.deepEqual(e.actual, '1');
+                });
+        });
+    });
+
+    describe(".check.user.metadata", function() {
+        it("should check the user's metadata", function() {
+            return tester
+                .setup.user.metadata({foo: 'bar'})
+                .check.user.metadata({foo: 'baz'})
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, "Unexpected user metadata");
+                    assert.deepEqual(e.expected, {foo: 'baz'});
+                    assert.deepEqual(e.actual, {foo: 'bar'});
                 });
         });
     });
