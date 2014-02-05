@@ -236,6 +236,12 @@ describe("HttpRequest", function() {
             assert(request_str.indexOf(
                 '(params: [{"name":"bar","value":"baz"}])') > -1);
         });
+
+        it("should exclude the params if not present", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/');
+            assert.strictEqual(
+                request.toString().indexOf('(params:'), -1);
+        });
     });
 });
 
