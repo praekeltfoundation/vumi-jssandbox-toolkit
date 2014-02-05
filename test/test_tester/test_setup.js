@@ -103,7 +103,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.user({lang: 'jp'})
                     .run()
                     .then(function() {
-                        var user = api.kv_store['users.default.+81'];
+                        var user = api.kv_store['users.test_app.+81'];
                         assert.equal(user.lang, 'jp');
                         assert.equal(user.addr, '+81');
                     });
@@ -125,7 +125,7 @@ describe("AppTester Setup Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        var user = api.kv_store['users.default.+81'];
+                        var user = api.kv_store['users.test_app.+81'];
                         assert.notEqual(user.lang, 'jp');
                         assert.equal(user.addr, '+81');
                     });
@@ -139,7 +139,7 @@ describe("AppTester Setup Tasks", function() {
                         lang: 'jp'
                     });
                 }).run().then(function() {
-                    var user = api.kv_store['users.default.+81'];
+                    var user = api.kv_store['users.test_app.+81'];
                     assert.equal(user.lang, 'jp');
                     assert.equal(user.addr, '+81');
                 });
@@ -150,7 +150,7 @@ describe("AppTester Setup Tasks", function() {
     describe(".setup.user.lang", function() {
         it("should set the user's language", function() {
             return tester.setup.user.lang('af').run().then(function() {
-                var user = api.kv_store['users.default.+27123456789'];
+                var user = api.kv_store['users.test_app.+27123456789'];
                 assert.equal(user.lang, 'af');
             });
         });
@@ -159,7 +159,7 @@ describe("AppTester Setup Tasks", function() {
     describe(".setup.user.addr", function() {
         it("should set the user's address", function() {
             return tester.setup.user.addr('+2798765').run().then(function() {
-                var user = api.kv_store['users.default.+2798765'];
+                var user = api.kv_store['users.test_app.+2798765'];
                 assert.equal(user.addr, '+2798765');
             });
         });
@@ -172,7 +172,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.user.state({name: 'initial_state'})
                     .run()
                     .then(function() {
-                        var user = api.kv_store['users.default.+27123456789'];
+                        var user = api.kv_store['users.test_app.+27123456789'];
                         assert.equal(user.state.name, 'initial_state');
                     });
             });
@@ -185,7 +185,7 @@ describe("AppTester Setup Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        var user = api.kv_store['users.default.+27123456789'];
+                        var user = api.kv_store['users.test_app.+27123456789'];
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
                     });
             });
@@ -197,7 +197,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.user.state('initial_state')
                     .run()
                     .then(function() {
-                        var user = api.kv_store['users.default.+27123456789'];
+                        var user = api.kv_store['users.test_app.+27123456789'];
                         assert.equal(user.state.name, 'initial_state');
                     });
             });
@@ -207,7 +207,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.user.state('initial_state', {foo: 'bar'})
                     .run()
                     .then(function() {
-                        var user = api.kv_store['users.default.+27123456789'];
+                        var user = api.kv_store['users.test_app.+27123456789'];
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
                     });
             });
@@ -222,7 +222,7 @@ describe("AppTester Setup Tasks", function() {
                 .setup.user.state.metadata({baz: 'qux'})
                 .run()
                 .then(function() {
-                    var user = api.kv_store['users.default.+27123456789'];
+                    var user = api.kv_store['users.test_app.+27123456789'];
                     assert.deepEqual(user.state.metadata, {
                         foo: 'bar',
                         baz: 'qux'
@@ -237,7 +237,7 @@ describe("AppTester Setup Tasks", function() {
                 initial_state: 'coffee',
                 coffee_state: 'yes'
             }).run().then(function() {
-                var user = api.kv_store['users.default.+27123456789'];
+                var user = api.kv_store['users.test_app.+27123456789'];
                 assert.equal(user.answers.initial_state, 'coffee');
                 assert.equal(user.answers.coffee_state, 'yes');
             });
@@ -250,7 +250,7 @@ describe("AppTester Setup Tasks", function() {
                 .setup.user.answer('initial_state', 'coffee')
                 .run()
                 .then(function() {
-                    var user = api.kv_store['users.default.+27123456789'];
+                    var user = api.kv_store['users.test_app.+27123456789'];
                     assert.deepEqual(user.answers.initial_state, 'coffee');
                 });
         });
