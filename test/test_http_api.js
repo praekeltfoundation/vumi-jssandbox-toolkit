@@ -95,7 +95,7 @@ describe("HttpRequest", function() {
             assert.deepEqual(cmd.data.headers, {foo: ['bar']});
         });
 
-        it("should include the url params if available", function() {
+        it("should include the url params if passed as a list", function() {
             var request = new HttpRequest('GET', 'http://foo.com/', {
                 params: [{
                     name: 'bar',
@@ -105,6 +105,15 @@ describe("HttpRequest", function() {
 
             var cmd = request.to_cmd();
             assert.equal(cmd.data.url, 'http://foo.com/?bar=baz');
+        });
+
+        it("should include the url params if passed as an object", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                params: {bar: "baz", zar: "zaz"}
+            });
+
+            var cmd = request.to_cmd();
+            assert.equal(cmd.data.url, 'http://foo.com/?bar=baz&zar=zaz');
         });
 
         it("should include the request body if available", function() {
@@ -149,7 +158,8 @@ describe("HttpRequest", function() {
             });
 
             var request_str = request.toString();
-            assert(request_str.indexOf('[{"name":"bar","value":"baz"}]') > -1);
+            assert(request_str.indexOf(
+                '(params: [{"name":"bar","value":"baz"}])') > -1);
         });
     });
 });
