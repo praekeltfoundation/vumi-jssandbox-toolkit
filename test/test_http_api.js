@@ -5,6 +5,7 @@ var test_utils = vumigo.test_utils;
 var http_api = vumigo.http_api;
 var HttpApi = http_api.HttpApi;
 var JsonApi = http_api.JsonApi;
+var UrlParams = http_api.UrlParams;
 var HttpRequest = http_api.HttpRequest;
 var HttpResponse = http_api.HttpResponse;
 var HttpResponseError = http_api.HttpResponseError;
@@ -52,6 +53,80 @@ describe("HttpResponseError", function() {
     });
 });
 
+describe("UrlParams", function() {
+    var url_params;
+
+    describe("on creation", function() {
+        it("should accept null values", function () {
+            url_params = new UrlParams(null);
+            assert.deepEqual(url_params.param_list, []);
+        });
+
+        it("should accept undefined values", function () {
+            url_params = new UrlParams();
+            assert.deepEqual(url_params.param_list, []);
+        });
+
+        it("should accept arrays of parameters", function() {
+            url_params = new UrlParams([
+                {name: "foo", value: "value-1"},
+                {name: "foo", value: "value-2"},
+            ]);
+            assert.deepEqual(url_params.param_list, [
+                {name: "foo", value: "value-1"},
+                {name: "foo", value: "value-2"},
+            ]);
+        });
+
+        it("should accept simple objects", function() {
+            url_params = new UrlParams({
+                foo: "bar", boo: "far"
+            });
+            assert.deepEqual(url_params.param_list, [
+                {name: "boo", value: "far"},
+                {name: "foo", value: "bar"},
+            ]);
+        });
+    });
+
+    describe(".append_to", function() {
+        it("should not change the URL if there are no parameters", function() {
+            url_params = new UrlParams();
+            assert.strictEqual(
+                "http://example.com/",
+                url_params.append_to("http://example.com/"));
+        });
+
+        it("should append any URL parameters", function() {
+            url_params = new UrlParams({foo: "fog", boo: "bog"});
+            assert.strictEqual(
+                "http://example.com/?boo=bog&foo=fog",
+                url_params.append_to("http://example.com/"));
+        });
+    });
+
+    describe(".exist", function() {
+        it("should return true if there are parameters", function() {
+            url_params = new UrlParams({foo: "bar"});
+            assert.strictEqual(true, url_params.exist());
+        });
+
+        it("should return false if there are no parameters", function() {
+            url_params = new UrlParams();
+            assert.strictEqual(false, url_params.exist());
+        });
+    });
+
+    describe(".toJSON", function() {
+        it("should return the list of query parameters", function() {
+            url_params = new UrlParams({foo: "bar"});
+            assert.strictEqual(
+                '[{"name":"foo","value":"bar"}]',
+                JSON.stringify(url_params));
+        });
+    });
+});
+
 describe("HttpRequest", function() {
     describe(".encode", function() {
         it("should encode the request's body if available", function() {
@@ -95,7 +170,7 @@ describe("HttpRequest", function() {
             assert.deepEqual(cmd.data.headers, {foo: ['bar']});
         });
 
-        it("should include the url params if available", function() {
+        it("should include the url params if passed as a list", function() {
             var request = new HttpRequest('GET', 'http://foo.com/', {
                 params: [{
                     name: 'bar',
@@ -105,6 +180,15 @@ describe("HttpRequest", function() {
 
             var cmd = request.to_cmd();
             assert.equal(cmd.data.url, 'http://foo.com/?bar=baz');
+        });
+
+        it("should include the url params if passed as an object", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/', {
+                params: {bar: "baz", zar: "zaz"}
+            });
+
+            var cmd = request.to_cmd();
+            assert.equal(cmd.data.url, 'http://foo.com/?bar=baz&zar=zaz');
         });
 
         it("should include the request body if available", function() {
@@ -149,7 +233,14 @@ describe("HttpRequest", function() {
             });
 
             var request_str = request.toString();
-            assert(request_str.indexOf('[{"name":"bar","value":"baz"}]') > -1);
+            assert(request_str.indexOf(
+                '(params: [{"name":"bar","value":"baz"}])') > -1);
+        });
+
+        it("should exclude the params if not present", function() {
+            var request = new HttpRequest('GET', 'http://foo.com/');
+            assert.strictEqual(
+                request.toString().indexOf('(params:'), -1);
         });
     });
 });
