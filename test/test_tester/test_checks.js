@@ -295,6 +295,7 @@ describe("AppTester Check Tasks", function() {
                             addr: "+27123456789",
                             lang: null,
                             answers: {},
+                            metadata: {},
                             state: {
                                 name: "initial_state",
                                 metadata: {}

@@ -13,10 +13,11 @@ module.exports = function() {
             addr: '+27987654321',
             lang: 'af',
             answers: {start: 'ja'},
+            metadata: {name: 'jan'},
             state: {
                 name: 'start',
                 metadata: {foo: 'bar'}
-            }
+            },
         }
     };
 };
