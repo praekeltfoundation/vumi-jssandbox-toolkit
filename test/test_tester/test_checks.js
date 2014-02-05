@@ -13,6 +13,8 @@ var ChoiceState = states.ChoiceState;
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
 
+var test_utils = require('../../lib/test_utils');
+
 
 describe("AppTester Check Tasks", function() {
     var im;
@@ -54,18 +56,9 @@ describe("AppTester Check Tasks", function() {
     });
 
     describe("helpers", function() {
-        function catch_err(fn) {
-            try {
-                fn();
-            }
-            catch (e) {
-                return e;
-            }
-        }
-
         describe(".assertion", function() {
             it("should allow both a message and diff to be shown", function() {
-                var e = catch_err(function() {
+                var e = test_utils.catch_err(function() {
                     checks.assertion(function() {
                         assert.equal(0, 1);
                     }, {
@@ -79,7 +72,7 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should allow only showing a message and no diff", function() {
-                var e = catch_err(function() {
+                var e = test_utils.catch_err(function() {
                     checks.assertion(function() {
                         assert.equal(0, 1);
                     }, {
@@ -108,14 +101,14 @@ describe("AppTester Check Tasks", function() {
                 });
 
                 it("should show a diff there is no message", function() {
-                    var e = catch_err(function() {
+                    var e = test_utils.catch_err(function() {
                         checks.assert(0);
                     });
                     assert(e.showDiff);
                 });
 
                 it("shouldn't show a diff if there is a message", function() {
-                    var e = catch_err(function() {
+                    var e = test_utils.catch_err(function() {
                         checks.assert(0, {msg: 'foo'});
                     });
                     assert(!e.showDiff);
@@ -138,7 +131,7 @@ describe("AppTester Check Tasks", function() {
                 });
 
                 it("should show a diff", function() {
-                    var e = catch_err(function() {
+                    var e = test_utils.catch_err(function() {
                         checks.assert.deepEqual({foo: 'bar'}, {foo: 'baz'});
                     });
                     assert(e.showDiff);
@@ -161,7 +154,7 @@ describe("AppTester Check Tasks", function() {
                 });
 
                 it("should show a diff", function() {
-                    var e = catch_err(function() {
+                    var e = test_utils.catch_err(function() {
                         checks.assert.strictEqual(1, '1');
                     });
                     assert(e.showDiff);
@@ -181,7 +174,7 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should show not show a diff", function() {
-                var e = catch_err(function() {
+                var e = test_utils.catch_err(function() {
                     checks.assert.fail({
                         actual: 1,
                         op: '<',
@@ -192,7 +185,7 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should show the operator comparison if given", function() {
-                var e = catch_err(function() {
+                var e = test_utils.catch_err(function() {
                     checks.assert.fail({
                         actual: 1,
                         op: '<',
@@ -203,7 +196,7 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should show the message if given", function() {
-                var e = catch_err(function() {
+                var e = test_utils.catch_err(function() {
                     checks.assert.fail({msg: 'foo'});
                 });
                 assert.equal(e.message, 'foo');
