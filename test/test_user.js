@@ -172,6 +172,7 @@ describe("User", function() {
             addr: '+27987654321',
             lang: 'af',
             answers: {start: 'ja'},
+            metadata: {name: 'jan'},
             state: {
                 name: 'start',
                 metadata: {foo: 'bar'}
@@ -358,6 +359,29 @@ describe("User", function() {
             return user.set_lang('jp').then(function() {
                 assert.equal(user.lang, 'jp');
                 assert.equal(user.i18n.gettext('yes'), 'hai');
+            });
+        });
+    });
+
+    describe(".update_metadata", function() {
+        it("should update the user's metadata", function() {
+            assert.deepEqual(user.metadata, {name: 'jan'});
+            user.update_metadata({surname: 'luhrmann'});
+            assert.deepEqual(user.metadata, {
+                name: 'jan',
+                surname: 'luhrmann'
+            });
+        });
+
+        it("should overwrite already defined metadata properties", function() {
+            assert.deepEqual(user.metadata, {name: 'jan'});
+            user.update_metadata({
+                name: 'baz',
+                surname: 'luhrmann'
+            });
+            assert.deepEqual(user.metadata, {
+                name: 'baz',
+                surname: 'luhrmann'
             });
         });
     });
