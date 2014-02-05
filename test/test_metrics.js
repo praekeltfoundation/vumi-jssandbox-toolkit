@@ -51,7 +51,7 @@ describe("MetricStore", function() {
 
             return im.api.pending_calls_complete().then(function() {
                 assert.deepEqual(im.api.metrics, {
-                    luke_the_store:{
+                    test_app:{
                         yoda_the_metric: {
                             agg: 'sum',
                             values: [23, 42]
@@ -84,7 +84,7 @@ describe("MetricStore", function() {
 
             return im.api.pending_calls_complete().then(function() {
                 assert.deepEqual(im.api.metrics, {
-                    luke_the_store:{
+                    test_app:{
                         yoda_the_metric: {
                             agg: 'sum',
                             values: [23, 42]
@@ -117,7 +117,7 @@ describe("MetricStore", function() {
 
             return im.api.pending_calls_complete().then(function() {
                 assert.deepEqual(im.api.metrics, {
-                    luke_the_store:{
+                    test_app:{
                         yoda_the_metric: {
                             agg: 'avg',
                             values: [23, 42]
@@ -150,7 +150,7 @@ describe("MetricStore", function() {
 
             return im.api.pending_calls_complete().then(function() {
                 assert.deepEqual(im.api.metrics, {
-                    luke_the_store:{
+                    test_app:{
                         yoda_the_metric: {
                             agg: 'min',
                             values: [23, 42]
@@ -183,7 +183,7 @@ describe("MetricStore", function() {
 
             return im.api.pending_calls_complete().then(function() {
                 assert.deepEqual(im.api.metrics, {
-                    luke_the_store:{
+                    test_app:{
                         yoda_the_metric: {
                             agg: 'max',
                             values: [23, 42]
@@ -216,7 +216,7 @@ describe("MetricStore", function() {
 
             return im.api.pending_calls_complete().then(function() {
                 assert.deepEqual(im.api.metrics, {
-                    luke_the_store:{
+                    test_app:{
                         yoda_the_metric: {
                             agg: 'sum',
                             values: [1, 1]
