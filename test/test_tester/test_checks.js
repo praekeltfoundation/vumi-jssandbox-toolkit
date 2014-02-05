@@ -431,6 +431,20 @@ describe("AppTester Check Tasks", function() {
         });
     });
 
+    describe(".check.user.metadata", function() {
+        it("should check the user's metadata", function() {
+            return tester
+                .setup.user.metadata({foo: 'bar'})
+                .check.user.metadata({foo: 'baz'})
+                .run()
+                .catch(function(e) {
+                    assert.equal(e.msg, "Unexpected user metadata");
+                    assert.deepEqual(e.expected, {foo: 'baz'});
+                    assert.deepEqual(e.actual, {foo: 'bar'});
+                });
+        });
+    });
+
     describe(".check.state", function() {
         describe(".check.state(name, metadata)", function() {
             it("should check the current state's name", function() {
