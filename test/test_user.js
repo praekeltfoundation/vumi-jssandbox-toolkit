@@ -10,8 +10,7 @@ describe("UserStateData", function() {
     var state;
 
     beforeEach(function() {
-        state = new UserStateData({
-            name: 'test_state',
+        state = new UserStateData('test_state', {
             metadata: {foo: 'bar'},
             creator_opts: {baz: 'qux'}
         });
@@ -62,6 +61,22 @@ describe("UserStateData", function() {
                 assert.deepEqual(state.creator_opts, {baz: 'qux'});
             });
         });
+
+        describe(".reset(name opts)", function() {
+            it("should reset itself using a name and options", function() {
+                assert(typeof state.name == 'undefined');
+                assert.deepEqual(state.metadata, {});
+
+                state.change('test_state', {
+                    metadata: {foo: 'bar'},
+                    creator_opts: {baz: 'qux'}
+                });
+
+                assert.equal(state.name, 'test_state');
+                assert.deepEqual(state.metadata, {foo: 'bar'});
+                assert.deepEqual(state.creator_opts, {baz: 'qux'});
+            });
+        });
     });
 
     describe(".change", function() {
@@ -73,13 +88,10 @@ describe("UserStateData", function() {
             assert(typeof state.name == 'undefined');
             assert.deepEqual(state.metadata, {});
 
-            state.change({
-                name: 'test_state',
+            state.change('test_state', {
                 metadata: {foo: 'bar'},
                 creator_opts: {baz: 'qux'}
             });
-
-            assert.equal(state.name, 'test_state');
 
             assert.equal(state.name, 'test_state');
             assert.deepEqual(state.metadata, {foo: 'bar'});
@@ -88,15 +100,17 @@ describe("UserStateData", function() {
 
         describe("if a null state was given", function() {
             it("should not reset the user", function() {
-                state.reset({
+                state.reset('test_state', {
                     name: 'test_state',
-                    metadata: {foo: 'bar'}
+                    metadata: {foo: 'bar'},
+                    creator_opts: {baz: 'qux'}
                 });
 
                 state.change(null);
 
                 assert.equal(state.name, 'test_state');
                 assert.deepEqual(state.metadata, {foo: 'bar'});
+            assert.deepEqual(state.creator_opts, {baz: 'qux'});
             });
         });
 
@@ -104,13 +118,15 @@ describe("UserStateData", function() {
             it("should not reset the user", function() {
                 state.reset({
                     name: 'test_state',
-                    metadata: {foo: 'bar'}
+                    metadata: {foo: 'bar'},
+                    creator_opts: {baz: 'qux'}
                 });
 
                 state.change();
 
                 assert.equal(state.name, 'test_state');
                 assert.deepEqual(state.metadata, {foo: 'bar'});
+                assert.deepEqual(state.creator_opts, {baz: 'qux'});
             });
         });
     });
