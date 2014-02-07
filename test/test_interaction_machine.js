@@ -285,6 +285,15 @@ describe("InteractionMachine", function () {
             im.state = start_state;
         });
 
+        it("should pass the metadata to the state creator", function() {
+            im.app.states.add('foo', function(name, metadata) {
+                assert.deepEqual(metadata, {lerp: 'larp'});
+                return new EndState(name, {text: 'foo'});
+            });
+
+            return im.switch_state('foo', {lerp: 'larp'});
+        });
+
         describe("if we are already in the requested state", function() {
             it("should not try switch state", function() {
                 var exit = im.once.resolved('state:exit');
