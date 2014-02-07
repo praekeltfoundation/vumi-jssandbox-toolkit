@@ -296,6 +296,17 @@ describe("InteractionMachine", function () {
             });
         });
 
+        it("should allow state creators to delegate to other state creators",
+        function() {
+            im.app.states.add('foo', function() {
+                return im.app.states.create('start');
+            });
+
+            return im.switch_state('foo').then(function() {
+                assert.equal(im.state, start_state);
+            });
+        });
+
         it("should create the requested state", function() {
             return im.switch_state('end').then(function() {
                 assert.equal(im.state, end_state);
