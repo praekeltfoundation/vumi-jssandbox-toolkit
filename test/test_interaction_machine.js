@@ -285,13 +285,13 @@ describe("InteractionMachine", function () {
             im.state = start_state;
         });
 
-        it("should pass the metadata to the state creator", function() {
-            im.app.states.add('foo', function(name, metadata) {
-                assert.deepEqual(metadata, {lerp: 'larp'});
+        it("should pass creator options to the state creator", function() {
+            im.app.states.add('foo', function(name, opts) {
+                assert.deepEqual(opts, {lerp: 'larp'});
                 return new EndState(name, {text: 'foo'});
             });
 
-            return im.switch_state('foo', {lerp: 'larp'});
+            return im.switch_state('foo', {creator_opts: {lerp: 'larp'}});
         });
 
         describe("if we are already in the requested state", function() {
