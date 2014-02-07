@@ -179,38 +179,6 @@ describe("AppStates", function () {
                 });
             });
         });
-
-        describe("if the state has the wrong name", function() {
-            beforeEach(function() {
-                states.add('bad', function() {
-                    return new State('badder');
-                });
-            });
-
-            it("should log an error", function() {
-                var msg = [
-                    "Creator for state 'bad' created a state with",
-                    "a different name: 'badder'"
-                ].join(' ');
-
-                assert(!im.api.in_logs(msg));
-                return states.create('bad').then(function(new_state) {
-                    assert(im.api.in_logs(msg));
-                });
-            });
-
-            it("should create the error state", function() {
-                return states.create('bad').then(function(new_state) {
-                    assert.equal(
-                        new_state.name,
-                        '__error__');
-
-                    assert.equal(
-                        new_state.end_text,
-                        'An error occurred. Please try again later.');
-                });
-            });
-        });
     });
 });
 
