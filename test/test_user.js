@@ -10,7 +10,11 @@ describe("UserStateData", function() {
     var state;
 
     beforeEach(function() {
-        state = new UserStateData('test_state', {foo: 'bar'});
+        state = new UserStateData({
+            name: 'test_state',
+            metadata: {foo: 'bar'},
+            creator_opts: {baz: 'qux'}
+        });
     });
 
     describe(".reset", function() {
@@ -47,26 +51,15 @@ describe("UserStateData", function() {
                 assert(typeof state.name == 'undefined');
                 assert.deepEqual(state.metadata, {});
 
-                state.reset({
-                    name : 'test_state',
-                    metadata: {foo: 'bar'}
+                state.change({
+                    name: 'test_state',
+                    metadata: {foo: 'bar'},
+                    creator_opts: {baz: 'qux'}
                 });
 
                 assert.equal(state.name, 'test_state');
                 assert.deepEqual(state.metadata, {foo: 'bar'});
-            });
-        });
-
-        describe(".reset(name, metadata)", function() {
-            it("should reset itself using the given name and metadata",
-            function() {
-                assert(typeof state.name == 'undefined');
-                assert.deepEqual(state.metadata, {});
-
-                state.reset('test_state', {foo: 'bar'});
-
-                assert.equal(state.name, 'test_state');
-                assert.deepEqual(state.metadata, {foo: 'bar'});
+                assert.deepEqual(state.creator_opts, {baz: 'qux'});
             });
         });
     });
@@ -80,16 +73,25 @@ describe("UserStateData", function() {
             assert(typeof state.name == 'undefined');
             assert.deepEqual(state.metadata, {});
 
-            state.change('test_state', {foo: 'bar'});
+            state.change({
+                name: 'test_state',
+                metadata: {foo: 'bar'},
+                creator_opts: {baz: 'qux'}
+            });
+
             assert.equal(state.name, 'test_state');
 
             assert.equal(state.name, 'test_state');
             assert.deepEqual(state.metadata, {foo: 'bar'});
+            assert.deepEqual(state.creator_opts, {baz: 'qux'});
         });
 
         describe("if a null state was given", function() {
             it("should not reset the user", function() {
-                state.reset('test_state', {foo: 'bar'});
+                state.reset({
+                    name: 'test_state',
+                    metadata: {foo: 'bar'}
+                });
 
                 state.change(null);
 
@@ -100,7 +102,10 @@ describe("UserStateData", function() {
 
         describe("if an undefined state was given", function() {
             it("should not reset the user", function() {
-                state.reset('test_state', {foo: 'bar'});
+                state.reset({
+                    name: 'test_state',
+                    metadata: {foo: 'bar'}
+                });
 
                 state.change();
 
@@ -132,7 +137,8 @@ describe("UserStateData", function() {
         function() {
             assert.deepEqual(state.serialize(), {
                 name: 'test_state',
-                metadata: {foo: 'bar'}
+                metadata: {foo: 'bar'},
+                creator_opts: {baz: 'qux'}
             });
         });
     });
@@ -175,7 +181,8 @@ describe("User", function() {
             metadata: {name: 'jan'},
             state: {
                 name: 'start',
-                metadata: {foo: 'bar'}
+                metadata: {foo: 'bar'},
+                creator_opts: {}
             }
         }));
     });
