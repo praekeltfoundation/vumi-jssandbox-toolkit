@@ -191,7 +191,7 @@ describe("AppTester Setup Tasks", function() {
             });
         });
 
-        describe(".setup.user.state(name, metadata)", function() {
+        describe(".setup.user.state(name, opts)", function() {
             it("should set the user's state's name", function() {
                 return tester
                     .setup.user.state('initial_state')
@@ -204,11 +204,25 @@ describe("AppTester Setup Tasks", function() {
 
             it("should set the user's state metadata", function() {
                 return tester
-                    .setup.user.state('initial_state', {foo: 'bar'})
+                    .setup.user.state('initial_state', {
+                        metadata: {foo: 'bar'}
+                    })
                     .run()
                     .then(function() {
                         var user = api.kv_store['users.test_app.+27123456789'];
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
+                    });
+            });
+
+            it("should set the user's state creator opts", function() {
+                return tester
+                    .setup.user.state('initial_state', {
+                        creator_opts: {foo: 'bar'}
+                    })
+                    .run()
+                    .then(function() {
+                        var user = api.kv_store['users.test_app.+27123456789'];
+                        assert.deepEqual(user.state.creator_opts, {foo: 'bar'});
                     });
             });
         });

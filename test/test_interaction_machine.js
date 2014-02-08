@@ -14,7 +14,7 @@ var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
 var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
 
 
-describe.only("InteractionMachine", function () {
+describe("InteractionMachine", function () {
     var im;
     var api;
     var msg;
