@@ -93,6 +93,15 @@ describe("AppStates", function () {
             });
         });
 
+        it("should allow options to be passed to the creator", function() {
+            states.add('spam', function(name, opts) {
+                assert.deepEqual(opts, {foo: 'bar'});
+                return new State('spam');
+            });
+
+            return states.create('spam', {foo: 'bar'});
+        });
+
         describe("if the state does not exist", function() {
             var start_state;
 
