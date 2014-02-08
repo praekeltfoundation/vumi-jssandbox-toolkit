@@ -268,7 +268,7 @@ describe("InteractionMachine", function () {
 
     describe(".switch_to_start_state", function() {
         beforeEach(function() {
-            return im.switch_state('end');
+            return im.switch_state('end', {}, {});
         });
 
         it("should switch to the start state", function() {
@@ -286,19 +286,19 @@ describe("InteractionMachine", function () {
         });
 
         it("should pass creator options to the state creator", function() {
-            im.app.states.add('foo', function(name, opts) {
-                assert.deepEqual(opts, {lerp: 'larp'});
-                return new EndState(name, {text: 'foo'});
+            im.app.states.add('spam', function(name, opts) {
+                assert.deepEqual(opts, {baz: 'qux'});
+                return new EndState(name, {text: 'spam'});
             });
 
-            return im.switch_state('foo', {creator_opts: {lerp: 'larp'}});
+            return im.switch_state('spam', {}, {baz: 'qux'});
         });
 
         describe("if we are already in the requested state", function() {
             it("should not try switch state", function() {
                 var exit = im.once.resolved('state:exit');
                 var enter = im.once.resolved('state:enter');
-                return im.switch_state('start').then(function() {
+                return im.switch_state('start', {}, {}).then(function() {
                     assert(!exit.isFulfilled());
                     assert(!enter.isFulfilled());
                 });
@@ -306,37 +306,35 @@ describe("InteractionMachine", function () {
         });
 
         it("should create the requested state", function() {
-            return im.switch_state('end').then(function() {
+            return im.switch_state('end', {}, {}).then(function() {
                 assert.equal(im.state, end_state);
             });
         });
 
         it("should setup the new state", function() {
             var p = end_state.once.resolved('setup');
-            return im.switch_state('end').thenResolve(p);
+            return im.switch_state('end', {}, {}).thenResolve(p);
         });
 
         it("should emit a 'state:exit' event for the old state",
         function() {
             var p = start_state.once.resolved('state:exit');
-            return im.switch_state('end').thenResolve(p);
+            return im.switch_state('end', {}, {}).thenResolve(p);
         });
 
         it("should set the user's state to the new state", function() {
             var p = start_state.once.resolved('state:exit');
-            return im.switch_state('end').thenResolve(p);
+            return im.switch_state('end', {}, {}).thenResolve(p);
         });
 
         it("should then emit an 'enter' event for the new state", function() {
             var p = end_state.once.resolved('state:enter');
-            return im.switch_state('end').thenResolve(p);
+            return im.switch_state('end', {}, {}).thenResolve(p);
         });
 
         it("should reset the user's state to the created state", function() {
             assert(!im.user.state.is('end'));
-            return im.switch_state('end', {
-                creator_opts: {baz: 'qux'}
-            }).then(function() {
+            return im.switch_state('end', {}, {baz: 'qux'}).then(function() {
                 assert(im.user.state.is('end'));
                 assert.deepEqual(im.user.state.creator_opts, {baz: 'qux'});
             });
