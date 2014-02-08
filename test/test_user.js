@@ -31,17 +31,19 @@ describe("UserStateData", function() {
             });
         });
 
-        describe(".reset(state)", function() {
-            it("should reset itself using a state instance", function() {
+        describe(".reset(state, opts)", function() {
+            it("should reset itself using a state instance and options",
+            function() {
                 assert(typeof state.name == 'undefined');
                 assert.deepEqual(state.metadata, {});
 
                 var s = new State('test_state');
                 s.metadata = {foo: 'bar'};
-                state.reset(s);
+                state.reset(s, {creator_opts: {baz: 'qux'}});
 
                 assert.equal(state.name, 'test_state');
                 assert.deepEqual(state.metadata, {foo: 'bar'});
+                assert.deepEqual(state.creator_opts, {baz: 'qux'});
             });
         });
 
