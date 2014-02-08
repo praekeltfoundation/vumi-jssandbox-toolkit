@@ -14,7 +14,7 @@ var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
 var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
 
 
-describe("InteractionMachine", function () {
+describe.only("InteractionMachine", function () {
     var im;
     var api;
     var msg;
@@ -330,6 +330,16 @@ describe("InteractionMachine", function () {
         it("should then emit an 'enter' event for the new state", function() {
             var p = end_state.once.resolved('state:enter');
             return im.switch_state('end').thenResolve(p);
+        });
+
+        it("should reset the user's state to the created state", function() {
+            assert(!im.user.state.is('end'));
+            return im.switch_state('end', {
+                creator_opts: {baz: 'qux'}
+            }).then(function() {
+                assert(im.user.state.is('end'));
+                assert.deepEqual(im.user.state.creator_opts, {baz: 'qux'});
+            });
         });
     });
 
