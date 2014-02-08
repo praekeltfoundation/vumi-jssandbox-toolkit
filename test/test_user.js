@@ -52,7 +52,7 @@ describe("UserStateData", function() {
                 assert(typeof state.name == 'undefined');
                 assert.deepEqual(state.metadata, {});
 
-                state.change({
+                state.reset({
                     name: 'test_state',
                     metadata: {foo: 'bar'},
                     creator_opts: {baz: 'qux'}
@@ -69,62 +69,10 @@ describe("UserStateData", function() {
                 assert(typeof state.name == 'undefined');
                 assert.deepEqual(state.metadata, {});
 
-                state.change('test_state', {
-                    metadata: {foo: 'bar'},
-                    creator_opts: {baz: 'qux'}
-                });
-
-                assert.equal(state.name, 'test_state');
-                assert.deepEqual(state.metadata, {foo: 'bar'});
-                assert.deepEqual(state.creator_opts, {baz: 'qux'});
-            });
-        });
-    });
-
-    describe(".change", function() {
-        beforeEach(function() {
-            state = new UserStateData();
-        });
-
-        it("should reset the user's state", function() {
-            assert(typeof state.name == 'undefined');
-            assert.deepEqual(state.metadata, {});
-
-            state.change('test_state', {
-                metadata: {foo: 'bar'},
-                creator_opts: {baz: 'qux'}
-            });
-
-            assert.equal(state.name, 'test_state');
-            assert.deepEqual(state.metadata, {foo: 'bar'});
-            assert.deepEqual(state.creator_opts, {baz: 'qux'});
-        });
-
-        describe("if a null state was given", function() {
-            it("should not reset the user", function() {
                 state.reset('test_state', {
-                    name: 'test_state',
                     metadata: {foo: 'bar'},
                     creator_opts: {baz: 'qux'}
                 });
-
-                state.change(null);
-
-                assert.equal(state.name, 'test_state');
-                assert.deepEqual(state.metadata, {foo: 'bar'});
-            assert.deepEqual(state.creator_opts, {baz: 'qux'});
-            });
-        });
-
-        describe("if an undefined state was given", function() {
-            it("should not reset the user", function() {
-                state.reset({
-                    name: 'test_state',
-                    metadata: {foo: 'bar'},
-                    creator_opts: {baz: 'qux'}
-                });
-
-                state.change();
 
                 assert.equal(state.name, 'test_state');
                 assert.deepEqual(state.metadata, {foo: 'bar'});

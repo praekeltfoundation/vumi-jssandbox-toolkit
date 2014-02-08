@@ -257,7 +257,7 @@ describe("InteractionMachine", function () {
         });
 
         it("should switch to the current user state", function() {
-            im.user.state.change(end_state);
+            im.user.state.reset(end_state);
             assert(im.is_in_state('start'));
 
             return im.switch_to_user_state().then(function() {
@@ -432,7 +432,7 @@ describe("InteractionMachine", function () {
         describe("if the state does not want to continue the session",
         function() {
             beforeEach(function() {
-                im.user.state.change(end_state);
+                im.user.state.reset(end_state);
             });
 
             it("should emit a 'session:close' event", function() {
@@ -456,7 +456,7 @@ describe("InteractionMachine", function () {
                     send_reply: false
                 });
                 im.app.states.add(state);
-                im.user.state.change(state);
+                im.user.state.reset(state);
             });
 
             it("should not send a reply", function() {

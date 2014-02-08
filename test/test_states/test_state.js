@@ -102,7 +102,21 @@ describe("State", function () {
         });
     });
 
-    describe.only(".set_next_state", function() {
+    describe(".set_next_state", function() {
+        it("should not change state undefined is given", function() {
+            assert.equal(im.user.state.name, 'start');
+            return state.set_next_state().then(function() {
+                assert.equal(im.user.state.name, 'start');
+            });
+        });
+
+        it("should not change state null is given", function() {
+            assert.equal(im.user.state.name, 'start');
+            return state.set_next_state(null).then(function() {
+                assert.equal(im.user.state.name, 'start');
+            });
+        });
+
         describe(".set_next_state(name)", function() {
             it("should set the next state using the given name", function() {
                 assert.equal(im.user.state.name, 'start');
@@ -178,6 +192,27 @@ describe("State", function () {
                         return Q('spam');
                     }).then(function() {
                         assert.equal(im.user.state.name, 'spam');
+                    });
+            });
+
+            it("should not change state if null is returned", function() {
+                assert.equal(im.user.state.name, 'start');
+
+                return state
+                    .set_next_state(function() {
+                        return null;
+                    }).then(function() {
+                        assert.equal(im.user.state.name, 'start');
+                    });
+            });
+
+            it("should not change state if undefined is returned", function() {
+                assert.equal(im.user.state.name, 'start');
+
+                return state
+                    .set_next_state(function() {})
+                    .then(function() {
+                        assert.equal(im.user.state.name, 'start');
                     });
             });
         });
