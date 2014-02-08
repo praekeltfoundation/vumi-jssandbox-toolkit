@@ -1,3 +1,4 @@
+var Q = require('q');
 var assert = require("assert");
 
 var vumigo = require("../../lib");
@@ -98,6 +99,87 @@ describe("State", function () {
             });
 
             assert(!state.send_reply());
+        });
+    });
+
+    describe.only(".set_next_state", function() {
+        describe(".set_next_state(name)", function() {
+            it("should set the next state using the given name", function() {
+                assert.equal(im.user.state.name, 'start');
+                return state.set_next_state('spam').then(function() {
+                    assert.equal(im.user.state.name, 'spam');
+                });
+            });
+        });
+
+        describe(".set_next_state(opts)", function() {
+            it("should set the next state using the given options",
+            function() {
+                assert.equal(im.user.state.name, 'start');
+
+                return state
+                    .set_next_state({
+                        name: 'spam',
+                        metadata: {foo: 'bar'},
+                        creator_opts: {baz: 'qux'}
+                    }).then(function() {
+                        var state = im.user.state;
+                        assert.equal(state.name, 'spam');
+                        assert.deepEqual(state.metadata, {foo: 'bar'});
+                        assert.deepEqual(state.creator_opts, {baz: 'qux'});
+                    });
+            });
+        });
+
+        describe(".set_next_state(fn)", function() {
+            it("should be allowed to return an options object", function() {
+                assert.equal(im.user.state.name, 'start');
+
+                return state
+                    .set_next_state(function() {
+                        return {
+                            name: 'spam',
+                            metadata: {foo: 'bar'},
+                            creator_opts: {baz: 'qux'}
+                        };
+                    }).then(function() {
+                        var state = im.user.state;
+                        assert.equal(state.name, 'spam');
+                        assert.deepEqual(state.metadata, {foo: 'bar'});
+                        assert.deepEqual(state.creator_opts, {baz: 'qux'});
+                    });
+            });
+
+            it("should be allowed to return a name", function() {
+                assert.equal(im.user.state.name, 'start');
+
+                return state
+                    .set_next_state(function() {
+                        return 'spam';
+                    }).then(function() {
+                        assert.equal(im.user.state.name, 'spam');
+                    });
+            });
+
+            it("should allow arguments to be given the function", function() {
+                function fn(a, b) {
+                    assert.equal(a, 'foo');
+                    assert.equal(b, 'bar');
+                }
+
+                return state.set_next_state(fn, 'foo', 'bar');
+            });
+
+            it("should be allowed to return a promise", function() {
+                assert.equal(im.user.state.name, 'start');
+
+                return state
+                    .set_next_state(function() {
+                        return Q('spam');
+                    }).then(function() {
+                        assert.equal(im.user.state.name, 'spam');
+                    });
+            });
         });
     });
 });
