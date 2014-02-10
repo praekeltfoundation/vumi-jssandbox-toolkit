@@ -48,49 +48,6 @@ describe("utils", function() {
         });
     });
 
-    describe("update", function() {
-        it("should update the destination with the source", function() {
-            var obj = {
-                a: 'foo',
-                b: 'bar',
-                c: 'baz'
-            };
-
-            assert.equal(obj, utils.update(obj, {
-                a: 'lerp',
-                c: null
-            }));
-
-           assert.deepEqual(obj, {
-                a: 'lerp',
-                b: 'bar',
-                c: null
-           });
-        });
-
-        it("should ignore the source's prototype properties", function() {
-            var dest = {
-                a: 'foo',
-                b: 'bar',
-                c: 'baz'
-            };
-
-            var src = Object.create({
-                a: 'lerp',
-                b: 'larp'
-            });
-
-            src.c = 'lorem';
-
-            utils.update(dest, src);
-            assert.deepEqual(dest, {
-                a: 'foo',
-                b: 'bar',
-                c: 'lorem'
-            });
-        });
-    });
-
     describe(".inherit", function() {
         it("should set up the child's prototype chain", function() {
             var Parent = function() {};
