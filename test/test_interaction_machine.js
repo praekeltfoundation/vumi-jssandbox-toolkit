@@ -1,4 +1,3 @@
-var Q = require("q");
 var assert = require("assert");
 
 var vumigo = require("../lib");
@@ -8,10 +7,8 @@ var App = vumigo.App;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
 
-var InteractionMachine = vumigo.InteractionMachine;
-var InboundEventEvent = vumigo.interaction_machine.InboundEventEvent;
-var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
 var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
+var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
 
 
 describe("InteractionMachine", function () {
@@ -211,7 +208,8 @@ describe("InteractionMachine", function () {
             it("should shutdown the im after event handling", function() {
                 im.attach();
                 var p = im.once.resolved('im:shutdown');
-                return api.on_inbound_message(cmd);
+                api.on_inbound_message(cmd);
+                return p;
             });
 
             it("should handle any errors thrown by the event listeners",
