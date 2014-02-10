@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "jed": "~0.5",
-    "q": "~0.9"
+    "q": "~0.9",
+    "underscore": "~1.5.2"
   },
   "devDependencies": {
     "mocha": "~1.8",
