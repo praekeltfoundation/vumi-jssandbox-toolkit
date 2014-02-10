@@ -4,7 +4,6 @@ var assert = require("assert");
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
 var BookletState = vumigo.states.BookletState;
-var StateEnterEvent = vumigo.states.StateEnterEvent;
 
 
 describe("BookletState", function() {

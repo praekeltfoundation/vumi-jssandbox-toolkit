@@ -1,4 +1,3 @@
-var Q = require('q');
 var assert = require('assert');
 
 var app = require('../../lib/app');
@@ -6,10 +5,6 @@ var App = app.App;
 
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
-
-var tasks = require('../../lib/tester/tasks');
-var AppTesterTasks = tasks.AppTesterTasks;
-var AppTesterTaskSet = tasks.AppTesterTaskSet;
 
 
 describe("AppTester", function() {
