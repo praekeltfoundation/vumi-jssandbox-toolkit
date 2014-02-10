@@ -553,7 +553,7 @@ describe("HttpApi", function() {
 
         describe("if the sandbox api replies with a failure", function() {
             beforeEach(function() {
-                im.api.request = function() {
+                im.api.request = function(cmd_name, cmd_data, reply) {
                     reply({
                         success: false,
                         reason: 'No apparent reason'
