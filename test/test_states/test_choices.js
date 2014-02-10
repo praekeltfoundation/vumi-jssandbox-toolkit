@@ -1,4 +1,5 @@
 var assert = require("assert");
+var _ = require("underscore");
 
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
@@ -7,7 +8,6 @@ var ChoiceState = vumigo.states.ChoiceState;
 var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
 var success = vumigo.promise.success;
-var utils = vumigo.utils;
 
 
 describe("ChoiceState", function () {
@@ -15,7 +15,7 @@ describe("ChoiceState", function () {
     var state;
 
     function make_state(opts) {
-        opts = utils.set_defaults(opts || {}, {
+        opts = _.defaults(opts || {}, {
             name: "color_state",
             question: "What is your favourite colour?",
             choices: [
@@ -100,7 +100,7 @@ describe("PaginatedChoiceState", function () {
     var state;
 
     function make_state(opts) {
-        opts = utils.set_defaults(opts || {}, {
+        opts = _.defaults(opts || {}, {
             name: "color_state",
             question: "What is your favourite colour?",
             choices: [

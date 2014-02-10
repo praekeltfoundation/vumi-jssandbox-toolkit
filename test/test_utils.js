@@ -64,39 +64,6 @@ describe("utils", function() {
         });
     });
 
-    describe("set_defaults", function() {
-        it("should set defaults on the object", function() {
-            var obj = {
-                a: 'foo',
-                c: null,
-                d: false,
-                e: undefined
-            };
-
-            assert.equal(obj, utils.set_defaults(obj, {
-                a: 'bar',
-                b: 'baz',
-                c: 'qux',
-                d: 'quux',
-                e: 'corge'
-            }));
-
-           assert.deepEqual(obj, {
-               a: 'foo',
-               b: 'baz',
-               c: null,
-               d: false,
-               e: 'corge'
-           });
-        });
-
-        it("should not set defaults that are undefined", function() {
-            var obj = {};
-            utils.set_defaults(obj, {foo: obj.foo});
-            assert.deepEqual(obj, {});
-        });
-    });
-
     describe("update", function() {
         it("should update the destination with the source", function() {
             var obj = {
