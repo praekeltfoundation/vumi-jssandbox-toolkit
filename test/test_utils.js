@@ -15,22 +15,6 @@ describe("utils", function() {
         });
     });
 
-    describe("each_prop", function() {
-        it("should iterate through each property", function() {
-            var obj = {
-                foo: 'bar',
-                baz: 'qux'
-            };
-
-            var copy = {};
-            utils.each_prop(obj, function(value, name) {
-                copy[name] = value;
-            });
-
-            assert.deepEqual(obj, copy);
-        });
-    });
-
     describe("functor", function() {
         describe("if the object is a function", function() {
             it("should simply return the object", function() {
