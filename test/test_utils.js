@@ -4,17 +4,6 @@ var assert = require("assert");
 var utils = require("../lib/utils");
 
 describe("utils", function() {
-    describe("pop_prop", function() {
-        it("should pop the given property off the object", function() {
-            var obj = {
-                r: 'j',
-                d: '2'
-            };
-            assert.equal(utils.pop_prop(obj, 'd'), 2);
-            assert.deepEqual(obj,  {r: 'j'});
-        });
-    });
-
     describe("functor", function() {
         describe("if the object is a function", function() {
             it("should simply return the object", function() {
