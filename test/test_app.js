@@ -122,7 +122,7 @@ describe("AppStates", function () {
                     "Switching to start state 'start'."].join(' ');
 
                 assert(!im.api.in_logs(msg));
-                return states.create('spam').then(function() {
+                return states.create('spam').then(function(new_state) {
                     assert(im.api.in_logs(msg));
                 });
             });
@@ -138,7 +138,7 @@ describe("AppStates", function () {
                         "Switching to error state."].join(' ');
 
                     assert(!im.api.in_logs(msg));
-                    return states.create('spam').then(function() {
+                    return states.create('spam').then(function(new_state) {
                         assert(im.api.in_logs(msg));
                     });
                 });
@@ -171,7 +171,7 @@ describe("AppStates", function () {
                 ].join(' ');
 
                 assert(!im.api.in_logs(msg));
-                return states.create('bad').then(function() {
+                return states.create('bad').then(function(new_state) {
                     assert(im.api.in_logs(msg));
                 });
             });

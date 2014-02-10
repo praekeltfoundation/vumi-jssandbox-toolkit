@@ -471,7 +471,7 @@ describe("HttpApi", function() {
                     name :'b',
                     value: 2
                 }]
-            }).then(function() {
+            }).then(function(data) {
                 var request = im.api.http_requests[0];
                 assert.equal(request.url, 'http://foo.com/?a=1&b=2');
             });
@@ -553,7 +553,7 @@ describe("HttpApi", function() {
 
         describe("if the sandbox api replies with a failure", function() {
             beforeEach(function() {
-                im.api.request = function() {
+                im.api.request = function(cmd_name, cmd_data, reply) {
                     reply({
                         success: false,
                         reason: 'No apparent reason'
