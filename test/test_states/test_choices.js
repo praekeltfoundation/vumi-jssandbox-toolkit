@@ -7,7 +7,6 @@ var test_utils = vumigo.test_utils;
 var ChoiceState = vumigo.states.ChoiceState;
 var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
-var success = vumigo.promise.success;
 
 
 describe("ChoiceState", function () {
