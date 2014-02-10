@@ -1,6 +1,3 @@
-var Q = require("q");
-var assert = require("assert");
-
 var vumigo = require("../lib");
 var test_utils = vumigo.test_utils;
 
@@ -211,7 +208,8 @@ describe("InteractionMachine", function () {
             it("should shutdown the im after event handling", function() {
                 im.attach();
                 var p = im.once.resolved('im:shutdown');
-                return api.on_inbound_message(cmd);
+                api.on_inbound_message(cmd);
+                return p;
             });
 
             it("should handle any errors thrown by the event listeners",

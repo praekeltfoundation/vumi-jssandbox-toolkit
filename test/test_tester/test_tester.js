@@ -1,4 +1,3 @@
-var Q = require('q');
 var assert = require('assert');
 
 var app = require('../../lib/app');
