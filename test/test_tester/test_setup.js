@@ -11,8 +11,6 @@ var ChoiceState = states.ChoiceState;
 
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
-
-var tasks = require('../../lib/tester/tasks');
 var TaskMethodError = tester.TaskMethodError;
 
 

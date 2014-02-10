@@ -6,9 +6,8 @@ var App = app.App;
 
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
-
-var tasks = require('../../lib/tester/tasks');
 var TaskMethodError = tester.TaskMethodError;
+
 
 describe("AppTester Interaction Tasks", function() {
     var im;
