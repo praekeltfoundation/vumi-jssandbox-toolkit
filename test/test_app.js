@@ -3,7 +3,9 @@ var assert = require("assert");
 var vumigo = require("../lib");
 var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
-var StateError = vumigo.states.StateError;
+
+var app = vumigo.app;
+var AppStateError = app.AppStateError;
 
 
 describe("AppStates", function () {
@@ -68,7 +70,7 @@ describe("AppStates", function () {
                 states.add.creator('spam', f);
                 assert.throws(function() {
                     states.add.creator('spam', g);
-                }, StateError);
+                }, AppStateError);
             });
         });
     });
@@ -115,14 +117,18 @@ describe("AppStates", function () {
                 });
             });
 
-            it("should log a message", function() {
-                var msg = [
-                    "Unknown state 'spam'.",
-                    "Switching to start state 'start'."].join(' ');
+            it("should emit an error event", function() {
+                var p = app.once.resolved('app:error');
+                return states
+                    .create('spam')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert(e.error instanceof AppStateError);
 
-                assert(!im.api.in_logs(msg));
-                return states.create('spam').then(function(new_state) {
-                    assert(im.api.in_logs(msg));
+                        assert.equal(e.error.message, [
+                            "Unknown state 'spam'.",
+                            "Switching to start state 'start'."
+                        ].join(' '));
                 });
             });
 
@@ -131,14 +137,23 @@ describe("AppStates", function () {
                     states.remove('start');
                 });
 
-                it("should log a message", function() {
-                    var msg = [
-                        "Unknown start state 'start'.",
-                        "Switching to error state."].join(' ');
+                it("should emit an error event", function() {
+                    var p = app.once.resolved('app:error').then(function() {
+                        // the first app:error is the one that got us to switch
+                        // to the start state
+                        return app.once.resolved('app:error');
+                    });
 
-                    assert(!im.api.in_logs(msg));
-                    return states.create('spam').then(function(new_state) {
-                        assert(im.api.in_logs(msg));
+                    return states
+                        .create('spam')
+                        .thenResolve(p)
+                        .then(function(e) {
+                            assert(e.error instanceof AppStateError);
+
+                            assert.equal(e.error.message, [
+                                "Unknown start state 'start'.",
+                                "Switching to error state."
+                            ].join(' '));
                     });
                 });
 
@@ -178,18 +193,13 @@ describe("AppStates", function () {
 
             it("should emit an error event", function() {
                 var p = app.once.resolved('app:error');
-                return states.create('bad').thenResolve(p);
-            });
+                return states.create('bad').thenResolve(p).then(function(e) {
+                    assert(e.error instanceof AppStateError);
 
-            it("should log an error", function() {
-                var msg = [
-                    "Creator for state 'bad' should create a state,",
-                    "but instead created something of type 'number'"
-                ].join(' ');
-
-                assert(!im.api.in_logs(msg));
-                return states.create('bad').then(function(new_state) {
-                    assert(im.api.in_logs(msg));
+                    assert.equal(e.error.message, [
+                        "Creator for state 'bad' should create a state,",
+                        "but instead created something of type 'number'"
+                    ].join(' '));
                 });
             });
 
@@ -217,6 +227,15 @@ describe("App", function () {
         return test_utils.make_im().then(function(new_im) {
             im = new_im;
             app = im.app;
+        });
+    });
+
+    describe("when an 'app:error' event occurs", function() {
+        it("should log the error", function() {
+            assert(!im.api.in_logs(':('));
+            return app.emit.error(new Error(':(')).then(function() {
+                assert(im.api.in_logs(':('));
+            });
         });
     });
 
