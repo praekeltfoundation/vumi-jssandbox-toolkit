@@ -1,6 +1,9 @@
 var Q = require('q');
 var assert = require('assert');
 
+var states = require('../../lib/states');
+var State = states.State;
+
 var app = require('../../lib/app');
 var App = app.App;
 
@@ -17,6 +20,8 @@ describe("AppTester Interaction Tasks", function() {
 
     beforeEach(function() {
         app = new App('start');
+        app.states.add(new State('start'));
+
         tester = new AppTester(app);
         tasks = tester.tasks.get('interactions');
         im = tester.im;
@@ -65,14 +70,10 @@ describe("AppTester Interaction Tasks", function() {
         });
 
         describe("when an error occurs in the sandbox", function() {
-            var error;
-
             beforeEach(function() {
-                error = new Error(':(');
-
-                app.states.add('start', function() {
+                im.switch_state = function() {
                     throw new Error(':(');
-                });
+                };
             });
 
             it("should use the same error handling as the im", function() {
@@ -87,7 +88,6 @@ describe("AppTester Interaction Tasks", function() {
             it("should rethrow the error", function() {
                 return tasks.send(msg).catch(function(e) {
                     assert.equal(e.message, ':(');
-                    assert.equal(error.message, e.message);
                 });
             });
         });

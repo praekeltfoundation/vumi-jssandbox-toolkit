@@ -1,6 +1,9 @@
 var Q = require('q');
 var assert = require('assert');
 
+var states = require('../../lib/states');
+var State = states.State;
+
 var app = require('../../lib/app');
 var App = app.App;
 
@@ -63,7 +66,10 @@ describe("AppTesterTasks", function() {
     var record;
 
     beforeEach(function() {
-        tester = new AppTester(new App('start'));
+        var app = new App('start');
+        app.states.add(new State('start'));
+
+        tester = new AppTester(app);
         tasks = new ToyTasks(tester);
         tester.tasks.add('toys', tasks);
         record = tasks.data.record = [];
@@ -296,7 +302,10 @@ describe("AppTesterTaskSet", function() {
     var flying_toys;
 
     beforeEach(function() {
-        tester = new AppTester(new App('start'));
+        var app = new App('start');
+        app.states.add(new State('start'));
+
+        tester = new AppTester(app);
         tasks = new AppTesterTaskSet();
 
         toys = new ToyTasks(tester);
