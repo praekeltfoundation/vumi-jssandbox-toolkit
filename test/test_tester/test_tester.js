@@ -2,6 +2,7 @@ var assert = require('assert');
 
 var app = require('../../lib/app');
 var App = app.App;
+var AppErrorEvent = app.AppErrorEvent;
 
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
@@ -37,6 +38,18 @@ describe("AppTester", function() {
         };
 
         tester.tasks.attach();
+    });
+
+    it("should throw app errors emitted as events", function() {
+        var error = new Error(':(');
+        var p = tester.app.once.resolved('app:error');
+
+        return tester
+            .app.emit(new AppErrorEvent(tester.app, error))
+            .catch(function(e) {
+                assert.strictEqual(error, e);
+            })
+            .thenResolve(p);
     });
 
     describe(".reset", function() {

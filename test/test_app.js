@@ -156,11 +156,29 @@ describe("AppStates", function () {
             });
         });
 
+        describe("if the state creator throws an error", function() {
+            beforeEach(function() {
+                states.add('bad', function() {
+                    throw new Error();
+                });
+            });
+
+            it("should emit an error event", function() {
+                var p = app.once.resolved('app:error');
+                return states.create('bad').thenResolve(p);
+            });
+        });
+
         describe("if the created state is not a State instance", function() {
             beforeEach(function() {
                 states.add('bad', function() {
                     return 7;
                 });
+            });
+
+            it("should emit an error event", function() {
+                var p = app.once.resolved('app:error');
+                return states.create('bad').thenResolve(p);
             });
 
             it("should log an error", function() {
