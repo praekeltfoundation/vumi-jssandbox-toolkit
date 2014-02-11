@@ -208,7 +208,7 @@ describe("AppTester Check Tasks", function() {
         it("should call the given function", function() {
             var called = false;
 
-            return tester.input().check(function(im, api, app) {
+            return tester.input().check(function(api, im, app) {
                 assert.strictEqual(im, tester.im);
                 assert.strictEqual(api, tester.api);
                 assert.strictEqual(app, tester.app);
