@@ -1,7 +1,11 @@
 var assert = require('assert');
 
+var states = require('../../lib/states');
+var State = states.State;
+
 var app = require('../../lib/app');
 var App = app.App;
+var AppErrorEvent = app.AppErrorEvent;
 
 var tester = require('../../lib/tester/tester');
 var AppTester = tester.AppTester;
@@ -12,7 +16,10 @@ describe("AppTester", function() {
     var record;
 
     beforeEach(function() {
-        tester = new AppTester(new App('start'));
+        var app = new App('start');
+        app.states.add(new State('start'));
+
+        tester = new AppTester(app);
         record = [];
 
         var setups = tester.tasks.get('setups');
@@ -37,6 +44,18 @@ describe("AppTester", function() {
         };
 
         tester.tasks.attach();
+    });
+
+    it("should throw app errors emitted as events", function() {
+        var error = new Error(':(');
+        var p = tester.app.once.resolved('app:error');
+
+        return tester
+            .app.emit(new AppErrorEvent(tester.app, error))
+            .catch(function(e) {
+                assert.strictEqual(error, e);
+            })
+            .thenResolve(p);
     });
 
     describe(".reset", function() {
