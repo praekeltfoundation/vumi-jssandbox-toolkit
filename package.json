@@ -1,5 +1,5 @@
 {
-  "name": "vumigo",
+  "name": "vumigo_v02",
   "version": "0.2.0-alpha",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "lib/index.js",
