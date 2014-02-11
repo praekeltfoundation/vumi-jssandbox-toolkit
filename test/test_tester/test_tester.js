@@ -1,5 +1,8 @@
 var assert = require('assert');
 
+var states = require('../../lib/states');
+var State = states.State;
+
 var app = require('../../lib/app');
 var App = app.App;
 var AppErrorEvent = app.AppErrorEvent;
@@ -13,7 +16,10 @@ describe("AppTester", function() {
     var record;
 
     beforeEach(function() {
-        tester = new AppTester(new App('start'));
+        var app = new App('start');
+        app.states.add(new State('start'));
+
+        tester = new AppTester(app);
         record = [];
 
         var setups = tester.tasks.get('setups');
