@@ -5,7 +5,9 @@ var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 
 var app = vumigo.app;
+var App = app.App;
 var AppStateError = app.AppStateError;
+var AppTester = vumigo.AppTester;
 
 
 describe("AppStates", function () {
@@ -159,13 +161,7 @@ describe("AppStates", function () {
 
                 it("should create the error state", function() {
                     return states.create('spam').then(function(new_state) {
-                        assert.equal(
-                            new_state.name,
-                            '__error__');
-
-                        assert.equal(
-                            new_state.end_text,
-                            'An error occurred. Please try again later.');
+                        assert.equal(new_state.name, '__error__');
                     });
                 });
             });
@@ -205,14 +201,35 @@ describe("AppStates", function () {
 
             it("should create the error state", function() {
                 return states.create('bad').then(function(new_state) {
-                    assert.equal(
-                        new_state.name,
-                        '__error__');
-
-                    assert.equal(
-                        new_state.end_text,
-                        'An error occurred. Please try again later.');
+                    assert.equal(new_state.name, '__error__');
                 });
+            });
+        });
+    });
+
+    describe(".creators", function() {
+        describe(".__error__", function() {
+            it("should display an appropriate message to the user", function() {
+                var app = new App('__error__');
+                var tester = new AppTester(app);
+
+                return tester
+                    .start()
+                    .check.reply('An error occurred. Please try again later.')
+                    .run();
+            });
+
+            it("should put the user in the start state on the next session",
+            function() {
+                var app = new App('start');
+                var tester = new AppTester(app);
+                app.states.add(new State('start'));
+
+                return tester
+                    .setup.user.state('__error__')
+                    .start()
+                    .check.user.state('start')
+                    .run();
             });
         });
     });
