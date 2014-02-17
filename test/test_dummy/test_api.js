@@ -1,10 +1,10 @@
 var assert = require("assert");
 var Q = require("q");
 
-var dummy_api = require("../../lib/dummy_api");
-var DummyApi = dummy_api.DummyApi;
+var api = require("../../lib/dummy/api");
+var DummyApi = api.DummyApi;
 
-var resources = require("../../lib/dummy_api/resources");
+var resources = require("../../lib/dummy/resources");
 var DummyResource = resources.DummyResource;
 
 

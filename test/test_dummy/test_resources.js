@@ -1,12 +1,12 @@
 var assert = require("assert");
 
-var errors = require("../../lib/dummy_api/errors");
+var errors = require("../../lib/dummy/errors");
 var DummyError = errors.DummyError;
 
-var api = require("../../lib/dummy_api/api");
+var api = require("../../lib/dummy/api");
 var DummyApi = api.DummyApi;
 
-var resources = require("../../lib/dummy_api/resources");
+var resources = require("../../lib/dummy/resources");
 var DummyResource = resources.DummyResource;
 var DummyResources = resources.DummyResources;
 
