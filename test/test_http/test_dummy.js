@@ -6,9 +6,12 @@ var DummyResourceError = resources.DummyResourceError;
 var api = require('../../lib/dummy/api');
 var DummyApi = api.DummyApi;
 
-var http = require('../../lib/http/dummy');
-var HttpFixture = http.HttpFixture;
-var HttpFixtures = http.HttpFixtures;
+api = require('../../lib/http/api');
+var HttpRequest = api.HttpRequest;
+
+var dummy = require('../../lib/http/dummy');
+var HttpFixture = dummy.HttpFixture;
+var HttpFixtures = dummy.HttpFixtures;
 
 
 describe("HttpFixture", function () {
@@ -96,41 +99,259 @@ describe("HttpFixture", function () {
 });
 
 describe("HttpFixtures", function () {
-    HttpFixtures;
-
     describe(".add", function() {
-        describe(".add(data)", function() {
-            it("should allow a single or multiple responses to be given");
+        it("should support adding a fixture from data", function() {
+            var fixtures = new HttpFixtures();
+
+            fixtures.add({
+                request: {url: 'http://example.com'},
+                response: {code: 201}
+            });
+
+            var request = new HttpRequest('get','http://example.com');
+            var fixture = fixtures.find(request);
+
+            assert(fixture instanceof HttpFixture);
+            assert.equal(fixture.request.url, 'http://example.com');
+            assert.equal(fixture.responses[0].code, 201);
         });
 
-        describe(".add(fixture)", function() {
-            it("should support adding an already initialised fixture");
+        it("should support adding an already initialised fixture", function() {
+            var fixtures = new HttpFixtures();
+            var fixture = new HttpFixture({
+                request: {url: 'http://example.com'},
+                response: {code: 201}
+            });
+            fixtures.add(fixture);
+
+            var request = new HttpRequest('get','http://example.com');
+            assert.equal(fixtures.find(request), fixture);
         });
     });
 
     describe(".matchers", function() {
         describe(".url", function() {
-            it("should determine whether the request urls match");
-            it("should support regexes");
+            it("should determine whether the request urls match", function() {
+                var fixtures = new HttpFixtures();
+
+                assert(!fixtures.matchers.url(
+                    new HttpRequest('get','http://example.org'),
+                    new HttpFixture({request: {url: 'http://example.com'}})));
+
+                assert(fixtures.matchers.url(
+                    new HttpRequest('get','http://example.com'),
+                    new HttpFixture({request: {url: 'http://example.com'}})));
+            });
+
+            it("should support regexes", function() {
+                var fixtures = new HttpFixtures();
+
+                assert(!fixtures.matchers.url(
+                    new HttpRequest('get','http://example.org'),
+                    new HttpFixture({request: {url: /.*.com/}})));
+
+                assert(fixtures.matchers.url(
+                    new HttpRequest('get','http://example.com'),
+                    new HttpFixture({request: {url: /.*.com/}})));
+            });
         });
 
         describe(".params", function() {
-            it("should determine whether the request params match");
-            it("should return true if both requests have no params");
+            it("should determine whether the params match", function() {
+                var fixtures = new HttpFixtures();
+
+                assert(!fixtures.matchers.params(
+                    new HttpRequest('get','http://example.com', {
+                        params: [{
+                            name: 'foo',
+                            value: 'bar'
+                        }]
+                    }),
+                    new HttpFixture({
+                        request: {
+                            url: 'http://example.com',
+                            params: [{
+                                name: 'foo',
+                                value: 'baz'
+                            }]
+                        }
+                    })));
+
+                assert(fixtures.matchers.params(
+                    new HttpRequest('get','http://example.com', {
+                        params: [{
+                            name: 'foo',
+                            value: 'bar'
+                        }]
+                    }),
+                    new HttpFixture({
+                        request: {
+                            url: 'http://example.com',
+                            params: [{
+                                name: 'foo',
+                                value: 'bar'
+                            }]
+                        }
+                    })));
+            });
+
+            it("should return true if both requests have no params",
+            function() {
+                var fixtures = new HttpFixtures();
+
+                assert(fixtures.matchers.params(
+                    new HttpRequest('get','http://example.com'),
+                    new HttpFixture({request: {url: 'http://example.com'}})));
+            });
         });
 
         describe(".body", function() {
-            it("should determine whether the request bodies");
-            it("should do a deep equals test for json requests");
-            it("should return true if both requests have no bodies");
-            it("should return true if both json requests have no data");
+            it("should determine whether the request bodies match",
+            function() {
+                var fixtures = new HttpFixtures({json: false});
+
+                assert(!fixtures.matchers.body(
+                    new HttpRequest('get','http://example.com', {
+                        body: 'foo'
+                    }),
+                    new HttpFixture({
+                        request: {
+                            url: 'http://example.com',
+                            body: 'bar'
+                        }
+                    })));
+
+                assert(fixtures.matchers.body(
+                    new HttpRequest('get','http://example.com', {
+                        body: 'foo'
+                    }),
+                    new HttpFixture({
+                        request: {
+                            url: 'http://example.com',
+                            body: 'foo'
+                        }
+                    })));
+            });
+
+            it("should do a deep equals test for json requests", function() {
+                var fixtures = new HttpFixtures({json: true});
+
+                assert(!fixtures.matchers.body(
+                    new HttpRequest('get','http://example.com', {
+                        data: {foo: 'bar'}
+                    }),
+                    new HttpFixture({
+                        request: {
+                            url: 'http://example.com',
+                            body: {foo: 'baz'}
+                        }
+                    })));
+
+                assert(fixtures.matchers.body(
+                    new HttpRequest('get','http://example.com', {
+                        body: {foo: 'bar'}
+                    }),
+                    new HttpFixture({
+                        request: {
+                            url: 'http://example.com',
+                            body: {foo: 'bar'}
+                        }
+                    })));
+            });
+
+            it("should return true if both requests have no bodies",
+            function() {
+                var fixtures = new HttpFixtures({json: false});
+
+                assert(fixtures.matchers.body(
+                    new HttpRequest('get','http://example.com'),
+                    new HttpFixture({
+                        request: {url: 'http://example.com'}
+                    })));
+            });
+
+            it("should return true if both json requests have no data",
+            function() {
+                var fixtures = new HttpFixtures();
+
+                assert(fixtures.matchers.body(
+                    new HttpRequest('get','http://example.com'),
+                    new HttpFixture({
+                        request: {url: 'http://example.com'}
+                    })));
+            });
         });
     });
 
     describe(".find", function() {
-        it("should return the matching fixture");
-        it("should throw an error if there are no matches");
-        it("should throw an error if there are multiple matches");
+        it("should return the matching fixture", function() {
+            var fixtures = new HttpFixtures();
+
+            var fixture_a = new HttpFixture({
+                request: {
+                    url: /.*a.*/,
+                    params: [{
+                        name: 'foo',
+                        value: 'bar'
+                    }],
+                    data: {lerp: 'larp'}
+                }
+            });
+
+            var fixture_b = new HttpFixture({
+                request: {
+                    method: 'post',
+                    url: /.*b.*/,
+                    params: [{
+                        name: 'baz',
+                        value: 'qux'
+                    }],
+                    data: {lorem: 'lark'}
+                }
+            });
+
+            fixtures.add(fixture_a);
+            fixtures.add(fixture_b);
+
+            assert.strictEqual(
+                fixtures.find(new HttpRequest('get','http://a.com', {
+                    params: [{
+                        name: 'foo',
+                        value: 'bar'
+                    }],
+                    data: {lerp: 'larp'}
+                })),
+                fixture_a);
+
+            assert.strictEqual(
+                fixtures.find(new HttpRequest('post','http://b.com', {
+                    params: [{
+                        name: 'baz',
+                        value: 'qux'
+                    }],
+                    data: {lorem: 'lark'}
+                })),
+                fixture_b);
+        });
+
+        it("should throw an error if there are no matches", function() {
+            var fixtures = new HttpFixtures();
+            fixtures.add(new HttpFixture({request: {url: /.*a.*/}}));
+
+            assert.throws(function() {
+                fixtures.find(new HttpRequest('get','http://b.com'));
+            }, DummyResourceError);
+        });
+
+        it("should throw an error if there are multiple matches", function() {
+            var fixtures = new HttpFixtures();
+            fixtures.add(new HttpFixture({request: {url: /.*a.*/}}));
+            fixtures.add(new HttpFixture({request: {url: /.*a.*/}}));
+
+            assert.throws(function() {
+                fixtures.find(new HttpRequest('get','http://a.com'));
+            }, DummyResourceError);
+        });
     });
 });
 
