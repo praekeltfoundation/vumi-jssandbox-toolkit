@@ -1,15 +1,15 @@
 var assert = require("assert");
 
-var vumigo = require("../lib");
+var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
-var http_api = vumigo.http_api;
-var HttpApi = http_api.HttpApi;
-var JsonApi = http_api.JsonApi;
-var UrlParams = http_api.UrlParams;
-var HttpRequest = http_api.HttpRequest;
-var HttpResponse = http_api.HttpResponse;
-var HttpResponseError = http_api.HttpResponseError;
-var HttpRequestError = http_api.HttpRequestError;
+var api = vumigo.http.api;
+var HttpApi = api.HttpApi;
+var JsonApi = api.JsonApi;
+var UrlParams = api.UrlParams;
+var HttpRequest = api.HttpRequest;
+var HttpResponse = api.HttpResponse;
+var HttpResponseError = api.HttpResponseError;
+var HttpRequestError = api.HttpRequestError;
 
 
 describe("HttpRequestError", function() {
