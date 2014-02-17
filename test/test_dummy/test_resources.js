@@ -107,28 +107,34 @@ describe("DummyResources", function() {
 
         it("should fail if no such resource exists", function() {
             var resources = new DummyResources();
-            resources.handle({cmd: 'toy.foo'}).then(function(result) {
-                assert(!result.success);
-            });
+            return resources
+                .handle({cmd: 'toy.foo'})
+                .then(function(result) {
+                    assert(!result.success);
+                });
         });
 
         it("should fail if no such handler exists", function() {
             var resources = new DummyResources();
             resources.add(new ToyResource());
 
-            resources.handle({cmd: 'toy.bar'}).then(function(result) {
-                assert(!result.success);
-            });
+            return resources
+                .handle({cmd: 'toy.bar'})
+                .then(function(result) {
+                    assert(!result.success);
+                });
         });
 
         it("should treat unhandled exceptions as failure replies", function() {
             var resources = new DummyResources();
             resources.add(new BadToyResource());
 
-            resources.handle({cmd: 'bad_toy.bar'}).then(function(result) {
-                assert(!result.success);
-                assert.equal(result.reason, ':(');
-            });
+            return resources
+                .handle({cmd: 'bad_toy.foo'})
+                .then(function(result) {
+                    assert(!result.success);
+                    assert.equal(result.reason, ':(');
+                });
         });
     });
 
