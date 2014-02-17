@@ -1,4 +1,5 @@
-var assert = require("assert");
+var Q = require('q');
+var assert = require('assert');
 
 var resources = require('../../lib/dummy/resources');
 var DummyResourceError = resources.DummyResourceError;
@@ -362,33 +363,198 @@ describe("DummyHttpResource", function () {
         api = new DummyApi();
     });
 
+    function request(name, cmd) {
+        var d = Q.defer();
+        api.request(name, cmd, function(result) {
+            d.resolve(result);
+        });
+        return d.promise;
+    }
+
     describe(".request_from_cmd", function() {
-        it("should convert the command's headers into request headers");
-        it("should convert the command's params into request params");
-        it("should decode the request body if it is a json request");
+        it("should convert the command's headers into request headers",
+        function() {
+            var request = api.http.request_from_cmd({
+                cmd: 'http.get',
+                url: 'http://example.com',
+                headers: {foo: ['bar', 'baz']}
+            });
+
+            assert.deepEqual(request.headers, {foo: ['bar', 'baz']});
+        });
+
+        it("should convert the command's params into request params",
+        function() {
+            var request = api.http.request_from_cmd({
+                cmd: 'http.get',
+                url: 'http://example.com/?foo=bar&baz=qux'
+            });
+
+            assert.deepEqual(request.params.param_list, [{
+                name: 'foo',
+                value: 'bar'
+            }, {
+                name: 'baz',
+                value: 'qux'
+            }]);
+        });
+
+        it("should json decode the request body if asked", function() {
+            var api = new DummyApi({json: true});
+
+            var request = api.http.request_from_cmd({
+                cmd: 'http.get',
+                url: 'http://example.com/?foo=bar&baz=qux',
+                data: JSON.stringify({foo: 'bar'})
+            });
+
+            assert.deepEqual(request.data, {foo: 'bar'});
+        });
     });
 
     describe(".handlers", function() {
         describe("request handlers", function() {
-            it("should respond with the matching fixture's next response");
-            it("should throw an error if the fixture is used up");
-            it("should record the request");
+            it("should respond with the matching fixture's next response",
+            function() {
+                api.http.fixtures.add({
+                    request: {
+                        method: 'head',
+                        url: 'http://example.com'
+                    },
+                    response: {
+                        code: 201,
+                        data: {foo: 'bar'}
+                    }
+                });
+
+                return request('http.head', {
+                    url: 'http://example.com'
+                }).then(function(result) {
+                    assert.equal(result.code, 201);
+                    assert.equal(result.body, JSON.stringify({foo: 'bar'}));
+                });
+            });
+
+            it("should fail if the fixture is used up", function() {
+                api.http.fixtures.add({
+                    request: {url: 'http://example.com'}
+                });
+
+                return request('http.get', {
+                    url: 'http://example.com'
+                }).then(function() {
+                    return request('http.get', {
+                        url: 'http://example.com'
+                    });
+                }).then(function(result) {
+                    assert(!result.success);
+                });
+            });
+
+            it("should record the request", function() {
+                api.http.fixtures.add({
+                    request: {
+                        method: 'head',
+                        url: 'http://example.com'
+                    }
+                });
+
+                return request('http.head', {
+                    url: 'http://example.com'
+                }).then(function() {
+                    var request = api.http.requests[0];
+                    assert(request instanceof HttpRequest);
+                    assert.equal(request.method, 'HEAD');
+                    assert.equal(request.url, 'http://example.com');
+                });
+            });
         });
 
         describe(".get", function() {
-            it("should perform dummy get requests");
+            it("should perform dummy get requests", function() {
+                api.http.fixtures.add({
+                    request: {
+                        method: 'get',
+                        url: 'http://example.com'
+                    },
+                    response: {
+                        code: 201,
+                        data: {foo: 'bar'}
+                    }
+                });
+
+                return request('http.get', {
+                    url: 'http://example.com'
+                }).then(function(result) {
+                    assert.equal(result.code, 201);
+                    assert.equal(result.body, '{"foo":"bar"}');
+                });
+            });
         });
 
         describe(".head", function() {
-            it("should perform dummy head requests");
+            it("should perform dummy head requests", function() {
+                api.http.fixtures.add({
+                    request: {
+                        method: 'head',
+                        url: 'http://example.com'
+                    },
+                    response: {code: 201}
+                });
+
+                return request('http.head', {
+                    url: 'http://example.com'
+                }).then(function(result) {
+                    assert.equal(result.code, 201);
+                });
+            });
         });
 
         describe(".post", function() {
-            it("should perform dummy post requests");
+            it("should perform dummy post requests", function() {
+                api.http.fixtures.add({
+                    request: {
+                        method: 'post',
+                        url: 'http://example.com',
+                        data: {lerp: 'larp'}
+                    },
+                    response: {
+                        data: {foo: 'bar'}
+                    }
+                });
+
+                return request('http.post', {
+                    url: 'http://example.com',
+                    data: JSON.stringify({lerp: 'larp'})
+                }).then(function(result) {
+                    assert.equal(result.code, 200);
+                    assert.equal(result.body, '{"foo":"bar"}');
+                });
+            });
         });
 
         describe(".delete", function() {
-            it("should perform dummy delete requests");
+            it("should perform dummy delete requests", function() {
+                api.http.fixtures.add({
+                    request: {
+                        method: 'delete',
+                        url: 'http://example.com',
+                        data: {lerp: 'larp'}
+                    },
+                    response: {
+                        code: 204,
+                        data: {foo: 'bar'}
+                    }
+                });
+
+                return request('http.delete', {
+                    url: 'http://example.com',
+                    data: JSON.stringify({lerp: 'larp'})
+                }).then(function(result) {
+                    assert.equal(result.code, 204);
+                    assert.equal(result.body, '{"foo":"bar"}');
+                });
+            });
         });
     });
 });
