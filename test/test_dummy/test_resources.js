@@ -35,6 +35,16 @@ var AnotherToyResource = DummyResource.extend(function(self) {
     };
 });
 
+var BadToyResource = DummyResource.extend(function(self) {
+    DummyResource.call(self);
+
+    self.name = 'bad_toy';
+
+    self.handlers.foo = function(cmd) {
+        throw new Error(':(');
+    };
+});
+
 describe("DummyResources", function() {
     describe(".add", function() {
         it("should add the resource", function() {
@@ -95,21 +105,30 @@ describe("DummyResources", function() {
                 });
         });
 
-        it("should throw an error if no such resource exists", function() {
+        it("should fail if no such resource exists", function() {
             var resources = new DummyResources();
-
-            assert.throws(function() {
-                resources.handle({cmd: 'toy.foo'});
-            }, DummyResourceError);
+            resources.handle({cmd: 'toy.foo'}).then(function(result) {
+                assert(!result.success);
+            });
         });
 
-        it("should throw an error if no such handler exists", function() {
+        it("should fail if no such handler exists", function() {
             var resources = new DummyResources();
             resources.add(new ToyResource());
 
-            assert.throws(function() {
-                resources.handle({cmd: 'toy.bar'});
-            }, DummyResourceError);
+            resources.handle({cmd: 'toy.bar'}).then(function(result) {
+                assert(!result.success);
+            });
+        });
+
+        it("should treat unhandled exceptions as failure replies", function() {
+            var resources = new DummyResources();
+            resources.add(new BadToyResource());
+
+            resources.handle({cmd: 'bad_toy.bar'}).then(function(result) {
+                assert(!result.success);
+                assert.equal(result.reason, ':(');
+            });
         });
     });
 
