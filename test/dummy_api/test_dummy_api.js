@@ -1,8 +1,9 @@
 var assert = require("assert");
 var Q = require("q");
-var vumigo = require("../lib");
 
-var DummyApi = vumigo.dummy_api.DummyApi;
+var dummy_api = require("../../lib/dummy_api");
+var DummyApi = dummy_api.DummyApi;
+
 
 describe("DummyApi", function () {
     var api;
