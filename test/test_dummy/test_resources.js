@@ -1,12 +1,10 @@
 var assert = require("assert");
 
-var errors = require("../../lib/dummy/errors");
-var DummyError = errors.DummyError;
-
 var api = require("../../lib/dummy/api");
 var DummyApi = api.DummyApi;
 
 var resources = require("../../lib/dummy/resources");
+var DummyResourceError = resources.DummyResourceError;
 var DummyResource = resources.DummyResource;
 var DummyResources = resources.DummyResources;
 
@@ -52,7 +50,7 @@ describe("DummyResources", function() {
 
             assert.throws(function() {
                 resources.add(new ToyResource());
-            }, DummyError);
+            }, DummyResourceError);
         });
     });
 
@@ -69,7 +67,7 @@ describe("DummyResources", function() {
 
             assert.throws(function() {
                 resources.get('toy');
-            }, DummyError);
+            }, DummyResourceError);
         });
     });
 
@@ -102,7 +100,7 @@ describe("DummyResources", function() {
 
             assert.throws(function() {
                 resources.handle({cmd: 'toy.foo'});
-            }, DummyError);
+            }, DummyResourceError);
         });
 
         it("should throw an error if no such handler exists", function() {
@@ -111,7 +109,7 @@ describe("DummyResources", function() {
 
             assert.throws(function() {
                 resources.handle({cmd: 'toy.bar'});
-            }, DummyError);
+            }, DummyResourceError);
         });
     });
 
