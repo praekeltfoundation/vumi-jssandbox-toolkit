@@ -1,5 +1,8 @@
 var assert = require("assert");
 
+var resources = require('../../lib/dummy/resources');
+var DummyResourceError = resources.DummyResourceError;
+
 var api = require('../../lib/dummy/api');
 var DummyApi = api.DummyApi;
 
@@ -9,15 +12,86 @@ var HttpFixtures = http.HttpFixtures;
 
 
 describe("HttpFixture", function () {
-    assert;
-    HttpFixture;
+    it("should allow a single response to be given", function() {
+        var fixture = new HttpFixture({
+            request: {url: 'http://example.com'},
+            response: {code: 201}
+        });
 
-    it("should encode requests if asked");
-    it("should decode responses if asked");
+        assert.equal(fixture.responses[0].code, 201);
+    });
+
+    it("should allow a multiple responses to be given", function() {
+        var fixture = new HttpFixture({
+            request: {url: 'http://example.com'},
+            responses: [
+                {code: 201},
+                {code: 403}]
+        });
+
+        assert.equal(fixture.responses[0].code, 201);
+        assert.equal(fixture.responses[1].code, 403);
+    });
+
+    it("should use a default response if no responses are given", function() {
+        var fixture = new HttpFixture({
+            request: {url: 'http://example.com'}
+        });
+
+        assert.equal(fixture.responses[0].code, 200);
+    });
+
+    it("should json encode requests if asked", function() {
+        var fixture = new HttpFixture({
+            opts: {json: true},
+            request: {
+                url: 'http://example.com',
+                data: {foo: 'bar'}
+            }
+        });
+
+        assert.equal(fixture.request.body, '{"foo":"bar"}');
+    });
+
+    it("should json decode responses if asked", function() {
+        var fixture = new HttpFixture({
+            request: {url: 'http://example.com'},
+            responses: [
+                {body: '{"foo":"bar"}'},
+                {body: '{"baz":"qux"}'}]
+        });
+
+        assert.deepEqual(fixture.responses[0].data, {foo: 'bar'});
+        assert.deepEqual(fixture.responses[1].data, {baz: 'qux'});
+    });
 
     describe(".use", function() {
-        it("should return the next response");
-        it("should throw an error if it is used up");
+        it("should return the next response", function() {
+            var fixture = new HttpFixture({
+                request: {url: 'http://example.com'},
+                responses: [
+                    {body: '{"foo":"bar"}'},
+                    {body: '{"baz":"qux"}'}]
+            });
+
+            assert.strictEqual(fixture.use(), fixture.responses[0]);
+            assert.strictEqual(fixture.use(), fixture.responses[1]);
+        });
+
+        it("should throw an error if it is used up", function() {
+            var fixture = new HttpFixture({
+                request: {url: 'http://example.com'},
+                responses: [
+                    {body: '{"foo":"bar"}'},
+                    {body: '{"baz":"qux"}'}]
+            });
+
+            fixture.use();
+            fixture.use();
+            assert.throws(function() {
+                fixture.use();
+            }, DummyResourceError);
+        });
     });
 });
 
