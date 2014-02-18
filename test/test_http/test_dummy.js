@@ -15,7 +15,6 @@ var HttpFixture = dummy.HttpFixture;
 var HttpFixtures = dummy.HttpFixtures;
 
 
-describe("sigh", function() {
 describe("HttpFixture", function () {
     it("should allow a single response to be given", function() {
         var fixture = new HttpFixture({
@@ -562,5 +561,4 @@ describe("DummyHttpResource", function () {
             });
         });
     });
-});
 });
