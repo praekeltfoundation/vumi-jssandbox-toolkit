@@ -244,18 +244,18 @@ describe("HttpFixtures", function () {
                     new HttpFixture({
                         request: {
                             url: 'http://example.com',
-                            body: {foo: 'baz'}
+                            data: {foo: 'baz'}
                         }
                     })));
 
                 assert(fixtures.matchers.body(
                     new HttpRequest('get','http://example.com', {
-                        body: {foo: 'bar'}
+                        data: {foo: 'bar'}
                     }),
                     new HttpFixture({
                         request: {
                             url: 'http://example.com',
-                            body: {foo: 'bar'}
+                            data: {foo: 'bar'}
                         }
                     })));
             });

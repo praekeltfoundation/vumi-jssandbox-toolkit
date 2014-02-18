@@ -2,6 +2,8 @@ var assert = require("assert");
 
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
+var DummyApi = vumigo.DummyApi;
+
 var api = vumigo.http.api;
 var HttpApi = api.HttpApi;
 var JsonApi = api.JsonApi;
@@ -296,7 +298,9 @@ describe("HttpApi", function() {
     var api;
 
     function make_api(opts) {
-        return test_utils.make_im().then(function(new_im) {
+        return test_utils.make_im({
+            api: new DummyApi({json: false})
+        }).then(function(new_im) {
             im = new_im;
             api = new HttpApi(im, opts);
             return api;
@@ -312,7 +316,7 @@ describe("HttpApi", function() {
 
     describe(".get", function() {
         it("should perform GET requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'GET',
                     url: 'http://foo.com/',
@@ -331,7 +335,7 @@ describe("HttpApi", function() {
 
     describe(".head", function() {
         it("should perform HEAD requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'HEAD',
                     url: 'http://foo.com/',
@@ -347,7 +351,7 @@ describe("HttpApi", function() {
 
     describe(".post", function() {
         it("should perform POST requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'POST',
                     url: 'http://foo.com/',
@@ -371,7 +375,7 @@ describe("HttpApi", function() {
 
     describe(".put", function() {
         it("should perform PUT requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'PUT',
                     url: 'http://foo.com/',
@@ -395,7 +399,7 @@ describe("HttpApi", function() {
 
     describe(".delete", function() {
         it("should perform DELETE requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'DELETE',
                     url: 'http://foo.com/',
@@ -419,7 +423,7 @@ describe("HttpApi", function() {
 
     describe(".request", function() {
         it("should accept responses in the 200 range", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'GET',
                     url: 'http://foo.com/'
@@ -439,7 +443,7 @@ describe("HttpApi", function() {
         });
 
         it("should support request body data", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     url: 'http://foo.com/',
                     method: 'POST',
@@ -450,16 +454,23 @@ describe("HttpApi", function() {
             return api.request("post", 'http://foo.com/', {
                 data: 'ping',
             }).then(function() {
-                var request = im.api.http_requests[0];
+                var request = im.api.http.requests[0];
                 assert.equal(request.body, 'ping');
             });
         });
 
         it("should support request url params", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'GET',
-                    url: 'http://foo.com/?a=1&b=2',
+                    url: 'http://foo.com/',
+                    params: [{
+                        name :'a',
+                        value: 1
+                    }, {
+                        name :'b',
+                        value: 2
+                    }]
                 }
             });
 
@@ -472,8 +483,14 @@ describe("HttpApi", function() {
                     value: 2
                 }]
             }).then(function(data) {
-                var request = im.api.http_requests[0];
-                assert.equal(request.url, 'http://foo.com/?a=1&b=2');
+                var request = im.api.http.requests[0];
+                assert.deepEqual(request.params.param_list, [{
+                    name :'a',
+                    value: 1
+                }, {
+                    name :'b',
+                    value: 2
+                }]);
             });
         });
 
@@ -484,7 +501,7 @@ describe("HttpApi", function() {
                     password: 'pw'
                 }
             }).then(function() {
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/',
@@ -493,7 +510,7 @@ describe("HttpApi", function() {
 
                 return api.get('http://foo.com/');
             }).then(function() {
-                var request = im.api.http_requests[0];
+                var request = im.api.http.requests[0];
                 assert.deepEqual(
                     request.headers.Authorization,
                     ['Basic bWU6cHc=']);
@@ -502,7 +519,7 @@ describe("HttpApi", function() {
 
         describe("if the response code is in the error range", function() {
             it("should throw an error", function() {
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/'
@@ -528,7 +545,7 @@ describe("HttpApi", function() {
                     throw Error("You shall not parse");
                 };
 
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/'
@@ -562,7 +579,7 @@ describe("HttpApi", function() {
             });
 
             it("should throw an error", function() {
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/'
@@ -603,7 +620,7 @@ describe("JsonApi", function() {
     });
 
     it("should decode JSON body response", function() {
-        im.api.add_http_fixture({
+        im.api.http.fixtures.add({
             request: {
                 method: 'GET',
                 url: 'http://foo.com/',
@@ -620,11 +637,11 @@ describe("JsonApi", function() {
     });
 
     it("should encode request data to JSON", function() {
-        im.api.add_http_fixture({
+        im.api.http.fixtures.add({
             request: {
                 url: 'http://foo.com/',
                 method: 'POST',
-                body: '{"lerp": "larp"}',
+                body: '{"lerp":"larp"}',
                 content_type: 'application/json; charset=utf-8'
             }
         });
