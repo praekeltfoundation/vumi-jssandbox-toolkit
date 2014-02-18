@@ -334,25 +334,6 @@ describe("HttpFixtures", function () {
                 })),
                 fixture_b);
         });
-
-        it("should throw an error if there are no matches", function() {
-            var fixtures = new HttpFixtures();
-            fixtures.add(new HttpFixture({request: {url: /.*a.*/}}));
-
-            assert.throws(function() {
-                fixtures.find(new HttpRequest('get','http://b.com'));
-            }, DummyResourceError);
-        });
-
-        it("should throw an error if there are multiple matches", function() {
-            var fixtures = new HttpFixtures();
-            fixtures.add(new HttpFixture({request: {url: /.*a.*/}}));
-            fixtures.add(new HttpFixture({request: {url: /.*a.*/}}));
-
-            assert.throws(function() {
-                fixtures.find(new HttpRequest('get','http://a.com'));
-            }, DummyResourceError);
-        });
     });
 });
 
@@ -446,6 +427,27 @@ describe("DummyHttpResource", function () {
                     return request('http.get', {
                         url: 'http://example.com'
                     });
+                }).then(function(result) {
+                    assert(!result.success);
+                });
+            });
+
+            it("should fail if there are no matches", function() {
+                api.http.fixtures.add({request: {url: /.*a.*/}});
+
+                return request('http.get', {
+                    url: 'http://b.com'
+                }).then(function(result) {
+                    assert(!result.success);
+                });
+            });
+
+            it("should fail if there are multiple matches", function() {
+                api.http.fixtures.add({request: {url: /.*a.*/}});
+                api.http.fixtures.add({request: {url: /.*com/}});
+
+                return request('http.get', {
+                    url: 'http://a.com'
                 }).then(function(result) {
                     assert(!result.success);
                 });
