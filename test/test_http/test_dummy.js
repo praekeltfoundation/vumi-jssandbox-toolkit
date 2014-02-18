@@ -15,6 +15,7 @@ var HttpFixture = dummy.HttpFixture;
 var HttpFixtures = dummy.HttpFixtures;
 
 
+describe("sigh", function() {
 describe("HttpFixture", function () {
     it("should allow a single response to be given", function() {
         var fixture = new HttpFixture({
@@ -45,9 +46,9 @@ describe("HttpFixture", function () {
         assert.equal(fixture.responses[0].code, 200);
     });
 
-    it("should json encode requests if asked", function() {
+    it("should encode requests", function() {
         var fixture = new HttpFixture({
-            opts: {json: true},
+            encoding: 'json',
             request: {
                 url: 'http://example.com',
                 data: {foo: 'bar'}
@@ -57,8 +58,9 @@ describe("HttpFixture", function () {
         assert.equal(fixture.request.body, '{"foo":"bar"}');
     });
 
-    it("should json decode responses if asked", function() {
+    it("should decode responses", function() {
         var fixture = new HttpFixture({
+            encoding: 'json',
             request: {url: 'http://example.com'},
             responses: [
                 {body: '{"foo":"bar"}'},
@@ -209,7 +211,7 @@ describe("HttpFixtures", function () {
         describe(".body", function() {
             it("should determine whether the request bodies match",
             function() {
-                var fixtures = new HttpFixtures({json: false});
+                var fixtures = new HttpFixtures();
 
                 assert(!fixtures.matchers.body(
                     new HttpRequest('get','http://example.com', {
@@ -234,8 +236,9 @@ describe("HttpFixtures", function () {
                     })));
             });
 
-            it("should do a deep equals test for json requests", function() {
-                var fixtures = new HttpFixtures({json: true});
+            it("should do a deep equals test both requests have data",
+            function() {
+                var fixtures = new HttpFixtures();
 
                 assert(!fixtures.matchers.body(
                     new HttpRequest('get','http://example.com', {
@@ -341,7 +344,9 @@ describe("DummyHttpResource", function () {
     var api;
 
     beforeEach(function() {
-        api = new DummyApi();
+        api = new DummyApi({
+            http: {encoding: 'json'}
+        });
     });
 
     function request(name, cmd) {
@@ -381,8 +386,6 @@ describe("DummyHttpResource", function () {
         });
 
         it("should json decode the request body if asked", function() {
-            var api = new DummyApi({json: true});
-
             var request = api.http.request_from_cmd({
                 cmd: 'http.get',
                 url: 'http://example.com/?foo=bar&baz=qux',
@@ -559,4 +562,5 @@ describe("DummyHttpResource", function () {
             });
         });
     });
+});
 });
