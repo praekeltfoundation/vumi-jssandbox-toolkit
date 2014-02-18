@@ -1,8 +1,25 @@
 var assert = require("assert");
 var Q = require("q");
-var vumigo = require("../lib");
 
-var DummyApi = vumigo.dummy_api.DummyApi;
+var api = require("../../lib/dummy/api");
+var DummyApi = api.DummyApi;
+
+var resources = require("../../lib/dummy/resources");
+var DummyResource = resources.DummyResource;
+
+
+var ToyResource = DummyResource.extend(function(self) {
+    DummyResource.call(self);
+
+    self.name = 'toy';
+
+    self.handlers.foo = function(cmd) {
+        return {
+            handler: 'foo',
+            cmd: cmd
+        };
+    };
+});
 
 describe("DummyApi", function () {
     var api;
@@ -34,6 +51,17 @@ describe("DummyApi", function () {
         assert(!has_reply);
         return api.pending_calls_complete().then(function () {
             assert(has_reply);
+        });
+    });
+
+    it("should dispatch commands using its resource controller when possible",
+    function() {
+        api.resources.add(new ToyResource());
+        return api_request('toy.foo', {}).then(function(result) {
+            assert.deepEqual(result, {
+                handler: 'foo',
+                cmd: {cmd: 'toy.foo'}
+            });
         });
     });
 
