@@ -562,3 +562,25 @@ describe("DummyHttpResource", function () {
         });
     });
 });
+
+describe("infer_encoding", function() {
+    it("should infer json encodings", function() {
+        assert.equal(
+            dummy.infer_encoding({
+                'Content-Type': ['application/json']
+            }),
+            dummy.encodings.json);
+
+        assert.equal(
+            dummy.infer_encoding({
+                'Content-Type': ['application/json; charset=utf8']
+            }),
+            dummy.encodings.json);
+    });
+    
+    it("should fallback to a 'none' encoding", function() {
+        assert.equal(
+            dummy.infer_encoding({'Content-Type': ['foo']}),
+            dummy.encodings.none);
+    });
+});
