@@ -2,7 +2,6 @@ var assert = require("assert");
 
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
-var DummyApi = vumigo.DummyApi;
 
 var api = vumigo.http.api;
 var HttpApi = api.HttpApi;
@@ -298,9 +297,7 @@ describe("HttpApi", function() {
     var api;
 
     function make_api(opts) {
-        return test_utils.make_im({
-            api: new DummyApi({json: false})
-        }).then(function(new_im) {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             api = new HttpApi(im, opts);
             return api;
@@ -320,15 +317,16 @@ describe("HttpApi", function() {
                 request: {
                     method: 'GET',
                     url: 'http://foo.com/',
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: "bar"}
                 }
             });
 
             return api.get('http://foo.com/').then(function(response) {
                 assert.equal(response.code, 200);
-                assert.equal(response.data, '{"foo": "bar"}');
+                assert.equal(response.body, JSON.stringify({foo: "bar"}));
             });
         });
     });
@@ -339,6 +337,7 @@ describe("HttpApi", function() {
                 request: {
                     method: 'HEAD',
                     url: 'http://foo.com/',
+                    headers: {'Content-Type': ['application/json']}
                 }
             });
 
@@ -355,20 +354,22 @@ describe("HttpApi", function() {
                 request: {
                     method: 'POST',
                     url: 'http://foo.com/',
-                    content_type: 'application/json',
-                    body: '{"lerp": "larp"}',
+                    data: {lerp: 'larp'},
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: 'bar'}
                 }
             });
 
             return api.post('http://foo.com/', {
-                data: '{"lerp": "larp"}',
+                data: JSON.stringify({lerp: 'larp'}),
                 headers: {'Content-Type': ['application/json']}
             }).then(function(response) {
                 assert.equal(response.code, 200);
-                assert.strictEqual(response.data, '{"foo": "bar"}');
+                assert.strictEqual(
+                    response.data,
+                    JSON.stringify({foo: "bar"}));
             });
         });
     });
@@ -379,20 +380,22 @@ describe("HttpApi", function() {
                 request: {
                     method: 'PUT',
                     url: 'http://foo.com/',
-                    body: '{"lerp": "larp"}',
-                    content_type: 'application/json',
+                    data: {lerp: 'larp'},
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: 'bar'}
                 }
             });
 
             return api.put('http://foo.com/', {
-                data: '{"lerp": "larp"}',
+                data: JSON.stringify({lerp: 'larp'}),
                 headers: {'Content-Type': ['application/json']}
             }).then(function(response) {
                 assert.equal(response.code, 200);
-                assert.strictEqual(response.data, '{"foo": "bar"}');
+                assert.strictEqual(
+                    response.data,
+                    JSON.stringify({foo: "bar"}));
             });
         });
     });
@@ -403,20 +406,22 @@ describe("HttpApi", function() {
                 request: {
                     method: 'DELETE',
                     url: 'http://foo.com/',
-                    content_type: 'application/json',
-                    body: '{"lerp": "larp"}',
+                    data: {lerp: 'larp'},
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: 'bar'}
                 }
             });
 
             return api.delete('http://foo.com/', {
-                data: '{"lerp": "larp"}',
+                data: JSON.stringify({lerp: 'larp'}),
                 headers: {'Content-Type': ['application/json']}
             }).then(function(response) {
                 assert.equal(response.code, 200);
-                assert.strictEqual(response.data, '{"foo": "bar"}');
+                assert.strictEqual(
+                    response.data,
+                    JSON.stringify({foo: "bar"}));
             });
         });
     });
@@ -623,8 +628,7 @@ describe("JsonApi", function() {
         im.api.http.fixtures.add({
             request: {
                 method: 'GET',
-                url: 'http://foo.com/',
-                content_type: 'application/json; charset=utf-8'
+                url: 'http://foo.com/'
             },
             response: {
                 body: '{"foo": "bar"}'
@@ -641,8 +645,7 @@ describe("JsonApi", function() {
             request: {
                 url: 'http://foo.com/',
                 method: 'POST',
-                body: '{"lerp":"larp"}',
-                content_type: 'application/json; charset=utf-8'
+                body: '{"lerp":"larp"}'
             }
         });
 
