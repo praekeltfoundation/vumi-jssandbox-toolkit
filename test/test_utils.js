@@ -59,13 +59,13 @@ describe("utils", function() {
     describe(".url_encode", function() {
         it("should url encode the given url and params", function() {
             assert.equal(
-                'http://example.com/?a=foo&b=bar&c=null',
+                'http://example.com/?a=f%20o%20o&b=b%20a%20r&c=null',
                 utils.url_encode('http://example.com/', [{
                     name: 'a',
-                    value: 'foo'
+                    value: 'f o o'
                 }, {
                     name: 'b',
-                    value: 'bar'
+                    value: 'b a r'
                 }, {
                     name: 'c',
                     value: null
