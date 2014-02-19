@@ -71,22 +71,15 @@ describe("DummyResources", function() {
             resources.add(resource);
             assert.strictEqual(resources.get('toy'), resource);
         });
-
-        it("should throw an error if the resource does not exist", function() {
-            var resources = new DummyResources();
-
-            assert.throws(function() {
-                resources.get('toy');
-            }, DummyResourceError);
-        });
     });
 
-    describe(".can_handle", function() {
-        it("should determine whether a command can be handled", function() {
+    describe(".has_resource_for", function() {
+        it("should determine whether there is a resource for the command",
+        function() {
             var resources = new DummyResources();
             resources.add(new ToyResource());
-            assert(resources.can_handle({cmd: 'toy.foo'}));
-            assert(!resources.can_handle({cmd: 'toy.bar'}));
+            assert(resources.has_resource_for({cmd: 'toy.foo'}));
+            assert(!resources.has_resource_for({cmd: 'spam.foo'}));
         });
     });
 
