@@ -57,10 +57,10 @@ describe("utils", function() {
     });
 
     describe(".url_encode", function() {
-        it("should url encode an object of parameters", function() {
+        it("should url encode the given url and params", function() {
             assert.equal(
-                'a=foo&b=bar&c=null',
-                utils.url_encode([{
+                'http://example.com/?a=foo&b=bar&c=null',
+                utils.url_encode('http://example.com/', [{
                     name: 'a',
                     value: 'foo'
                 }, {
