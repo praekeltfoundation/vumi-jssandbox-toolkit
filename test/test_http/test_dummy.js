@@ -111,7 +111,7 @@ describe("HttpFixtures", function () {
             });
 
             var request = new HttpRequest('get','http://example.com');
-            var fixture = fixtures.find(request);
+            var fixture = fixtures.filter(request)[0];
 
             assert(fixture instanceof HttpFixture);
             assert.equal(fixture.request.url, 'http://example.com');
@@ -127,7 +127,7 @@ describe("HttpFixtures", function () {
             fixtures.add(fixture);
 
             var request = new HttpRequest('get','http://example.com');
-            assert.equal(fixtures.find(request), fixture);
+            assert.equal(fixtures.filter(request)[0], fixture);
         });
     });
 
@@ -286,8 +286,8 @@ describe("HttpFixtures", function () {
         });
     });
 
-    describe(".find", function() {
-        it("should return the matching fixture", function() {
+    describe(".filter", function() {
+        it("should return the matching fixtures", function() {
             var fixtures = new HttpFixtures();
 
             var fixture_a = new HttpFixture({
@@ -316,25 +316,25 @@ describe("HttpFixtures", function () {
             fixtures.add(fixture_a);
             fixtures.add(fixture_b);
 
-            assert.strictEqual(
-                fixtures.find(new HttpRequest('get','http://a.com', {
+            assert.deepEqual(
+                fixtures.filter(new HttpRequest('get','http://a.com', {
                     params: [{
                         name: 'foo',
                         value: 'bar'
                     }],
                     data: {lerp: 'larp'}
                 })),
-                fixture_a);
+                [fixture_a]);
 
-            assert.strictEqual(
-                fixtures.find(new HttpRequest('post','http://b.com', {
+            assert.deepEqual(
+                fixtures.filter(new HttpRequest('post','http://b.com', {
                     params: [{
                         name: 'baz',
                         value: 'qux'
                     }],
                     data: {lorem: 'lark'}
                 })),
-                fixture_b);
+                [fixture_b]);
         });
     });
 });
