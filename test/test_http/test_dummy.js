@@ -47,7 +47,7 @@ describe("HttpFixture", function () {
 
     it("should encode requests", function() {
         var fixture = new HttpFixture({
-            encoding: 'json',
+            default_encoding: 'json',
             request: {
                 url: 'http://example.com',
                 data: {foo: 'bar'}
@@ -59,7 +59,7 @@ describe("HttpFixture", function () {
 
     it("should decode responses", function() {
         var fixture = new HttpFixture({
-            encoding: 'json',
+            default_encoding: 'json',
             request: {url: 'http://example.com'},
             responses: [
                 {body: '{"foo":"bar"}'},
@@ -344,7 +344,7 @@ describe("DummyHttpResource", function () {
 
     beforeEach(function() {
         api = new DummyApi({
-            http: {encoding: 'json'}
+            http: {default_encoding: 'json'}
         });
     });
 
