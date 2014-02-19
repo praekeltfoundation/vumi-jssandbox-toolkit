@@ -17,9 +17,10 @@ describe("Freetext", function () {
             state = new FreeText('state_1', {
                 next: 'state_2',
                 question: 'yes?',
-                error: 'no!',
                 check: function(content) {
-                    return content == 'A lemon';
+                    if (content !== 'A lemon') {
+                        return 'no!';
+                    }
                 }
             });
 
@@ -66,11 +67,11 @@ describe("Freetext", function () {
                 });
             });
 
-            it("should put the state in an error state", function() {
-                assert(!state.in_error);
+            it("should put the state in an error", function() {
+                assert(!state.error);
 
                 return state.emit.input('Not a lemon').then(function() {
-                    assert(state.in_error);
+                    assert.equal(state.error.response, 'no!');
                 });
             });
         });
@@ -84,9 +85,11 @@ describe("Freetext", function () {
         });
 
         it("should translate the error text", function() {
-            assert.equal(state.error_text, 'no!');
-            state.translate(im.user.i18n);
-            assert.equal(state.error_text, 'nee!');
+            return state.invalidate('no!').then(function() {
+                assert.equal(state.error.response, 'no!');
+                state.translate(im.user.i18n);
+                assert.equal(state.error.response, 'nee!');
+            });
         });
     });
 
@@ -99,8 +102,9 @@ describe("Freetext", function () {
 
         describe("if the state is in an error", function() {
             it("should display the given error text", function() {
-                state.in_error = true;
-                assert.equal(state.display(), 'no!');
+                return state.invalidate('no!').then(function() {
+                    assert.equal(state.display(), 'no!');
+                });
             });
         });
     });

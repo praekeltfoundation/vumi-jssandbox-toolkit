@@ -91,6 +91,16 @@ describe("utils", function() {
         });
     });
 
+    describe(".exists", function() {
+        it("should return true if the value is not null or undefined",
+        function() {
+            assert(!utils.exists());
+            assert(!utils.exists(null));
+            assert(utils.exists(0));
+            assert(utils.exists(''));
+        });
+    });
+
     describe("Extendable", function() {
         var Extendable = utils.Extendable;
 
