@@ -46,7 +46,7 @@ describe("StateInvalidError", function () {
     });
 });
 
-describe.only("State", function () {
+describe("State", function () {
     var im;
     var state;
 
