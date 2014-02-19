@@ -16,6 +16,7 @@ describe("ChoiceState", function () {
     function make_state(opts) {
         opts = _.defaults(opts || {}, {
             name: "color_state",
+            error: "no!",
             question: "What is your favourite colour?",
             choices: [
                 new Choice('red', 'Red'),
@@ -88,6 +89,93 @@ describe("ChoiceState", function () {
 
                 state.emit.input("1").then(function() {
                     assert.equal(im.user.state.name, 'red_state');
+                });
+            });
+        });
+    });
+
+    describe(".translate", function() {
+        beforeEach(function() {
+            return make_state({
+                question: 'yes or no?',
+                choices: [
+                    new Choice('yes', 'yes'),
+                    new Choice('no', 'no')]
+            });
+        });
+
+        it("should translate the question", function() {
+            assert.equal(state.question_text, 'yes or no?');
+            state.translate(im.user.i18n);
+            assert.equal(state.question_text, 'ja of nee?');
+        });
+
+        it("should translate the error text", function() {
+            return state.invalidate('no!').then(function() {
+                assert.equal(state.error.response, 'no!');
+                state.translate(im.user.i18n);
+                assert.equal(state.error.response, 'nee!');
+            });
+        });
+
+        it("should translate its choices", function() {
+            assert.deepEqual(
+                _(state.choices).pluck('label'),
+                ['yes', 'no']);
+
+            state.translate(im.user.i18n);
+
+            assert.deepEqual(
+                _(state.choices).pluck('label'),
+                ['ja', 'nee']);
+        });
+    });
+
+    describe("on state:input", function() {
+        describe("if the user response is valid", function() {
+            it("should set the user's current state to the next state",
+            function() {
+                assert.equal(im.user.state.name, 'color_state');
+
+                return state.emit.input('1').then(function() {
+                    assert.equal(im.user.state.name, 'red_state');
+                });
+            });
+
+            it("should save the user's response", function() {
+                var answer = im.user.get_answer('color_state');
+                assert(typeof answer == 'undefined');
+
+                return state.emit.input('1').then(function() {
+                    assert.equal(im.user.get_answer('color_state'), '1');
+                });
+            });
+        });
+
+        describe("if the user response is not a valid choice", function() {
+            it("should not set the user's state", function() {
+                assert.equal(im.user.state.name, 'color_state');
+
+                return state.emit.input('3').then(function() {
+                    assert.equal(im.user.state.name, 'color_state');
+                });
+            });
+
+            it("should not save the user's answer", function() {
+                var answer = im.user.get_answer('color_state');
+                assert(typeof answer == 'undefined');
+
+                return state.emit.input('3').then(function() {
+                    var answer = im.user.get_answer('color_state');
+                    assert(typeof answer == 'undefined');
+                });
+            });
+
+            it("should put the state in an error state", function() {
+                assert(!state.error);
+
+                return state.emit.input('3').then(function() {
+                    assert.equal(state.error.response, 'no!');
                 });
             });
         });

@@ -4,9 +4,49 @@ var assert = require("assert");
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
+var StateInvalidError = vumigo.states.StateInvalidError;
 
 
-describe("State", function () {
+describe("StateInvalidError", function () {
+    describe(".message", function() {
+        it("should include the state name", function() {
+            var state = new State('foo');
+            var error = new StateInvalidError(state, ':(');
+            assert(error.message.indexOf('foo') > -1);
+        });
+
+        it("should include the response", function() {
+            var state = new State('foo');
+            var error = new StateInvalidError(state, ':(');
+            assert(error.message.indexOf(':(') > -1);
+        });
+
+        it("should include the input if given", function() {
+            var state = new State('foo');
+            var error = new StateInvalidError(state, ':(', {input: 'roar'});
+            assert(error.message.indexOf('roar') > -1);
+        });
+
+        it("should include the reason if given", function() {
+            var state = new State('foo');
+            var error = new StateInvalidError(state, ':(', {reason: 'meh'});
+            assert(error.message.indexOf('meh') > -1);
+        });
+    });
+
+    describe(".translate", function() {
+        it("should translate the error response", function() {
+            return test_utils.i18n_for('af').then(function(i18n) {
+                var state = new State('foo');
+                var error = new StateInvalidError(state, 'no!');
+                error.translate(i18n);
+                assert.equal(error.response, 'nee!');
+            });
+        });
+    });
+});
+
+describe.only("State", function () {
     var im;
     var state;
 
@@ -212,6 +252,115 @@ describe("State", function () {
                     .then(function() {
                         assert.equal(im.user.state.name, 'start');
                     });
+            });
+        });
+    });
+
+    describe(".validate", function() {
+        describe("if the checker returned a string", function() {
+            it("should set the state's error object to an appropriate error",
+            function() {
+                var state = new State('foo', {
+                    check: function(input) {
+                        return 'no ' + input + ' for you!';
+                    }
+                });
+
+                return state.validate('swords').then(function() {
+                    assert(state.error instanceof StateInvalidError);
+                    assert.equal(state.error.input, 'swords');
+                    assert.equal(state.error.reason, 'Bad user input');
+                    assert.equal(state.error.response, 'no swords for you!');
+                });
+            });
+
+            it("should emit a 'state:invalid' event", function() {
+                var state = new State('foo', {
+                    check: function() { return 'no!'; }
+                });
+
+                var p = state.once.resolved('state:invalid');
+                return state.validate('swords').thenResolve(p);
+            });
+        });
+
+        describe("if the checker returned a StateInvalidError", function() {
+            it("should set the state's error object with the error",
+            function() {
+                var error;
+
+                var state = new State('foo', {
+                    check: function() { return error; }
+                });
+
+                error = new StateInvalidError(state, 'no!');
+
+                return state.validate('swords').then(function() {
+                    assert.strictEqual(state.error, error);
+                });
+            });
+
+            it("should emit a 'state:invalid' event", function() {
+                var state = new State('foo', {
+                    check: function() {
+                        return new StateInvalidError(state, 'no!');
+                    }
+                });
+
+                var p = state.once.resolved('state:invalid');
+                return state.validate('swords').thenResolve(p);
+            });
+        });
+
+        describe("if the checker returned a non-error", function() {
+            it("should not invalidate the state", function() {
+                var state = new State('foo', {
+                    next: function() {}
+                });
+
+                assert.strictEqual(state.error, null);
+                return state.validate('swords').then(function() {
+                    assert.strictEqual(state.error, null);
+                });
+            });
+        });
+    });
+
+    describe(".invalidate", function() {
+        describe("if a string was given", function() {
+            it("should set the state's error object to an appropriate error",
+            function() {
+                var state = new State('foo');
+
+                return state.invalidate('no!').then(function() {
+                    assert(state.error instanceof StateInvalidError);
+                    assert.equal(state.error.response, 'no!');
+                });
+            });
+
+            it("should emit a 'state:invalid' event", function() {
+                var state = new State('foo');
+                var p = state.once.resolved('state:invalid');
+                return state.invalidate('no!').thenResolve(p);
+            });
+        });
+
+        describe("if a StateInvalidError was given", function() {
+            it("should set the state's error object with the error",
+            function() {
+                var state = new State('foo');
+                var error = new StateInvalidError(state, 'no!');
+
+                return state.invalidate(error).then(function() {
+                    assert.strictEqual(state.error, error);
+                });
+            });
+
+            it("should emit a 'state:invalid' event", function() {
+                var state = new State('foo');
+                var error = new StateInvalidError(state, 'no!');
+                var p = state.once.resolved('state:invalid');
+                return state.invalidate(error).thenResolve(p);
             });
         });
     });
