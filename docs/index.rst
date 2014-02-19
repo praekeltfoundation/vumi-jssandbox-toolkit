@@ -21,6 +21,7 @@ Vumi Go's Javascript sandbox.
    metrics.rst
    events.rst
    tester.rst
+   dummy.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
