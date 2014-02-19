@@ -1,15 +1,16 @@
 var assert = require("assert");
 
-var vumigo = require("../lib");
+var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
-var http_api = vumigo.http_api;
-var HttpApi = http_api.HttpApi;
-var JsonApi = http_api.JsonApi;
-var UrlParams = http_api.UrlParams;
-var HttpRequest = http_api.HttpRequest;
-var HttpResponse = http_api.HttpResponse;
-var HttpResponseError = http_api.HttpResponseError;
-var HttpRequestError = http_api.HttpRequestError;
+
+var api = vumigo.http.api;
+var HttpApi = api.HttpApi;
+var JsonApi = api.JsonApi;
+var UrlParams = api.UrlParams;
+var HttpRequest = api.HttpRequest;
+var HttpResponse = api.HttpResponse;
+var HttpResponseError = api.HttpResponseError;
+var HttpRequestError = api.HttpRequestError;
 
 
 describe("HttpRequestError", function() {
@@ -312,29 +313,31 @@ describe("HttpApi", function() {
 
     describe(".get", function() {
         it("should perform GET requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'GET',
                     url: 'http://foo.com/',
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: "bar"}
                 }
             });
 
             return api.get('http://foo.com/').then(function(response) {
                 assert.equal(response.code, 200);
-                assert.equal(response.data, '{"foo": "bar"}');
+                assert.equal(response.body, JSON.stringify({foo: "bar"}));
             });
         });
     });
 
     describe(".head", function() {
         it("should perform HEAD requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'HEAD',
                     url: 'http://foo.com/',
+                    headers: {'Content-Type': ['application/json']}
                 }
             });
 
@@ -347,79 +350,85 @@ describe("HttpApi", function() {
 
     describe(".post", function() {
         it("should perform POST requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'POST',
                     url: 'http://foo.com/',
-                    content_type: 'application/json',
-                    body: '{"lerp": "larp"}',
+                    data: {lerp: 'larp'},
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: 'bar'}
                 }
             });
 
             return api.post('http://foo.com/', {
-                data: '{"lerp": "larp"}',
+                data: JSON.stringify({lerp: 'larp'}),
                 headers: {'Content-Type': ['application/json']}
             }).then(function(response) {
                 assert.equal(response.code, 200);
-                assert.strictEqual(response.data, '{"foo": "bar"}');
+                assert.strictEqual(
+                    response.data,
+                    JSON.stringify({foo: "bar"}));
             });
         });
     });
 
     describe(".put", function() {
         it("should perform PUT requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'PUT',
                     url: 'http://foo.com/',
-                    body: '{"lerp": "larp"}',
-                    content_type: 'application/json',
+                    data: {lerp: 'larp'},
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: 'bar'}
                 }
             });
 
             return api.put('http://foo.com/', {
-                data: '{"lerp": "larp"}',
+                data: JSON.stringify({lerp: 'larp'}),
                 headers: {'Content-Type': ['application/json']}
             }).then(function(response) {
                 assert.equal(response.code, 200);
-                assert.strictEqual(response.data, '{"foo": "bar"}');
+                assert.strictEqual(
+                    response.data,
+                    JSON.stringify({foo: "bar"}));
             });
         });
     });
 
     describe(".delete", function() {
         it("should perform DELETE requests", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'DELETE',
                     url: 'http://foo.com/',
-                    content_type: 'application/json',
-                    body: '{"lerp": "larp"}',
+                    data: {lerp: 'larp'},
+                    headers: {'Content-Type': ['application/json']}
                 },
                 response: {
-                    body: '{"foo": "bar"}'
+                    data: {foo: 'bar'}
                 }
             });
 
             return api.delete('http://foo.com/', {
-                data: '{"lerp": "larp"}',
+                data: JSON.stringify({lerp: 'larp'}),
                 headers: {'Content-Type': ['application/json']}
             }).then(function(response) {
                 assert.equal(response.code, 200);
-                assert.strictEqual(response.data, '{"foo": "bar"}');
+                assert.strictEqual(
+                    response.data,
+                    JSON.stringify({foo: "bar"}));
             });
         });
     });
 
     describe(".request", function() {
         it("should accept responses in the 200 range", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'GET',
                     url: 'http://foo.com/'
@@ -439,7 +448,7 @@ describe("HttpApi", function() {
         });
 
         it("should support request body data", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     url: 'http://foo.com/',
                     method: 'POST',
@@ -450,16 +459,23 @@ describe("HttpApi", function() {
             return api.request("post", 'http://foo.com/', {
                 data: 'ping',
             }).then(function() {
-                var request = im.api.http_requests[0];
+                var request = im.api.http.requests[0];
                 assert.equal(request.body, 'ping');
             });
         });
 
         it("should support request url params", function() {
-            im.api.add_http_fixture({
+            im.api.http.fixtures.add({
                 request: {
                     method: 'GET',
-                    url: 'http://foo.com/?a=1&b=2',
+                    url: 'http://foo.com/',
+                    params: [{
+                        name :'a',
+                        value: 1
+                    }, {
+                        name :'b',
+                        value: 2
+                    }]
                 }
             });
 
@@ -472,8 +488,14 @@ describe("HttpApi", function() {
                     value: 2
                 }]
             }).then(function(data) {
-                var request = im.api.http_requests[0];
-                assert.equal(request.url, 'http://foo.com/?a=1&b=2');
+                var request = im.api.http.requests[0];
+                assert.deepEqual(request.params.param_list, [{
+                    name :'a',
+                    value: 1
+                }, {
+                    name :'b',
+                    value: 2
+                }]);
             });
         });
 
@@ -484,7 +506,7 @@ describe("HttpApi", function() {
                     password: 'pw'
                 }
             }).then(function() {
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/',
@@ -493,7 +515,7 @@ describe("HttpApi", function() {
 
                 return api.get('http://foo.com/');
             }).then(function() {
-                var request = im.api.http_requests[0];
+                var request = im.api.http.requests[0];
                 assert.deepEqual(
                     request.headers.Authorization,
                     ['Basic bWU6cHc=']);
@@ -502,7 +524,7 @@ describe("HttpApi", function() {
 
         describe("if the response code is in the error range", function() {
             it("should throw an error", function() {
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/'
@@ -528,7 +550,7 @@ describe("HttpApi", function() {
                     throw Error("You shall not parse");
                 };
 
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/'
@@ -562,7 +584,7 @@ describe("HttpApi", function() {
             });
 
             it("should throw an error", function() {
-                im.api.add_http_fixture({
+                im.api.http.fixtures.add({
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/'
@@ -603,11 +625,10 @@ describe("JsonApi", function() {
     });
 
     it("should decode JSON body response", function() {
-        im.api.add_http_fixture({
+        im.api.http.fixtures.add({
             request: {
                 method: 'GET',
-                url: 'http://foo.com/',
-                content_type: 'application/json; charset=utf-8'
+                url: 'http://foo.com/'
             },
             response: {
                 body: '{"foo": "bar"}'
@@ -620,12 +641,11 @@ describe("JsonApi", function() {
     });
 
     it("should encode request data to JSON", function() {
-        im.api.add_http_fixture({
+        im.api.http.fixtures.add({
             request: {
                 url: 'http://foo.com/',
                 method: 'POST',
-                body: '{"lerp": "larp"}',
-                content_type: 'application/json; charset=utf-8'
+                body: '{"lerp":"larp"}'
             }
         });
 
