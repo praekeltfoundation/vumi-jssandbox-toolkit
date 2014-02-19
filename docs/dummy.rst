@@ -5,6 +5,7 @@ API
 ---
 
 .. autojs:: ../lib/dummy/api.js
+.. autojs:: ../lib/http/dummy.js
 
 
 Under the Hood

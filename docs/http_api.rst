@@ -1,4 +1,4 @@
 HTTP API
 ========
 
-.. autojs:: ../lib/http_api.js
+.. autojs:: ../lib/http/api.js
