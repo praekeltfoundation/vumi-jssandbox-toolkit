@@ -12,7 +12,8 @@ module.exports = function() {
             'no!' : [null, 'nee!'],
             'hello': [null, 'hallo'],
             'hello?': [null, 'hallo?'],
-            'goodbye': [null, 'totsiens']
+            'goodbye': [null, 'totsiens'],
+            'yes or no?': [null, 'ja of nee?'],
         }),
         'translation.jp': JSON.stringify({
             '' : {
