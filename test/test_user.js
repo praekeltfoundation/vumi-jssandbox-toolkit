@@ -132,8 +132,7 @@ describe("User", function() {
     var user;
 
     beforeEach(function() {
-        var msg = require('../test/fixtures/simple-msg').call();
-        return test_utils.make_im({msg: msg}).then(function(new_im) {
+        return test_utils.make_im().then(function(new_im) {
             im = new_im;
             user = im.user;
         });
