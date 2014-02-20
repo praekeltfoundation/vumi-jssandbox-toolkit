@@ -24,6 +24,13 @@ describe(".translate", function() {
             });
         });
 
+        it("should use gettext when used as a function", function() {
+            var translator = new LazyTranslator();
+            var translation = translator('message');
+            assert.equal(translation.method, 'gettext');
+            assert.deepEqual(translation.args, ['message']);
+        });
+
         it("should support gettext", function() {
             var translator = new LazyTranslator();
             var translation = translator.gettext('message');
