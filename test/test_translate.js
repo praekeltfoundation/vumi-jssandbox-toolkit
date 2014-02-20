@@ -1,10 +1,12 @@
-var _ = require('underscore');
+var Jed = require('jed');
 var assert = require('assert');
 
-var translate = require('../lib/translate');
+var vumigo = require('../lib');
+var fixtures = vumigo.fixtures;
+var translate = vumigo.translate;
 var Translator = translate.Translator;
 var LazyTranslator = translate.LazyTranslator;
-var LazyTranslation = translate.LazyTranslation;
+var LazyText = translate.LazyText;
 
 
 describe(".translate", function() {
@@ -12,49 +14,49 @@ describe(".translate", function() {
         describe(".support", function() {
             it("should add a method which generates lazy translations",
             function() {
-                var translator = new LazyTranslator();
-                assert(!('foo' in translator));
+                var $ = new LazyTranslator();
+                assert(!('foo' in $));
 
-                translator.support('foo');
+                $.support('foo');
 
-                var translation = translator.foo('bar', 'baz');
-                assert(translation instanceof LazyTranslation);
+                var translation = $.foo('bar', 'baz');
+                assert(translation instanceof LazyText);
                 assert.equal(translation.method, 'foo');
                 assert.deepEqual(translation.args, ['bar', 'baz']);
             });
         });
 
         it("should use gettext when used as a function", function() {
-            var translator = new LazyTranslator();
-            var translation = translator('message');
+            var $ = new LazyTranslator();
+            var translation = $('message');
             assert.equal(translation.method, 'gettext');
             assert.deepEqual(translation.args, ['message']);
         });
 
         it("should support gettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.gettext('message');
+            var $ = new LazyTranslator();
+            var translation = $.gettext('message');
             assert.equal(translation.method, 'gettext');
             assert.deepEqual(translation.args, ['message']);
         });
 
         it("should support ngettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.ngettext('singular', 'plural', 'n');
+            var $ = new LazyTranslator();
+            var translation = $.ngettext('singular', 'plural', 'n');
             assert.equal(translation.method, 'ngettext');
             assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
         });
 
         it("should support dgettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.dgettext('domain', 'message');
+            var $ = new LazyTranslator();
+            var translation = $.dgettext('domain', 'message');
             assert.equal(translation.method, 'dgettext');
             assert.deepEqual(translation.args, ['domain', 'message']);
         });
 
         it("should support dngettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.dgettext(
+            var $ = new LazyTranslator();
+            var translation = $.dgettext(
                 'domain', 'singular', 'plural', 'n');
 
             assert.equal(translation.method, 'dgettext');
@@ -64,22 +66,22 @@ describe(".translate", function() {
         });
 
         it("should support lgettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.lgettext('message');
+            var $ = new LazyTranslator();
+            var translation = $.lgettext('message');
             assert.equal(translation.method, 'lgettext');
             assert.deepEqual(translation.args, ['message']);
         });
 
         it("should support lngettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.lngettext('singular', 'plural', 'n');
+            var $ = new LazyTranslator();
+            var translation = $.lngettext('singular', 'plural', 'n');
             assert.equal(translation.method, 'lngettext');
             assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
         });
 
         it("should support ldngettext", function() {
-            var translator = new LazyTranslator();
-            var translation = translator.lngettext(
+            var $ = new LazyTranslator();
+            var translation = $.lngettext(
                 'domain', 'singular', 'plural', 'n');
 
             assert.equal(translation.method, 'lngettext');
@@ -91,43 +93,38 @@ describe(".translate", function() {
 
     describe("Translator", function() {
         describe("if a lazy translation was given", function() {
-            it("should apply the corresponding method and args to the i18n instance",
+            it("should apply the corresponding method and args",
             function() {
-                var lazy_translator = new LazyTranslator();
-                lazy_translator.support('foo');
-
-                var translator = new Translator({foo: _.identity});
-                assert.equal(translator(lazy_translator.foo('bar')), 'bar');
+                var $ = new LazyTranslator();
+                var i18n = new Translator(fixtures.lang('af'));
+                assert.equal(i18n($.gettext('yes')), 'ja');
             });
         });
 
         describe("if a lazy translation was not given", function() {
             it("should simply return what it was given", function() {
-                assert.equal(translate.apply_translation({}, 3), 3);
-                assert.equal(translate.apply_translation({}, 'foo'), 'foo');
+                var i18n = new Translator();
+                assert.equal(i18n(3), 3);
+                assert.equal(i18n('foo'), 'foo');
             });
         });
     });
 
     describe("apply_translation", function() {
         describe("if a lazy translation was given", function() {
-            it("should apply the corresponding method and args to the i18n instance",
-            function() {
+            it("should translate the text", function() {
+                var jed = new Jed(fixtures.lang('af'));
                 var translator = new LazyTranslator();
-                translator.support('foo');
-
-                assert.equal(
-                    translate.apply_translation(
-                        {foo: _.identity},
-                        translator.foo('bar')),
-                    'bar');
+                var text = translator.gettext('yes');
+                assert.equal(translate.apply_translation(jed, text), 'ja');
             });
         });
 
         describe("if a lazy translation was not given", function() {
             it("should simply return what it was given", function() {
-                assert.equal(translate.apply_translation({}, 3), 3);
-                assert.equal(translate.apply_translation({}, 'foo'), 'foo');
+                var jed = new Jed(fixtures.lang('af'));
+                assert.equal(translate.apply_translation(jed, 3), 3);
+                assert.equal(translate.apply_translation(jed, 'foo'), 'foo');
             });
         });
     });

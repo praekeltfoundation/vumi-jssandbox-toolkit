@@ -26,13 +26,13 @@ describe("InteractionMachine", function () {
         app = new App('start');
 
         start_state = new FreeText('start', {
-            question: 'hello?',
+            question: test_utils.$('hello?'),
             next: 'end'
         });
         app.states.add(start_state);
 
         end_state = new EndState('end', {
-            text: 'goodbye'
+            text: test_utils.$('goodbye')
         });
         app.states.add(end_state);
 
@@ -355,7 +355,7 @@ describe("InteractionMachine", function () {
         it("should construct a jed instance with the fetched language data",
         function() {
             return im.fetch_translation('jp').then(function(i18n) {
-                assert.equal(i18n.gettext('yes'), 'hai');
+                assert.equal(i18n(test_utils.$('yes')), 'hai');
             });
         });
     });

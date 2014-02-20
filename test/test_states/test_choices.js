@@ -98,32 +98,26 @@ describe("ChoiceState", function () {
     describe(".translate", function() {
         beforeEach(function() {
             return make_state({
-                question: 'yes or no?',
+                question: test_utils.$('yes or no?'),
                 choices: [
-                    new Choice('yes', 'yes'),
-                    new Choice('no', 'no')]
+                    new Choice('yes', test_utils.$('yes')),
+                    new Choice('no', test_utils.$('no'))]
             });
         });
 
         it("should translate the question", function() {
-            assert.equal(state.question_text, 'yes or no?');
             state.translate(im.user.i18n);
             assert.equal(state.question_text, 'ja of nee?');
         });
 
         it("should translate the error text", function() {
-            return state.invalidate('no!').then(function() {
-                assert.equal(state.error.response, 'no!');
+            return state.invalidate(test_utils.$('no!')).then(function() {
                 state.translate(im.user.i18n);
                 assert.equal(state.error.response, 'nee!');
             });
         });
 
         it("should translate its choices", function() {
-            assert.deepEqual(
-                _(state.choices).pluck('label'),
-                ['yes', 'no']);
-
             state.translate(im.user.i18n);
 
             assert.deepEqual(

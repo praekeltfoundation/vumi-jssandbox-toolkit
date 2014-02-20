@@ -6,6 +6,7 @@ var State = vumigo.states.State;
 var User = vumigo.user.User;
 var UserStateData = vumigo.user.UserStateData;
 
+
 describe("UserStateData", function() {
     var state;
 
@@ -181,7 +182,7 @@ describe("User", function() {
                 assert.equal(user.get_answer('start'), 'yes');
                 assert.equal(user.state.name, 'start');
                 assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                assert.equal(user.i18n.gettext('yes'), 'ja');
+                assert.equal(user.i18n(test_utils.$('yes')), 'ja');
             });
         });
     });
@@ -225,7 +226,7 @@ describe("User", function() {
                         assert.equal(user.get_answer('start'), 'ja');
                         assert.equal(user.state.name, 'start');
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                        assert.equal(user.i18n.gettext('yes'), 'ja');
+                        assert.equal(user.i18n(test_utils.$('yes')), 'ja');
                     });
             });
 
@@ -264,7 +265,7 @@ describe("User", function() {
                         assert.equal(user.get_answer('start'), 'ja');
                         assert.equal(user.state.name, 'start');
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                        assert.equal(user.i18n.gettext('no'), 'nee');
+                        assert.equal(user.i18n(test_utils.$('no')), 'nee');
                     });
             });
 
@@ -330,7 +331,7 @@ describe("User", function() {
         it("should change the user's language", function() {
             return user.set_lang('jp').then(function() {
                 assert.equal(user.lang, 'jp');
-                assert.equal(user.i18n.gettext('yes'), 'hai');
+                assert.equal(user.i18n(test_utils.$('yes')), 'hai');
             });
         });
     });
