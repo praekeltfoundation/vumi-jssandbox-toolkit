@@ -2,6 +2,7 @@ var _ = require('underscore');
 var assert = require('assert');
 
 var translate = require('../lib/translate');
+var LazyTranslation = translate.LazyTranslation;
 var LazyTranslator = translate.LazyTranslator;
 
 
@@ -14,85 +15,71 @@ describe("LazyTranslator", function() {
 
             translator.support('foo');
 
-            assert.deepEqual(translator.foo('bar', 'baz'), {
-                method: 'foo',
-                args: ['bar', 'baz'],
-                lazy_translation: true
-            });
+            var translation = translator.foo('bar', 'baz');
+            assert(translation instanceof LazyTranslation);
+            assert.equal(translation.method, 'foo');
+            assert.deepEqual(translation.args, ['bar', 'baz']);
         });
     });
 
     it("should support gettext", function() {
         var translator = new LazyTranslator();
-        assert.deepEqual(translator.gettext('message'), {
-            method: 'gettext',
-            args: ['message'],
-            lazy_translation: true
-        });
+        var translation = translator.gettext('message');
+        assert.equal(translation.method, 'gettext');
+        assert.deepEqual(translation.args, ['message']);
     });
 
     it("should support ngettext", function() {
         var translator = new LazyTranslator();
-        assert.deepEqual(translator.ngettext('singular', 'plural', 'n'), {
-            method: 'ngettext',
-            args: ['singular', 'plural', 'n'],
-            lazy_translation: true
-        });
+        var translation = translator.ngettext('singular', 'plural', 'n');
+        assert.equal(translation.method, 'ngettext');
+        assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
     });
 
     it("should support dgettext", function() {
         var translator = new LazyTranslator();
-        assert.deepEqual(translator.dgettext('domain', 'message'), {
-            method: 'dgettext',
-            args: ['domain', 'message'],
-            lazy_translation: true
-        });
+        var translation = translator.dgettext('domain', 'message');
+        assert.equal(translation.method, 'dgettext');
+        assert.deepEqual(translation.args, ['domain', 'message']);
     });
 
     it("should support dngettext", function() {
         var translator = new LazyTranslator();
+        var translation = translator.dgettext(
+            'domain', 'singular', 'plural', 'n');
+
+        assert.equal(translation.method, 'dgettext');
         assert.deepEqual(
-            translator.dgettext('domain', 'singular', 'plural', 'n'),
-            {
-                method: 'dgettext',
-                args: ['domain', 'singular', 'plural', 'n'],
-                lazy_translation: true
-            });
+            translation.args,
+            ['domain', 'singular', 'plural', 'n']);
     });
 
     it("should support lgettext", function() {
         var translator = new LazyTranslator();
-        assert.deepEqual(
-            translator.lgettext('message'),
-            {
-                method: 'lgettext',
-                args: ['message'],
-                lazy_translation: true
-            });
+        var translation = translator.lgettext('message');
+        assert.equal(translation.method, 'lgettext');
+        assert.deepEqual(translation.args, ['message']);
     });
 
     it("should support lngettext", function() {
         var translator = new LazyTranslator();
-        assert.deepEqual(
-            translator.lngettext('singular', 'plural', 'n'),
-            {
-                method: 'lngettext',
-                args: ['singular', 'plural','n'],
-                lazy_translation: true
-            });
+        var translation = translator.lngettext('singular', 'plural', 'n');
+        assert.equal(translation.method, 'lngettext');
+        assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
     });
 
     it("should support ldngettext", function() {
         var translator = new LazyTranslator();
+        var translation = translator.lngettext(
+            'domain', 'singular', 'plural', 'n');
+
+        assert.equal(translation.method, 'lngettext');
         assert.deepEqual(
-            translator.ldngettext('domain', 'singular', 'plural', 'n'),
-            {
-                method: 'ldngettext',
-                args: ['domain', 'singular', 'plural','n'],
-                lazy_translation: true
-            });
+            translation.args,
+            ['domain', 'singular', 'plural', 'n']);
     });
 });
+
 
 describe("apply_translation", function() {
     describe("if a lazy translation was given", function() {
