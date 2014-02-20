@@ -57,21 +57,42 @@ describe("utils", function() {
     });
 
     describe(".url_encode", function() {
-        it("should url encode an object of parameters", function() {
+        it("should url encode the given url and params", function() {
             assert.equal(
-                'a=foo&b=bar&c=null',
-                utils.url_encode([{
+                utils.url_encode('http://example.com/', [{
                     name: 'a',
-                    value: 'foo'
+                    value: 'f o o'
                 }, {
                     name: 'b',
-                    value: 'bar'
+                    value: 'b a r'
                 }, {
                     name: 'c',
                     value: null
-                }]));
+                }]),
+                'http://example.com/?a=f%20o%20o&b=b%20a%20r&c=null');
         });
     });
+
+    describe(".url_decode", function() {
+        it("should decode the url into its base and params", function() {
+            assert.deepEqual(utils.url_decode(
+                'http://example.com/?a=f%20o%20o&b=b%20a%20r&c=null'),
+                {
+                    url: 'http://example.com/',
+                    params: [{
+                        name: 'a',
+                        value: 'f o o'
+                    }, {
+                        name: 'b',
+                        value: 'b a r'
+                    }, {
+                        name: 'c',
+                        value: 'null'
+                    }]
+                });
+        });
+    });
+
 
     describe(".starts_with", function() {
         it("should determine whether the one string starts with the other",
@@ -81,6 +102,23 @@ describe("utils", function() {
             assert(utils.starts_with('foo', 'foo'));
             assert(utils.starts_with('foobar', 'foo'));
             assert(!utils.starts_with('foobar', 'foobarbaz'));
+        });
+    });
+
+    describe(".deep_equals", function() {
+        it("should determine whether the objects are deep equal", function() {
+            assert(!utils.deep_equals({foo: 'bar'}, {foo: 'baz'}));
+            assert(utils.deep_equals({foo: 'bar'}, {foo: 'bar'}));
+        });
+    });
+
+    describe(".exists", function() {
+        it("should return true if the value is not null or undefined",
+        function() {
+            assert(!utils.exists());
+            assert(!utils.exists(null));
+            assert(utils.exists(0));
+            assert(utils.exists(''));
         });
     });
 
