@@ -94,7 +94,7 @@ describe("LazyTranslator", function() {
     });
 });
 
-describe("translate", function() {
+describe("apply_translation", function() {
     describe("if a lazy translation was given", function() {
         it("should apply the corresponding method and args to the i18n instance",
         function() {
@@ -102,7 +102,7 @@ describe("translate", function() {
             translator.support('foo');
 
             assert.equal(
-                translate.translate(
+                translate.apply_translation(
                     {foo: _.identity},
                     translator.foo('bar')),
                 'bar');
@@ -111,8 +111,8 @@ describe("translate", function() {
 
     describe("if a lazy translation was not given", function() {
         it("should simply return what it was given", function() {
-            assert.equal(translate.translate({}, 3), 3);
-            assert.equal(translate.translate({}, 'foo'), 'foo');
+            assert.equal(translate.apply_translation({}, 3), 3);
+            assert.equal(translate.apply_translation({}, 'foo'), 'foo');
         });
     });
 });
