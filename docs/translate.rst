@@ -15,7 +15,7 @@ their text. Here is a simple example:
         App.call(self);
 
         self.states.add('states:start', function(name) {
-            return new EndState(name, {
+            return new FreeText(name, {
                 question: self.$("Hello! Say something!"),
                 next: 'states:end'
             });
