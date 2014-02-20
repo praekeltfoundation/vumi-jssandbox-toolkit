@@ -1,6 +1,7 @@
 var assert = require("assert");
 
 var vumigo = require("../lib");
+var fixtures = vumigo.fixtures;
 var test_utils = vumigo.test_utils;
 
 var App = vumigo.App;
@@ -21,7 +22,7 @@ describe("InteractionMachine", function () {
     var end_state;
 
     beforeEach(function() {
-        msg = require('../test/fixtures/simple-msg-2').call();
+        msg = fixtures.msg('2');
         app = new App('start');
 
         start_state = new FreeText('start', {
