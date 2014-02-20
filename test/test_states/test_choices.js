@@ -5,6 +5,7 @@ var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
 
 var ChoiceState = vumigo.states.ChoiceState;
+var MenuState = vumigo.states.MenuState;
 var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
 
@@ -177,6 +178,55 @@ describe("ChoiceState", function () {
                 return state.emit.input('3').then(function() {
                     assert.equal(state.error.response, 'no!');
                 });
+            });
+        });
+    });
+});
+
+describe("MenuState", function () {
+    var im;
+    var state;
+
+    function make_state(opts) {
+        opts = _.defaults(opts || {}, {
+            name: "menu_state",
+            question: "Select menu item:",
+            choices: [
+                new Choice('state_by_name', 'By Name'),
+                new Choice({
+                    name: 'state_by_object',
+                    metadata: {foo: "bar"}
+                }, 'By Object')
+            ]
+         });
+
+        return test_utils
+            .make_im()
+            .then(function(new_im) {
+                im = new_im;
+                state = new MenuState(opts.name, opts);
+                im.app.states.add(state);
+                return im.switch_state(opts.name).thenResolve(state);
+            });
+    }
+
+    beforeEach(function () {
+        return make_state();
+    });
+
+    describe("should support", function () {
+        it("state name choice values", function () {
+            assert.equal(im.user.state.name, 'menu_state');
+
+            return state.emit.input("1").then(function() {
+                assert.equal(im.user.state.name, 'state_by_name');
+            });
+        });
+
+        it("state object choice values", function() {
+            return state.emit.input("2").then(function() {
+                assert.equal(im.user.state.name, 'state_by_object');
+                assert.deepEqual(im.user.state.metadata, {"foo": "bar"});
             });
         });
     });
