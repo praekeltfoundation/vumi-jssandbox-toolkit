@@ -1,12 +1,11 @@
 Translation
 ===========
 
-
 The toolkit supports internationalization using `gettext`_. Apps have an ``$``
 attribute available that they can use when they would like to internationalize
 their text. Here is a simple example:
 
-.. _gettext: http://docs.python.org/2/library/gettext.html
+.. _gettext: http://www.gnu.org/software/gettext/
 
 
 .. code-block:: javascript
@@ -27,6 +26,10 @@ their text. Here is a simple example:
             });
         });
     });
+
+The gettext methods are well documented in the `python docs`_.
+
+.. _python docs: http://docs.python.org/2/library/gettext.html
 
 
 Under the hood
