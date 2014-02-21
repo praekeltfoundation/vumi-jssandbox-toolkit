@@ -34,8 +34,8 @@ You can contact the Vumi development team in the following ways:
   mailing list
 * on *irc* in *#vumi* on the [Freenode IRC network][vumi-irc]
 
-  [vumi-email]: https://groups.google.com/forum/?fromgroups#!forum/vumi-dev
-  [vumi-irc]: https://webchat.freenode.net/?channels=#vumi
-
 Issues can be filed in the GitHub issue tracker. Please don't use the
 issue tracker for general support queries.
+
+  [vumi-email]: https://groups.google.com/forum/?fromgroups#!forum/vumi-dev
+  [vumi-irc]: https://webchat.freenode.net/?channels=#vumi
