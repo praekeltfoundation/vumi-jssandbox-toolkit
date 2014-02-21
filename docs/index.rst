@@ -22,6 +22,7 @@ Vumi Go's Javascript sandbox.
    events.rst
    tester.rst
    dummy.rst
+   translate.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
