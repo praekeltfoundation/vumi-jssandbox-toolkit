@@ -36,12 +36,11 @@ describe("StateInvalidError", function () {
 
     describe(".translate", function() {
         it("should translate the error response", function() {
-            return test_utils.i18n_for('af').then(function(i18n) {
-                var state = new State('foo');
-                var error = new StateInvalidError(state, 'no!');
-                error.translate(i18n);
-                assert.equal(error.response, 'nee!');
-            });
+            var i18n = test_utils.i18n_for('af');
+            var state = new State('foo');
+            var error = new StateInvalidError(state, 'no!');
+            error.translate(i18n);
+            assert.equal(error.response, 'nee!');
         });
     });
 });
