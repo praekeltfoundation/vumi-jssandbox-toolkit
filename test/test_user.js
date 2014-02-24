@@ -82,23 +82,6 @@ describe("UserStateData", function() {
         });
     });
 
-    describe(".update_metadata", function() {
-        it("should update the metadata", function() {
-            assert.deepEqual(state.metadata, {foo: 'bar'});
-            state.update_metadata({baz: 'qux'});
-            assert.deepEqual(state.metadata, {
-                foo: 'bar',
-                baz: 'qux'
-            });
-        });
-
-        it("should overwrite already defined metadata properties", function() {
-            assert.deepEqual(state.metadata, {foo: 'bar'});
-            state.update_metadata({foo: 'qux'});
-            assert.deepEqual(state.metadata, {foo: 'qux'});
-        });
-    });
-
     describe(".serialize", function() {
         it("should return the state data as a JSON-serializable object",
         function() {
@@ -332,29 +315,6 @@ describe("User", function() {
             return user.set_lang('jp').then(function() {
                 assert.equal(user.lang, 'jp');
                 assert.equal(user.i18n(test_utils.$('yes')), 'hai');
-            });
-        });
-    });
-
-    describe(".update_metadata", function() {
-        it("should update the user's metadata", function() {
-            assert.deepEqual(user.metadata, {name: 'jan'});
-            user.update_metadata({surname: 'luhrmann'});
-            assert.deepEqual(user.metadata, {
-                name: 'jan',
-                surname: 'luhrmann'
-            });
-        });
-
-        it("should overwrite already defined metadata properties", function() {
-            assert.deepEqual(user.metadata, {name: 'jan'});
-            user.update_metadata({
-                name: 'baz',
-                surname: 'luhrmann'
-            });
-            assert.deepEqual(user.metadata, {
-                name: 'baz',
-                surname: 'luhrmann'
             });
         });
     });
