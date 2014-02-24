@@ -7,13 +7,59 @@ var ContactError = api.ContactError;
 
 
 describe("Contact", function() {
+    describe(".reset", function() {
+        it("should reset the contact using the given attributes", function() {
+            var contact = new Contact({
+                key: '123',
+                user_account: 'user_foo',
+                extra: {ham: 'spam'},
+                groups: ['foo']
+            });
+
+            contact.reset({
+                key: '123',
+                user_account: 'user_foo',
+                groups: ['bar']
+            });
+
+            assert.deepEqual(contact.serialize(), {
+                key: '123',
+                user_account: 'user_foo',
+                extra: {},
+                groups: ['bar']
+            });
+        });
+
+        it("should re-validate the contact", function() {
+            var validated = false;
+
+            var contact = new Contact({
+                key: '123',
+                user_account: 'user_foo'
+            });
+
+            contact.validate = function() {
+                validated = true;
+            };
+
+            assert(!validated);
+            contact.reset({
+                key: '123',
+                user_account: 'user_foo',
+                extra: {ham: 'spam'}
+            });
+            assert(validated);
+        });
+    });
+
     describe(".validate", function() {
         it("should throw an error for non-string groups", function() {
             var contact = new Contact({
                 key: '123',
                 user_account: 'user_foo',
-                groups: [null]
             });
+
+            contact.attrs.groups.push(null);
 
             assert.throws(
                 function() { contact.validate(); },
@@ -32,8 +78,9 @@ describe("Contact", function() {
             var contact = new Contact({
                 key: '123',
                 user_account: 'user_foo',
-                extra: {spam: null}
             });
+
+            contact.attrs.extra.spam = null;
 
             assert.throws(
                 function() { contact.validate(); },
