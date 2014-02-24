@@ -40,18 +40,18 @@ describe(".translate", function() {
             assert.deepEqual(translation.args, ['message']);
         });
 
-        it("should support ngettext", function() {
-            var $ = new LazyTranslator();
-            var translation = $.ngettext('singular', 'plural', 'n');
-            assert.equal(translation.method, 'ngettext');
-            assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
-        });
-
         it("should support dgettext", function() {
             var $ = new LazyTranslator();
             var translation = $.dgettext('domain', 'message');
             assert.equal(translation.method, 'dgettext');
             assert.deepEqual(translation.args, ['domain', 'message']);
+        });
+
+        it("should support ngettext", function() {
+            var $ = new LazyTranslator();
+            var translation = $.ngettext('singular', 'plural', 'n');
+            assert.equal(translation.method, 'ngettext');
+            assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
         });
 
         it("should support dngettext", function() {
@@ -65,29 +65,42 @@ describe(".translate", function() {
                 ['domain', 'singular', 'plural', 'n']);
         });
 
-        it("should support lgettext", function() {
+        it("should support pgettext", function() {
             var $ = new LazyTranslator();
-            var translation = $.lgettext('message');
-            assert.equal(translation.method, 'lgettext');
-            assert.deepEqual(translation.args, ['message']);
+            var translation = $.pgettext('context', 'message');
+            assert.equal(translation.method, 'pgettext');
+            assert.deepEqual(translation.args, ['context', 'message']);
         });
 
-        it("should support lngettext", function() {
+        it("should support dpgettext", function() {
             var $ = new LazyTranslator();
-            var translation = $.lngettext('singular', 'plural', 'n');
-            assert.equal(translation.method, 'lngettext');
-            assert.deepEqual(translation.args, ['singular', 'plural', 'n']);
-        });
+            var translation = $.dpgettext('domain', 'context', 'message');
 
-        it("should support ldngettext", function() {
-            var $ = new LazyTranslator();
-            var translation = $.lngettext(
-                'domain', 'singular', 'plural', 'n');
-
-            assert.equal(translation.method, 'lngettext');
+            assert.equal(translation.method, 'dpgettext');
             assert.deepEqual(
                 translation.args,
-                ['domain', 'singular', 'plural', 'n']);
+                ['domain', 'context', 'message']);
+        });
+
+        it("should support npgettext", function() {
+            var $ = new LazyTranslator();
+            var translation = $.npgettext(
+                'context', 'singular', 'plural', 'n');
+            assert.equal(translation.method, 'npgettext');
+            assert.deepEqual(
+                translation.args,
+                ['context', 'singular', 'plural', 'n']);
+        });
+
+        it("should support dnpgettext", function() {
+            var $ = new LazyTranslator();
+            var translation = $.dnpgettext(
+                'domain', 'context', 'singular', 'plural', 'n');
+
+            assert.equal(translation.method, 'dnpgettext');
+            assert.deepEqual(
+                translation.args,
+                ['domain', 'context', 'singular', 'plural', 'n']);
         });
     });
 
