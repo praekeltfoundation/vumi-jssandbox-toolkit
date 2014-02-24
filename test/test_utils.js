@@ -112,6 +112,55 @@ describe("utils", function() {
         });
     });
 
+    describe(".deep_matches", function() {
+        it("should determine whether properties deeply match an object",
+        function() {
+            assert(utils.deep_matches({
+                foo: 'bar',
+                baz: {
+                    qux: 'corge',
+                    grault: ['garply', 'waldo']
+                }
+            }, {
+                foo: 'bar'
+            }));
+
+            assert(utils.deep_matches({
+                foo: 'bar',
+                baz: {
+                    qux: 'corge',
+                    grault: ['garply', 'waldo']
+                }
+            }, {
+                baz: {
+                    qux: 'corge',
+                    grault: ['garply', 'waldo']
+                }
+            }));
+
+            assert(!utils.deep_matches({
+                foo: 'bar',
+                baz: {
+                    qux: 'corge',
+                    grault: ['garply', 'waldo']
+                }
+            }, {
+                foo: 'baz'
+            }));
+
+            assert(!utils.deep_matches({
+                foo: 'bar',
+                baz: {
+                    qux: 'corge',
+                    grault: ['garply', 'waldo']
+                }
+            }, {
+                foo: 'bar',
+                grault: ['waldo']
+            }));
+        });
+    });
+
     describe(".exists", function() {
         it("should return true if the value is not null or undefined",
         function() {
