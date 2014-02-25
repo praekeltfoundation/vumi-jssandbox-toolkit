@@ -21,6 +21,7 @@ describe("DummyContactsResource", function() {
             it("should add the contact to the store", function() {
                 var contact = new Contact({
                     key: '123',
+                    msisdn: '+27123',
                     user_account: 'user_foo'
                 });
 
@@ -179,12 +180,15 @@ describe("DummyContactsResource", function() {
             it("should save the contact if it exists", function() {
                 api.contacts.add({
                     key: '123',
+                    msisdn: '+27123',
                     name: 'nobody'
                 });
 
                 return request('contacts.save', {
                     contact: {
                         key: '123',
+                        msisdn: '+27123',
+                        user_account: 'user_foo',
                         name: 'somebody'
                     }
                 }).then(function(result) {
@@ -211,6 +215,7 @@ describe("DummyContactsResource", function() {
                 return request('contacts.save', {
                     contact: {
                         key: '123',
+                        msisdn: '+27123',
                         extra: {foo: 3}
                     }
                 }).then(function(result) {
@@ -225,7 +230,7 @@ describe("DummyContactsResource", function() {
     });
 
     describe(".format_addr", function() {
-        it("should format misdns", function() {
+        it("should format msisdns", function() {
             assert.equal(dummy.format_addr('27123', 'msisdn'), '+27123');
             assert.equal(dummy.format_addr('+27123', 'msisdn'), '+27123');
         });
