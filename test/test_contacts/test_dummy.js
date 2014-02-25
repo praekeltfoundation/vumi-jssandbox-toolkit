@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var assert = require('assert');
 
 var vumigo = require("../../lib");
@@ -37,53 +38,19 @@ describe("DummyContactsResource", function() {
                     surname: 'rainbow'
                 });
 
-                assert(api.contacts.find_where({
-                    name: 'super',
-                    surname: 'rainbow'
+                assert(_.find(api.contacts.store, {
+                    attrs: {
+                        name: 'super',
+                        surname: 'rainbow'
+                    }
                 }));
             });
         });
     });
 
-    describe(".find_where", function() {
-        it("should find the contact matching the given attributes", function() {
-            api.contacts.add({
-                extra: {foo: 'bar'},
-                groups: ['group_1']
-            });
-
-            api.contacts.add({
-                extra: {foo: 'baz'},
-                groups: ['group_1']
-            });
-
-            var contact_1 = api.contacts.find_where({
-                extra: {foo: 'bar'},
-                groups: ['group_1']
-            });
-
-            var contact_2 = api.contacts.find_where({
-                extra: {foo: 'baz'},
-                groups: ['group_1']
-            });
-
-            assert.deepEqual(contact_1.attrs.extra, {foo: 'bar'});
-            assert.deepEqual(contact_1.attrs.groups, ['group_1']);
-
-            assert.deepEqual(contact_2.attrs.extra, {foo: 'baz'});
-            assert.deepEqual(contact_1.attrs.groups, ['group_1']);
-        });
-
-        it("should return undefined if no contain is found", function() {
-            assert.equal(
-                typeof api.contacts.find_where({foo: 'bar'}),
-                'undefined');
-        });
-    });
-
     describe(".handlers", function() {
         describe(".get", function() {
-            it("retrieve the contact by if it exists", function() {
+            it("retrieve the contact if it exists", function() {
                 api.contacts.add({msisdn: '+27123'});
 
                 return request('contacts.get', {
