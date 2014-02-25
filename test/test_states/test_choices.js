@@ -1,5 +1,5 @@
 var assert = require("assert");
-var _ = require("underscore");
+var _ = require("lodash");
 
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
@@ -121,7 +121,7 @@ describe("ChoiceState", function () {
             state.translate(im.user.i18n);
 
             assert.deepEqual(
-                _(state.choices).pluck('label'),
+                _.pluck(state.choices, 'label'),
                 ['ja', 'nee']);
         });
     });
