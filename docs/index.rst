@@ -17,6 +17,7 @@ Vumi Go's Javascript sandbox.
    states.rst
    user.rst
    config.rst
+   contacts.rst
    http_api.rst
    metrics.rst
    events.rst
