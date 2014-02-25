@@ -11,19 +11,22 @@ describe("Contact", function() {
         it("should reset the contact using the given attributes", function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 extra: {ham: 'spam'},
-                groups: ['foo']
+                groups: ['foo'],
             });
 
             contact.reset({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['bar']
             });
 
             assert.deepEqual(contact.serialize(), {
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 extra: {},
                 groups: ['bar']
@@ -35,6 +38,7 @@ describe("Contact", function() {
 
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo'
             });
 
@@ -45,6 +49,7 @@ describe("Contact", function() {
             assert(!validated);
             contact.reset({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 extra: {ham: 'spam'}
             });
@@ -53,9 +58,32 @@ describe("Contact", function() {
     });
 
     describe(".validate", function() {
+        it("should throw an error for non-string msisdns", function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user_foo'
+            });
+
+            contact.attrs.msisdn = null;
+
+            assert.throws(
+                function() { contact.validate(); },
+                function(error) {
+                    assert(error instanceof ContactError);
+                    assert.equal(
+                        error.message,
+                        ["Contact has an msisdn of type 'object' instead of",
+                         "'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+
         it("should throw an error for non-string groups", function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
             });
 
@@ -77,6 +105,7 @@ describe("Contact", function() {
         it("should throw an error for non-string extra values", function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
             });
 
@@ -102,7 +131,8 @@ describe("Contact", function() {
 
             var contact = new Contact({
                 key: '123',
-                user_account: 'user_foo'
+                msisdn: '+27123',
+                user_account: 'user_foo',
             });
 
             contact.validate = function() {
@@ -117,16 +147,18 @@ describe("Contact", function() {
         it("should serialize the contact", function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['group_1'],
-                extra: {ham: 'spam'}
+                extra: {ham: 'spam'},
             });
 
             assert.deepEqual(contact.serialize(), {
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['group_1'],
-                extra: {ham: 'spam'}
+                extra: {ham: 'spam'},
             });
         });
 
@@ -134,6 +166,7 @@ describe("Contact", function() {
         function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['group_1'],
                 extra: {ham: 'spam'}
@@ -144,6 +177,7 @@ describe("Contact", function() {
 
             assert.deepEqual(contact.attrs, {
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['group_1'],
                 extra: {ham: 'spam'}
@@ -154,6 +188,7 @@ describe("Contact", function() {
         function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['group_1'],
                 extra: {ham: 'spam'}
@@ -171,6 +206,7 @@ describe("Contact", function() {
         function() {
             var contact = new Contact({
                 key: '123',
+                msisdn: '+27123',
                 user_account: 'user_foo',
                 groups: ['group_1'],
                 extra: {ham: 'spam'}
