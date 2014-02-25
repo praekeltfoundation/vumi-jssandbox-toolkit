@@ -1,5 +1,5 @@
 var assert = require("assert");
-var _ = require("underscore");
+var _ = require("lodash");
 
 var vumigo = require("../../lib");
 var test_utils = vumigo.test_utils;
