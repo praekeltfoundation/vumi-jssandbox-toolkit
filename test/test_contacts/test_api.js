@@ -7,7 +7,7 @@ var ContactError = api.ContactError;
 
 
 describe("Contact", function() {
-    describe(".validate", function() {
+    describe(".do.validate", function() {
         it("should throw an error for non-string msisdns", function() {
             var contact = new Contact({
                 key: '123',
@@ -18,7 +18,7 @@ describe("Contact", function() {
             contact.msisdn = null;
 
             assert.throws(
-                function() { contact.validate(); },
+                function() { contact.do.validate(); },
                 function(error) {
                     assert(error instanceof ContactError);
                     assert.equal(
@@ -40,7 +40,7 @@ describe("Contact", function() {
             contact.groups.push(null);
 
             assert.throws(
-                function() { contact.validate(); },
+                function() { contact.do.validate(); },
                 function(error) {
                     assert(error instanceof ContactError);
                     assert.equal(
@@ -62,7 +62,7 @@ describe("Contact", function() {
             contact.extra.spam = null;
 
             assert.throws(
-                function() { contact.validate(); },
+                function() { contact.do.validate(); },
                 function(error) {
                     assert(error instanceof ContactError);
                     assert.equal(
