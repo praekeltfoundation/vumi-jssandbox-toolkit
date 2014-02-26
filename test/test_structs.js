@@ -93,17 +93,22 @@ describe("models", function() {
             it("should return a deep copy of its attributes", function() {
                 var model = new Model({
                     foo: 'bar',
-                    baz: 'qux'
+                    baz: {qux: 'corge'}
                 });
 
                 var data = model.serialize();
                 assert.deepEqual(data, {
                     foo: 'bar',
-                    baz: 'qux'
+                    baz: {qux: 'corge'}
                 });
 
                 data.foo = 'spam';
-                assert.equal(model.foo, 'bar');
+                data.baz.qux = 'ham';
+
+                assert.deepEqual(model, {
+                    foo: 'bar',
+                    baz: {qux: 'corge'}
+                });
             });
         });
 
