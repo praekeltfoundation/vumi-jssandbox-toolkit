@@ -192,6 +192,56 @@ describe("DummyContactsResource", function() {
                 });
             });
         });
+
+        describe(".update", function() {
+            it("should update the contact if found", function() {
+                api.contacts.add({
+                    key: '123',
+                    name: 'iggy',
+                    extra: {
+                        desk: 'lamp',
+                        tennis: 'instructor'
+                    }
+                });
+
+                return request('contacts.update', {
+                    key: '123',
+                    fields: {extra: {foo: 'bar'}}
+                }).then(function(result) {
+                    assert(result.success);
+                    assert.equal(result.contact.name, 'iggy');
+                    assert.deepEqual(result.contact.extra, {foo: 'bar'});
+                });
+            });
+
+            it("should fail if the contact was not found", function() {
+                return request('contacts.update', {
+                    key: '123',
+                    fields: {extra: {foo: 'bar'}}
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(result.reason, "Contact not found");
+                });
+            });
+
+            it("should fail if the update failed", function() {
+                api.contacts.add({
+                    key: '123',
+                    name: 'iggy',
+                });
+
+                return request('contacts.update', {
+                    key: '123',
+                    fields: {extra: {foo: 3}}
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(
+                        result.reason,
+                        ["Contact extra 'foo' has a value of type 'number'",
+                         "instead of 'string': 3"].join(' '));
+                });
+            });
+        });
     });
 
     describe(".format_addr", function() {
