@@ -58,14 +58,14 @@ describe("IMConfig", function() {
         });
     });
 
-    describe(".validate", function() {
+    describe(".do.validate", function() {
         it("should check for the app's name", function() {
             var config = new IMConfig(im);
             assert(!('name' in config));
 
             assert.throws(
                 function() {
-                    config.validate();
+                    config.do.validate();
                 },
                 function(e) {
                     assert(e instanceof IMConfigError);
@@ -75,7 +75,7 @@ describe("IMConfig", function() {
         });
     });
 
-    describe(".setup", function() {
+    describe(".do.setup", function() {
         var config;
 
         beforeEach(function() {
@@ -83,13 +83,13 @@ describe("IMConfig", function() {
         });
 
         it("should emit a 'setup' event", function() {
-            var p = config.once.resolved('setup');
-            return config.setup().thenResolve(p);
+            var p = config.do.once.resolved('setup');
+            return config.do.setup().thenResolve(p);
         });
 
         it("setup the config from its value in the sandbox config",
         function() {
-            return config.setup().then(function() {
+            return config.do.setup().then(function() {
                 assert.equal(config.lerp, 'larp');
             });
         });
@@ -98,11 +98,11 @@ describe("IMConfig", function() {
             var config = new IMConfig(im);
 
             var validated = false;
-            config.cls.validate = function() {
+            config.do.validate = function() {
                 validated = true;
             };
 
-            return config.setup().then(function() {
+            return config.do.setup().then(function() {
                 assert(validated);
             });
         });
