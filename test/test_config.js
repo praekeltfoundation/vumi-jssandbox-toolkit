@@ -58,13 +58,20 @@ describe("IMConfig", function() {
         });
     });
 
-    describe(".validation", function() {
+    describe(".validate", function() {
         it("should check for the app's name", function() {
-            var e = test_utils.catch_err(function() {
-                config.validate({});
-            });
-            assert(e instanceof IMConfigError);
-            assert.equal(e.message, "No 'name' config property found");
+            var config = new IMConfig(im);
+            assert(!('name' in config));
+
+            assert.throws(
+                function() {
+                    config.validate();
+                },
+                function(e) {
+                    assert(e instanceof IMConfigError);
+                    assert.equal(e.message, "No 'name' config property found");
+                    return true;
+                });
         });
     });
 
@@ -83,20 +90,20 @@ describe("IMConfig", function() {
         it("setup the config from its value in the sandbox config",
         function() {
             return config.setup().then(function() {
-                assert.equal(config.get('lerp'), 'larp');
+                assert.equal(config.lerp, 'larp');
             });
         });
 
         it("should validate the config", function() {
-            return test_utils.make_im({
-                config: {config: '{}'}
-            })
-            .then(function() {
-                var config = new IMConfig(im);
-                return config.setup();
-            })
-            .catch(function(e) {
-                assert(e instanceof IMConfigError);
+            var config = new IMConfig(im);
+
+            var validated = false;
+            config.cls.validate = function() {
+                validated = true;
+            };
+
+            return config.setup().then(function() {
+                assert(validated);
             });
         });
     });
