@@ -62,10 +62,14 @@ describe("models", function() {
                     baz: 'qux'
                 });
 
-                assert.deepEqual(model.serialize(), {
+                var data = model.serialize();
+                assert.deepEqual(data, {
                     foo: 'bar',
                     baz: 'qux'
                 });
+
+                data.foo = 'spam';
+                assert.equal(model.attrs.foo, 'bar');
             });
         });
     });
