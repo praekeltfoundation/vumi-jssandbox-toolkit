@@ -49,7 +49,11 @@ describe("EndState", function () {
 
     describe(".translate", function() {
         it("should translate the state's text", function() {
-            assert.equal(state.display(), 'goodbye');
+            var state = new EndState('state_1', {
+                next: 'state_2',
+                text: test_utils.$('goodbye')
+            });
+
             state.translate(im.user.i18n);
             assert.equal(state.display(), 'totsiens');
         });

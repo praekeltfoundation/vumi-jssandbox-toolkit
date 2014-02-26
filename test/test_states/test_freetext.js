@@ -79,14 +79,16 @@ describe("Freetext", function () {
 
     describe(".translate", function() {
         it("should translate the question", function() {
-            assert.equal(state.question_text, 'yes?');
+            var state = new FreeText('state_1', {
+                question: test_utils.$('yes?')
+            });
             state.translate(im.user.i18n);
             assert.equal(state.question_text, 'ja?');
         });
 
         it("should translate the error text", function() {
-            return state.invalidate('no!').then(function() {
-                assert.equal(state.error.response, 'no!');
+            var state = new FreeText('state_1', {question: 'yes?'});
+            return state.invalidate(test_utils.$('no!')).then(function() {
                 state.translate(im.user.i18n);
                 assert.equal(state.error.response, 'nee!');
             });

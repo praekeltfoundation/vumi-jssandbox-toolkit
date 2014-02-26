@@ -6,6 +6,7 @@ var State = vumigo.states.State;
 var User = vumigo.user.User;
 var UserStateData = vumigo.user.UserStateData;
 
+
 describe("UserStateData", function() {
     var state;
 
@@ -78,23 +79,6 @@ describe("UserStateData", function() {
                 assert.deepEqual(state.metadata, {foo: 'bar'});
                 assert.deepEqual(state.creator_opts, {baz: 'qux'});
             });
-        });
-    });
-
-    describe(".update_metadata", function() {
-        it("should update the metadata", function() {
-            assert.deepEqual(state.metadata, {foo: 'bar'});
-            state.update_metadata({baz: 'qux'});
-            assert.deepEqual(state.metadata, {
-                foo: 'bar',
-                baz: 'qux'
-            });
-        });
-
-        it("should overwrite already defined metadata properties", function() {
-            assert.deepEqual(state.metadata, {foo: 'bar'});
-            state.update_metadata({foo: 'qux'});
-            assert.deepEqual(state.metadata, {foo: 'qux'});
         });
     });
 
@@ -181,7 +165,7 @@ describe("User", function() {
                 assert.equal(user.get_answer('start'), 'yes');
                 assert.equal(user.state.name, 'start');
                 assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                assert.equal(user.i18n.gettext('yes'), 'ja');
+                assert.equal(user.i18n(test_utils.$('yes')), 'ja');
             });
         });
     });
@@ -225,7 +209,7 @@ describe("User", function() {
                         assert.equal(user.get_answer('start'), 'ja');
                         assert.equal(user.state.name, 'start');
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                        assert.equal(user.i18n.gettext('yes'), 'ja');
+                        assert.equal(user.i18n(test_utils.$('yes')), 'ja');
                     });
             });
 
@@ -264,7 +248,7 @@ describe("User", function() {
                         assert.equal(user.get_answer('start'), 'ja');
                         assert.equal(user.state.name, 'start');
                         assert.deepEqual(user.state.metadata, {foo: 'bar'});
-                        assert.equal(user.i18n.gettext('no'), 'nee');
+                        assert.equal(user.i18n(test_utils.$('no')), 'nee');
                     });
             });
 
@@ -330,30 +314,7 @@ describe("User", function() {
         it("should change the user's language", function() {
             return user.set_lang('jp').then(function() {
                 assert.equal(user.lang, 'jp');
-                assert.equal(user.i18n.gettext('yes'), 'hai');
-            });
-        });
-    });
-
-    describe(".update_metadata", function() {
-        it("should update the user's metadata", function() {
-            assert.deepEqual(user.metadata, {name: 'jan'});
-            user.update_metadata({surname: 'luhrmann'});
-            assert.deepEqual(user.metadata, {
-                name: 'jan',
-                surname: 'luhrmann'
-            });
-        });
-
-        it("should overwrite already defined metadata properties", function() {
-            assert.deepEqual(user.metadata, {name: 'jan'});
-            user.update_metadata({
-                name: 'baz',
-                surname: 'luhrmann'
-            });
-            assert.deepEqual(user.metadata, {
-                name: 'baz',
-                surname: 'luhrmann'
+                assert.equal(user.i18n(test_utils.$('yes')), 'hai');
             });
         });
     });

@@ -38,7 +38,7 @@ describe("StateInvalidError", function () {
         it("should translate the error response", function() {
             var i18n = test_utils.i18n_for('af');
             var state = new State('foo');
-            var error = new StateInvalidError(state, 'no!');
+            var error = new StateInvalidError(state, test_utils.$('no!'));
             error.translate(i18n);
             assert.equal(error.response, 'nee!');
         });
@@ -326,6 +326,13 @@ describe("State", function () {
     });
 
     describe(".invalidate", function() {
+        it("should emit a 'state:invalid' event", function() {
+            var state = new State('foo');
+            var error = new StateInvalidError(state, 'no!');
+            var p = state.once.resolved('state:invalid');
+            return state.invalidate(error).thenResolve(p);
+        });
+
         describe("if a string was given", function() {
             it("should set the state's error object to an appropriate error",
             function() {
@@ -336,11 +343,20 @@ describe("State", function () {
                     assert.equal(state.error.response, 'no!');
                 });
             });
+        });
 
-            it("should emit a 'state:invalid' event", function() {
+        describe("if a LazyText was given", function() {
+            it("should set the state's error object to an appropriate error",
+            function() {
                 var state = new State('foo');
-                var p = state.once.resolved('state:invalid');
-                return state.invalidate('no!').thenResolve(p);
+
+                return state.invalidate(test_utils.$('no!')).then(function() {
+                    assert(state.error instanceof StateInvalidError);
+
+                    assert.deepEqual(
+                        state.error.response,
+                        test_utils.$('no!'));
+                });
             });
         });
 
@@ -353,13 +369,6 @@ describe("State", function () {
                 return state.invalidate(error).then(function() {
                     assert.strictEqual(state.error, error);
                 });
-            });
-
-            it("should emit a 'state:invalid' event", function() {
-                var state = new State('foo');
-                var error = new StateInvalidError(state, 'no!');
-                var p = state.once.resolved('state:invalid');
-                return state.invalidate(error).thenResolve(p);
             });
         });
     });

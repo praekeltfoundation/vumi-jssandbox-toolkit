@@ -17,11 +17,13 @@ Vumi Go's Javascript sandbox.
    states.rst
    user.rst
    config.rst
+   contacts.rst
    http_api.rst
    metrics.rst
    events.rst
    tester.rst
    dummy.rst
+   translate.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
