@@ -8,7 +8,7 @@ var Model = structs.Model;
 
 describe("models", function() {
     describe("Model", function() {
-        describe(".clear", function() {
+        describe(".do.clear", function() {
             it("should clear all of the model's attributes", function() {
                 var model = new Model({
                     foo: 'bar',
@@ -20,22 +20,22 @@ describe("models", function() {
                     baz: 'qux'
                 });
 
-                model.clear();
+                model.do.clear();
 
                 assert.deepEqual(model, {});
             });
         });
 
-        describe(".reset", function() {
+        describe(".do.reset", function() {
             it("should validate the model", function() {
                 var model = new Model();
 
                 var validated = false;
-                model.cls.validate = function() {
+                model.do.validate = function() {
                     validated = true;
                 };
 
-                model.reset();
+                model.do.reset();
                 assert(validated);
             });
 
@@ -50,7 +50,7 @@ describe("models", function() {
                     baz: 'qux'
                 });
 
-                model.reset({
+                model.do.reset({
                     foo: 'lorem',
                     lerp: 'larp'
                 });
@@ -69,7 +69,7 @@ describe("models", function() {
                     'baz': 'larp'
                 };
 
-                model.reset({foo: 'bar'});
+                model.do.reset({foo: 'bar'});
                 assert.deepEqual(model, {
                     foo: 'bar',
                     baz: 'larp'
@@ -77,7 +77,7 @@ describe("models", function() {
             });
         });
 
-        describe(".serialize", function() {
+        describe(".do.serialize", function() {
             it("should validate the model", function() {
                 var model = new Model();
 
@@ -86,7 +86,7 @@ describe("models", function() {
                     validated = true;
                 };
 
-                model.serialize();
+                model.do.serialize();
                 assert(validated);
             });
 
@@ -96,7 +96,7 @@ describe("models", function() {
                     baz: {qux: 'corge'}
                 });
 
-                var data = model.serialize();
+                var data = model.do.serialize();
                 assert.deepEqual(data, {
                     foo: 'bar',
                     baz: {qux: 'corge'}
@@ -116,13 +116,6 @@ describe("models", function() {
             var model = new Model({foo: 'bar'});
             model.cls.spam = 'ham';
             assert.deepEqual(_.keys(model), ['foo']);
-        });
-
-        it("should allow model class properties to be directly accessible",
-        function() {
-            var model = new Model();
-            model.cls.spam = 'ham';
-            assert.equal(model.spam, 'ham');
         });
 
         describe(".extend", function() {
