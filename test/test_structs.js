@@ -41,6 +41,21 @@ describe("models", function() {
                     lerp: 'larp'
                 });
             });
+
+            it("should apply the model's default attributes", function() {
+                var model = new Model();
+
+                model.defaults = {
+                    'foo': 'lerp',
+                    'baz': 'larp'
+                };
+
+                model.reset({foo: 'bar'});
+                assert.deepEqual(model.attrs, {
+                    foo: 'bar',
+                    baz: 'larp'
+                });
+            });
         });
 
         describe(".serialize", function() {
