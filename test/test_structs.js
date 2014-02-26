@@ -152,14 +152,33 @@ describe("models", function() {
                 assert.equal(Child.foo, Parent.foo);
             });
 
-            describe("the constructor's context", function() {
-                it("should be the first arg of the constructor", function() {
-                    var Thing = Model.extend(function(self) {
-                        assert.strictEqual(self, this);
-                    });
-
-                    new Thing();
+            it("should pass the context as the first constructor arg",
+            function() {
+                var Thing = Model.extend(function(self) {
+                    assert.strictEqual(self, this);
                 });
+
+                new Thing();
+            });
+
+            it("should ensure all constructors get the correct context",
+            function() {
+                var parent_context;
+                var child_context;
+
+                var Parent = Model.extend(function(self) {
+                    parent_context = self;
+                    Model.call(self);
+                });
+
+                var Child = Parent.extend(function(self) {
+                    child_context = self;
+                    Parent.call(self);
+                });
+
+                var context = new Child();
+                assert.strictEqual(context, child_context);
+                assert.strictEqual(child_context, parent_context);
             });
         });
     });
