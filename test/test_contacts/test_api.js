@@ -8,11 +8,55 @@ var ContactError = api.ContactError;
 
 describe("Contact", function() {
     describe(".do.validate", function() {
+        it("should throw an error for non-string keys", function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user1'
+            });
+
+            contact.key = null;
+
+            assert.throws(
+                function() { contact.do.validate(); },
+                function(error) {
+                    assert(error instanceof ContactError);
+                    assert.equal(
+                        error.message,
+                        ["Contact has a key of type 'object' instead of",
+                         "'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+
+        it("should throw an error for non-string user accounts", function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user1'
+            });
+
+            contact.user_account = null;
+
+            assert.throws(
+                function() { contact.do.validate(); },
+                function(error) {
+                    assert(error instanceof ContactError);
+                    assert.equal(
+                        error.message,
+                        ["Contact has a user_account of type 'object'",
+                         "instead of 'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+
         it("should throw an error for non-string msisdns", function() {
             var contact = new Contact({
                 key: '123',
                 msisdn: '+27123',
-                user_account: 'user_foo'
+                user_account: 'user1'
             });
 
             contact.msisdn = null;
@@ -34,7 +78,7 @@ describe("Contact", function() {
             var contact = new Contact({
                 key: '123',
                 msisdn: '+27123',
-                user_account: 'user_foo',
+                user_account: 'user1',
             });
 
             contact.groups.push(null);
@@ -56,7 +100,7 @@ describe("Contact", function() {
             var contact = new Contact({
                 key: '123',
                 msisdn: '+27123',
-                user_account: 'user_foo',
+                user_account: 'user1',
             });
 
             contact.extra.spam = null;
@@ -79,7 +123,7 @@ describe("Contact", function() {
             var contact = new Contact({
                 key: '123',
                 msisdn: '+27123',
-                user_account: 'user_foo',
+                user_account: 'user1',
             });
 
             contact.subscriptions.conv3 = null;

@@ -23,7 +23,7 @@ describe("DummyContactsResource", function() {
                 var contact = new Contact({
                     key: '123',
                     msisdn: '+27123',
-                    user_account: 'user_foo'
+                    user_account: 'user1'
                 });
 
                 api.contacts.add(contact);
@@ -175,7 +175,7 @@ describe("DummyContactsResource", function() {
                     contact: {
                         key: '123',
                         msisdn: '+27123',
-                        user_account: 'user_foo',
+                        user_account: 'user1',
                         name: 'somebody'
                     }
                 }).then(function(result) {
@@ -203,6 +203,7 @@ describe("DummyContactsResource", function() {
                     contact: {
                         key: '123',
                         msisdn: '+27123',
+                        user_account: 'user1',
                         extra: {foo: 3}
                     }
                 }).then(function(result) {
