@@ -242,6 +242,114 @@ describe("DummyContactsResource", function() {
                 });
             });
         });
+
+        describe(".update_extras", function() {
+            it("should update the contact if found", function() {
+                api.contacts.add({
+                    key: '123',
+                    name: 'iggy',
+                    extra: {
+                        desk: 'lamp',
+                        tennis: 'instructor'
+                    }
+                });
+
+                return request('contacts.update_extras', {
+                    key: '123',
+                    fields: {foo: 'bar'}
+                }).then(function(result) {
+                    assert(result.success);
+                    assert.equal(result.contact.name, 'iggy');
+                    assert.deepEqual(result.contact.extra, {
+                        foo: 'bar',
+                        desk: 'lamp',
+                        tennis: 'instructor'
+                    });
+                });
+            });
+
+            it("should fail if the contact was not found", function() {
+                return request('contacts.update_extras', {
+                    key: '123',
+                    fields: {extra: {foo: 'bar'}}
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(result.reason, "Contact not found");
+                });
+            });
+
+            it("should fail if the update failed", function() {
+                api.contacts.add({
+                    key: '123',
+                    name: 'iggy',
+                });
+
+                return request('contacts.update_extras', {
+                    key: '123',
+                    fields: {foo: 3}
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(
+                        result.reason,
+                        ["Contact extra 'foo' has a value of type 'number'",
+                         "instead of 'string': 3"].join(' '));
+                });
+            });
+        });
+
+        describe(".update_subscriptions", function() {
+            it("should update the contact if found", function() {
+                api.contacts.add({
+                    key: '123',
+                    name: 'iggy',
+                    subscriptions: {
+                        conv1: 'counter1',
+                        conv2: 'counter2'
+                    }
+                });
+
+                return request('contacts.update_subscriptions', {
+                    key: '123',
+                    fields: {conv3: 'counter3'}
+                }).then(function(result) {
+                    assert(result.success);
+                    assert.equal(result.contact.name, 'iggy');
+                    assert.deepEqual(result.contact.subscriptions, {
+                        conv1: 'counter1',
+                        conv2: 'counter2',
+                        conv3: 'counter3'
+                    });
+                });
+            });
+
+            it("should fail if the contact was not found", function() {
+                return request('contacts.update_subscriptions', {
+                    key: '123',
+                    fields: {conv3: 'counter3'}
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(result.reason, "Contact not found");
+                });
+            });
+
+            it("should fail if the update failed", function() {
+                api.contacts.add({
+                    key: '123',
+                    name: 'iggy',
+                });
+
+                return request('contacts.update_subscriptions', {
+                    key: '123',
+                    fields: {conv3: 3}
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(
+                        result.reason,
+                        ["Contact subscription 'conv3' has a value of type",
+                         "'number' instead of 'string': 3"].join(' '));
+                });
+            });
+        });
     });
 
     describe(".format_addr", function() {
