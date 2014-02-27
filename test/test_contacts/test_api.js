@@ -3,6 +3,7 @@ var assert = require("assert");
 var vumigo = require("../../lib");
 var api = vumigo.contacts.api;
 var Contact = api.Contact;
+var Group = api.Group;
 var ValidationError = vumigo.structs.ValidationError;
 
 
@@ -92,6 +93,98 @@ describe("Contact", function() {
                         error.message,
                         ["Contact subscription 'conv3' has a value of type",
                          "'object' instead of 'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+    });
+});
+
+describe("Group", function() {
+    describe(".do.validate", function() {
+        it("should throw an error for non-string keys", function() {
+            var group = new Group({
+                key: '123',
+                user_account: 'user-1',
+                name: 'cars'
+            });
+
+            group.key = null;
+
+            assert.throws(
+                function() { group.do.validate(); },
+                function(error) {
+                    assert(error instanceof ValidationError);
+                    assert.equal(
+                        error.message,
+                        ["Group has a key of type 'object' instead of",
+                         "'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+
+        it("should throw an error for non-string user accounts", function() {
+            var group = new Group({
+                key: '123',
+                user_account: 'user-1',
+                name: 'cars'
+            });
+
+            group.user_account = null;
+
+            assert.throws(
+                function() { group.do.validate(); },
+                function(error) {
+                    assert(error instanceof ValidationError);
+                    assert.equal(
+                        error.message,
+                        ["Group has a user_account of type 'object' instead of",
+                         "'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+
+        it("should throw an error for non-string names", function() {
+            var group = new Group({
+                key: '123',
+                user_account: 'user-1',
+                name: 'cars'
+            });
+
+            group.name = null;
+
+            assert.throws(
+                function() { group.do.validate(); },
+                function(error) {
+                    assert(error instanceof ValidationError);
+                    assert.equal(
+                        error.message,
+                        ["Group has a name of type 'object' instead of",
+                         "'string': null"].join(' '));
+
+                    return true;
+                });
+        });
+
+        it("should throw an error for non-string queries", function() {
+            var group = new Group({
+                key: '123',
+                user_account: 'user-1',
+                name: 'cars'
+            });
+
+            group.query = null;
+
+            assert.throws(
+                function() { group.do.validate(); },
+                function(error) {
+                    assert(error instanceof ValidationError);
+                    assert.equal(
+                        error.message,
+                        ["Group has a query of type 'object' instead of",
+                         "'string': null"].join(' '));
 
                     return true;
                 });
