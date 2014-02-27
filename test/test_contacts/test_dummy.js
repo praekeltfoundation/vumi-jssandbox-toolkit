@@ -8,7 +8,7 @@ var DummyApi = vumigo.dummy.api.DummyApi;
 var Contact = vumigo.contacts.api.Contact;
 
 
-describe("contacts.api", function() {
+describe("contacts.dummy", function() {
     describe("DummyContactsResource", function() {
         var api;
         var request;
@@ -24,7 +24,7 @@ describe("contacts.api", function() {
                     var contact = new Contact({
                         key: '123',
                         msisdn: '+27123',
-                        user_account: 'user_foo'
+                        user_account: 'user1'
                     });
 
                     api.contacts.add(contact);
@@ -176,7 +176,7 @@ describe("contacts.api", function() {
                         contact: {
                             key: '123',
                             msisdn: '+27123',
-                            user_account: 'user_foo',
+                            user_account: 'user1',
                             name: 'somebody'
                         }
                     }).then(function(result) {
