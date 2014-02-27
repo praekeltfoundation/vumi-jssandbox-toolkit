@@ -39,10 +39,8 @@ describe("DummyContactsResource", function() {
                 });
 
                 assert(_.find(api.contacts.store, {
-                    attrs: {
-                        name: 'super',
-                        surname: 'rainbow'
-                    }
+                    name: 'super',
+                    surname: 'rainbow'
                 }));
             });
         });
