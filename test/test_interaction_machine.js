@@ -59,7 +59,7 @@ describe("InteractionMachine", function () {
         });
 
         it("should setup its config", function() {
-            var p = im.config.once.resolved('setup');
+            var p = im.config.do.once.resolved('setup');
             return im.setup(msg).thenResolve(p);
         });
 

@@ -58,17 +58,24 @@ describe("IMConfig", function() {
         });
     });
 
-    describe(".validation", function() {
+    describe(".do.validate", function() {
         it("should check for the app's name", function() {
-            var e = test_utils.catch_err(function() {
-                config.validate({});
-            });
-            assert(e instanceof IMConfigError);
-            assert.equal(e.message, "No 'name' config property found");
+            var config = new IMConfig(im);
+            assert(!('name' in config));
+
+            assert.throws(
+                function() {
+                    config.do.validate();
+                },
+                function(e) {
+                    assert(e instanceof IMConfigError);
+                    assert.equal(e.message, "No 'name' config property found");
+                    return true;
+                });
         });
     });
 
-    describe(".setup", function() {
+    describe(".do.setup", function() {
         var config;
 
         beforeEach(function() {
@@ -76,27 +83,27 @@ describe("IMConfig", function() {
         });
 
         it("should emit a 'setup' event", function() {
-            var p = config.once.resolved('setup');
-            return config.setup().thenResolve(p);
+            var p = config.do.once.resolved('setup');
+            return config.do.setup().thenResolve(p);
         });
 
         it("setup the config from its value in the sandbox config",
         function() {
-            return config.setup().then(function() {
-                assert.equal(config.get('lerp'), 'larp');
+            return config.do.setup().then(function() {
+                assert.equal(config.lerp, 'larp');
             });
         });
 
         it("should validate the config", function() {
-            return test_utils.make_im({
-                config: {config: '{}'}
-            })
-            .then(function() {
-                var config = new IMConfig(im);
-                return config.setup();
-            })
-            .catch(function(e) {
-                assert(e instanceof IMConfigError);
+            var config = new IMConfig(im);
+
+            var validated = false;
+            config.do.validate = function() {
+                validated = true;
+            };
+
+            return config.do.setup().then(function() {
+                assert(validated);
             });
         });
     });
