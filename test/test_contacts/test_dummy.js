@@ -350,6 +350,19 @@ describe("DummyContactsResource", function() {
                 });
             });
         });
+
+        describe(".search", function() {
+            it("should return the fixed query results", function() {
+                api.contacts.search_results['foo:bar'] = ['1', '2'];
+
+                return request('contacts.search', {
+                    query: 'foo:bar',
+                }).then(function(result) {
+                    assert(result.success);
+                    assert.deepEqual(result.keys, ['1', '2']);
+                });
+            });
+        });
     });
 
     describe(".format_addr", function() {
