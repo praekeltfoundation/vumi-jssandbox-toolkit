@@ -9,15 +9,15 @@ var Contact = vumigo.contacts.api.Contact;
 
 
 describe("contacts.dummy", function() {
+    var api;
+    var request;
+
+    beforeEach(function() {
+        api =  new DummyApi();
+        request = test_utils.requester(api);
+    });
+
     describe("DummyContactsResource", function() {
-        var api;
-        var request;
-
-        beforeEach(function() {
-            api =  new DummyApi();
-            request = test_utils.requester(api);
-        });
-
         describe(".add", function() {
             describe(".add(contact)", function() {
                 it("should add the contact to the store", function() {
