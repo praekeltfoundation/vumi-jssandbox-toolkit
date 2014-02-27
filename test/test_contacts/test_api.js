@@ -15,7 +15,7 @@ describe("contacts.api", function() {
                 var contact = new Contact({
                     key: '123',
                     msisdn: '+27123',
-                    user_account: 'user_foo'
+                    user_account: 'user1'
                 });
 
                 contact.msisdn = null;
@@ -37,7 +37,7 @@ describe("contacts.api", function() {
                 var contact = new Contact({
                     key: '123',
                     msisdn: '+27123',
-                    user_account: 'user_foo',
+                    user_account: 'user1',
                 });
 
                 contact.groups.push(null);
@@ -59,7 +59,7 @@ describe("contacts.api", function() {
                 var contact = new Contact({
                     key: '123',
                     msisdn: '+27123',
-                    user_account: 'user_foo',
+                    user_account: 'user1',
                 });
 
                 contact.extra.spam = null;
@@ -82,7 +82,7 @@ describe("contacts.api", function() {
                 var contact = new Contact({
                     key: '123',
                     msisdn: '+27123',
-                    user_account: 'user_foo',
+                    user_account: 'user1',
                 });
 
                 contact.subscriptions.conv3 = null;
