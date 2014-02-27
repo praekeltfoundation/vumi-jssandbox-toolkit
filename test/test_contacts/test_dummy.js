@@ -85,6 +85,28 @@ describe("DummyContactsResource", function() {
             });
         });
 
+        describe(".get_by_key", function() {
+            it("retrieve the contact if it exists", function() {
+                api.contacts.add({key: '123'});
+
+                return request('contacts.get_by_key', {
+                    key: '123',
+                }).then(function(result) {
+                    assert(result.success);
+                    assert.equal(result.contact.key, '123');
+                });
+            });
+
+            it("should fail if no contact is found", function() {
+                return request('contacts.get_by_key', {
+                    key: '123',
+                }).then(function(result) {
+                    assert(!result.success);
+                    assert.equal(result.reason, "Contact not found");
+                });
+            });
+        });
+
         describe(".get_or_create", function() {
             it("retrieve the contact if it exists", function() {
                 api.contacts.add({msisdn: '+27123'});
