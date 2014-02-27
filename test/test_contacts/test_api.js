@@ -73,5 +73,28 @@ describe("Contact", function() {
                     return true;
                 });
         });
+
+        it("should throw an error for non-string subscription values",
+        function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user_foo',
+            });
+
+            contact.subscriptions.conv3 = null;
+
+            assert.throws(
+                function() { contact.do.validate(); },
+                function(error) {
+                    assert(error instanceof ContactError);
+                    assert.equal(
+                        error.message,
+                        ["Contact subscription 'conv3' has a value of type",
+                         "'object' instead of 'string': null"].join(' '));
+
+                    return true;
+                });
+        });
     });
 });
