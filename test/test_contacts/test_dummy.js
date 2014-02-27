@@ -389,6 +389,53 @@ describe("contacts.dummy", function() {
         });
     });
 
+    describe("DummyGroupResource", function() {
+        describe(".add", function() {
+            describe(".add(group)", function() {
+                it("should add the group to the store");
+            });
+
+            describe(".add(data)", function() {
+                it("should add a corresponding group to the store");
+            });
+        });
+
+        describe(".handlers", function() {
+            describe(".get", function() {
+                it("retrieve the group if it exists");
+                it("should fail if no group is found");
+            });
+
+            describe(".get_by_name", function() {
+                it("retrieve the group if it exists");
+                it("should fail if no group is found");
+                it("should fail if multiple groups were found");
+            });
+
+            describe(".get_or_create_by_name", function() {
+                it("retrieve the group if it exists");
+                it("should create a new group if it does not yet exist");
+                it("should fail if multiple groups were found");
+            });
+
+            describe(".update", function() {
+                it("should update the group if found");
+                it("should fail if the group was not found");
+                it("should fail if the update failed");
+            });
+
+            describe(".search", function() {
+                it("should return the fixed query results");
+            });
+
+            describe(".count_members", function() {
+                it("should return the member count for static groups");
+                it("should return the member count for smart groups");
+                it("should fail if no group is found");
+            });
+        });
+    });
+
     describe(".format_addr", function() {
         it("should format msisdns", function() {
             assert.equal(dummy.format_addr('27123', 'msisdn'), '+27123');
