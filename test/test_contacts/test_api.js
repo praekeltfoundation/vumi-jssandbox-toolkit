@@ -6,7 +6,7 @@ var Contact = api.Contact;
 var ContactError = api.ContactError;
 
 
-describe("contact.api", function() {
+describe("contacts.api", function() {
     describe("Contact", function() {
         describe(".do.validate", function() {
             it("should throw an error for non-string msisdns", function() {
