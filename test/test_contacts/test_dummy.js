@@ -204,6 +204,7 @@ describe("contacts.dummy", function() {
                         contact: {
                             key: '123',
                             msisdn: '+27123',
+                            user_account: 'user1',
                             extra: {foo: 3}
                         }
                     }).then(function(result) {
