@@ -105,7 +105,7 @@ describe("Group", function() {
         it("should throw an error for non-string keys", function() {
             var group = new Group({
                 key: '123',
-                user_account: 'user-1',
+                user_account: 'user1',
                 name: 'cars'
             });
 
@@ -127,7 +127,7 @@ describe("Group", function() {
         it("should throw an error for non-string user accounts", function() {
             var group = new Group({
                 key: '123',
-                user_account: 'user-1',
+                user_account: 'user1',
                 name: 'cars'
             });
 
@@ -149,7 +149,7 @@ describe("Group", function() {
         it("should throw an error for non-string names", function() {
             var group = new Group({
                 key: '123',
-                user_account: 'user-1',
+                user_account: 'user1',
                 name: 'cars'
             });
 
@@ -171,7 +171,7 @@ describe("Group", function() {
         it("should throw an error for non-string queries", function() {
             var group = new Group({
                 key: '123',
-                user_account: 'user-1',
+                user_account: 'user1',
                 name: 'cars'
             });
 
