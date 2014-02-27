@@ -10,6 +10,7 @@ var EndState = vumigo.states.EndState;
 
 var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
 var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
+var ApiError = vumigo.interaction_machine.ApiError;
 
 
 describe("InteractionMachine", function () {
@@ -404,6 +405,25 @@ describe("InteractionMachine", function () {
             assert(!api.in_logs('arrg'));
             im.api_request('log.info', {msg: 'arrg'}).then(function() {
                 assert(api.in_logs('arrg'));
+            });
+        });
+
+        it("should reject the reply if the api gave a failure reply",
+        function() {
+            im.api.reply = function() {
+                return {
+                    success: false,
+                    reason: 'No apparent reason'
+                };
+            };
+
+            im.api_request('log.info', {msg: 'arrg'}).catch(function() {
+                assert(e instanceof ApiError);
+                assert.deepEqual(e.reply, {
+                    success: false,
+                    reason: 'No apparent reason'
+                });
+                assert.equal(e.message, 'No apparent reason');
             });
         });
     });
