@@ -45,7 +45,7 @@ Contacts Example
 ~~~~~~~~~~~~~~~~
 
 You can create, update and remove contact information in Vumi Go's contact
-database. Here is an `example application <https://github.com/smn/go-contacts>`
+database. Here is an `example application <https://github.com/smn/go-contacts>`_
 that shows you how.
 
 Groups Example
