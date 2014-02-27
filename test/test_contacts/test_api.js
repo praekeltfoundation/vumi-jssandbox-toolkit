@@ -3,7 +3,7 @@ var assert = require("assert");
 var vumigo = require("../../lib");
 var api = vumigo.contacts.api;
 var Contact = api.Contact;
-var ContactError = api.ContactError;
+var ValidationError = vumigo.structs.ValidationError;
 
 
 describe("Contact", function() {
@@ -20,7 +20,7 @@ describe("Contact", function() {
             assert.throws(
                 function() { contact.do.validate(); },
                 function(error) {
-                    assert(error instanceof ContactError);
+                    assert(error instanceof ValidationError);
                     assert.equal(
                         error.message,
                         ["Contact has an msisdn of type 'object' instead of",
@@ -42,7 +42,7 @@ describe("Contact", function() {
             assert.throws(
                 function() { contact.do.validate(); },
                 function(error) {
-                    assert(error instanceof ContactError);
+                    assert(error instanceof ValidationError);
                     assert.equal(
                         error.message,
                         ["Contact has a group of type 'object' instead of",
@@ -64,7 +64,7 @@ describe("Contact", function() {
             assert.throws(
                 function() { contact.do.validate(); },
                 function(error) {
-                    assert(error instanceof ContactError);
+                    assert(error instanceof ValidationError);
                     assert.equal(
                         error.message,
                         ["Contact extra 'spam' has a value of type 'object'",
@@ -87,7 +87,7 @@ describe("Contact", function() {
             assert.throws(
                 function() { contact.do.validate(); },
                 function(error) {
-                    assert(error instanceof ContactError);
+                    assert(error instanceof ValidationError);
                     assert.equal(
                         error.message,
                         ["Contact subscription 'conv3' has a value of type",
