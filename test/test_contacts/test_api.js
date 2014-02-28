@@ -168,6 +168,7 @@ describe("contacts.api", function() {
                     return contacts
                         .get('@spam', {create: true})
                         .then(function(contact) {
+                            assert.equal(contact.twitter_handle, '@spam');
                             assert.deepEqual(im.api.contacts.store, [contact]);
                         });
                 });
