@@ -24,7 +24,7 @@ describe("contacts.api", function() {
                 assert.throws(
                     function() { contact.do.validate(); },
                     function(error) {
-                        assert(error instanceof ContactError);
+                        assert(error instanceof ValidationError);
                         assert.equal(
                             error.message,
                             ["Contact has a key of type 'object' instead of",
@@ -46,7 +46,7 @@ describe("contacts.api", function() {
                 assert.throws(
                     function() { contact.do.validate(); },
                     function(error) {
-                        assert(error instanceof ContactError);
+                        assert(error instanceof ValidationError);
                         assert.equal(
                             error.message,
                             ["Contact has a user_account of type 'object'",
