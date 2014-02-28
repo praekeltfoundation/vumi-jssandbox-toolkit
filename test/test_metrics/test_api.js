@@ -40,14 +40,14 @@ describe("metrics.api", function() {
             });
 
             it("should record the metric", function() {
-                assert.deepEqual(im.api.metrics, {});
+                assert.deepEqual(im.api.metrics.stores, {});
 
                 metrics.fire('yoda_the_metric', 23,  'sum');
                 metrics.fire('yoda_the_metric', 42,  'sum');
                 metrics.fire('yaddle_the_metric', 22,  'avg');
 
                 return im.api.pending_calls_complete().then(function() {
-                    assert.deepEqual(im.api.metrics, {
+                    assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
                                 agg: 'sum',
@@ -73,14 +73,14 @@ describe("metrics.api", function() {
             });
 
             it("should record the metric", function() {
-                assert.deepEqual(im.api.metrics, {});
+                assert.deepEqual(im.api.metrics.stores, {});
 
                 metrics.fire_sum('yoda_the_metric', 23);
                 metrics.fire_sum('yoda_the_metric', 42);
                 metrics.fire_sum('yaddle_the_metric', 22);
 
                 return im.api.pending_calls_complete().then(function() {
-                    assert.deepEqual(im.api.metrics, {
+                    assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
                                 agg: 'sum',
@@ -106,14 +106,14 @@ describe("metrics.api", function() {
             });
 
             it("should record the metric", function() {
-                assert.deepEqual(im.api.metrics, {});
+                assert.deepEqual(im.api.metrics.stores, {});
 
                 metrics.fire_avg('yoda_the_metric', 23);
                 metrics.fire_avg('yoda_the_metric', 42);
                 metrics.fire_avg('yaddle_the_metric', 22);
 
                 return im.api.pending_calls_complete().then(function() {
-                    assert.deepEqual(im.api.metrics, {
+                    assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
                                 agg: 'avg',
@@ -139,14 +139,14 @@ describe("metrics.api", function() {
             });
 
             it("should record the metric", function() {
-                assert.deepEqual(im.api.metrics, {});
+                assert.deepEqual(im.api.metrics.stores, {});
 
                 metrics.fire_min('yoda_the_metric', 23);
                 metrics.fire_min('yoda_the_metric', 42);
                 metrics.fire_min('yaddle_the_metric', 22);
 
                 return im.api.pending_calls_complete().then(function() {
-                    assert.deepEqual(im.api.metrics, {
+                    assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
                                 agg: 'min',
@@ -172,14 +172,14 @@ describe("metrics.api", function() {
             });
 
             it("should record the metric", function() {
-                assert.deepEqual(im.api.metrics, {});
+                assert.deepEqual(im.api.metrics.stores, {});
 
                 metrics.fire_max('yoda_the_metric', 23);
                 metrics.fire_max('yoda_the_metric', 42);
                 metrics.fire_max('yaddle_the_metric', 22);
 
                 return im.api.pending_calls_complete().then(function() {
-                    assert.deepEqual(im.api.metrics, {
+                    assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
                                 agg: 'max',
@@ -205,14 +205,14 @@ describe("metrics.api", function() {
             });
 
             it("should record the metric", function() {
-                assert.deepEqual(im.api.metrics, {});
+                assert.deepEqual(im.api.metrics.stores, {});
 
                 metrics.fire_inc('yoda_the_metric');
                 metrics.fire_inc('yoda_the_metric');
                 metrics.fire_inc('yaddle_the_metric');
 
                 return im.api.pending_calls_complete().then(function() {
-                    assert.deepEqual(im.api.metrics, {
+                    assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
                                 agg: 'sum',
