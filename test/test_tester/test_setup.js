@@ -83,11 +83,11 @@ describe("AppTester Setup Tasks", function() {
         it("should call the given function with the api", function() {
             return tester
                 .setup(function(api) {
-                    api.config_store.foo = 'bar';
+                    api.config.store.foo = 'bar';
                 })
                 .run()
                 .then(function() {
-                    assert.equal(api.config_store.foo, 'bar');
+                    assert.equal(api.config.store.foo, 'bar');
                 });
         });
     });
@@ -293,7 +293,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.config({baz: 'qux'})
                     .run()
                     .then(function() {
-                        var config = JSON.parse(api.config_store.config);
+                        var config = api.config.store.config;
                         assert.equal(config.foo, 'bar');
                         assert.equal(config.baz, 'qux');
                     });
@@ -315,7 +315,7 @@ describe("AppTester Setup Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        var config = JSON.parse(api.config_store.config);
+                        var config = api.config.store.config;
                         assert.equal(config.foo, 'bar');
                         assert(!('baz' in config));
                     });
@@ -326,7 +326,7 @@ describe("AppTester Setup Tasks", function() {
                 return tester.setup.config(function() {
                     return Q({foo: 'bar'});
                 }).run().then(function() {
-                    var config = JSON.parse(api.config_store.config);
+                    var config = api.config.store.config;
                     assert.equal(config.foo, 'bar');
                 });
             });
