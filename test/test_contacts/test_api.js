@@ -178,7 +178,7 @@ describe("contacts.api", function() {
                     name: 'cars'
                 });
 
-                group.query = null;
+                group.query = 3;
 
                 assert.throws(
                     function() { group.do.validate(); },
@@ -186,8 +186,8 @@ describe("contacts.api", function() {
                         assert(error instanceof ValidationError);
                         assert.equal(
                             error.message,
-                            ["Group has a query of type 'object' instead of",
-                             "'string': null"].join(' '));
+                            ["Group has a query of type 'number' instead of",
+                             "'string': 3"].join(' '));
 
                         return true;
                     });
