@@ -199,7 +199,7 @@ describe("metrics.api", function() {
         describe(".fire.inc", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire.inc('yaddle-the-metric', 23)
+                    .fire.inc('yaddle-the-metric')
                     .then(function(success) {
                         assert(success);
                     });
@@ -222,6 +222,39 @@ describe("metrics.api", function() {
                             yaddle_the_metric: {
                                 agg: 'sum',
                                 values: [1]
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        describe(".fire.inc", function() {
+            it("should return the status of the fire call", function() {
+                return metrics
+                    .fire.last('yaddle-the-metric', 23)
+                    .then(function(success) {
+                        assert(success);
+                    });
+            });
+
+            it("should record the metric", function() {
+                assert.deepEqual(im.api.metrics.stores, {});
+
+                return Q.all([
+                    metrics.fire.last('yoda_the_metric', 1),
+                    metrics.fire.last('yoda_the_metric', 2),
+                    metrics.fire.last('yaddle_the_metric', 3)
+                ]).then(function() {
+                    assert.deepEqual(im.api.metrics.stores, {
+                        test_app:{
+                            yoda_the_metric: {
+                                agg: 'last',
+                                values: [1, 2]
+                            },
+                            yaddle_the_metric: {
+                                agg: 'last',
+                                values: [3]
                             }
                         }
                     });
