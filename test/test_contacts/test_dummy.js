@@ -6,6 +6,7 @@ var dummy = vumigo.contacts.dummy;
 var test_utils = vumigo.test_utils;
 var DummyApi = vumigo.dummy.api.DummyApi;
 var Contact = vumigo.contacts.api.Contact;
+var Group = vumigo.contacts.api.Group;
 
 
 describe("contacts.dummy", function() {
@@ -376,10 +377,10 @@ describe("contacts.dummy", function() {
 
             describe(".search", function() {
                 it("should return the fixed query results", function() {
-                    api.contacts.search_results['foo:bar'] = ['1', '2'];
+                    api.contacts.search_results['name:"Foo"'] = ['1', '2'];
 
                     return request('contacts.search', {
-                        query: 'foo:bar',
+                        query: 'name:"Foo"',
                     }).then(function(result) {
                         assert(result.success);
                         assert.deepEqual(result.keys, ['1', '2']);
@@ -392,46 +393,262 @@ describe("contacts.dummy", function() {
     describe("DummyGroupResource", function() {
         describe(".add", function() {
             describe(".add(group)", function() {
-                it("should add the group to the store");
+                it("should add the group to the store", function() {
+                    var group = new Group({
+                        key: '123',
+                        user_account: 'user1',
+                        name: 'cats'
+                    });
+
+                    api.groups.add(group);
+                    assert.deepEqual(api.groups.store, [group]);
+                });
             });
 
             describe(".add(data)", function() {
-                it("should add a corresponding group to the store");
+                it("should add a corresponding group to the store",
+                function() {
+                    api.groups.add({
+                        name: 'cats',
+                        query: 'surname:"cat"'
+                    });
+
+                    assert(_.find(api.groups.store, {
+                        name: 'cats',
+                        query: 'surname:"cat"'
+                    }));
+                });
             });
         });
 
         describe(".handlers", function() {
             describe(".get", function() {
-                it("retrieve the group if it exists");
-                it("should fail if no group is found");
+                it("retrieve the group if it exists", function() {
+                    api.groups.add({
+                        key: '123',
+                        name: 'cats'
+                    });
+
+                    return request('groups.get', {
+                        key: '123'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert.deepEqual(api.groups.store, [result.group]);
+                    });
+                });
+
+                it("should fail if no group is found", function() {
+                    return request('groups.get', {
+                        key: '123'
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(result.reason, "Group not found");
+                    });
+                });
             });
 
             describe(".get_by_name", function() {
-                it("retrieve the group if it exists");
-                it("should fail if no group is found");
-                it("should fail if multiple groups were found");
+                it("retrieve the group if it exists", function() {
+                    api.groups.add({name: 'cats'});
+
+                    return request('groups.get_by_name', {
+                        name: 'cats'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert.deepEqual(api.groups.store,  [result.group]);
+                    });
+                });
+
+                it("should fail if no group is found", function() {
+                    return request('groups.get_by_name', {
+                        name: 'cats'
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(result.reason, "Group not found");
+                    });
+                });
+
+                it("should fail if multiple groups were found", function() {
+                    api.groups.add({name: 'cats'});
+                    api.groups.add({name: 'cats'});
+
+                    return request('groups.get_by_name', {
+                        name: 'cats'
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(result.reason, "Multiple groups found");
+                    });
+                });
             });
 
             describe(".get_or_create_by_name", function() {
-                it("retrieve the group if it exists");
-                it("should create a new group if it does not yet exist");
-                it("should fail if multiple groups were found");
+                it("retrieve the group if it exists", function() {
+                    api.groups.add({name: 'cats'});
+
+                    return request('groups.get_or_create_by_name', {
+                        name: 'cats'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert(!result.created);
+                        assert.deepEqual(api.groups.store,  [result.group]);
+                    });
+                });
+
+                it("should create a new group if it does not yet exist",
+                function() {
+                    return request('groups.get_or_create_by_name', {
+                        name: 'cats'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert(result.created);
+                        assert.equal(result.group.name, 'cats');
+                        assert.deepEqual(api.groups.store,  [result.group]);
+                    });
+                });
+
+                it("should fail if multiple groups were found", function() {
+                    api.groups.add({name: 'cats'});
+                    api.groups.add({name: 'cats'});
+
+                    return request('groups.get_or_create_by_name', {
+                        name: 'cats'
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(result.reason, "Multiple groups found");
+                    });
+                });
             });
 
             describe(".update", function() {
-                it("should update the group if found");
-                it("should fail if the group was not found");
-                it("should fail if the update failed");
+                it("should update the group if found", function() {
+                    api.groups.add({
+                        key: '123',
+                        name: 'cats'
+                    });
+
+                    return request('groups.update', {
+                        key: '123',
+                        name: 'pandas',
+                        query: '"surname:"Panda"'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert.equal(result.group.name, 'pandas');
+                        assert.equal(result.group.query, '"surname:"Panda"');
+                        assert.deepEqual([result.group], api.groups.store);
+                    });
+                });
+
+                it("should fail if the group was not found", function() {
+                    return request('groups.update', {
+                        key: '123',
+                        name: 'pandas',
+                        query: '"surname:"Panda"'
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(result.reason, 'Group not found');
+                    });
+                });
+
+                it("should fail if the update failed", function() {
+                    api.groups.add({
+                        key: '123',
+                        name: 'cats'
+                    });
+
+                    return request('groups.update', {
+                        key: '123',
+                        name: 3
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(
+                            result.reason,
+                            ["Group has a name of type 'number' instead of",
+                             "'string': 3"].join(' '));
+                    });
+                });
             });
 
             describe(".search", function() {
-                it("should return the fixed query results");
+                it("should return the fixed query results", function() {
+                    var group1 = api.groups.add({
+                        key: '1',
+                        name: 'one'
+                    });
+
+                    var group2 = api.groups.add({
+                        key: '2',
+                        name: 'two'
+                    });
+
+                    api.groups.add({
+                        key: '3',
+                        name: 'three'
+                    });
+
+                    api.groups.search_results['name:"Foo"'] = ['1', '2'];
+
+                    return request('groups.search', {
+                        query: 'name:"Foo"',
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert.deepEqual(result.groups, [group1, group2]);
+                    });
+                });
             });
 
             describe(".count_members", function() {
-                it("should return the member count for static groups");
-                it("should return the member count for smart groups");
-                it("should fail if no group is found");
+                it("should return the member count for static groups",
+                function() {
+                    var cats = api.groups.add({
+                        key: '1',
+                        name: 'cats'
+                    });
+
+                    var pandas = api.groups.add({
+                        key: '2',
+                        name: 'pandas'
+                    });
+
+                    api.contacts.add({groups: [cats.key]});
+                    api.contacts.add({groups: [pandas.key]});
+                    api.contacts.add({groups: [cats.key, pandas.key]});
+
+                    return request('groups.count_members', {
+                        key: '1'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert(result.count, 2);
+                        assert.deepEqual(result.group, cats);
+                    });
+                });
+
+                it("should return the member count for smart groups",
+                function() {
+                    api.contacts.search_results['surname:"Cat"'] = ['1', '2'];
+
+                    var group = api.groups.add({
+                        key: 'group1',
+                        name: 'cats',
+                        query: 'surname:"Cat"'
+                    });
+
+                    return request('groups.count_members', {
+                        key: 'group1'
+                    }).then(function(result) {
+                        assert(result.success);
+                        assert(result.count, 2);
+                        assert.deepEqual(result.group, group);
+                    });
+                });
+
+                it("should fail if no group is found", function() {
+                    return request('groups.count_members', {
+                        key: 'group1'
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(result.reason, "Group not found");
+                    });
+                });
             });
         });
     });
