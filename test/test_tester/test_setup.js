@@ -293,7 +293,7 @@ describe("AppTester Setup Tasks", function() {
                     .setup.config({baz: 'qux'})
                     .run()
                     .then(function() {
-                        var config = api.config.store.config;
+                        var config = api.config.app;
                         assert.equal(config.foo, 'bar');
                         assert.equal(config.baz, 'qux');
                     });
@@ -315,7 +315,7 @@ describe("AppTester Setup Tasks", function() {
                     })
                     .run()
                     .then(function() {
-                        var config = api.config.store.config;
+                        var config = api.config.app;
                         assert.equal(config.foo, 'bar');
                         assert(!('baz' in config));
                     });
@@ -326,7 +326,7 @@ describe("AppTester Setup Tasks", function() {
                 return tester.setup.config(function() {
                     return Q({foo: 'bar'});
                 }).run().then(function() {
-                    var config = api.config.store.config;
+                    var config = api.config.app;
                     assert.equal(config.foo, 'bar');
                 });
             });
