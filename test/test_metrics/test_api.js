@@ -64,10 +64,10 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire_sum", function() {
+        describe(".fire.sum", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire_sum('yaddle-the-metric', 23)
+                    .fire.sum('yaddle-the-metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -77,9 +77,9 @@ describe("metrics.api", function() {
                 assert.deepEqual(im.api.metrics.stores, {});
 
                 return Q.all([
-                    metrics.fire_sum('yoda_the_metric', 23),
-                    metrics.fire_sum('yoda_the_metric', 42),
-                    metrics.fire_sum('yaddle_the_metric', 22)
+                    metrics.fire.sum('yoda_the_metric', 23),
+                    metrics.fire.sum('yoda_the_metric', 42),
+                    metrics.fire.sum('yaddle_the_metric', 22)
                 ]).then(function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
@@ -97,10 +97,10 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire_avg", function() {
+        describe(".fire.avg", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire_avg('yaddle-the-metric', 23)
+                    .fire.avg('yaddle-the-metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -110,9 +110,9 @@ describe("metrics.api", function() {
                 assert.deepEqual(im.api.metrics.stores, {});
 
                 return Q.all([
-                    metrics.fire_avg('yoda_the_metric', 23),
-                    metrics.fire_avg('yoda_the_metric', 42),
-                    metrics.fire_avg('yaddle_the_metric', 22)
+                    metrics.fire.avg('yoda_the_metric', 23),
+                    metrics.fire.avg('yoda_the_metric', 42),
+                    metrics.fire.avg('yaddle_the_metric', 22)
                 ]).then(function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
@@ -130,10 +130,10 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire_min", function() {
+        describe(".fire.min", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire_min('yaddle-the-metric', 23)
+                    .fire.min('yaddle-the-metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -143,9 +143,9 @@ describe("metrics.api", function() {
                 assert.deepEqual(im.api.metrics.stores, {});
 
                 return Q.all([
-                    metrics.fire_min('yoda_the_metric', 23),
-                    metrics.fire_min('yoda_the_metric', 42),
-                    metrics.fire_min('yaddle_the_metric', 22)
+                    metrics.fire.min('yoda_the_metric', 23),
+                    metrics.fire.min('yoda_the_metric', 42),
+                    metrics.fire.min('yaddle_the_metric', 22)
                 ]).then(function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
@@ -163,10 +163,10 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire_max", function() {
+        describe(".fire.max", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire_max('yaddle-the-metric', 23)
+                    .fire.max('yaddle-the-metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -176,9 +176,9 @@ describe("metrics.api", function() {
                 assert.deepEqual(im.api.metrics.stores, {});
 
                 return Q.all([
-                    metrics.fire_max('yoda_the_metric', 23),
-                    metrics.fire_max('yoda_the_metric', 42),
-                    metrics.fire_max('yaddle_the_metric', 22)
+                    metrics.fire.max('yoda_the_metric', 23),
+                    metrics.fire.max('yoda_the_metric', 42),
+                    metrics.fire.max('yaddle_the_metric', 22)
                 ]).then(function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
@@ -196,10 +196,10 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire_inc", function() {
+        describe(".fire.inc", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire_inc('yaddle-the-metric', 23)
+                    .fire.inc('yaddle-the-metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -209,9 +209,9 @@ describe("metrics.api", function() {
                 assert.deepEqual(im.api.metrics.stores, {});
 
                 return Q.all([
-                    metrics.fire_inc('yoda_the_metric'),
-                    metrics.fire_inc('yoda_the_metric'),
-                    metrics.fire_inc('yaddle_the_metric')
+                    metrics.fire.inc('yoda_the_metric'),
+                    metrics.fire.inc('yoda_the_metric'),
+                    metrics.fire.inc('yaddle_the_metric')
                 ]).then(function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
