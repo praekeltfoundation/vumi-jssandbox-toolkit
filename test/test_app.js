@@ -250,9 +250,9 @@ describe("App", function () {
 
     describe("when an 'app:error' event occurs", function() {
         it("should log the error", function() {
-            assert(!_.contains(im.api.log.info, ':('));
+            assert(!_.contains(im.api.log.error, ':('));
             return app.emit.error(new Error(':(')).then(function() {
-                assert(_.contains(im.api.log.info, ':('));
+                assert(_.contains(im.api.log.error, ':('));
             });
         });
     });
