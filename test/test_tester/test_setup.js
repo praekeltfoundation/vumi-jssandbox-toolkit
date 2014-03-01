@@ -285,51 +285,17 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.config", function() {
-        describe(".setup.config(obj)", function() {
-            it("should update the config data with the given properties",
-            function() {
-                return tester
-                    .setup.config({foo: 'bar'})
-                    .setup.config({baz: 'qux'})
-                    .run()
-                    .then(function() {
-                        var config = api.config.app;
-                        assert.equal(config.foo, 'bar');
-                        assert.equal(config.baz, 'qux');
-                    });
-            });
-        });
-
-        describe(".setup.config(fn)", function() {
-            it("should set the config data with the function's result",
-            function() {
-                return tester
-                    .setup.config(function(config) {
-                        config.foo = 'bar';
-                        config.baz = 'qux';
-                        return config;
-                    })
-                    .setup.config(function(config) {
-                        delete config.baz;
-                        return config;
-                    })
-                    .run()
-                    .then(function() {
-                        var config = api.config.app;
-                        assert.equal(config.foo, 'bar');
-                        assert(!('baz' in config));
-                    });
-            });
-
-            it("should allow the function to return its result via a promise",
-            function() {
-                return tester.setup.config(function() {
-                    return Q({foo: 'bar'});
-                }).run().then(function() {
+        it("should update the config data with the given properties",
+        function() {
+            return tester
+                .setup.config({foo: 'bar'})
+                .setup.config({baz: 'qux'})
+                .run()
+                .then(function() {
                     var config = api.config.app;
                     assert.equal(config.foo, 'bar');
+                    assert.equal(config.baz, 'qux');
                 });
-            });
         });
     });
 
