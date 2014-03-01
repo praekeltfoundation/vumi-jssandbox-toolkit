@@ -33,7 +33,7 @@ describe("contacts.dummy", function() {
                 });
             });
 
-            describe(".add(data)", function() {
+            describe(".add(attrs)", function() {
                 it("should add a corresponding contact to the store", function() {
                     api.contacts.add({
                         name: 'super',
@@ -390,7 +390,7 @@ describe("contacts.dummy", function() {
         });
     });
 
-    describe("DummyGroupResource", function() {
+    describe("DummyGroupsResource", function() {
         describe(".add", function() {
             describe(".add(group)", function() {
                 it("should add the group to the store", function() {
@@ -405,7 +405,7 @@ describe("contacts.dummy", function() {
                 });
             });
 
-            describe(".add(data)", function() {
+            describe(".add(attrs)", function() {
                 it("should add a corresponding group to the store",
                 function() {
                     api.groups.add({
@@ -413,10 +413,11 @@ describe("contacts.dummy", function() {
                         query: 'surname:"cat"'
                     });
 
-                    assert(_.find(api.groups.store, {
-                        name: 'cats',
-                        query: 'surname:"cat"'
-                    }));
+                    assert.equal(api.groups.store.length, 1);
+                    var group = api.groups.store[0];
+                    assert(group instanceof Group);
+                    assert.equal(group.name, 'cats');
+                    assert.equal(group.query, 'surname:"cat"');
                 });
             });
         });
