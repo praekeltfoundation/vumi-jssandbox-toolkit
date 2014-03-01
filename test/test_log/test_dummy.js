@@ -5,7 +5,7 @@ var test_utils = vumigo.test_utils;
 var DummyApi = vumigo.dummy.api.DummyApi;
 
 
-describe.only("log.dummy", function() {
+describe("log.dummy", function() {
     var api;
     var request;
 
