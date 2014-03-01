@@ -380,9 +380,9 @@ describe("InteractionMachine", function () {
 
     describe(".err", function() {
         it("should log the error", function() {
-            assert(!_.contains(api.log.info, ':('));
+            assert(!_.contains(api.log.error, ':('));
             return im.err(new Error(':(')).then(function() {
-                assert(_.contains(api.log.info, ':('));
+                assert(_.contains(api.log.error, ':('));
             });
         });
 
@@ -553,12 +553,12 @@ describe("InteractionMachine", function () {
     describe("on 'unknown_command'", function() {
         it("should log the command", function() {
             assert(!_.contains(
-                api.log.info, 'Received unknown command: {"bad":"cmd"}'));
+                api.log.error, 'Received unknown command: {"bad":"cmd"}'));
 
             var e = new UnknownCommandEvent(im, {bad: 'cmd'});
             return im.emit(e).then(function() {
                 assert(_.contains(
-                    api.log.info, 'Received unknown command: {"bad":"cmd"}'));
+                    api.log.error, 'Received unknown command: {"bad":"cmd"}'));
             });
         });
     });
