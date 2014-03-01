@@ -65,36 +65,12 @@ describe("DummyApi", function () {
         });
     });
 
-    describe(".in_logs", function() {
-        it("should determine whether the message is in the logs", function() {
-            assert(!api.in_logs('foo'));
-            api.log_info('foo');
-            assert(api.in_logs('foo'));
-        });
-    });
-
     describe(".find_contact", function() {
         it("should fail for unknown address types", function() {
             assert.throws(
                 function () { api.find_contact("unknown", "+12334"); },
                 "/Unsupported delivery class " +
                 "(got: unknown with address +12334)/");
-        });
-    });
-
-    describe("Logging Resource", function () {
-        it("should log calls on the known levels", function() {
-            var levels = ['info', 'debug', 'warning', 'error', 'critical'];
-
-            return Q.all(levels.map(function(level) {
-                var cmd = 'log.' + level;
-                return api_request(cmd, {msg: level}).then(function(reply) {
-                    assert(reply.success);
-                    assert.equal(reply.cmd, cmd);
-                });
-            })).then(function() {
-                assert.deepEqual(api.logs, levels);
-            });
         });
     });
 
