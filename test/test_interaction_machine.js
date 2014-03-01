@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var assert = require("assert");
 
 var vumigo = require("../lib");
@@ -370,18 +371,18 @@ describe("InteractionMachine", function () {
 
     describe(".log", function() {
         it("should log the requested message", function() {
-            assert(!api.in_logs('wah wah'));
+            assert(!_.contains(api.log.info, 'wah wah'));
             return im.log('wah wah').then(function() {
-                assert(api.in_logs('wah wah'));
+                assert(_.contains(api.log.info, 'wah wah'));
             });
         });
     });
 
     describe(".err", function() {
         it("should log the error", function() {
-            assert(!api.in_logs(':('));
+            assert(!_.contains(api.log.info, ':('));
             return im.err(new Error(':(')).then(function() {
-                assert(api.in_logs(':('));
+                assert(_.contains(api.log.info, ':('));
             });
         });
 
@@ -409,9 +410,9 @@ describe("InteractionMachine", function () {
 
     describe(".api_request", function() {
         it("should make a promise-based api request", function() {
-            assert(!api.in_logs('arrg'));
+            assert(!_.contains(api.log.info, 'arrg'));
             im.api_request('log.info', {msg: 'arrg'}).then(function() {
-                assert(api.in_logs('arrg'));
+                assert(_.contains(api.log.info, 'arrg'));
             });
         });
 
@@ -551,10 +552,13 @@ describe("InteractionMachine", function () {
 
     describe("on 'unknown_command'", function() {
         it("should log the command", function() {
-            assert(!api.in_logs('Received unknown command: {"bad":"cmd"}'));
+            assert(!_.contains(
+                api.log.info, 'Received unknown command: {"bad":"cmd"}'));
+
             var e = new UnknownCommandEvent(im, {bad: 'cmd'});
             return im.emit(e).then(function() {
-                assert(api.in_logs('Received unknown command: {"bad":"cmd"}'));
+                assert(_.contains(
+                    api.log.info, 'Received unknown command: {"bad":"cmd"}'));
             });
         });
     });

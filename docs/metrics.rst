@@ -1,4 +1,4 @@
 Metrics
 =======
 
-.. autojs:: ../lib/metrics.js
+.. autojs:: ../lib/metrics/api.js
