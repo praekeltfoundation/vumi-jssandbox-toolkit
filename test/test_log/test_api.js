@@ -59,8 +59,8 @@ describe("log.api", function() {
 
         describe(".critical", function() {
             it("should log to the CRITICAL log level", function() {
-                return im.log.error('foo').then(function(result) {
-                    assert(contains_one(im.api.log.error, 'foo'));
+                return im.log.critical('foo').then(function(result) {
+                    assert(contains_one(im.api.log.critical, 'foo'));
                 });
             });
         });
