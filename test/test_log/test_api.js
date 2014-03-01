@@ -34,7 +34,7 @@ describe("log.api", function() {
         });
 
         describe(".info", function() {
-            it("should log to the DEBUG log level", function() {
+            it("should log to the INFO log level", function() {
                 return im.log.info('foo').then(function(result) {
                     assert(contains_one(im.api.log.info, 'foo'));
                 });
