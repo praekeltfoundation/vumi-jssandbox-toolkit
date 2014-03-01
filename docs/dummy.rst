@@ -5,6 +5,7 @@ API
 ---
 
 .. autojs:: ../lib/dummy/api.js
+.. autojs:: ../lib/config/dummy.js
 .. autojs:: ../lib/http/dummy.js
 .. autojs:: ../lib/contacts/dummy.js
 
