@@ -285,16 +285,27 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.config", function() {
-        it("should update the config data with the given properties",
+        it("should update the sandbox config with the given properties",
         function() {
             return tester
                 .setup.config({foo: 'bar'})
                 .setup.config({baz: 'qux'})
                 .run()
                 .then(function() {
-                    var config = api.config.app;
-                    assert.equal(config.foo, 'bar');
-                    assert.equal(config.baz, 'qux');
+                    assert.equal(api.config.store.foo, 'bar');
+                    assert.equal(api.config.store.baz, 'qux');
+                });
+        });
+
+        it("should update the sandbox's app config with the given properties",
+        function() {
+            return tester
+                .setup.config.app({foo: 'bar'})
+                .setup.config.app({baz: 'qux'})
+                .run()
+                .then(function() {
+                    assert.equal(api.config.app.foo, 'bar');
+                    assert.equal(api.config.app.baz, 'qux');
                 });
         });
     });
