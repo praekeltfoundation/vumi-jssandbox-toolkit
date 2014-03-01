@@ -69,6 +69,13 @@ describe("InteractionMachine", function () {
             return im.setup(msg).thenResolve(p);
         });
 
+        it("should setup its contacts store", function() {
+            var p = im.contacts.once.resolved('setup');
+            return im.setup(msg).then(function() {
+                assert(p.isFulfilled());
+            });
+        });
+
         it("should setup its app", function() {
             var p = im.app.once.resolved('setup');
             return im.setup(msg).thenResolve(p);
