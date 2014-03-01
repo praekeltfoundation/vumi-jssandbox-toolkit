@@ -15,6 +15,7 @@ Vumi Go's Javascript sandbox.
    interaction_machine.rst
    app.rst
    states.rst
+   log.rst
    user.rst
    config.rst
    contacts.rst
