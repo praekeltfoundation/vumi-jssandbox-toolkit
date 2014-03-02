@@ -12,14 +12,11 @@ describe("test_utils", function() {
                 var api = new DummyApi();
                 var request = test_utils.requester(api);
 
-                var p = request('log.info', {msg: 'foo'});
-                return p.then(function(result) {
-                    assert.deepEqual(result, {
-                        success: true,
-                        cmd: 'log.info'
-                    });
-
-                    assert.deepEqual(api.logs, ['foo']);
+                return request('log.info', {
+                    msg: 'foo'
+                }).then(function(result) {
+                    assert(result.success);
+                    assert.deepEqual(api.log.info, ['foo']);
                 });
             });
         });
