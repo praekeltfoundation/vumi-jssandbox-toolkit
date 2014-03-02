@@ -229,7 +229,7 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire.inc", function() {
+        describe(".fire.last", function() {
             it("should return the status of the fire call", function() {
                 return metrics
                     .fire.last('yaddle-the-metric', 23)
