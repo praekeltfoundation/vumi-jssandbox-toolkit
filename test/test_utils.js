@@ -122,7 +122,7 @@ describe("utils", function() {
         });
     });
 
-    describe(".exists", function() {
+    describe(".is_integer", function() {
         it("should determine whether a value is an integer",
         function() {
             assert(!utils.is_integer());
