@@ -1,4 +1,4 @@
 Config
 ======
 
-.. autojs:: ../lib/config.js
+.. autojs:: ../lib/config/api.js

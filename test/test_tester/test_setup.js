@@ -83,11 +83,11 @@ describe("AppTester Setup Tasks", function() {
         it("should call the given function with the api", function() {
             return tester
                 .setup(function(api) {
-                    api.config_store.foo = 'bar';
+                    api.config.store.foo = 'bar';
                 })
                 .run()
                 .then(function() {
-                    assert.equal(api.config_store.foo, 'bar');
+                    assert.equal(api.config.store.foo, 'bar');
                 });
         });
     });
@@ -285,51 +285,28 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.config", function() {
-        describe(".setup.config(obj)", function() {
-            it("should update the config data with the given properties",
-            function() {
-                return tester
-                    .setup.config({foo: 'bar'})
-                    .setup.config({baz: 'qux'})
-                    .run()
-                    .then(function() {
-                        var config = JSON.parse(api.config_store.config);
-                        assert.equal(config.foo, 'bar');
-                        assert.equal(config.baz, 'qux');
-                    });
-            });
+        it("should update the sandbox config with the given properties",
+        function() {
+            return tester
+                .setup.config({foo: 'bar'})
+                .setup.config({baz: 'qux'})
+                .run()
+                .then(function() {
+                    assert.equal(api.config.store.foo, 'bar');
+                    assert.equal(api.config.store.baz, 'qux');
+                });
         });
 
-        describe(".setup.config(fn)", function() {
-            it("should set the config data with the function's result",
-            function() {
-                return tester
-                    .setup.config(function(config) {
-                        config.foo = 'bar';
-                        config.baz = 'qux';
-                        return config;
-                    })
-                    .setup.config(function(config) {
-                        delete config.baz;
-                        return config;
-                    })
-                    .run()
-                    .then(function() {
-                        var config = JSON.parse(api.config_store.config);
-                        assert.equal(config.foo, 'bar');
-                        assert(!('baz' in config));
-                    });
-            });
-
-            it("should allow the function to return its result via a promise",
-            function() {
-                return tester.setup.config(function() {
-                    return Q({foo: 'bar'});
-                }).run().then(function() {
-                    var config = JSON.parse(api.config_store.config);
-                    assert.equal(config.foo, 'bar');
+        it("should update the sandbox's app config with the given properties",
+        function() {
+            return tester
+                .setup.config.app({foo: 'bar'})
+                .setup.config.app({baz: 'qux'})
+                .run()
+                .then(function() {
+                    assert.equal(api.config.app.foo, 'bar');
+                    assert.equal(api.config.app.baz, 'qux');
                 });
-            });
         });
     });
 

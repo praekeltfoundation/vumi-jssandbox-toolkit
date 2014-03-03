@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var assert = require("assert");
 
 var vumigo = require("../lib");
@@ -249,9 +250,9 @@ describe("App", function () {
 
     describe("when an 'app:error' event occurs", function() {
         it("should log the error", function() {
-            assert(!im.api.in_logs(':('));
+            assert(!_.contains(im.api.log.error, ':('));
             return app.emit.error(new Error(':(')).then(function() {
-                assert(im.api.in_logs(':('));
+                assert(_.contains(im.api.log.error, ':('));
             });
         });
     });
