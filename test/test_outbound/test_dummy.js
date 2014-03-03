@@ -206,14 +206,14 @@ describe("outbound.dummy", function() {
                 it("should fail if 'content' isn't a string or null",
                 function() {
                     return request('outbound.send_to_endpoint', {
-                        content: null,
+                        content: 3,
                         to_addr: '+27123',
                         endpoint: 'sms'
                     }).then(function(result) {
                         assert(!result.success);
                         assert.equal(
                             result.reason,
-                            "'content' needs to be a string");
+                            "'content' needs to be a string or null");
                     });
                 });
 
