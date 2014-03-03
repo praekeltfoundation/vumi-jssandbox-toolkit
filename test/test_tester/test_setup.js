@@ -325,7 +325,8 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.char_limit", function() {
-        it("should change the char limit used in the checking phase", function() {
+        it("should change the char limit used in the checking phase",
+        function() {
             return tester
                 .setup.char_limit(2)
                 .setup.char_limit(3)

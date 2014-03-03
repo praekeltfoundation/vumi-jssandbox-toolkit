@@ -39,9 +39,11 @@ describe("config.api", function() {
 
             describe("if the 'json' option is true", function() {
                 it("should parse the config value as JSON", function() {
-                    return config.get('foo', {json: true}).then(function(value) {
-                        assert.deepEqual(value, {bar: 'baz'});
-                    });
+                    return config
+                        .get('foo', {json: true})
+                        .then(function(value) {
+                            assert.deepEqual(value, {bar: 'baz'});
+                        });
                 });
             });
         });
@@ -69,7 +71,9 @@ describe("config.api", function() {
                     },
                     function(e) {
                         assert(e instanceof IMConfigError);
-                        assert.equal(e.message, "No 'name' config property found");
+                        assert.equal(
+                            e.message,
+                            "No 'name' config property found");
                         return true;
                     });
             });

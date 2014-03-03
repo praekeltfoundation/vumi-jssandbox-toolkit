@@ -30,7 +30,8 @@ describe("AppTester Interaction Tasks", function() {
             tester.tasks.attach();
         });
 
-        it("should throw an error when scheduling interaction tasks", function() {
+        it("should throw an error when scheduling interaction tasks",
+        function() {
             tester.check();
 
             assert.throws(function() {
