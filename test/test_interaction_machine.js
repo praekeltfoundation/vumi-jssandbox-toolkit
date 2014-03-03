@@ -446,7 +446,7 @@ describe("InteractionMachine", function () {
 
         it("should use the state's display content in the reply", function() {
             return im.reply(msg).then(function() {
-                var reply = api.request_calls[0];
+                var reply = api.outbound.store[0];
                 assert.deepEqual(reply.content, 'hello?');
             });
         });
@@ -459,7 +459,7 @@ describe("InteractionMachine", function () {
             it("should translate the state's display content in the reply",
             function() {
                 return im.reply(msg, {translate: true}).then(function() {
-                    var reply = api.request_calls[0];
+                    var reply = api.outbound.store[0];
                     assert.deepEqual(reply.content, 'hallo?');
                 });
             });
@@ -479,7 +479,7 @@ describe("InteractionMachine", function () {
             it("should set the reply message to not continue the session",
             function() {
                 return im.reply(msg).then(function() {
-                    var reply = api.request_calls[0];
+                    var reply = api.outbound.store[0];
                     assert.deepEqual(reply.continue_session, false);
                 });
             });
@@ -497,7 +497,7 @@ describe("InteractionMachine", function () {
 
             it("should not send a reply", function() {
                 return im.reply(msg).then(function() {
-                    assert.equal(api.request_calls.length, 0);
+                    assert.equal(api.outbound.store.length, 0);
                 });
             });
         });
@@ -638,11 +638,10 @@ describe("InteractionMachine", function () {
 
             it("should reply to the message", function() {
                 return im.emit(event).then(function() {
-                    assert.deepEqual(api.request_calls, [{
+                    assert.deepEqual(api.outbound.store, [{
                         content: 'hello?',
                         in_reply_to: '2',
                         continue_session: true,
-                        cmd: 'outbound.reply_to'
                     }]);
                 });
             });
@@ -661,11 +660,10 @@ describe("InteractionMachine", function () {
 
             it("should reply to the message", function() {
                 return im.emit(event).then(function() {
-                    assert.deepEqual(api.request_calls, [{
+                    assert.deepEqual(api.outbound.store, [{
                         content: 'goodbye',
                         in_reply_to: '2',
-                        continue_session: false,
-                        cmd: 'outbound.reply_to'
+                        continue_session: false
                     }]);
                 });
             });
