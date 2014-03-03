@@ -122,6 +122,17 @@ describe("utils", function() {
         });
     });
 
+    describe(".is_integer", function() {
+        it("should determine whether a value is an integer",
+        function() {
+            assert(!utils.is_integer());
+            assert(!utils.is_integer(null));
+            assert(!utils.is_integer('2'));
+            assert(!utils.is_integer(2.1));
+            assert(utils.is_integer(2));
+        });
+    });
+
     describe("Extendable", function() {
         var Extendable = utils.Extendable;
 
