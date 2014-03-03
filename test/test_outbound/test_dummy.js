@@ -165,9 +165,10 @@ describe("outbound.dummy", function() {
                         endpoint: 'sms'
                     }).then(function(result) {
                         assert(!result.success);
-                        assert.equal(
-                            result.reason,
-                            "send_to_tag is no longer supported");
+                        assert.equal(result.reason, [
+                            "send_to_tag is no longer supported,",
+                            "please use send_to_endpoint instead"
+                        ].join(' '));
                     });
                 });
             });
