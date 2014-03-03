@@ -77,6 +77,13 @@ describe("InteractionMachine", function () {
             });
         });
 
+        it("should setup its outbound helper", function() {
+            var p = im.outbound.once.resolved('setup');
+            return im.setup(msg).then(function() {
+                assert(p.isFulfilled());
+            });
+        });
+
         it("should setup its app", function() {
             var p = im.app.once.resolved('setup');
             return im.setup(msg).thenResolve(p);
