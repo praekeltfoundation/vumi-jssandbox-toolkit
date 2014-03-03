@@ -324,36 +324,6 @@ describe("AppTester Setup Tasks", function() {
                     });
             });
         });
-
-        describe(".setup.kv(fn)", function() {
-            it("should set the kv data with the function's result",
-            function() {
-                return tester
-                    .setup.kv(function(kv) {
-                        kv.store.foo = 'bar';
-                        kv.store.baz = 'qux';
-                    })
-                    .setup.kv(function(kv) {
-                        delete kv.store.baz;
-                    })
-                    .run()
-                    .then(function() {
-                        assert.equal(api.kv.store.foo, 'bar');
-                        assert(!('baz' in api.kv.store));
-                    });
-            });
-
-            it("should allow the function to return its result via a promise",
-            function() {
-                return tester.setup.kv(function(kv) {
-                    return Q().then(function() {
-                        kv.store.foo = 'bar';
-                    });
-                }).run().then(function() {
-                    assert.equal(api.kv.store.foo, 'bar');
-                });
-            });
-        });
     });
 
     describe(".setup.char_limit", function() {
