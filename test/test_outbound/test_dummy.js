@@ -203,7 +203,8 @@ describe("outbound.dummy", function() {
                     });
                 });
 
-                it("should fail if 'content' isn't a string", function() {
+                it("should fail if 'content' isn't a string or null",
+                function() {
                     return request('outbound.send_to_endpoint', {
                         content: null,
                         to_addr: '+27123',
