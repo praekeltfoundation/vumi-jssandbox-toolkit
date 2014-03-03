@@ -53,7 +53,6 @@ describe("AppTester Interaction Tasks", function() {
                 session_event: 'resume'
             };
             
-            tester.api.add_reply({success: true});
             return tester.run();
         });
 
