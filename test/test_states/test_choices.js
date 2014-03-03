@@ -1,7 +1,7 @@
-var assert = require("assert");
-var _ = require("lodash");
+var assert = require('assert');
+var _ = require('lodash');
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 
 var ChoiceState = vumigo.states.ChoiceState;

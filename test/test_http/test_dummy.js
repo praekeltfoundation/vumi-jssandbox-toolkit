@@ -1,7 +1,7 @@
 var Q = require('q');
 var assert = require('assert');
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var DummyApi = vumigo.dummy.api.DummyApi;
 var DummyResourceError = vumigo.dummy.resources.DummyResourceError;
 var HttpRequest = vumigo.http.api.HttpRequest;

@@ -1,7 +1,7 @@
 var Q = require('q');
 var assert = require('assert');
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var App = vumigo.app.App;
 
 var EndState = vumigo.states.EndState;

@@ -1,7 +1,7 @@
-var Q = require("q");
-var assert = require("assert");
+var Q = require('q');
+var assert = require('assert');
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 var BookletState = vumigo.states.BookletState;
 

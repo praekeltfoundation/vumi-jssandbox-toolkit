@@ -2,7 +2,7 @@ var Q = require('q');
 var assert = require('assert');
 var AssertionError = assert.AssertionError;
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 var App = vumigo.App;
 var AppTester = vumigo.tester.AppTester;

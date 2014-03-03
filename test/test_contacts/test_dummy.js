@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var assert = require('assert');
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var dummy = vumigo.contacts.dummy;
 var test_utils = vumigo.test_utils;
 var DummyApi = vumigo.dummy.api.DummyApi;

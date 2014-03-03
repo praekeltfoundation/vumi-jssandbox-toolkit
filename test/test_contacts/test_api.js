@@ -1,6 +1,6 @@
-var assert = require("assert");
+var assert = require('assert');
 
-var vumigo = require("../../lib");
+var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 
 var api = vumigo.contacts.api;

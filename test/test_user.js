@@ -1,6 +1,6 @@
-var assert = require("assert");
+var assert = require('assert');
 
-var vumigo = require("../lib");
+var vumigo = require('../lib');
 var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 var User = vumigo.user.User;
