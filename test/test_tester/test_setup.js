@@ -142,6 +142,14 @@ describe("AppTester Setup Tasks", function() {
                     assert.equal(user.addr, '+81');
                 });
             });
+
+            it("should bind the function to the tester instance", function() {
+                return tester.setup.user(function() {
+                    assert.strictEqual(this, tester);
+                    return {};
+                })
+                .run();
+            });
         });
     });
 
