@@ -98,6 +98,7 @@ describe("outbound.dummy", function() {
 
                         var message = api.outbound.store[0];
                         assert.deepEqual(message, {
+                            group: true,
                             content: 'foo',
                             in_reply_to: '123',
                             continue_session: false
