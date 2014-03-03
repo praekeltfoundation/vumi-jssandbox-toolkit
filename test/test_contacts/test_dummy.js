@@ -2,7 +2,6 @@ var _ = require('lodash');
 var assert = require('assert');
 
 var vumigo = require("../../lib");
-var dummy = vumigo.contacts.dummy;
 var test_utils = vumigo.test_utils;
 var DummyApi = vumigo.dummy.api.DummyApi;
 var Contact = vumigo.contacts.api.Contact;
@@ -652,22 +651,6 @@ describe("contacts.dummy", function() {
                     });
                 });
             });
-        });
-    });
-
-    describe(".format_addr", function() {
-        it("should format msisdns", function() {
-            assert.equal(dummy.format_addr('27123', 'msisdn'), '+27123');
-            assert.equal(dummy.format_addr('+27123', 'msisdn'), '+27123');
-        });
-
-        it("should format gtalk ids", function() {
-            assert.equal(dummy.format_addr('foo/bar', 'gtalk_id'), 'foo');
-            assert.equal(dummy.format_addr('foo', 'gtalk_id'), 'foo');
-        });
-
-        it("should be a noop for other address types", function() {
-            assert.equal(dummy.format_addr('foo', 'unknown_type'), 'foo');
         });
     });
 });

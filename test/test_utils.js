@@ -201,4 +201,20 @@ describe("utils", function() {
                 'undefined');
         });
     });
+
+    describe(".format_addr", function() {
+        it("should format msisdns", function() {
+            assert.equal(utils.format_addr('27123', 'msisdn'), '+27123');
+            assert.equal(utils.format_addr('+27123', 'msisdn'), '+27123');
+        });
+
+        it("should format gtalk ids", function() {
+            assert.equal(utils.format_addr('foo/bar', 'gtalk_id'), 'foo');
+            assert.equal(utils.format_addr('foo', 'gtalk_id'), 'foo');
+        });
+
+        it("should be a noop for other address types", function() {
+            assert.equal(utils.format_addr('foo', 'unknown_type'), 'foo');
+        });
+    });
 });
