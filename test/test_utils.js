@@ -1,5 +1,6 @@
 var assert = require("assert");
-var utils = require("../lib/utils");
+var vumigo = require('../lib');
+var utils = vumigo.utils;
 
 describe("utils", function() {
     describe("functor", function() {

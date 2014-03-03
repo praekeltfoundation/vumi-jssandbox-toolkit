@@ -5,9 +5,8 @@ var vumigo = require("../lib");
 var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 
-var app = vumigo.app;
-var App = app.App;
-var AppStateError = app.AppStateError;
+var App = vumigo.App;
+var AppStateError = vumigo.app.AppStateError;
 var AppTester = vumigo.AppTester;
 
 

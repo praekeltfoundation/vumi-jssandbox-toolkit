@@ -1,16 +1,12 @@
 var Q = require('q');
 var assert = require('assert');
 
-var resources = require('../../lib/dummy/resources');
-var DummyResourceError = resources.DummyResourceError;
+var vumigo = require("../../lib");
+var DummyApi = vumigo.dummy.api.DummyApi;
+var DummyResourceError = vumigo.dummy.resources.DummyResourceError;
+var HttpRequest = vumigo.http.api.HttpRequest;
 
-var api = require('../../lib/dummy/api');
-var DummyApi = api.DummyApi;
-
-api = require('../../lib/http/api');
-var HttpRequest = api.HttpRequest;
-
-var dummy = require('../../lib/http/dummy');
+var dummy = vumigo.http.dummy;
 var HttpFixture = dummy.HttpFixture;
 var HttpFixtures = dummy.HttpFixtures;
 

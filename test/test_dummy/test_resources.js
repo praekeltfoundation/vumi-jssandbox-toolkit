@@ -1,12 +1,10 @@
 var assert = require("assert");
 
-var api = require("../../lib/dummy/api");
-var DummyApi = api.DummyApi;
-
-var resources = require("../../lib/dummy/resources");
-var DummyResourceError = resources.DummyResourceError;
-var DummyResource = resources.DummyResource;
-var DummyResources = resources.DummyResources;
+var vumigo = require("../../lib");
+var DummyApi = vumigo.dummy.api.DummyApi;
+var DummyResource = vumigo.dummy.resources.DummyResource;
+var DummyResources = vumigo.dummy.resources.DummyResources;
+var DummyResourceError = vumigo.dummy.resources.DummyResourceError;
 
 
 var ToyResource = DummyResource.extend(function(self, name) {

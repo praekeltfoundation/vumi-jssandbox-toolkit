@@ -1,7 +1,6 @@
 var assert = require("assert");
 var vumigo = require("../../lib");
 
-
 var FreeText = vumigo.states.FreeText;
 var test_utils = vumigo.test_utils;
 

@@ -1,9 +1,9 @@
 var Q = require("q");
 var assert = require("assert");
 
-var events = require("../lib/events");
-var Event = events.Event;
-var Eventable = events.Eventable;
+var vumigo = require("../lib");
+var Event = vumigo.events.Event;
+var Eventable = vumigo.events.Eventable;
 
 
 describe("Eventable", function() {

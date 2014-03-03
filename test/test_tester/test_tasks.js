@@ -1,18 +1,12 @@
 var Q = require('q');
 var assert = require('assert');
 
-var states = require('../../lib/states');
-var State = states.State;
-
-var app = require('../../lib/app');
-var App = app.App;
-
-var tester = require('../../lib/tester/tester');
-var AppTester = tester.AppTester;
-
-var tasks = require('../../lib/tester/tasks');
-var AppTesterTasks = tasks.AppTesterTasks;
-var AppTesterTaskSet = tasks.AppTesterTaskSet;
+var vumigo = require("../../lib");
+var State = vumigo.states.State;
+var App = vumigo.App;
+var AppTester = vumigo.tester.AppTester;
+var AppTesterTasks = vumigo.tester.tasks.AppTesterTasks;
+var AppTesterTaskSet = vumigo.tester.tasks.AppTesterTaskSet;
 
 
 var ToyTasks = AppTesterTasks.extend(function(self, tester) {
