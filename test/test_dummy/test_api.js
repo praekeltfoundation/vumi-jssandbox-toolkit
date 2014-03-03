@@ -38,7 +38,8 @@ describe("DummyApi", function () {
         api = new DummyApi();
     });
 
-    it("should dispatch commands asynchronously", function() {
+    // TODO remove when pending_calls_complete is removed
+    it.skip("should dispatch commands asynchronously", function() {
         var has_reply = false;
 
         api_request("kv.get", {key: "foo"}).then(function (reply) {
