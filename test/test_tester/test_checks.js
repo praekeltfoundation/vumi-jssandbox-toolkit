@@ -366,13 +366,13 @@ describe("AppTester Check Tasks", function() {
                 .setup.user.state('initial_state')
                 .input('1')
                 .check.user.properties({
-                    answers: {initial_state: '2'}
+                    answers: {initial_state: 'coffee'}
                 })
                 .run()
                 .catch(function(e) {
                     assert.equal(e.msg, "Unexpected user answers");
-                    assert.deepEqual(e.expected, {initial_state: '2'});
-                    assert.deepEqual(e.actual, {initial_state: '1'});
+                    assert.deepEqual(e.expected, {initial_state: 'coffee'});
+                    assert.deepEqual(e.actual, {initial_state: 'tea'});
                 });
         });
 
@@ -423,12 +423,12 @@ describe("AppTester Check Tasks", function() {
             return tester
                 .setup.user.state('initial_state')
                 .input('1')
-                .check.user.answers({initial_state: '2'})
+                .check.user.answers({initial_state: 'coffee'})
                 .run()
                 .catch(function(e) {
                     assert.equal(e.msg, "Unexpected user answers");
-                    assert.deepEqual(e.expected, {initial_state: '2'});
-                    assert.deepEqual(e.actual, {initial_state: '1'});
+                    assert.deepEqual(e.expected, {initial_state: 'coffee'});
+                    assert.deepEqual(e.actual, {initial_state: 'tea'});
                 });
         });
     });
@@ -438,14 +438,14 @@ describe("AppTester Check Tasks", function() {
             return tester
                 .setup.user.state('initial_state')
                 .input('1')
-                .check.user.answer('initial_state', '2')
+                .check.user.answer('initial_state', 'coffee')
                 .run()
                 .catch(function(e) {
                     assert.equal(
                         e.msg,
                         "Unexpected user answer to state 'initial_state'");
-                    assert.deepEqual(e.expected, '2');
-                    assert.deepEqual(e.actual, '1');
+                    assert.deepEqual(e.expected, 'coffee');
+                    assert.deepEqual(e.actual, 'tea');
                 });
         });
     });

@@ -142,7 +142,7 @@ describe("ChoiceState", function () {
                 assert(typeof answer == 'undefined');
 
                 return state.emit.input('1').then(function() {
-                    assert.equal(im.user.get_answer('color_state'), '1');
+                    assert.equal(im.user.get_answer('color_state'), 'red');
                 });
             });
         });
