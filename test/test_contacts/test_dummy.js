@@ -670,29 +670,4 @@ describe("contacts.dummy", function() {
             assert.equal(dummy.format_addr('foo', 'unknown_type'), 'foo');
         });
     });
-
-    describe(".infer_addr_type", function() {
-        it("should infer the address type for sms", function() {
-            assert.equal(dummy.infer_addr_type('sms'), 'msisdn');
-        });
-
-        it("should infer the address type for ussd", function() {
-            assert.equal(dummy.infer_addr_type('ussd'), 'msisdn');
-        });
-
-        it("should infer the address type for gtalk", function() {
-            assert.equal(dummy.infer_addr_type('gtalk'), 'gtalk_id');
-        });
-
-        it("should infer the address type for twitter", function() {
-            assert.equal(dummy.infer_addr_type('twitter'), 'twitter_handle');
-        });
-
-        it("should return undefined for unrecognized delivery classes",
-        function() {
-            assert.equal(
-                typeof dummy.infer_addr_type('unknown_type'),
-                'undefined');
-        });
-    });
 });
