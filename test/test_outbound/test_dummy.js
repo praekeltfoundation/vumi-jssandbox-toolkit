@@ -157,78 +157,16 @@ describe("outbound.dummy", function() {
             });
 
             describe(".send_to_tag", function() {
-                it("should record the sent message", function() {
+                it("should fail with a deprecation error", function() {
                     return request('outbound.send_to_tag', {
                         content: 'foo',
                         to_addr: '+27123',
-                        tagpool: 'pool1',
-                        tag: 'tag1'
-                    }).then(function(result) {
-                        assert(result.success);
-                        assert.equal(api.outbound.store.length, 1);
-
-                        var message = api.outbound.store[0];
-                        assert.deepEqual(message, {
-                            content: 'foo',
-                            to_addr: '+27123',
-                            endpoint: 'pool1:tag1'
-                        });
-                    });
-                });
-
-                it("should fail if 'to_addr' isn't a string", function() {
-                    return request('outbound.send_to_tag', {
-                        content: 'foo',
-                        to_addr: null,
-                        tagpool: 'pool1',
-                        tag: 'tag1'
+                        endpoint: 'sms'
                     }).then(function(result) {
                         assert(!result.success);
                         assert.equal(
                             result.reason,
-                            "'to_addr' needs to be a string");
-                    });
-                });
-
-                it("should fail if 'content' isn't a string", function() {
-                    return request('outbound.send_to_tag', {
-                        content: null,
-                        to_addr: '+27123',
-                        tagpool: 'pool1',
-                        tag: 'tag1'
-                    }).then(function(result) {
-                        assert(!result.success);
-                        assert.equal(
-                            result.reason,
-                            "'content' needs to be a string");
-                    });
-                });
-
-                it("should fail if 'tag' isn't a string", function() {
-                    return request('outbound.send_to_tag', {
-                        content: 'foo',
-                        to_addr: '+27123',
-                        tagpool: 'pool1',
-                        tag: null
-                    }).then(function(result) {
-                        assert(!result.success);
-                        assert.equal(
-                            result.reason,
-                            "'tag' needs to be a string");
-                    });
-                });
-
-                it("should fail if 'tagpool' isn't a string", function() {
-                    return request('outbound.send_to_tag', {
-                        content: 'foo',
-                        to_addr: '+27123',
-                        tagpool: 'pool1',
-                        tag: null
-                    }).then(function(result) {
-                        assert(!result.success);
-                        assert.equal(
-                            result.reason,
-                            "'tag' needs to be a string");
+                            "send_to_tag is no longer supported");
                     });
                 });
             });
