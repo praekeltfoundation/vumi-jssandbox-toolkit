@@ -580,7 +580,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -631,7 +634,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -678,7 +684,6 @@ describe("AppTester Check Tasks", function() {
                         assert.equal(e.msg, "Unexpected reply");
 
                         assert.deepEqual(e.actual, {
-                            cmd: 'outbound.reply_to',
                             in_reply_to: '1',
                             continue_session: true,
                             content: [
@@ -693,7 +698,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -738,7 +746,7 @@ describe("AppTester Check Tasks", function() {
                 var called = false;
 
                 return tester.input().check.reply(function(reply) {
-                    assert.deepEqual(reply, api.request_calls[0]);
+                    assert.deepEqual(reply, api.outbound.store[0]);
                     called = true;
                 }).run().then(function() {
                     assert(called);
@@ -746,7 +754,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -821,7 +832,10 @@ describe("AppTester Check Tasks", function() {
         });
 
         it("should check that only one reply was sent", function() {
-            api.request_calls.push('fake_reply');
+            api.outbound.store.push({
+                content: 'fake reply',
+                in_reply_to: '1'
+            });
 
             return tester
                 .input()
@@ -879,7 +893,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -930,7 +947,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -982,7 +1002,10 @@ describe("AppTester Check Tasks", function() {
         });
 
         it("should check that only one reply was sent", function() {
-            api.request_calls.push('fake_reply');
+            api.outbound.store.push({
+                content: 'fake reply',
+                in_reply_to: '1'
+            });
 
             return tester
                 .input()
@@ -1012,7 +1035,6 @@ describe("AppTester Check Tasks", function() {
                     assert.deepEqual(e.expected, []);
 
                     assert.deepEqual(e.actual, [{
-                        cmd: 'outbound.reply_to',
                         in_reply_to: '1',
                         continue_session: true,
                         content: [
