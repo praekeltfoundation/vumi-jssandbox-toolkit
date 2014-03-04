@@ -1,5 +1,6 @@
-var assert = require("assert");
-var utils = require("../lib/utils");
+var assert = require('assert');
+var vumigo = require('../lib');
+var utils = vumigo.utils;
 
 describe("utils", function() {
     describe("functor", function() {
@@ -174,6 +175,47 @@ describe("utils", function() {
                     assert.equal(thing.foo, 'bar');
                 });
             });
+        });
+    });
+
+    describe(".infer_addr_type", function() {
+        it("should infer the address type for sms", function() {
+            assert.equal(utils.infer_addr_type('sms'), 'msisdn');
+        });
+
+        it("should infer the address type for ussd", function() {
+            assert.equal(utils.infer_addr_type('ussd'), 'msisdn');
+        });
+
+        it("should infer the address type for gtalk", function() {
+            assert.equal(utils.infer_addr_type('gtalk'), 'gtalk_id');
+        });
+
+        it("should infer the address type for twitter", function() {
+            assert.equal(utils.infer_addr_type('twitter'), 'twitter_handle');
+        });
+
+        it("should return undefined for unrecognized delivery classes",
+        function() {
+            assert.equal(
+                typeof utils.infer_addr_type('unknown_type'),
+                'undefined');
+        });
+    });
+
+    describe(".format_addr", function() {
+        it("should format msisdns", function() {
+            assert.equal(utils.format_addr('27123', 'msisdn'), '+27123');
+            assert.equal(utils.format_addr('+27123', 'msisdn'), '+27123');
+        });
+
+        it("should format gtalk ids", function() {
+            assert.equal(utils.format_addr('foo/bar', 'gtalk_id'), 'foo');
+            assert.equal(utils.format_addr('foo', 'gtalk_id'), 'foo');
+        });
+
+        it("should be a noop for other address types", function() {
+            assert.equal(utils.format_addr('foo', 'unknown_type'), 'foo');
         });
     });
 });
