@@ -1,17 +1,15 @@
 var Q = require('q');
 var assert = require('assert');
 
-var app = require('../../lib/app');
-var App = app.App;
+var vumigo = require('../../lib');
+var App = vumigo.app.App;
 
-var states = require('../../lib/states');
-var EndState = states.EndState;
-var Choice = states.Choice;
-var ChoiceState = states.ChoiceState;
+var EndState = vumigo.states.EndState;
+var Choice = vumigo.states.Choice;
+var ChoiceState = vumigo.states.ChoiceState;
 
-var tester = require('../../lib/tester/tester');
-var AppTester = tester.AppTester;
-var TaskMethodError = tester.TaskMethodError;
+var AppTester = vumigo.tester.AppTester;
+var TaskMethodError = vumigo.tester.TaskMethodError;
 
 
 describe("AppTester Setup Tasks", function() {
@@ -335,7 +333,8 @@ describe("AppTester Setup Tasks", function() {
     });
 
     describe(".setup.char_limit", function() {
-        it("should change the char limit used in the checking phase", function() {
+        it("should change the char limit used in the checking phase",
+        function() {
             return tester
                 .setup.char_limit(2)
                 .setup.char_limit(3)

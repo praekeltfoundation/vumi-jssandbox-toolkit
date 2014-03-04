@@ -2,18 +2,14 @@ var Q = require('q');
 var assert = require('assert');
 var AssertionError = assert.AssertionError;
 
-var app = require('../../lib/app');
-var App = app.App;
+var vumigo = require('../../lib');
+var test_utils = vumigo.test_utils;
+var App = vumigo.App;
+var AppTester = vumigo.tester.AppTester;
 
-var states = require('../../lib/states');
-var EndState = states.EndState;
-var Choice = states.Choice;
-var ChoiceState = states.ChoiceState;
-
-var tester = require('../../lib/tester/tester');
-var AppTester = tester.AppTester;
-
-var test_utils = require('../../lib/test_utils');
+var EndState = vumigo.states.EndState;
+var Choice = vumigo.states.Choice;
+var ChoiceState = vumigo.states.ChoiceState;
 
 
 describe("AppTester Check Tasks", function() {
