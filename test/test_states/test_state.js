@@ -7,7 +7,7 @@ var State = vumigo.states.State;
 var StateInvalidError = vumigo.states.StateInvalidError;
 
 
-describe.only("states.state", function() {
+describe("states.state", function() {
     describe("StateInvalidError", function () {
         describe(".message", function() {
             it("should include the state name", function() {
@@ -101,6 +101,31 @@ describe.only("states.state", function() {
             });
         });
 
+        describe(".show", function() {
+            it("should invoke .translate.before_display", function() {
+                var d = Q.defer();
+
+                state.translate.before_display = function() {
+                    return Q.delay(0).then(function() {
+                        d.resolve();
+                    });
+                };
+
+                return state.show().then(function() {
+                    assert(d.promise.isFulfilled());
+                });
+            });
+
+            it("should use .display's result", function() {
+                state.display = function() {
+                    return Q('bar').delay(0);
+                };
+
+                return state.show().then(function(result) {
+                    assert.equal(result, 'bar');
+                });
+            });
+        });
         describe(".save_response", function() {
             it("should store the given user response", function() {
                 assert.equal(
