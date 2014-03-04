@@ -1,4 +1,4 @@
-Sending Outbound Messages
-=========================
+Sending Messages
+================
 
 .. autojs:: ../lib/outbound/api.js
