@@ -82,7 +82,7 @@ describe("states.state", function() {
             it("should invoke .translate.before_input", function() {
                 var d = Q.defer();
 
-                state.translate.before_input = function() {
+                state.translators.before_input = function() {
                     return Q.delay(0).then(function() {
                         d.resolve();
                     });
@@ -105,7 +105,7 @@ describe("states.state", function() {
             it("should invoke .translate.before_display", function() {
                 var d = Q.defer();
 
-                state.translate.before_display = function() {
+                state.translators.before_display = function() {
                     return Q.delay(0).then(function() {
                         d.resolve();
                     });
