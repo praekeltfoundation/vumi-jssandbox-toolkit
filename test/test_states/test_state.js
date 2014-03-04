@@ -7,7 +7,7 @@ var State = vumigo.states.State;
 var StateInvalidError = vumigo.states.StateInvalidError;
 
 
-describe("states.state", function() {
+describe.only("states.state", function() {
     describe("StateInvalidError", function () {
         describe(".message", function() {
             it("should include the state name", function() {
@@ -79,6 +79,20 @@ describe("states.state", function() {
         });
 
         describe(".input", function() {
+            it("should invoke .translate.before_input", function() {
+                var d = Q.defer();
+
+                state.translate.before_input = function() {
+                    return Q.delay(0).then(function() {
+                        d.resolve();
+                    });
+                };
+
+                return state.input('foo').then(function() {
+                    assert(d.promise.isFulfilled());
+                });
+            });
+
             it("should emit a 'state:input' event", function() {
                 var p = state.once.resolved('state:input');
                 return state.input('foo').then(function() {
