@@ -1,15 +1,11 @@
 var Q = require('q');
 var assert = require('assert');
 
-var states = require('../../lib/states');
-var State = states.State;
-
-var app = require('../../lib/app');
-var App = app.App;
-
-var tester = require('../../lib/tester/tester');
-var AppTester = tester.AppTester;
-var TaskMethodError = tester.TaskMethodError;
+var vumigo = require('../../lib');
+var State = vumigo.states.State;
+var App = vumigo.app.App;
+var AppTester = vumigo.tester.AppTester;
+var TaskMethodError = vumigo.tester.TaskMethodError;
 
 
 describe("AppTester Interaction Tasks", function() {
@@ -34,7 +30,8 @@ describe("AppTester Interaction Tasks", function() {
             tester.tasks.attach();
         });
 
-        it("should throw an error when scheduling interaction tasks", function() {
+        it("should throw an error when scheduling interaction tasks",
+        function() {
             tester.check();
 
             assert.throws(function() {

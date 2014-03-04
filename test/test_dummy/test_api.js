@@ -1,7 +1,7 @@
-var assert = require("assert");
+var assert = require('assert');
+var Q = require('q');
 
 var vumigo = require("../../lib");
-var test_utils = vumigo.test_utils;
 var DummyApi = vumigo.dummy.api.DummyApi;
 var DummyResource = vumigo.dummy.resources.DummyResource;
 
@@ -19,21 +19,32 @@ var ToyResource = DummyResource.extend(function(self) {
     };
 });
 
-describe("DummyApi", function () {
-    var api;
-    var request;
+describe("dummy.api", function() {
+    describe("DummyApi", function () {
+        var api;
 
-    beforeEach(function () {
-        api = new DummyApi();
-        request = test_utils.requester(api);
-    });
+        function api_request(name, data) {
+            var d = Q.defer();
 
-    it("should dispatch commands using its resource controller", function() {
-        api.resources.add(new ToyResource());
-        return request('toy.foo', {}).then(function(result) {
-            assert.deepEqual(result, {
-                handler: 'foo',
-                cmd: {cmd: 'toy.foo'}
+            api.request(name, data, function(reply) {
+                d.resolve(reply);
+            });
+
+            return d.promise;
+        }
+
+        beforeEach(function () {
+            api = new DummyApi();
+        });
+
+        it("should dispatch commands using its resource controller",
+        function() {
+            api.resources.add(new ToyResource());
+            return api_request('toy.foo', {}).then(function(result) {
+                assert.deepEqual(result, {
+                    handler: 'foo',
+                    cmd: {cmd: 'toy.foo'}
+                });
             });
         });
     });
