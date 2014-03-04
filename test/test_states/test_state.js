@@ -78,6 +78,54 @@ describe("states.state", function() {
             });
         });
 
+        describe(".input", function() {
+            it("should invoke .translate.before_input", function() {
+                var d = Q.defer();
+
+                state.translators.before_input = function() {
+                    return Q.delay(0).then(function() {
+                        d.resolve();
+                    });
+                };
+
+                return state.input('foo').then(function() {
+                    assert(d.promise.isFulfilled());
+                });
+            });
+
+            it("should emit a 'state:input' event", function() {
+                var p = state.once.resolved('state:input');
+                return state.input('foo').then(function() {
+                    assert(p.isFulfilled());
+                });
+            });
+        });
+
+        describe(".show", function() {
+            it("should invoke .translate.before_display", function() {
+                var d = Q.defer();
+
+                state.translators.before_display = function() {
+                    return Q.delay(0).then(function() {
+                        d.resolve();
+                    });
+                };
+
+                return state.show().then(function() {
+                    assert(d.promise.isFulfilled());
+                });
+            });
+
+            it("should use .display's result", function() {
+                state.display = function() {
+                    return Q('bar').delay(0);
+                };
+
+                return state.show().then(function(result) {
+                    assert.equal(result, 'bar');
+                });
+            });
+        });
         describe(".save_response", function() {
             it("should store the given user response", function() {
                 assert.equal(
