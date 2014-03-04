@@ -11,6 +11,7 @@ API
 .. autojs:: ../lib/contacts/dummy.js
 .. autojs:: ../lib/kv/dummy.js
 .. autojs:: ../lib/metrics/dummy.js
+.. autojs:: ../lib/outbound/dummy.js
 
 
 Under the Hood

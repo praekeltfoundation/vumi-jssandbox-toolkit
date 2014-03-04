@@ -71,6 +71,13 @@ describe("interaction_machine", function() {
                 return im.setup(msg).thenResolve(p);
             });
 
+            it("should setup its outbound helper", function() {
+                var p = im.outbound.once.resolved('setup');
+                return im.setup(msg).then(function() {
+                    assert(p.isFulfilled());
+                });
+            });
+
             it("should setup its contacts store", function() {
                 var p = im.contacts.once.resolved('setup');
                 return im.setup(msg).then(function() {
@@ -302,6 +309,32 @@ describe("interaction_machine", function() {
                 });
 
                 return im.switch_state('spam', {}, {baz: 'qux'});
+            });
+
+            it("should translate the state", function() {
+                return test_utils.make_im({
+                    msg: fixtures.msg('1')
+                }).then(function(im) {
+                    im.app.states.add('foo', function(name) {
+                        var state = new EndState(name, {
+                            text: test_utils.$('yes or no?')
+                        });
+
+                        var text = state.display();
+                        assert.equal(text.args[0], 'yes or no?');
+
+                        return state;
+                    });
+
+                    return im.switch_state('foo').then(function() {
+                        assert.equal(im.state.display(), 'ja of nee?');
+                    });
+                });
+            });
+
+            it("should setup the new state", function() {
+                var p = end_state.once.resolved('setup');
+                return im.switch_state('end', {}, {}).thenResolve(p);
             });
 
             describe("if we are already in the requested state", function() {

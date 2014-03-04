@@ -151,6 +151,15 @@ describe("AppTester Interaction Tasks", function() {
                         assert.equal(im.msg.session_event, 'resume');
                     });
             });
+
+            it("should bind the function to the tester instance", function() {
+                return tester
+                    .input(function(msg) {
+                        assert.strictEqual(this, tester);
+                        return {};
+                    })
+                    .run();
+            });
         });
 
         describe(".input(content)", function() {
