@@ -2,18 +2,14 @@ var Q = require('q');
 var assert = require('assert');
 var AssertionError = assert.AssertionError;
 
-var app = require('../../lib/app');
-var App = app.App;
+var vumigo = require('../../lib');
+var test_utils = vumigo.test_utils;
+var App = vumigo.App;
+var AppTester = vumigo.tester.AppTester;
 
-var states = require('../../lib/states');
-var EndState = states.EndState;
-var Choice = states.Choice;
-var ChoiceState = states.ChoiceState;
-
-var tester = require('../../lib/tester/tester');
-var AppTester = tester.AppTester;
-
-var test_utils = require('../../lib/test_utils');
+var EndState = vumigo.states.EndState;
+var Choice = vumigo.states.Choice;
+var ChoiceState = vumigo.states.ChoiceState;
 
 
 describe("AppTester Check Tasks", function() {
@@ -366,13 +362,13 @@ describe("AppTester Check Tasks", function() {
                 .setup.user.state('initial_state')
                 .input('1')
                 .check.user.properties({
-                    answers: {initial_state: '2'}
+                    answers: {initial_state: 'coffee'}
                 })
                 .run()
                 .catch(function(e) {
                     assert.equal(e.msg, "Unexpected user answers");
-                    assert.deepEqual(e.expected, {initial_state: '2'});
-                    assert.deepEqual(e.actual, {initial_state: '1'});
+                    assert.deepEqual(e.expected, {initial_state: 'coffee'});
+                    assert.deepEqual(e.actual, {initial_state: 'tea'});
                 });
         });
 
@@ -423,12 +419,12 @@ describe("AppTester Check Tasks", function() {
             return tester
                 .setup.user.state('initial_state')
                 .input('1')
-                .check.user.answers({initial_state: '2'})
+                .check.user.answers({initial_state: 'coffee'})
                 .run()
                 .catch(function(e) {
                     assert.equal(e.msg, "Unexpected user answers");
-                    assert.deepEqual(e.expected, {initial_state: '2'});
-                    assert.deepEqual(e.actual, {initial_state: '1'});
+                    assert.deepEqual(e.expected, {initial_state: 'coffee'});
+                    assert.deepEqual(e.actual, {initial_state: 'tea'});
                 });
         });
     });
@@ -438,14 +434,14 @@ describe("AppTester Check Tasks", function() {
             return tester
                 .setup.user.state('initial_state')
                 .input('1')
-                .check.user.answer('initial_state', '2')
+                .check.user.answer('initial_state', 'coffee')
                 .run()
                 .catch(function(e) {
                     assert.equal(
                         e.msg,
                         "Unexpected user answer to state 'initial_state'");
-                    assert.deepEqual(e.expected, '2');
-                    assert.deepEqual(e.actual, '1');
+                    assert.deepEqual(e.expected, 'coffee');
+                    assert.deepEqual(e.actual, 'tea');
                 });
         });
     });
@@ -580,7 +576,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -631,7 +630,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -678,7 +680,6 @@ describe("AppTester Check Tasks", function() {
                         assert.equal(e.msg, "Unexpected reply");
 
                         assert.deepEqual(e.actual, {
-                            cmd: 'outbound.reply_to',
                             in_reply_to: '1',
                             continue_session: true,
                             content: [
@@ -693,7 +694,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -738,7 +742,7 @@ describe("AppTester Check Tasks", function() {
                 var called = false;
 
                 return tester.input().check.reply(function(reply) {
-                    assert.deepEqual(reply, api.request_calls[0]);
+                    assert.deepEqual(reply, api.outbound.store[0]);
                     called = true;
                 }).run().then(function() {
                     assert(called);
@@ -746,7 +750,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -821,7 +828,10 @@ describe("AppTester Check Tasks", function() {
         });
 
         it("should check that only one reply was sent", function() {
-            api.request_calls.push('fake_reply');
+            api.outbound.store.push({
+                content: 'fake reply',
+                in_reply_to: '1'
+            });
 
             return tester
                 .input()
@@ -879,7 +889,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -930,7 +943,10 @@ describe("AppTester Check Tasks", function() {
             });
 
             it("should check that only one reply was sent", function() {
-                api.request_calls.push('fake_reply');
+                api.outbound.store.push({
+                    content: 'fake reply',
+                    in_reply_to: '1'
+                });
 
                 return tester
                     .input()
@@ -982,7 +998,10 @@ describe("AppTester Check Tasks", function() {
         });
 
         it("should check that only one reply was sent", function() {
-            api.request_calls.push('fake_reply');
+            api.outbound.store.push({
+                content: 'fake reply',
+                in_reply_to: '1'
+            });
 
             return tester
                 .input()
@@ -1012,7 +1031,6 @@ describe("AppTester Check Tasks", function() {
                     assert.deepEqual(e.expected, []);
 
                     assert.deepEqual(e.actual, [{
-                        cmd: 'outbound.reply_to',
                         in_reply_to: '1',
                         continue_session: true,
                         content: [

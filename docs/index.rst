@@ -15,13 +15,16 @@ Vumi Go's Javascript sandbox.
    interaction_machine.rst
    app.rst
    states.rst
+   log.rst
    user.rst
    config.rst
+   contacts.rst
    http_api.rst
    metrics.rst
    events.rst
    tester.rst
    dummy.rst
+   translate.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
@@ -43,7 +46,7 @@ Contacts Example
 ~~~~~~~~~~~~~~~~
 
 You can create, update and remove contact information in Vumi Go's contact
-database. Here is an `example application <https://github.com/smn/go-contacts>`
+database. Here is an `example application <https://github.com/smn/go-contacts>`_
 that shows you how.
 
 Groups Example
