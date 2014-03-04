@@ -78,6 +78,15 @@ describe("states.state", function() {
             });
         });
 
+        describe(".input", function() {
+            it("should emit a 'state:input' event", function() {
+                var p = state.once.resolved('state:input');
+                return state.input('foo').then(function() {
+                    assert(p.isFulfilled());
+                });
+            });
+        });
+
         describe(".save_response", function() {
             it("should store the given user response", function() {
                 assert.equal(

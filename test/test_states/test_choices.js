@@ -51,13 +51,13 @@ describe("states.choice", function() {
             it("should accept a number-based answers", function () {
                 assert.equal(im.user.state.name, 'color_state');
 
-                return state.emit.input("1").then(function() {
+                return state.input("1").then(function() {
                     assert.equal(im.user.state.name, 'red_state');
                 });
             });
 
             it("should not accept label-based answers", function() {
-                return state.emit.input("Red").then(function() {
+                return state.input("Red").then(function() {
                     assert.equal(im.user.state.name, 'color_state');
                 });
             });
@@ -68,7 +68,7 @@ describe("states.choice", function() {
                 return make_state({accept_labels: true}).then(function(state) {
                     assert.equal(im.user.state.name, 'color_state');
 
-                    state.emit.input("Red").then(function() {
+                    state.input("Red").then(function() {
                         assert.equal(im.user.state.name, 'red_state');
                     });
                 });
@@ -79,7 +79,7 @@ describe("states.choice", function() {
                 return make_state({accept_labels: true}).then(function(state) {
                     assert.equal(im.user.state.name, 'color_state');
 
-                    state.emit.input("reD").then(function() {
+                    state.input("reD").then(function() {
                         assert.equal(im.user.state.name, 'red_state');
                     });
                 });
@@ -89,7 +89,7 @@ describe("states.choice", function() {
                 return make_state({accept_labels: true}).then(function(state) {
                     assert.equal(im.user.state.name, 'color_state');
 
-                    state.emit.input("1").then(function() {
+                    state.input("1").then(function() {
                         assert.equal(im.user.state.name, 'red_state');
                     });
                 });
@@ -133,7 +133,7 @@ describe("states.choice", function() {
                 function() {
                     assert.equal(im.user.state.name, 'color_state');
 
-                    return state.emit.input('1').then(function() {
+                    return state.input('1').then(function() {
                         assert.equal(im.user.state.name, 'red_state');
                     });
                 });
@@ -142,7 +142,7 @@ describe("states.choice", function() {
                     var answer = im.user.get_answer('color_state');
                     assert(typeof answer == 'undefined');
 
-                    return state.emit.input('1').then(function() {
+                    return state.input('1').then(function() {
                         assert.equal(im.user.get_answer('color_state'), 'red');
                     });
                 });
@@ -152,7 +152,7 @@ describe("states.choice", function() {
                 it("should not set the user's state", function() {
                     assert.equal(im.user.state.name, 'color_state');
 
-                    return state.emit.input('3').then(function() {
+                    return state.input('3').then(function() {
                         assert.equal(im.user.state.name, 'color_state');
                     });
                 });
@@ -161,7 +161,7 @@ describe("states.choice", function() {
                     var answer = im.user.get_answer('color_state');
                     assert(typeof answer == 'undefined');
 
-                    return state.emit.input('3').then(function() {
+                    return state.input('3').then(function() {
                         var answer = im.user.get_answer('color_state');
                         assert(typeof answer == 'undefined');
                     });
@@ -170,7 +170,7 @@ describe("states.choice", function() {
                 it("should put the state in an error state", function() {
                     assert(!state.error);
 
-                    return state.emit.input('3').then(function() {
+                    return state.input('3').then(function() {
                         assert.equal(state.error.response, 'no!');
                     });
                 });
@@ -213,13 +213,13 @@ describe("states.choice", function() {
             it("state name choice values", function () {
                 assert.equal(im.user.state.name, 'menu_state');
 
-                return state.emit.input("1").then(function() {
+                return state.input("1").then(function() {
                     assert.equal(im.user.state.name, 'state_by_name');
                 });
             });
 
             it("state object choice values", function() {
-                return state.emit.input("2").then(function() {
+                return state.input("2").then(function() {
                     assert.equal(im.user.state.name, 'state_by_object');
                     assert.deepEqual(im.user.state.metadata, {"foo": "bar"});
                 });
