@@ -87,7 +87,7 @@ describe("outbound.api", function() {
                                     return outbound.send({
                                         to: contact,
                                         content: 'hello!',
-                                        endpoint: 'twitter_endpoint',
+                                        endpoint: 'twitter_endpoint'
                                     });
                                 })
                                 .then(function() {
@@ -115,7 +115,7 @@ describe("outbound.api", function() {
                                     return outbound.send({
                                         to: contact,
                                         content: 'hello!',
-                                        endpoint: 'twitter',
+                                        endpoint: 'twitter_endpoint'
                                     });
                                 })
                                 .then(function() {
@@ -124,7 +124,7 @@ describe("outbound.api", function() {
                                     assert.deepEqual(sends[0], {
                                         to_addr: '@foo',
                                         content: 'hello!',
-                                        endpoint: 'twitter'
+                                        endpoint: 'twitter_endpoint'
                                     });
                                 });
                     });
