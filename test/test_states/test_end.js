@@ -31,7 +31,7 @@ describe("states.end", function() {
             function() {
                 assert.equal(im.user.state.name, 'state_1');
 
-                return state.emit.input('A lemon').then(function() {
+                return state.input('A lemon').then(function() {
                     assert.equal(im.user.state.name, 'state_2');
                 });
             });

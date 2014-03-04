@@ -50,13 +50,13 @@ describe("states.booklet", function() {
                 it("should not change the page number", function() {
                     assert.equal(booklet.metadata.page, 0);
 
-                    return booklet.emit.input("x").then(function() {
+                    return booklet.input("x").then(function() {
                         assert.equal(booklet.metadata.page, 0);
                     });
                 });
 
                 it("should not change state", function() {
-                    return booklet.emit.input("x").then(function() {
+                    return booklet.input("x").then(function() {
                         assert.equal(im.user.state.name, 'booklet');
                     });
                 });
@@ -67,13 +67,13 @@ describe("states.booklet", function() {
                 it("should decrement the page", function() {
                     booklet.set_current_page(0);
 
-                    return booklet.emit.input("1").then(function() {
+                    return booklet.input("1").then(function() {
                         assert.equal(booklet.get_current_page(), 2);
                     });
                 });
 
                 it("should not change state", function() {
-                    return booklet.emit.input("x").then(function() {
+                    return booklet.input("x").then(function() {
                         assert.equal(im.user.state.name, 'booklet');
                     });
                 });
@@ -81,7 +81,7 @@ describe("states.booklet", function() {
 
             describe("if the input given was for the exiting", function() {
                 it("should go to next state", function() {
-                    return booklet.emit.input("0").then(function() {
+                    return booklet.input("0").then(function() {
                         assert.equal(im.user.state.name, "next_state");
                     });
                 });
@@ -91,13 +91,13 @@ describe("states.booklet", function() {
                 it("should increment the page", function() {
                     booklet.set_current_page(0);
 
-                    return booklet.emit.input("2").then(function() {
+                    return booklet.input("2").then(function() {
                         assert.equal(booklet.get_current_page(), 1);
                     });
                 });
 
                 it("should not change state", function() {
-                    return booklet.emit.input("2").then(function() {
+                    return booklet.input("2").then(function() {
                         assert.equal(im.user.state.name, 'booklet');
                     });
                 });

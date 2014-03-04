@@ -35,7 +35,7 @@ describe("state.freetext", function() {
                 function() {
                     assert.equal(im.user.state.name, 'state_1');
 
-                    return state.emit.input('A lemon').then(function() {
+                    return state.input('A lemon').then(function() {
                         assert.equal(im.user.state.name, 'state_2');
                     });
                 });
@@ -43,7 +43,7 @@ describe("state.freetext", function() {
                 it("should save the user's response", function() {
                     assert(typeof im.user.get_answer('state_1') == 'undefined');
 
-                    return state.emit.input('A lemon').then(function() {
+                    return state.input('A lemon').then(function() {
                         assert.equal(im.user.get_answer('state_1'), 'A lemon');
                     });
                 });
@@ -53,7 +53,7 @@ describe("state.freetext", function() {
                 it("should not set the user's state", function() {
                     assert.equal(im.user.state.name, 'state_1');
 
-                    return state.emit.input('Not a lemon').then(function() {
+                    return state.input('Not a lemon').then(function() {
                         assert.equal(im.user.state.name, 'state_1');
                     });
                 });
@@ -61,7 +61,7 @@ describe("state.freetext", function() {
                 it("should not save the user's state", function() {
                     assert(typeof im.user.get_answer('state_1') == 'undefined');
 
-                    return state.emit.input('Not a lemon').then(function() {
+                    return state.input('Not a lemon').then(function() {
                         var answer = im.user.get_answer('state_1');
                         assert(typeof answer == 'undefined');
                     });
@@ -70,7 +70,7 @@ describe("state.freetext", function() {
                 it("should put the state in an error", function() {
                     assert(!state.error);
 
-                    return state.emit.input('Not a lemon').then(function() {
+                    return state.input('Not a lemon').then(function() {
                         assert.equal(state.error.response, 'no!');
                     });
                 });
