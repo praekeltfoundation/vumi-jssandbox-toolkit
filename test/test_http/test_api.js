@@ -13,7 +13,7 @@ var HttpResponseError = api.HttpResponseError;
 var HttpRequestError = api.HttpRequestError;
 
 
-describe("htto.api", function() {
+describe("http.api", function() {
     describe("HttpRequestError", function() {
         var request;
 
