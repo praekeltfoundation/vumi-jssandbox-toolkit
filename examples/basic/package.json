@@ -1,0 +1,17 @@
+{
+  "name": "example-jsbox-app",
+  "version": "0.0.0",
+  "description": "Example",
+  "scripts": {
+    "test": "../../utils/test.sh test/"
+  },
+  "dependencies": {
+    "vumigo_v02": "~0.2",
+    "q": "~0.9"
+  },
+  "devDependencies": {
+    "mocha-as-promised": "~2.0.0",
+    "mocha": "~1.17.1",
+    "jshint": "~2.4.4"
+  }
+}
