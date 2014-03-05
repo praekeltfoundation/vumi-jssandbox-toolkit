@@ -1,5 +1,5 @@
-Basic App
-=========
+A simple app
+============
 
 A simple app with three states. The start state is a ChoiceState, and asks the
 user if they would like tea or coffee. Based on their response, the user is

@@ -41,7 +41,7 @@ Basic example
 `A simple app`_ with a :class:`ChoiceState` and two :class:`EndState`\s. Take a look to find out how to ask a user if
 they would like tea or coffee.
 
-.. _a simple app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/basic
+.. _a simple app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/simple
 
 
 Indices and tables
