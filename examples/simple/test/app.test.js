@@ -1,3 +1,4 @@
+require('mocha-as-promised')();
 var vumigo = require('vumigo_v02');
 var app = require('../lib/app');
 var SimpleApp = app.SimpleApp;

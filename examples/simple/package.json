@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Example",
   "scripts": {
-    "test": "../../utils/test.sh test/"
+    "test": "mocha test"
   },
   "dependencies": {
     "vumigo_v02": "~0.2",
