@@ -132,7 +132,7 @@ describe("contacts.api", function() {
                     user_account: 'user1',
                 });
 
-                contact.subscriptions.conv3 = null;
+                contact.subscription.conv3 = null;
 
                 assert.throws(
                     function() { contact.do.validate(); },
