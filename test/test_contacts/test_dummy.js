@@ -84,6 +84,21 @@ describe("contacts.dummy", function() {
                              "(got: bad with address +27123)"].join(' '));
                     });
                 });
+
+                it("should return extras as extras-<name>", function() {
+                    api.contacts.add({
+                        msisdn: '+27123',
+                        extra: {foo: 'bar'}
+                    });
+
+                    return request('contacts.get', {
+                        addr: '27123',
+                        delivery_class: 'sms'
+                    }).then(function(result) {
+                        assert(!('extra' in result.contact));
+                        assert.equal(result.contact['extras-foo'], 'bar');
+                    });
+                });
             });
 
             describe(".get_by_key", function() {
@@ -104,6 +119,21 @@ describe("contacts.dummy", function() {
                     }).then(function(result) {
                         assert(!result.success);
                         assert.equal(result.reason, "Contact not found");
+                    });
+                });
+
+                it("should return extras as extras-<name>", function() {
+                    api.contacts.add({
+                        key:  '123',
+                        msisdn: '+27123',
+                        extra: {foo: 'bar'}
+                    });
+
+                    return request('contacts.get_by_key', {
+                        key: '123',
+                    }).then(function(result) {
+                        assert(!('extra' in result.contact));
+                        assert.equal(result.contact['extras-foo'], 'bar');
                     });
                 });
             });
@@ -147,6 +177,21 @@ describe("contacts.dummy", function() {
                              "(got: bad with address +27123)"].join(' '));
                     });
                 });
+
+                it("should return extras as extras-<name>", function() {
+                    api.contacts.add({
+                        msisdn: '+27123',
+                        extra: {foo: 'bar'}
+                    });
+
+                    return request('contacts.get_or_create', {
+                        addr: '+27123',
+                        delivery_class: 'sms'
+                    }).then(function(result) {
+                        assert(!('extra' in result.contact));
+                        assert.equal(result.contact['extras-foo'], 'bar');
+                    });
+                });
             });
 
             describe(".new", function() {
@@ -160,6 +205,19 @@ describe("contacts.dummy", function() {
                         assert(result.success);
                         assert.equal(result.contact.name, 'iggy');
                         assert.equal(result.contact.surname, 'mop');
+                    });
+                });
+
+                it("should return extras as extras-<name>", function() {
+                    return request('contacts.new', {
+                        contact: {
+                            name: 'iggy',
+                            surname: 'mop',
+                            extra: {foo: 'bar'}
+                        }
+                    }).then(function(result) {
+                        assert(!('extra' in result.contact));
+                        assert.equal(result.contact['extras-foo'], 'bar');
                     });
                 });
             });
@@ -215,6 +273,22 @@ describe("contacts.dummy", function() {
                              "instead of 'string': 3"].join(' '));
                     });
                 });
+
+                it("should return extras as extras-<name>", function() {
+                    api.contacts.add({key: '123'});
+
+                    return request('contacts.save', {
+                        contact: {
+                            key: '123',
+                            msisdn: '+27123',
+                            user_account: 'user1',
+                            extra: {foo: 'bar'}
+                        }
+                    }).then(function(result) {
+                        assert(!('extra' in result.contact));
+                        assert.equal(result.contact['extras-foo'], 'bar');
+                    });
+                });
             });
 
             describe(".update", function() {
@@ -234,7 +308,13 @@ describe("contacts.dummy", function() {
                     }).then(function(result) {
                         assert(result.success);
                         assert.equal(result.contact.name, 'iggy');
-                        assert.deepEqual(result.contact.extra, {foo: 'bar'});
+
+                        assert.equal(
+                            result.contact['extras-foo'],
+                            'bar');
+
+                        assert(!('extras-desk' in result.contact));
+                        assert(!('extras-tennis' in result.contact));
                     });
                 });
 
@@ -284,11 +364,18 @@ describe("contacts.dummy", function() {
                     }).then(function(result) {
                         assert(result.success);
                         assert.equal(result.contact.name, 'iggy');
-                        assert.deepEqual(result.contact.extra, {
-                            foo: 'bar',
-                            desk: 'lamp',
-                            tennis: 'instructor'
-                        });
+
+                        assert.equal(
+                            result.contact['extras-tennis'],
+                            'instructor');
+
+                        assert.equal(
+                            result.contact['extras-foo'],
+                            'bar');
+
+                        assert.equal(
+                            result.contact['extras-desk'],
+                            'lamp');
                     });
                 });
 
@@ -371,6 +458,26 @@ describe("contacts.dummy", function() {
                             result.reason,
                             ["Contact subscription 'conv3' has a value of type",
                              "'number' instead of 'string': 3"].join(' '));
+                    });
+                });
+
+                it("should return extras as extras-<name>", function() {
+                    api.contacts.add({
+                        key: '123',
+                        name: 'iggy',
+                        extra: {foo: 'bar'},
+                        subscription: {
+                            conv1: 'counter1',
+                            conv2: 'counter2'
+                        }
+                    });
+
+                    return request('contacts.update_subscriptions', {
+                        key: '123',
+                        fields: {conv3: 'counter3'}
+                    }).then(function(result) {
+                        assert(!('extra' in result.contact));
+                        assert.equal(result.contact['extras-foo'], 'bar');
                     });
                 });
             });
