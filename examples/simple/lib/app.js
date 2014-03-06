@@ -59,7 +59,7 @@ var SimpleApp = App.extend(function(self) {
 
 // if we have the real api, this is not a test, start the interaction machine
 if (typeof api != 'undefined') {
-    new InteractionMachine(api, new SomeApp());
+    new InteractionMachine(api, new SimpleApp());
 }
 
 
