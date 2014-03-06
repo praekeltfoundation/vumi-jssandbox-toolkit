@@ -326,7 +326,7 @@ describe("contacts.dummy", function() {
                     api.contacts.add({
                         key: '123',
                         name: 'iggy',
-                        subscriptions: {
+                        subscription: {
                             conv1: 'counter1',
                             conv2: 'counter2'
                         }
@@ -338,7 +338,7 @@ describe("contacts.dummy", function() {
                     }).then(function(result) {
                         assert(result.success);
                         assert.equal(result.contact.name, 'iggy');
-                        assert.deepEqual(result.contact.subscriptions, {
+                        assert.deepEqual(result.contact.subscription, {
                             conv1: 'counter1',
                             conv2: 'counter2',
                             conv3: 'counter3'
