@@ -13,6 +13,26 @@ var ValidationError = structs.ValidationError;
 
 describe("contacts.api", function() {
     describe("Contact", function() {
+        it("should allow extras be given as extra-<name>", function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user1',
+                extra: {lerp: 'larp'},
+                'extras-foo': 'bar',
+                'extras-baz': 'qux'
+            });
+
+            assert.deepEqual(contact.extra, {
+                lerp: 'larp',
+                foo: 'bar',
+                baz: 'qux'
+            });
+
+            assert(!('extras-foo' in contact));
+            assert(!('extras-baz' in contact));
+        });
+
         describe(".do.validate", function() {
             it("should throw an error for non-string keys", function() {
                 var contact = new Contact({
