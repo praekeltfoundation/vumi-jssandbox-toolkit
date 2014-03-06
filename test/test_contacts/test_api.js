@@ -33,6 +33,27 @@ describe("contacts.api", function() {
             assert(!('extras-baz' in contact));
         });
 
+        it("should allow subscriptions be given as subscription-<name>",
+        function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user1',
+                subscription: {lerp: 'larp'},
+                'subscription-foo': 'bar',
+                'subscription-baz': 'qux'
+            });
+
+            assert.deepEqual(contact.subscription, {
+                lerp: 'larp',
+                foo: 'bar',
+                baz: 'qux'
+            });
+
+            assert(!('subscription-foo' in contact));
+            assert(!('subscription-baz' in contact));
+        });
+
         describe(".do.validate", function() {
             it("should throw an error for non-string keys", function() {
                 var contact = new Contact({
