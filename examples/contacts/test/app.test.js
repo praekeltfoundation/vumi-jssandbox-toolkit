@@ -94,56 +94,52 @@ describe("app", function() {
         });
 
         describe("when the user is asked for their name", function() {
-            describe("when the user responds", function() {
-                it("should save their name", function() {
-                    // We need to test that the contact store was given the
-                    // name that the user responded with, so we need to do a
-                    // custom check using `.check`. We inspect the first
-                    // contact in the api's contact store, since only one new
-                    // contact would be created for the user.
-                    return tester
-                        .setup.user.state('states:registration:name')
-                        .input('Luke')
-                        .check(function(api) {
-                            var contact = api.contacts.store[0];
-                            assert.equal(contact.name, 'Luke');
-                        })
-                        .run();
-                });
+            it("should save their name", function() {
+                // We need to test that the contact store was given the
+                // name that the user responded with, so we need to do a
+                // custom check using `.check`. We inspect the first
+                // contact in the api's contact store, since only one new
+                // contact would be created for the user.
+                return tester
+                    .setup.user.state('states:registration:name')
+                    .input('Luke')
+                    .check(function(api) {
+                        var contact = api.contacts.store[0];
+                        assert.equal(contact.name, 'Luke');
+                    })
+                    .run();
+            });
 
-                it("should ask them if if they like tea or coffee", function() {
-                    return tester
-                        .setup.user.state('states:registration:name')
-                        .input('Luke')
-                        .check.interaction({
-                            states: 'states:registration:name',
-                            reply: [
-                                "Do you like tea or coffee?",
-                                "1. Tea",
-                                "2. Coffee"
-                            ].join('\n')
-                        })
-                        .run();
-                });
+            it("should ask them if they like tea or coffee", function() {
+                return tester
+                    .setup.user.state('states:registration:name')
+                    .input('Luke')
+                    .check.interaction({
+                        states: 'states:registration:name',
+                        reply: [
+                            "Do you like tea or coffee?",
+                            "1. Tea",
+                            "2. Coffee"
+                        ].join('\n')
+                    })
+                    .run();
             });
         });
 
         describe("when the user is asked if they like tea or coffee", function() {
-            describe("when the user makes a choice", function() {
-                it("should register the user", function() {
-                    // We want to check that the user is registered after
-                    // choosing any valid option, so we send any valid choice
-                    // (in this case '1') from the user, then check that the
-                    // user is registered.
-                    return tester
-                        .setup.user.state('states:registration:beverage')
-                        .input('1')
-                        .check(function(api) {
-                            var contact = api.contacts.store[0];
-                            assert.equal(contact.extra.registered, 'true');
-                        })
-                        .run();
-                });
+            it("should register the user with their response", function() {
+                // We want to check that the user is registered after
+                // choosing any valid option, so we send any valid choice
+                // (in this case '1') from the user, then check that the
+                // user is registered.
+                return tester
+                    .setup.user.state('states:registration:beverage')
+                    .input('1')
+                    .check(function(api) {
+                        var contact = api.contacts.store[0];
+                        assert.equal(contact.extra.registered, 'true');
+                    })
+                    .run();
             });
 
             describe("when the user chooses tea", function() {
