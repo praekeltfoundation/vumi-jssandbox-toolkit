@@ -13,6 +13,8 @@ var HttpApp = App.extend(function(self) {
     App.call(self, 'states:start');
 
     self.init = function() {
+        // We use `JsonApi` here. This ensure requests are json encoded and
+        // responses are json decoded.
         self.http = new JsonApi(self.im);
     };
 
@@ -27,6 +29,11 @@ var HttpApp = App.extend(function(self) {
     });
 
     self.states.add('states:put', function(name) {
+        // When the user has responded, we put their response to
+        // httpbin.org. Once httpbin.org has responded, we tell the interaction
+        // machine to go to 'states:done' next. Instead of just giving it the
+        // states name, we also give it additional options: the method that was
+        // performed, and httpbin.org's echo of the content in the response.
         return new FreeText(name, {
             question: 'What would you like to put?',
 
@@ -49,6 +56,9 @@ var HttpApp = App.extend(function(self) {
     });
 
     self.states.add('states:post', function(name) {
+        // Similarly to the put requests above, we send it to httpbin.org, then
+        // tell the interaction machine to go to 'states:done', giving it the
+        // method that was performed and httpbin.org's echo of the content.
         return new FreeText(name, {
             question: 'What would you like to post?',
 
@@ -71,6 +81,8 @@ var HttpApp = App.extend(function(self) {
     });
 
     self.states.add('states:done', function(name, opts) {
+        // Here we use the options given in 'states:put' and 'states:post' to
+        // show the appropriate message.
         return new EndState(name, {
             text: [
                 "You just performed a " + opts.method + ".",

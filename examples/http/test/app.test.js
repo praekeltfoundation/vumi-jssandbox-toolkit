@@ -13,6 +13,9 @@ describe("app", function() {
         
         beforeEach(function() {
             app = new HttpApp();
+
+            // We set up the `DummyApi`'s http resource to use 'json' as the
+            // default encoding. This can be overriden in each fixture.
             tester = new AppTester(app, {
                 api: {http: {default_encoding: 'json'}}
             });
@@ -22,6 +25,7 @@ describe("app", function() {
                     name: 'test_app'
                 })
                 .setup(function(api) {
+                    // Add all of the fixtures.
                     fixtures().forEach(api.http.fixtures.add);
                 });
         });
@@ -70,6 +74,10 @@ describe("app", function() {
 
         describe("when the user is asked to put something", function() {
             it("should should put their response", function() {
+                // We want to check that the response was given to httpbin.org,
+                // so we look at the request stored under `api.http.requests`
+                // and check the the request's data equals the content given by
+                // the user.
                 return tester
                     .setup.user.state('states:put')
                     .input('hello world!')
@@ -81,6 +89,9 @@ describe("app", function() {
             });
 
             it("should tell them the result", function() {
+                // Here, we rely on the corresponding fixture to set the
+                // response we were given. The echoed back 'hello world'
+                // was determined by the fixture's response.
                 return tester
                     .setup.user.state('states:put')
                     .input('hello world!')
@@ -97,6 +108,9 @@ describe("app", function() {
 
         describe("when the user is asked to post something", function() {
             it("should should post their response", function() {
+                // Similarly to the put test, we check that the message was
+                // given to httpbin.org correctly by inspecting the data of the
+                // requests stored under `api.http.requests`.
                 return tester
                     .setup.user.state('states:post')
                     .input('hello world!')
@@ -108,6 +122,9 @@ describe("app", function() {
             });
 
             it("should tell them the result", function() {
+                // Similarly to the test for put, we rely on the corresponding
+                // fixture to set the response. The echoed back 'hello world'
+                // was determined by the fixture's response.
                 return tester
                     .setup.user.state('states:post')
                     .input('hello world!')
