@@ -27,6 +27,18 @@ describe("models", function() {
         });
 
         describe(".do.reset", function() {
+            it("should parse the given attributes", function() {
+                var model = new Model();
+
+                model.do.parse = function(attrs) {
+                    attrs.foo = attrs.foo + '!';
+                    return attrs;
+                };
+
+                model.do.reset({foo: 'bar'});
+                assert.equal(model.foo, 'bar!');
+            });
+
             it("should validate the model", function() {
                 var model = new Model();
 

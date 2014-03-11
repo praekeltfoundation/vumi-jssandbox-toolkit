@@ -13,6 +13,47 @@ var ValidationError = structs.ValidationError;
 
 describe("contacts.api", function() {
     describe("Contact", function() {
+        it("should allow extras be given as extra-<name>", function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user1',
+                extra: {lerp: 'larp'},
+                'extras-foo': 'bar',
+                'extras-baz': 'qux'
+            });
+
+            assert.deepEqual(contact.extra, {
+                lerp: 'larp',
+                foo: 'bar',
+                baz: 'qux'
+            });
+
+            assert(!('extras-foo' in contact));
+            assert(!('extras-baz' in contact));
+        });
+
+        it("should allow subscriptions be given as subscription-<name>",
+        function() {
+            var contact = new Contact({
+                key: '123',
+                msisdn: '+27123',
+                user_account: 'user1',
+                subscription: {lerp: 'larp'},
+                'subscription-foo': 'bar',
+                'subscription-baz': 'qux'
+            });
+
+            assert.deepEqual(contact.subscription, {
+                lerp: 'larp',
+                foo: 'bar',
+                baz: 'qux'
+            });
+
+            assert(!('subscription-foo' in contact));
+            assert(!('subscription-baz' in contact));
+        });
+
         describe(".do.validate", function() {
             it("should throw an error for non-string keys", function() {
                 var contact = new Contact({
@@ -132,7 +173,7 @@ describe("contacts.api", function() {
                     user_account: 'user1',
                 });
 
-                contact.subscriptions.conv3 = null;
+                contact.subscription.conv3 = null;
 
                 assert.throws(
                     function() { contact.do.validate(); },
