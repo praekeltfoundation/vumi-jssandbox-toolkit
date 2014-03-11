@@ -12,6 +12,7 @@ Vumi Go's Javascript sandbox.
 .. toctree::
    :maxdepth: 1
 
+   examples.rst
    interaction_machine.rst
    app.rst
    states.rst
@@ -33,7 +34,29 @@ See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 Example Applications
 --------------------
 
-Coming soon!
+To get you started, here are some example applications that may be useful as an example or reference.
+
+Basic example
+~~~~~~~~~~~~~
+
+`A simple app`_ with a :class:`ChoiceState` and two :class:`EndState`\s. Take a look to find out how to ask a user if they would like tea or coffee.
+
+.. _a simple app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/simple
+
+Contacts example
+~~~~~~~~~~~~~~~~
+
+`An app`_ showing the basics for getting and saving contacts, and how to test
+contacts-based apps.
+
+.. _An app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/contacts
+
+Http example
+~~~~~~~~~~~~
+
+`An app`_ showing the basics for making http requests and using the responses.
+
+.. _An app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/http
 
 
 Indices and tables
