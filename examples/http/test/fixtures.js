@@ -24,7 +24,7 @@ module.exports = function() {
                     "X-Request-Id": "4cd50631-7b53-4687-8f5f-df24cfd6ff84"
                 },
                 "files": {},
-                "origin": "197.214.117.130",
+                "origin": "192.168.0.23",
                 "url": "http://httpbin.org/put",
                 "data": "{\"message\":\"hello world!\"}",
                 "args": {},
@@ -47,7 +47,7 @@ module.exports = function() {
             "data": {
                 "data": "{\"message\":\"hello world!\"}",
                 "form": {},
-                "origin": "197.214.117.130",
+                "origin": "192.168.0.23",
                 "url": "http://httpbin.org/post",
                 "args": {},
                 "files": {},
