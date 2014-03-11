@@ -51,6 +51,13 @@ contacts-based apps.
 
 .. _An app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/contacts
 
+Http example
+~~~~~~~~~~~~
+
+`An app`_ showing the basics for making http requests and using the responses.
+
+.. _An app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/http
+
 
 Indices and tables
 ==================
