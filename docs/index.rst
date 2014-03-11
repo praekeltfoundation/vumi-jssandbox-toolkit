@@ -36,27 +36,26 @@ Example Applications
 
 To get you started, here are some example applications that may be useful as an example or reference.
 
-Basic example
-~~~~~~~~~~~~~
-
-`A simple app`_ with a :class:`ChoiceState` and two :class:`EndState`\s. Take a look to find out how to ask a user if they would like tea or coffee.
-
-.. _a simple app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/simple
-
-Contacts example
+`Basic example`_
 ~~~~~~~~~~~~~~~~
 
-`An app`_ showing the basics for getting and saving contacts, and how to test
-contacts-based apps.
+A simple app with a :class:`ChoiceState` and two :class:`EndState`\s. Take a look to find out how to ask a user if they would like tea or coffee.
 
-.. _An app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/contacts
+.. _Basic example: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/simple
 
-Http example
-~~~~~~~~~~~~
+`Contacts example`_
+~~~~~~~~~~~~~~~~~~~
 
-`An app`_ showing the basics for making http requests and using the responses.
+Shows the basics for getting and saving contacts, and how to test contacts-based apps.
 
-.. _An app: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/http
+.. _Contacts example: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/contacts
+
+`Http example`_
+~~~~~~~~~~~~~~~
+
+Shows the basics for making http requests and using the responses.
+
+.. _Http example: https://github.com/praekelt/vumi-jssandbox-toolkit/tree/release/0.2.x/examples/http
 
 
 Indices and tables
