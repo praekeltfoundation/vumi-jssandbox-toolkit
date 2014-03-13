@@ -399,7 +399,7 @@ describe("interaction_machine", function() {
                 });
             });
 
-            it.only("should save the right opts for delegate state creators",
+            it("should save the right opts for delegate state creators",
             function() {
                 assert(_.isUndefined(im.user.creator_opts));
 
