@@ -130,6 +130,39 @@ describe("outbound.api", function() {
                     });
                 });
             });
+
+            it("should translate to the given language", function() {
+                return im
+                    .outbound.send({
+                        to: '+273123',
+                        endpoint: 'sms',
+                        content: test_utils.$('yes'),
+                        lang: 'jp'
+                    })
+                    .then(function() {
+                        var msg = im.api.outbound.store[0];
+                        assert.equal(msg.content, 'hai');
+                    });
+            });
+
+            it("should by default translate to the user language", function() {
+                return im
+                    .outbound.send({
+                        to: '+273123',
+                        endpoint: 'sms',
+                        content: test_utils.$('yes')
+                    })
+                    .then(function() {
+                        var msg = im.api.outbound.store[0];
+                        assert.equal(msg.content, 'ja');
+                    });
+            });
+
+            describe("when no language is given", function() {
+            });
+
+            describe("when a language is given", function() {
+            });
         });
 
         describe(".send_to_user", function() {
