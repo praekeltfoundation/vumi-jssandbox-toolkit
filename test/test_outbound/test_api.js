@@ -157,12 +157,6 @@ describe("outbound.api", function() {
                         assert.equal(msg.content, 'ja');
                     });
             });
-
-            describe("when no language is given", function() {
-            });
-
-            describe("when a language is given", function() {
-            });
         });
 
         describe(".send_to_user", function() {
