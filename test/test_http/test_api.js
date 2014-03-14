@@ -174,10 +174,7 @@ describe("http.api", function() {
 
             it("should include the url params if passed as a list", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/', {
-                    params: [{
-                        name: 'bar',
-                        value: 'baz'
-                    }]
+                    params: {bar: 'baz'}
                 });
 
                 var cmd = request.to_cmd();
@@ -228,15 +225,12 @@ describe("http.api", function() {
 
             it("should include the params if available", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/', {
-                    params: [{
-                        name: 'bar',
-                        value: 'baz'
-                    }]
+                    params: {bar: 'baz'}
                 });
 
                 var request_str = request.toString();
                 assert(request_str.indexOf(
-                    '(params: [{"name":"bar","value":"baz"}])') > -1);
+                    '(params: {"bar":"baz"})') > -1);
             });
 
             it("should exclude the params if not present", function() {
@@ -470,33 +464,24 @@ describe("http.api", function() {
                     request: {
                         method: 'GET',
                         url: 'http://foo.com/',
-                        params: [{
-                            name :'a',
-                            value: 1
-                        }, {
-                            name :'b',
-                            value: 2
-                        }]
+                        params: {
+                            a: '1',
+                            b: '2'
+                        }
                     }
                 });
 
                 return api.get('http://foo.com/', {
-                    params: [{
-                        name :'a',
-                        value: 1
-                    }, {
-                        name :'b',
-                        value: 2
-                    }]
+                    params: {
+                        a: '1',
+                        b: '2'
+                    }
                 }).then(function(data) {
                     var request = im.api.http.requests[0];
-                    assert.deepEqual(request.params.param_list, [{
-                        name :'a',
-                        value: 1
-                    }, {
-                        name :'b',
-                        value: 2
-                    }]);
+                    assert.deepEqual(request.params, {
+                        a: '1',
+                        b: '2'
+                    });
                 });
             });
 

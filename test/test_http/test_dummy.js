@@ -112,7 +112,7 @@ describe("http.dummy", function() {
                 var fixture = fixtures.filter(request)[0];
 
                 assert(fixture instanceof HttpFixture);
-                assert.equal(fixture.request.url, 'http://example.com');
+                assert.equal(fixture.request.url, 'http://example.com/');
                 assert.equal(fixture.responses[0].code, 201);
             });
 
@@ -377,13 +377,10 @@ describe("http.dummy", function() {
                     url: 'http://example.com/?foo=bar&baz=qux'
                 });
 
-                assert.deepEqual(request.params.param_list, [{
-                    name: 'foo',
-                    value: 'bar'
-                }, {
-                    name: 'baz',
-                    value: 'qux'
-                }]);
+                assert.deepEqual(request.params, {
+                    foo: 'bar',
+                    baz: 'qux'
+                });
             });
 
             it("should json decode the request body if asked", function() {
@@ -473,7 +470,7 @@ describe("http.dummy", function() {
                         var request = api.http.requests[0];
                         assert(request instanceof HttpRequest);
                         assert.equal(request.method, 'HEAD');
-                        assert.equal(request.url, 'http://example.com');
+                        assert.equal(request.url, 'http://example.com/');
                     });
                 });
             });
