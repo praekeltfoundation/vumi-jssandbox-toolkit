@@ -57,44 +57,6 @@ describe("utils", function() {
         });
     });
 
-    describe(".url_encode", function() {
-        it("should url encode the given url and params", function() {
-            assert.equal(
-                utils.url_encode('http://example.com/', [{
-                    name: 'a',
-                    value: 'f o o'
-                }, {
-                    name: 'b',
-                    value: 'b a r'
-                }, {
-                    name: 'c',
-                    value: null
-                }]),
-                'http://example.com/?a=f%20o%20o&b=b%20a%20r&c=null');
-        });
-    });
-
-    describe(".url_decode", function() {
-        it("should decode the url into its base and params", function() {
-            assert.deepEqual(utils.url_decode(
-                'http://example.com/?a=f%20o%20o&b=b%20a%20r&c=null'),
-                {
-                    url: 'http://example.com/',
-                    params: [{
-                        name: 'a',
-                        value: 'f o o'
-                    }, {
-                        name: 'b',
-                        value: 'b a r'
-                    }, {
-                        name: 'c',
-                        value: 'null'
-                    }]
-                });
-        });
-    });
-
-
     describe(".starts_with", function() {
         it("should determine whether the one string starts with the other",
         function() {

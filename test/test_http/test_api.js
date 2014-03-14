@@ -6,7 +6,6 @@ var test_utils = vumigo.test_utils;
 var api = vumigo.http.api;
 var HttpApi = api.HttpApi;
 var JsonApi = api.JsonApi;
-var UrlParams = api.UrlParams;
 var HttpRequest = api.HttpRequest;
 var HttpResponse = api.HttpResponse;
 var HttpResponseError = api.HttpResponseError;
@@ -51,80 +50,6 @@ describe("http.api", function() {
             it("should include the error reason if available", function() {
                 var error = new HttpResponseError(response, 'Sigh');
                 assert(error.message.indexOf('Sigh') > -1);
-            });
-        });
-    });
-
-    describe("UrlParams", function() {
-        var url_params;
-
-        describe("on creation", function() {
-            it("should accept null values", function () {
-                url_params = new UrlParams(null);
-                assert.deepEqual(url_params.param_list, []);
-            });
-
-            it("should accept undefined values", function () {
-                url_params = new UrlParams();
-                assert.deepEqual(url_params.param_list, []);
-            });
-
-            it("should accept arrays of parameters", function() {
-                url_params = new UrlParams([
-                    {name: "foo", value: "value-1"},
-                    {name: "foo", value: "value-2"},
-                ]);
-                assert.deepEqual(url_params.param_list, [
-                    {name: "foo", value: "value-1"},
-                    {name: "foo", value: "value-2"},
-                ]);
-            });
-
-            it("should accept simple objects", function() {
-                url_params = new UrlParams({
-                    foo: "bar", boo: "far"
-                });
-                assert.deepEqual(url_params.param_list, [
-                    {name: "boo", value: "far"},
-                    {name: "foo", value: "bar"},
-                ]);
-            });
-        });
-
-        describe(".append_to", function() {
-            it("should not change the URL if there are no parameters", function() {
-                url_params = new UrlParams();
-                assert.strictEqual(
-                    "http://example.com/",
-                    url_params.append_to("http://example.com/"));
-            });
-
-            it("should append any URL parameters", function() {
-                url_params = new UrlParams({foo: "fog", boo: "bog"});
-                assert.strictEqual(
-                    "http://example.com/?boo=bog&foo=fog",
-                    url_params.append_to("http://example.com/"));
-            });
-        });
-
-        describe(".exist", function() {
-            it("should return true if there are parameters", function() {
-                url_params = new UrlParams({foo: "bar"});
-                assert.strictEqual(true, url_params.exist());
-            });
-
-            it("should return false if there are no parameters", function() {
-                url_params = new UrlParams();
-                assert.strictEqual(false, url_params.exist());
-            });
-        });
-
-        describe(".toJSON", function() {
-            it("should return the list of query parameters", function() {
-                url_params = new UrlParams({foo: "bar"});
-                assert.strictEqual(
-                    '[{"name":"foo","value":"bar"}]',
-                    JSON.stringify(url_params));
             });
         });
     });
