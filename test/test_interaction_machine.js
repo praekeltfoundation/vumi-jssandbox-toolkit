@@ -388,6 +388,7 @@ describe("interaction_machine", function() {
 
             it("should reset the user's state to the new state", function() {
                 assert(!im.user.state.is('end'));
+
                 return im
                     .switch_state('end', {}, {baz: 'qux'})
                     .then(function() {
@@ -395,6 +396,33 @@ describe("interaction_machine", function() {
                         assert.deepEqual(
                             im.user.state.creator_opts,
                             {baz: 'qux'});
+                });
+            });
+
+            it("should save the right opts for delegate state creators",
+            function() {
+                assert(_.isUndefined(im.user.creator_opts));
+
+                im.app.states.add('foo', function(name) {
+                    return im.app.states.create('bar', {eggs: 'ham'});
+                });
+
+                im.app.states.add('bar', function(name, opts) {
+                    return im.app.states.create('baz', {lerp: 'larp'});
+                });
+
+                im.app.states.add('baz', function(name, opts) {
+                    return new EndState(name, {text: opts.lerp});
+                });
+
+                return im
+                    .switch_state('foo', {}, {lorem: 'ipsum'})
+                    .then(function() {
+                        assert(im.user.state.is('baz'));
+
+                        assert.deepEqual(
+                            im.user.state.creator_opts,
+                            {lerp: 'larp'});
                 });
             });
         });
