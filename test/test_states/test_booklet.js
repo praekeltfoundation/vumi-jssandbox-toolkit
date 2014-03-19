@@ -130,16 +130,45 @@ describe("states.booklet", function() {
             });
         });
 
-        describe(".display", function() {
+        describe(".show", function() {
             it("should display the current page", function() {
                 booklet.set_current_page(1);
 
-                return booklet.display().then(function(content) {
+                return booklet.show().then(function(content) {
                     assert.equal(content, [
                         "Page 1.",
                         "1 for prev, 2 for next, 0 to end."
                     ].join('\n'));
                 });
+            });
+
+            it("should translate the displayed content", function() {
+                var booklet = new BookletState('i18n_booklet', {
+                    next: "next_state",
+                    pages: 2,
+                    page_text: function(i) {
+                        return [
+                            test_utils.$('hello'),
+                            test_utils.$('goodbye')
+                        ][i];
+                    },
+                    footer_text: test_utils.$('yes or no?')
+                });
+
+                im.app.states.add(booklet);
+
+                return im
+                    .switch_state('i18n_booklet')
+                    .then(function() {
+                        booklet.set_current_page(1);
+                        return booklet.show();
+                    })
+                    .then(function(content) {
+                        assert.equal(content, [
+                            "totsiens",
+                            "ja of nee?"
+                        ].join('\n'));
+                    });
             });
         });
     });
