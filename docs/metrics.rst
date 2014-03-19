@@ -1,4 +1,5 @@
-Metrics
-=======
+Messages
+========
 
-.. autojs:: ../lib/metrics/api.js
+
+.. autojs:: ../lib/message.js
