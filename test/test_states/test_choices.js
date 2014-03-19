@@ -296,5 +296,65 @@ describe("states.choice", function() {
                 ].join('\n'))
                 .run();
         });
+
+        describe("when the user first enters the state", function() {
+            it("should show the user the first page", function() {
+                opts.options_per_page = 1;
+
+                return tester
+                    .input()
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Red red red",
+                        "2. More"
+                    ].join('\n'))
+                    .run();
+            });
+        });
+
+        describe("when the user is on an arbitrary page", function() {
+            beforeEach(function() {
+                opts.options_per_page = 1;
+
+                tester.setup.user.state({
+                    name: 'states:test',
+                    metadata: {page_start: 1}
+                });
+            });
+
+            it("should show the user the page content", function() {
+                return tester
+                    .input()
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Blue",
+                        "2. More",
+                        "3. Back"
+                    ].join('\n'))
+                    .run();
+            });
+
+            it("should take the user back if they ask", function() {
+                return tester
+                    .input('3')
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Red red red",
+                        "2. More"
+                    ].join('\n'))
+                    .run();
+            });
+
+            it("should take the user forward if they ask", function() {
+                return tester
+                    .input('2')
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Green",
+                        "2. Back"
+                    ].join('\n'))
+                    .run();
+            });
+        });
     });
 });
