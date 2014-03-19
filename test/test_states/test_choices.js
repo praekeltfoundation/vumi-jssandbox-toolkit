@@ -2,6 +2,8 @@ var assert = require('assert');
 var _ = require('lodash');
 
 var vumigo = require('../../lib');
+var App = vumigo.App;
+var AppTester = vumigo.AppTester;
 var test_utils = vumigo.test_utils;
 
 var ChoiceState = vumigo.states.ChoiceState;
@@ -228,96 +230,130 @@ describe("states.choice", function() {
     });
 
     describe("PaginatedChoiceState", function () {
-        var im;
-        var state;
-
-        function make_state(opts) {
-            opts = _.defaults(opts || {}, {
-                name: "color_state",
-                question: "What is your favourite colour?",
-                choices: [
-                    new Choice('long', 'Long item name'),
-                    new Choice('short', 'Short')
-                ],
-                next: function(choice) {
-                    return {
-                        long: 'long_state',
-                        short: 'short_state'
-                    }[choice.value];
-                }
-            });
-
-            return test_utils
-                .make_im()
-                .then(function(new_im) {
-                    im = new_im;
-                })
-                .then(function() {
-                    state = new PaginatedChoiceState(opts.name, opts);
-                    im.app.states.add(state);
-                    return im.switch_state('color_state').thenResolve(state);
-                });
-        }
-
-        function serialize_choices(choices) {
-            return choices.map(function(c) { return c.serialize(); });
-        }
+        var tester;
+        var opts;
 
         beforeEach(function () {
-            return make_state();
+            var app = new App('states:test');
+            opts = {};
+
+            app.states.add('states:test', function(name) {
+                opts = _.defaults(opts, {
+                    name: name,
+                    question: "Choose a colour:",
+                    choices: [
+                        new Choice('red', 'Red red red'),
+                        new Choice('blue', 'Blue'),
+                        new Choice('green', 'Green')
+                    ]
+                });
+
+                return new PaginatedChoiceState(name, opts);
+            });
+
+            tester = new AppTester(app);
         });
 
-        describe("shorten_choices", function() {
-            it("should shorten choices if needed", function() {
-                return make_state({
-                    characters_per_page: 25
-                }).then(function(state) {
-                    var choices = state.current_choices();
-                    choices = state.shorten_choices('Choices:', choices);
+        it("should shorten choices if needed", function() {
+            opts.characters_per_page = 44;
 
-                    assert.deepEqual(serialize_choices(choices), [{
-                        value: 'long',
-                        label: 'L...'
-                    }, {
-                        value: 'short',
-                        label: 'Short'
-                    }]);
+            return tester
+                .input()
+                .check.reply([
+                    "Choose a colour:",
+                    "1. Red ...",
+                    "2. Blue",
+                    "3. Green"
+                ].join('\n'))
+                .run();
+        });
+
+        it("should not shorten choices if not needed", function() {
+            opts.characters_per_page = 100;
+
+            return tester
+                .input()
+                .check.reply([
+                    "Choose a colour:",
+                    "1. Red red red",
+                    "2. Blue",
+                    "3. Green"
+                ].join('\n'))
+                .run();
+        });
+
+        it("should return all the choices if the text is already too long",
+        function() {
+            opts.characters_per_page = 4;
+
+            return tester
+                .input()
+                .check.reply([
+                    "Choose a colour:",
+                    "1. Red red red",
+                    "2. Blue",
+                    "3. Green"
+                ].join('\n'))
+                .run();
+        });
+
+        describe("when the user first enters the state", function() {
+            it("should show the user the first page", function() {
+                opts.options_per_page = 1;
+
+                return tester
+                    .input()
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Red red red",
+                        "2. More"
+                    ].join('\n'))
+                    .run();
+            });
+        });
+
+        describe("when the user is on an arbitrary page", function() {
+            beforeEach(function() {
+                opts.options_per_page = 1;
+
+                tester.setup.user.state({
+                    name: 'states:test',
+                    metadata: {page_start: 1}
                 });
             });
 
-            it("should not shorten choices if not needed", function() {
-                return make_state({
-                    characters_per_page: 100
-                }).then(function(state) {
-                    var choices = state.current_choices();
-                    choices = state.shorten_choices('Choices:', choices);
-
-                    assert.deepEqual(serialize_choices(choices), [{
-                        value: 'long',
-                        label: 'Long item name'
-                    }, {
-                        value: 'short',
-                        label: 'Short'
-                    }]);
-                });
+            it("should show the user the page content", function() {
+                return tester
+                    .input()
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Blue",
+                        "2. More",
+                        "3. Back"
+                    ].join('\n'))
+                    .run();
             });
 
-            it("should return all the choices if the text is already too long",
-            function() {
-                return make_state({
-                    characters_per_page: 4
-                }).then(function(state) {
-                    var choices = state.current_choices();
-                    choices = state.shorten_choices('12345', choices);
+            it("should take the user back if they ask", function() {
+                return tester
+                    .input('3')
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Red red red",
+                        "2. More"
+                    ].join('\n'))
+                    .run();
+            });
 
-                    assert.deepEqual(serialize_choices(choices), [{
-                        value: 'long',
-                        label: 'Long item name'
-                    }, {
-                        value: 'short',
-                        label: 'Short'
-                    }]);
-                });
+            it("should take the user forward if they ask", function() {
+                return tester
+                    .input('2')
+                    .check.reply([
+                        "Choose a colour:",
+                        "1. Green",
+                        "2. Back"
+                    ].join('\n'))
+                    .run();
             });
         });
     });
