@@ -1,175 +1,123 @@
+var _ = require('lodash');
 var Q = require('q');
-var assert = require('assert');
 
 var vumigo = require('../../lib');
+var fixtures = vumigo.fixtures;
+var App = vumigo.App;
+var AppTester = vumigo.AppTester;
+var EndState = vumigo.states.EndState;
 var test_utils = vumigo.test_utils;
 var BookletState = vumigo.states.BookletState;
 
 
 describe("states.booklet", function() {
     describe("BookletState", function() {
-        var booklet;
-        var im;
+        var tester;
 
-        function page_text(n) {
-            return Q("Page " + n + ".");
-        }
+        beforeEach(function () {
+            var app = new App('states:test');
 
-        beforeEach(function() {
-            return test_utils.make_im().then(function(new_im) {
-                im = new_im;
-
-                booklet = new BookletState('booklet', {
-                    next: "next_state",
+            app.states.add('states:test', function(name) {
+                _.defaults(tester.data.opts, {
+                    next: "states:next",
                     pages: 3,
-                    page_text: page_text
+                    page_text: function(n) {
+                        return Q("Page " + n + ".");
+                    }
                 });
 
-                im.app.states.add(booklet);
-                return im.switch_state('booklet');
+                return new BookletState(name, tester.data.opts);
             });
+
+            app.states.add('states:next', function(name) {
+                return new EndState(name, {
+                    text: 'You are on the next state.'
+                });
+            });
+
+            tester = new AppTester(app);
+            tester.data.opts = {};
         });
 
-        describe(".setup", function() {
-            it("should set the initial page", function() {
-                booklet = new BookletState('name', {
-                    next: "next_state",
-                    pages: 3,
-                    page_text: page_text,
-                    initial_page: 2
-                });
-
-                return booklet.setup(im).then(function() {
-                    assert.equal(booklet.get_current_page(), 2);
-                });
-            });
+        it("should display the first page when the user enters", function() {
+            return tester
+                .input()
+                .check.reply([
+                    "Page 0.",
+                    "1 for prev, 2 for next, 0 to end."
+                ].join('\n'))
+                .run();
         });
 
-        describe("on 'state:input'", function() {
-            describe("if the input given was unknown", function() {
-                it("should not change the page number", function() {
-                    assert.equal(booklet.metadata.page, 0);
-
-                    return booklet.input("x").then(function() {
-                        assert.equal(booklet.metadata.page, 0);
-                    });
-                });
-
-                it("should not change state", function() {
-                    return booklet.input("x").then(function() {
-                        assert.equal(im.user.state.name, 'booklet');
-                    });
-                });
-            });
-
-            describe("if the input given was for the previous page",
-            function() {
-                it("should decrement the page", function() {
-                    booklet.set_current_page(0);
-
-                    return booklet.input("1").then(function() {
-                        assert.equal(booklet.get_current_page(), 2);
-                    });
-                });
-
-                it("should not change state", function() {
-                    return booklet.input("x").then(function() {
-                        assert.equal(im.user.state.name, 'booklet');
-                    });
-                });
-            });
-
-            describe("if the input given was for the exiting", function() {
-                it("should go to next state", function() {
-                    return booklet.input("0").then(function() {
-                        assert.equal(im.user.state.name, "next_state");
-                    });
-                });
-            });
-
-            describe("if the input given was for the next page", function() {
-                it("should increment the page", function() {
-                    booklet.set_current_page(0);
-
-                    return booklet.input("2").then(function() {
-                        assert.equal(booklet.get_current_page(), 1);
-                    });
-                });
-
-                it("should not change state", function() {
-                    return booklet.input("2").then(function() {
-                        assert.equal(im.user.state.name, 'booklet');
-                    });
-                });
-            });
+        it("should show the same page if bad input was given", function() {
+            return tester
+                .setup.user.state('states:test')
+                .input('3')
+                .check.reply([
+                    "Page 0.",
+                    "1 for prev, 2 for next, 0 to end."
+                ].join('\n'))
+                .run();
         });
 
-        describe(".set_current_page", function() {
-            it("should allow the current page to be set", function() {
-                booklet.set_current_page(0);
-                assert.equal(booklet.get_current_page(), 0);
-
-                booklet.set_current_page(2);
-                assert.equal(booklet.get_current_page(), 2);
-            });
+        it("should go to the previous page if asked", function() {
+            return tester
+                .setup.user.state({
+                    name: 'states:test',
+                    metadata: {page: 1}
+                })
+                .input('1')
+                .check.reply([
+                    "Page 0.",
+                    "1 for prev, 2 for next, 0 to end."
+                ].join('\n'))
+                .run();
         });
 
-        describe(".inc_current_page", function() {
-            it("should allow the current page to be incremented", function() {
-                booklet.inc_current_page(1);
-                assert.equal(booklet.get_current_page(), 1);
-
-                booklet.inc_current_page(-1);
-                assert.equal(booklet.get_current_page(), 0);
-
-                booklet.inc_current_page(3);
-                assert.equal(booklet.get_current_page(), 0);
-
-                booklet.inc_current_page(-10);
-                assert.equal(booklet.get_current_page(), 2);
-            });
+        it("should go to the next page if asked", function() {
+            return tester
+                .setup.user.state({
+                    name: 'states:test',
+                    metadata: {page: 1}
+                })
+                .input('2')
+                .check.reply([
+                    "Page 2.",
+                    "1 for prev, 2 for next, 0 to end."
+                ].join('\n'))
+                .run();
         });
 
-        describe(".show", function() {
-            it("should display the current page", function() {
-                booklet.set_current_page(1);
+        it("should go to the next state if asked", function() {
+            return tester
+                .setup.user.state('states:test')
+                .input('0')
+                .check.reply("You are on the next state.")
+                .check.user.state('states:next')
+                .run();
+        });
 
-                return booklet.show().then(function(content) {
-                    assert.equal(content, [
-                        "Page 1.",
-                        "1 for prev, 2 for next, 0 to end."
-                    ].join('\n'));
-                });
-            });
+        it("should translate the displayed content", function() {
+            tester.data.opts = {
+                pages: 2,
+                page_text: function(i) {
+                    return [
+                        test_utils.$('hello'),
+                        test_utils.$('goodbye')
+                    ][i];
+                },
+                footer_text: test_utils.$('yes or no?')
+            };
 
-            it("should translate the displayed content", function() {
-                var booklet = new BookletState('i18n_booklet', {
-                    next: "next_state",
-                    pages: 2,
-                    page_text: function(i) {
-                        return [
-                            test_utils.$('hello'),
-                            test_utils.$('goodbye')
-                        ][i];
-                    },
-                    footer_text: test_utils.$('yes or no?')
-                });
-
-                im.app.states.add(booklet);
-
-                return im
-                    .switch_state('i18n_booklet')
-                    .then(function() {
-                        booklet.set_current_page(1);
-                        return booklet.show();
-                    })
-                    .then(function(content) {
-                        assert.equal(content, [
-                            "totsiens",
-                            "ja of nee?"
-                        ].join('\n'));
-                    });
-            });
+            return tester
+                .setup.config(fixtures.config())
+                .setup.user.lang('af')
+                .input()
+                .check.reply([
+                    "hallo",
+                    "ja of nee?"
+                ].join('\n'))
+                .run();
         });
     });
 });
