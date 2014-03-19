@@ -30,6 +30,11 @@ describe("kv.dummy", function() {
                 assert.equal(api.kv.store.foo, 3);
             });
 
+            it("should initialise new keys", function() {
+                assert.strictEqual(api.kv.incr('foo'), 1);
+                assert.equal(api.kv.store.foo, 1);
+            });
+
             it("should throw an error for non-integer values", function() {
                 api.kv.store.foo = 'bar';
 
