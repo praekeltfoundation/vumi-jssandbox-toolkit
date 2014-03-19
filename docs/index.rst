@@ -26,7 +26,7 @@ Vumi Go's Javascript sandbox.
    tester.rst
    dummy.rst
    translate.rst
-   outbound.rst
+   messages.rst
    test_utils.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
