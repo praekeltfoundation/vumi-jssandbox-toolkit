@@ -124,6 +124,12 @@ describe("interaction_machine", function() {
                 delete api.on_unknown_command;
                 delete api.on_inbound_message;
                 delete api.on_inbound_event;
+                delete app.im;
+            });
+
+            it("should attach the im to the app", function() {
+                im.attach();
+                assert.strictEqual(im, app.im);
             });
 
             describe("when api.on_unknown_command is invoked", function() {
