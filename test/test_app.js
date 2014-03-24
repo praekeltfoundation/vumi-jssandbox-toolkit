@@ -1,3 +1,4 @@
+var Q = require('q');
 var _ = require('lodash');
 var assert = require('assert');
 
@@ -8,6 +9,7 @@ var State = vumigo.states.State;
 var App = vumigo.App;
 var AppStateError = vumigo.app.AppStateError;
 var AppTester = vumigo.AppTester;
+var Event = vumigo.events.Event;
 
 
 describe("app", function() {
@@ -261,6 +263,38 @@ describe("app", function() {
                 return app.emit.error(new Error(':(')).then(function() {
                     assert(_.contains(im.api.log.error, ':('));
                 });
+            });
+        });
+
+        describe(".attach_im", function() {
+            it("should attach the im", function() {
+                var app = new App();
+                app.attach_im(im);
+                assert.equal(app.im, im);
+            });
+
+            it("should bind the app's event listeners", function() {
+                var d = Q.defer();
+
+                var app = new App('states:start', {
+                    events: {
+                        foo: function() {
+                            d.resolve();
+                            return d.promise;
+                        }
+                    }
+                });
+
+                return app
+                    .emit(new Event('foo'))
+                    .then(function() {
+                        assert(!d.promise.isFulfilled());
+                        app.attach_im(im);
+                        return app.emit(new Event('foo'));
+                    })
+                    .then(function() {
+                        assert(d.promise.isFulfilled());
+                    });
             });
         });
 
