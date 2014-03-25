@@ -43,6 +43,18 @@ describe("http.dummy", function() {
             assert.equal(fixture.responses[0].code, 200);
         });
 
+        it("should use params given in the url if relevant", function() {
+            var fixture = new HttpFixture({
+                request: {
+                    url: 'http://example.com/?foo=b%20a%20r',
+                    params: {foo: 'baz'}
+                }
+            });
+
+            assert.equal(fixture.request.url, 'http://example.com/');
+            assert.deepEqual(fixture.request.params, {foo: 'b a r'});
+        });
+
         it("should encode requests", function() {
             var fixture = new HttpFixture({
                 default_encoding: 'json',
@@ -112,7 +124,7 @@ describe("http.dummy", function() {
                 var fixture = fixtures.filter(request)[0];
 
                 assert(fixture instanceof HttpFixture);
-                assert.equal(fixture.request.url, 'http://example.com');
+                assert.equal(fixture.request.url, 'http://example.com/');
                 assert.equal(fixture.responses[0].code, 201);
             });
 
@@ -377,13 +389,10 @@ describe("http.dummy", function() {
                     url: 'http://example.com/?foo=bar&baz=qux'
                 });
 
-                assert.deepEqual(request.params.param_list, [{
-                    name: 'foo',
-                    value: 'bar'
-                }, {
-                    name: 'baz',
-                    value: 'qux'
-                }]);
+                assert.deepEqual(request.params, {
+                    foo: 'bar',
+                    baz: 'qux'
+                });
             });
 
             it("should json decode the request body if asked", function() {
@@ -473,7 +482,7 @@ describe("http.dummy", function() {
                         var request = api.http.requests[0];
                         assert(request instanceof HttpRequest);
                         assert.equal(request.method, 'HEAD');
-                        assert.equal(request.url, 'http://example.com');
+                        assert.equal(request.url, 'http://example.com/');
                     });
                 });
             });

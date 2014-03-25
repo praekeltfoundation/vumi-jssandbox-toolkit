@@ -3,7 +3,6 @@ var vumigo = require('../../lib');
 
 var EndState = vumigo.states.EndState;
 var test_utils = vumigo.test_utils;
-var SessionNewEvent = vumigo.interaction_machine.SessionNewEvent;
 
 
 describe("states.end", function() {
@@ -26,22 +25,12 @@ describe("states.end", function() {
         });
 
 
-        describe("on state:input", function() {
+        describe("when the state is shown", function() {
             it("should set the user's current state to the next state",
             function() {
                 assert.equal(im.user.state.name, 'state_1');
 
-                return state.input('A lemon').then(function() {
-                    assert.equal(im.user.state.name, 'state_2');
-                });
-            });
-        });
-
-        describe("on im session:new", function() {
-            it("should simulate an input event", function() {
-                assert.equal(im.user.state.name, 'state_1');
-
-                return im.emit(new SessionNewEvent(im)).then(function() {
+                return state.show().then(function() {
                     assert.equal(im.user.state.name, 'state_2');
                 });
             });
