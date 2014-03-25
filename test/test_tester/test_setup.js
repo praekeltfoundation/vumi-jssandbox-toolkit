@@ -45,6 +45,29 @@ describe("AppTester Setup Tasks", function() {
         }));
     });
 
+    it("should set up a new user if only the user address has been given",
+    function() {
+        var p = tester.im.user.once.resolved('user:new');
+
+        return tester.run().then(function() {
+            assert(p.isFulfilled());
+        });
+    });
+
+    it("should set up an exiting user if user fields have been given",
+    function() {
+        var p = tester.im.user.once.resolved('user:load');
+
+        return tester
+            .setup.user.addr('+273123')
+            .setup.user.state('initial_state')
+            .run()
+            .then(function() {
+                assert(p.isFulfilled());
+            });
+    });
+
+
     describe("if interaction tasks have already been scheduled", function() {
         beforeEach(function() {
             var interactions = tester.tasks.get('interactions');
