@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 require('mocha-as-promised')();
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 var app = require('../lib/app');
 var ContactsApp = app.ContactsApp;
 var AppTester = vumigo.AppTester;
