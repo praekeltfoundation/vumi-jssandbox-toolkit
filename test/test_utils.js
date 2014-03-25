@@ -68,13 +68,6 @@ describe("utils", function() {
         });
     });
 
-    describe(".deep_equals", function() {
-        it("should determine whether the objects are deep equal", function() {
-            assert(!utils.deep_equals({foo: 'bar'}, {foo: 'baz'}));
-            assert(utils.deep_equals({foo: 'bar'}, {foo: 'bar'}));
-        });
-    });
-
     describe(".exists", function() {
         it("should return true if the value is not null or undefined",
         function() {
