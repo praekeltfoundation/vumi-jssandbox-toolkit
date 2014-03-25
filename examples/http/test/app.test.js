@@ -13,12 +13,7 @@ describe("app", function() {
         
         beforeEach(function() {
             app = new HttpApp();
-
-            // We set up the `DummyApi`'s http resource to use 'json' as the
-            // default encoding. This can be overriden in each fixture.
-            tester = new AppTester(app, {
-                api: {http: {default_encoding: 'json'}}
-            });
+            tester = new AppTester(app);
 
             tester
                 .setup.config.app({
