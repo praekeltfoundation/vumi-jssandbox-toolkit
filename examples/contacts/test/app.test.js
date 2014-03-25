@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 require('mocha-as-promised')();
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 var app = require('../lib/app');
 var ContactsApp = app.ContactsApp;
 var AppTester = vumigo.AppTester;
@@ -43,7 +43,7 @@ describe("app", function() {
                         })
                         .start()
                         .check.interaction({
-                            states: 'states:registered',
+                            state: 'states:start',
                             reply: [
                                 "Hello Anakin. I hear you like tea.",
                                 "That's nice. Bye."
@@ -69,7 +69,7 @@ describe("app", function() {
                         })
                         .start()
                         .check.interaction({
-                            states: 'states:registered',
+                            state: 'states:start',
                             reply: [
                                 "Hello Luke. I hear you like coffee.",
                                 "That's nice. Bye."
@@ -85,7 +85,7 @@ describe("app", function() {
                     return tester
                         .start()
                         .check.interaction({
-                            states: 'states:registration:name',
+                            state: 'states:registration:name',
                             reply: "What is your name?"
                         })
                         .run();
@@ -115,7 +115,7 @@ describe("app", function() {
                     .setup.user.state('states:registration:name')
                     .input('Luke')
                     .check.interaction({
-                        states: 'states:registration:name',
+                        state: 'states:registration:beverage',
                         reply: [
                             "Do you like tea or coffee?",
                             "1. Tea",
@@ -178,7 +178,7 @@ describe("app", function() {
                     return tester
                         .input('1')
                         .check.interaction({
-                            states: 'states:registration:name',
+                            state: 'states:start',
                             reply: [
                                 "Hello Anakin. I hear you like tea.",
                                 "That's nice. Bye."
@@ -221,7 +221,7 @@ describe("app", function() {
                     return tester
                         .input('2')
                         .check.interaction({
-                            states: 'states:registered',
+                            state: 'states:start',
                             reply: [
                                 "Hello Luke. I hear you like coffee.",
                                 "That's nice. Bye."

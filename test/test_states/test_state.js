@@ -152,7 +152,19 @@ describe("states.state", function() {
                     assert.equal(result, 'bar');
                 });
             });
+
+            it("should emit a 'state:show' event", function() {
+                var p = state.once.resolved('state:show');
+
+                return state.show().then(function(content) {
+                    return p.then(function(e) {
+                        assert.strictEqual(e.state, state);
+                        assert.equal(e.content, content);
+                    });
+                });
+            });
         });
+
         describe(".save_response", function() {
             it("should store the given user response", function() {
                 assert.equal(

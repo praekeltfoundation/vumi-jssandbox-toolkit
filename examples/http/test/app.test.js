@@ -1,6 +1,6 @@
 require('mocha-as-promised')();
 var assert = require('assert');
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 var fixtures = require('./fixtures');
 var app = require('../lib/app');
 var HttpApp = app.HttpApp;
@@ -96,7 +96,7 @@ describe("app", function() {
                     .setup.user.state('states:put')
                     .input('hello world!')
                     .check.interaction({
-                        state: 'states:done',
+                        state: 'states:start',
                         reply: [
                             "You just performed a put.",
                             "It was echoed back: hello world!"
@@ -129,7 +129,7 @@ describe("app", function() {
                     .setup.user.state('states:post')
                     .input('hello world!')
                     .check.interaction({
-                        state: 'states:done',
+                        state: 'states:start',
                         reply: [
                             "You just performed a post.",
                             "It was echoed back: hello world!"
