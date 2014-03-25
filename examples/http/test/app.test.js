@@ -1,6 +1,6 @@
 require('mocha-as-promised')();
 var assert = require('assert');
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 var fixtures = require('./fixtures');
 var app = require('../lib/app');
 var HttpApp = app.HttpApp;
