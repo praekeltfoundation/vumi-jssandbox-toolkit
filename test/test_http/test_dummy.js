@@ -43,6 +43,18 @@ describe("http.dummy", function() {
             assert.equal(fixture.responses[0].code, 200);
         });
 
+        it("should use params given in the url if relevant", function() {
+            var fixture = new HttpFixture({
+                request: {
+                    url: 'http://example.com/?foo=b%20a%20r',
+                    params: {foo: 'baz'}
+                }
+            });
+
+            assert.equal(fixture.request.url, 'http://example.com/');
+            assert.deepEqual(fixture.request.params, {foo: 'b a r'});
+        });
+
         it("should encode requests", function() {
             var fixture = new HttpFixture({
                 default_encoding: 'json',

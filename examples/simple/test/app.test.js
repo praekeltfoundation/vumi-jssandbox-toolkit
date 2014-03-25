@@ -1,5 +1,5 @@
 require('mocha-as-promised')();
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 var app = require('../lib/app');
 var SimpleApp = app.SimpleApp;
 var AppTester = vumigo.AppTester;
@@ -47,13 +47,14 @@ describe("app", function() {
                     // start state and chooses tea, so we set the user to be on
                     // the start state, then input '1' (the number the user
                     // will enter corresponding to the tea choice). We then
-                    // check that the user arrives on the tea state, and that
-                    // we send the correct reply text to them.
+                    // check that the user has been sent the correct reply
+                    // text, and that they have moved back to the start state
+                    // for the next session.
                     return tester
                         .setup.user.state('states:start')
                         .input('1')
                         .check.interaction({
-                            state: 'states:tea',
+                            state: 'states:start',
                             reply: 'Meh. Bye.'
                         })
                         .run();
@@ -66,13 +67,13 @@ describe("app", function() {
                     // start state and chooses coffee. Similarly to the tea
                     // test above, we set the user to be on the start state,
                     // input '2' (which corresponds to coffee), then check that
-                    // the user arrives on the coffee state, and that we send
-                    // the correct reply text to them.
+                    // that we send the correct reply text to them and they
+                    // they have been moved back to the start state.
                     return tester
                         .setup.user.state('states:start')
                         .input('2')
                         .check.interaction({
-                            state: 'states:coffee',
+                            state: 'states:start',
                             reply: 'Cool :) Bye.'
                         })
                         .run();
