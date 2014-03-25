@@ -43,7 +43,9 @@ var ContactsApp = App.extend(function(self) {
                 "Hello " + self.contact.name + ".",
                 "I hear you like " + self.contact.extra.beverage + ".",
                 "That's nice. Bye."
-            ].join(' ')
+            ].join(' '),
+
+            next: 'states:start'
         });
     });
 
