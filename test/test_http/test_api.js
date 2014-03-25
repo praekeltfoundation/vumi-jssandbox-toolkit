@@ -217,7 +217,9 @@ describe("http.api", function() {
         var api;
 
         function make_api(opts) {
-            return test_utils.make_im().then(function(new_im) {
+            return test_utils.make_im({
+                api: {http: {default_encoding: 'none'}}
+            }).then(function(new_im) {
                 im = new_im;
                 api = new HttpApi(im, opts);
                 return api;
