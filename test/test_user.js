@@ -1,3 +1,4 @@
+var Q = require('q');
 var assert = require('assert');
 
 var vumigo = require('../lib');
@@ -139,6 +140,23 @@ describe("user", function() {
                     creator_opts: {}
                 }
             }));
+        });
+
+        describe(".created", function() {
+            it("should determine whether the user was created", function() {
+                var user1 = new User(im);
+                var user2 = new User(im);
+
+                return Q.all([
+                    user1.create('1234'),
+                    user2.load('+27987654321', {
+                        store_name: 'test_app'
+                    }),
+                ]).then(function() {
+                    assert(user1.created);
+                    assert(!user2.created);
+                });
+            });
         });
 
         describe(".setup", function() {
