@@ -90,6 +90,11 @@ describe("interaction_machine", function() {
                 return im.setup(msg).thenResolve(p);
             });
 
+            it("should emit the user's creation event", function() {
+                var p = im.user.once.resolved('user:load');
+                return im.setup(msg).thenResolve(p);
+            });
+
             it("should emit a 'setup' event", function() {
                 var p = im.once.resolved('setup');
                 return im.setup(msg).thenResolve(p);
