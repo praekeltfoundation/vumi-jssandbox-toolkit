@@ -21,32 +21,138 @@ describe("events", function() {
             assert(thing instanceof Thing);
         });
 
+        describe(".on", function() {
+            it("should accept a single listener", function() {
+                var foos = 0;
+                var thing = new Eventable();
+
+                thing.on('foo', function() {
+                    foos++;
+                });
+
+                return Q.all([
+                    thing.emit(new Event('foo')),
+                    thing.emit(new Event('foo'))
+                ]).then(function() {
+                    assert.equal(foos, 2);
+                });
+            });
+
+            it("should accept an object of listeners", function() {
+                var foos = 0;
+                var bars = 0;
+                var thing = new Eventable();
+
+                thing.on({
+                    foo: function() {
+                        foos++;
+                    },
+                    bar: function() {
+                        bars++;
+                    }
+                });
+
+                return Q.all([
+                    thing.emit(new Event('foo')),
+                    thing.emit(new Event('bar')),
+                    thing.emit(new Event('foo')),
+                    thing.emit(new Event('bar'))
+                ]).then(function() {
+                    assert.equal(foos, 2);
+                    assert.equal(bars, 2);
+                });
+            });
+
+            it("should support delegation to members", function(done) {
+                var thing = new Eventable();
+                thing.subthing = {subsubthing: new Eventable()};
+
+                thing.on('subthing.subsubthing foo', function() {
+                    done();
+                });
+
+                thing.subthing.subsubthing.emit(new Event('foo'));
+            });
+        });
+
         describe(".once", function() {
-            describe(".resolved", function() {
-                describe("once the event is emitted", function() {
-                    it("should fulfull the returned promise", function() {
-                        var p = eventable.once.resolved('foo');
-                        return eventable
-                            .emit(new Event('foo'))
-                            .thenResolve(p)
-                            .then(function(event) {
-                                assert.equal(event.name, 'foo');
-                            });
-                    });
+            it("should accept a single listener", function() {
+                var foos = 0;
+                var thing = new Eventable();
 
-                    it("should remove the event listener", function() {
-                        var p = eventable.once.resolved('foo');
-                        assert.equal(eventable.listeners('foo').length, 1);
+                thing.once('foo', function() {
+                    foos++;
+                });
 
-                        return eventable
-                            .emit(new Event('foo'))
-                            .thenResolve(p)
-                            .then(function() {
-                                assert.equal(
-                                    eventable.listeners('foo').length,
-                                    0);
-                            });
-                    });
+                return Q.all([
+                    thing.emit(new Event('foo')),
+                    thing.emit(new Event('foo'))
+                ]).then(function() {
+                    assert.equal(foos, 1);
+                });
+            });
+
+            it("should accept an object of listeners", function() {
+                var foos = 0;
+                var bars = 0;
+                var thing = new Eventable();
+
+                thing.once({
+                    foo: function() {
+                        foos++;
+                    },
+                    bar: function() {
+                        bars++;
+                    }
+                });
+
+                return Q.all([
+                    thing.emit(new Event('foo')),
+                    thing.emit(new Event('bar')),
+                    thing.emit(new Event('foo')),
+                    thing.emit(new Event('bar'))
+                ]).then(function() {
+                    assert.equal(foos, 1);
+                    assert.equal(bars, 1);
+                });
+            });
+
+            it("should support delegation to members", function(done) {
+                var thing = new Eventable();
+                thing.subthing = {subsubthing: new Eventable()};
+
+                thing.on('subthing.subsubthing foo', function() {
+                    done();
+                });
+
+                thing.subthing.subsubthing.emit(new Event('foo'));
+            });
+        });
+
+        describe(".once.resolved", function() {
+            describe("once the event is emitted", function() {
+                it("should fulfull the returned promise", function() {
+                    var p = eventable.once.resolved('foo');
+                    return eventable
+                        .emit(new Event('foo'))
+                        .thenResolve(p)
+                        .then(function(event) {
+                            assert.equal(event.name, 'foo');
+                        });
+                });
+
+                it("should remove the event listener", function() {
+                    var p = eventable.once.resolved('foo');
+                    assert.equal(eventable.listeners('foo').length, 1);
+
+                    return eventable
+                        .emit(new Event('foo'))
+                        .thenResolve(p)
+                        .then(function() {
+                            assert.equal(
+                                eventable.listeners('foo').length,
+                                0);
+                        });
                 });
             });
         });
