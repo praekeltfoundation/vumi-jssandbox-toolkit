@@ -280,25 +280,15 @@ describe("AppTester Check Tasks", function() {
     describe(".check.user", function() {
         describe(".check.user(obj)", function() {
             it("should check that the user deep equals obj", function() {
+                var user = tester.im.user;
+
                 return tester
                     .input()
                     .check.user({lerp: 'larp'})
                     .run()
                     .catch(function(e) {
                         assert.equal(e.msg, "Unexpected user properties");
-
-                        assert.deepEqual(e.actual, {
-                            addr: "+27123456789",
-                            lang: null,
-                            answers: {},
-                            metadata: {},
-                            state: {
-                                name: "initial_state",
-                                metadata: {},
-                                creator_opts: {}
-                            }
-                        });
-
+                        assert.deepEqual(e.actual, user.serialize());
                         assert.deepEqual(e.expected, {lerp: 'larp'});
                     });
             });
