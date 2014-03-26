@@ -5,6 +5,7 @@ var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 var StateInvalidError = vumigo.states.StateInvalidError;
+var Event = vumigo.events.Event;
 
 
 describe("states.state", function() {
@@ -66,6 +67,32 @@ describe("states.state", function() {
                 assert.strictEqual(state.im, im);
             });
 
+            it("should bind the state's events", function() {
+                var d = Q.defer();
+
+                var state = new State('states:start', {
+                    events: {
+                        foo: function() {
+                            d.resolve();
+                            return d.promise;
+                        }
+                    }
+                });
+
+                return state
+                    .emit(new Event('foo'))
+                    .then(function() {
+                        assert(!d.promise.isFulfilled());
+                        return state.setup(im);
+                    })
+                    .then(function() {
+                        return state.emit(new Event('foo'));
+                    })
+                    .then(function() {
+                        assert(d.promise.isFulfilled());
+                    });
+            });
+
             it("should emit a 'setup' event", function() {
                 var state = new State('luke_the_state');
                 var p = state.once.resolved('setup');
@@ -125,7 +152,19 @@ describe("states.state", function() {
                     assert.equal(result, 'bar');
                 });
             });
+
+            it("should emit a 'state:show' event", function() {
+                var p = state.once.resolved('state:show');
+
+                return state.show().then(function(content) {
+                    return p.then(function(e) {
+                        assert.strictEqual(e.state, state);
+                        assert.equal(e.content, content);
+                    });
+                });
+            });
         });
+
         describe(".save_response", function() {
             it("should store the given user response", function() {
                 assert.equal(

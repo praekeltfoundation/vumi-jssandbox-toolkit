@@ -1,6 +1,6 @@
 require('mocha-as-promised')();
 var assert = require('assert');
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 var fixtures = require('./fixtures');
 var app = require('../lib/app');
 var HttpApp = app.HttpApp;
@@ -13,12 +13,7 @@ describe("app", function() {
         
         beforeEach(function() {
             app = new HttpApp();
-
-            // We set up the `DummyApi`'s http resource to use 'json' as the
-            // default encoding. This can be overriden in each fixture.
-            tester = new AppTester(app, {
-                api: {http: {default_encoding: 'json'}}
-            });
+            tester = new AppTester(app);
 
             tester
                 .setup.config.app({
@@ -96,7 +91,7 @@ describe("app", function() {
                     .setup.user.state('states:put')
                     .input('hello world!')
                     .check.interaction({
-                        state: 'states:done',
+                        state: 'states:start',
                         reply: [
                             "You just performed a put.",
                             "It was echoed back: hello world!"
@@ -129,7 +124,7 @@ describe("app", function() {
                     .setup.user.state('states:post')
                     .input('hello world!')
                     .check.interaction({
-                        state: 'states:done',
+                        state: 'states:start',
                         reply: [
                             "You just performed a post.",
                             "It was echoed back: hello world!"

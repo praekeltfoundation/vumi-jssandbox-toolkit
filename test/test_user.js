@@ -1,3 +1,4 @@
+var Q = require('q');
 var assert = require('assert');
 
 var vumigo = require('../lib');
@@ -5,6 +6,9 @@ var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 var User = vumigo.user.User;
 var UserStateData = vumigo.user.UserStateData;
+var UserNewEvent = vumigo.user.UserNewEvent;
+var UserLoadEvent = vumigo.user.UserLoadEvent;
+var UserResetEvent = vumigo.user.UserResetEvent;
 
 
 describe("user", function() {
@@ -113,8 +117,6 @@ describe("user", function() {
         });
     });
 
-
-
     describe("User", function() {
         var im;
         var user;
@@ -138,6 +140,23 @@ describe("user", function() {
                     creator_opts: {}
                 }
             }));
+        });
+
+        describe(".created", function() {
+            it("should determine whether the user was created", function() {
+                var user1 = new User(im);
+                var user2 = new User(im);
+
+                return Q.all([
+                    user1.create('1234'),
+                    user2.load('+27987654321', {
+                        store_name: 'test_app'
+                    }),
+                ]).then(function() {
+                    assert(user1.created);
+                    assert(!user2.created);
+                });
+            });
         });
 
         describe(".setup", function() {
@@ -175,31 +194,21 @@ describe("user", function() {
         });
 
         describe(".reset", function() {
-            it("should emit a 'user:reset' event after setting up",
-            function() {
-                var setup = user.once.resolved('setup');
-                var p = user.once.resolved('user:reset');
-
+            it("should set the creation event to 'user:reset'", function() {
                 return user
                     .reset('1234')
-                    .thenResolve(p)
                     .then(function() {
-                        assert(setup.isFulfilled());
+                        assert(user.creation_event instanceof UserResetEvent);
                     });
             });
         });
 
         describe(".create", function() {
-            it("should emit a 'user:new' event after setting up",
-            function() {
-                var setup = user.once.resolved('setup');
-                var p = user.once.resolved('user:new');
-
+            it("should set the creation event to 'user:new'", function() {
                 return user
                     .create('1234')
-                    .thenResolve(p)
                     .then(function() {
-                        assert(setup.isFulfilled());
+                        assert(user.creation_event instanceof UserNewEvent);
                     });
             });
         });
@@ -219,13 +228,12 @@ describe("user", function() {
                         });
                 });
 
-                it("should emit a 'user:load' event", function() {
-                    var p = user.once.resolved('user:load');
+                it("should set the creation event to 'user:load'", function() {
                     return user
                         .load('+27987654321', {store_name: 'test_app'})
-                        .thenResolve(p)
                         .then(function(e) {
-                            assert.equal(user, e.user);
+                            assert(
+                                user.creation_event instanceof UserLoadEvent);
                         });
                 });
             });
@@ -258,13 +266,12 @@ describe("user", function() {
                         });
                 });
 
-                it("should emit a 'user:load' event", function() {
-                    var p = user.once.resolved('user:load');
+                it("should set the creation event to 'user:load'", function() {
                     return user
                         .load('+27987654321', {store_name: 'test_app'})
-                        .thenResolve(p)
                         .then(function(e) {
-                            assert.equal(user, e.user);
+                            assert(
+                                user.creation_event instanceof UserLoadEvent);
                         });
                 });
             });
@@ -280,15 +287,14 @@ describe("user", function() {
                         });
                 });
 
-                it("should emit a 'user:new' event", function() {
-                    var p = user.once.resolved('user:new');
+                it("should set the creation event to 'user:new'", function() {
                     return user
                         .load_or_create('i-do-not-exist', {
                             store_name: 'test_app'
                         })
-                        .thenResolve(p)
                         .then(function(e) {
-                            assert.equal(user, e.user);
+                            assert(
+                                user.creation_event instanceof UserNewEvent);
                         });
                 });
             });

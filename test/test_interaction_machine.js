@@ -90,6 +90,11 @@ describe("interaction_machine", function() {
                 return im.setup(msg).thenResolve(p);
             });
 
+            it("should emit the user's creation event", function() {
+                var p = im.user.once.resolved('user:load');
+                return im.setup(msg).thenResolve(p);
+            });
+
             it("should emit a 'setup' event", function() {
                 var p = im.once.resolved('setup');
                 return im.setup(msg).thenResolve(p);
@@ -124,6 +129,12 @@ describe("interaction_machine", function() {
                 delete api.on_unknown_command;
                 delete api.on_inbound_message;
                 delete api.on_inbound_event;
+                delete app.im;
+            });
+
+            it("should attach the im to the app", function() {
+                im.attach();
+                assert.strictEqual(im, app.im);
             });
 
             describe("when api.on_unknown_command is invoked", function() {
