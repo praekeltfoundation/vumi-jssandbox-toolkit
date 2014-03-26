@@ -18,6 +18,13 @@ describe.only("states.end", function() {
             app.states.add('states:start', function(name) {
                 return new FreeText(name, {
                     question: 'hello',
+                    next: 'states:mid'
+                });
+            });
+
+            app.states.add('states:mid', function(name) {
+                return new FreeText(name, {
+                    question: 'middle',
                     next: 'states:end'
                 });
             });
@@ -40,21 +47,49 @@ describe.only("states.end", function() {
 
             return tester
                 .setup.config(fixtures.config())
-                .setup.user.state('states:start')
+                .setup.user.state('states:mid')
                 .setup.user.lang('af')
                 .input('foo')
                 .check.reply('totsiens')
                 .run();
         });
 
-        it("should move the user to the next state after showing content",
+        it("should move the user to the next state after showing the state",
         function() {
             return tester
-                .setup.user.state('states:start')
+                .setup.user.state('states:mid')
                 .input('foo')
                 .check.reply('goodbye')
                 .check.user.state('states:start')
                 .run();
+        });
+
+        describe("when dealing with session-based messages", function() {
+            it("should show the next state on a new session", function() {
+                return tester
+                    .setup.user.state('states:start')
+                    .input({
+                        content: null,
+                        session_event: 'new'
+                    })
+                    .check.reply('hello')
+                    .check.user.state('states:start')
+                    .run();
+            });
+        });
+
+        describe("when dealing with non-session-based messages", function() {
+            it("should show the next state on a new session", function() {
+                return tester
+                    .setup.user.state('states:start')
+                    .input({
+                        content: null,
+                        session_event: null
+                    })
+                    .check.reply('hello')
+                    .check.user.state('states:start')
+                    .run();
+            });
         });
     });
 });
