@@ -1,51 +1,60 @@
-var assert = require('assert');
+var _ = require('lodash');
 var vumigo = require('../../lib');
+var fixtures = vumigo.fixtures;
 
+var App = vumigo.App;
+var AppTester = vumigo.AppTester;
+var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
-var test_utils = vumigo.test_utils;
 
 
-describe("states.end", function() {
+describe.only("states.end", function() {
     describe("EndState", function () {
-        var im;
-        var state;
+        var tester;
 
         beforeEach(function() {
-            return test_utils.make_im().then(function(new_im) {
-                im = new_im;
+            var app = new App('states:start');
 
-                state = new EndState('state_1', {
-                    next: 'state_2',
-                    text: 'goodbye'
+            app.states.add('states:start', function(name) {
+                return new FreeText(name, {
+                    question: 'hello',
+                    next: 'states:end'
+                });
+            });
+
+            app.states.add('states:end', function(name) {
+                _.defaults(tester.data.opts, {
+                    text: 'goodbye',
+                    next: 'states:start'
                 });
 
-                im.app.states.add(state);
-                return im.switch_state('state_1');
+                return new EndState(name, tester.data.opts);
             });
+
+            tester = new AppTester(app);
+            tester.data.opts = {};
         });
 
+        it("should translate the displayed content", function() {
+            tester.data.opts.text = tester.app.$('goodbye');
 
-        describe("when the state is shown", function() {
-            it("should set the user's current state to the next state",
-            function() {
-                assert.equal(im.user.state.name, 'state_1');
-
-                return state.show().then(function() {
-                    assert.equal(im.user.state.name, 'state_2');
-                });
-            });
+            return tester
+                .setup.config(fixtures.config())
+                .setup.user.state('states:start')
+                .setup.user.lang('af')
+                .input('foo')
+                .check.reply('totsiens')
+                .run();
         });
 
-        describe(".translate", function() {
-            it("should translate the state's text", function() {
-                var state = new EndState('state_1', {
-                    next: 'state_2',
-                    text: test_utils.$('goodbye')
-                });
-
-                state.translate(im.user.i18n);
-                assert.equal(state.display(), 'totsiens');
-            });
+        it("should move the user to the next state after showing content",
+        function() {
+            return tester
+                .setup.user.state('states:start')
+                .input('foo')
+                .check.reply('goodbye')
+                .check.user.state('states:start')
+                .run();
         });
     });
 });
