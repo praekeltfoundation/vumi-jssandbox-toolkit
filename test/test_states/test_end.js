@@ -8,9 +8,10 @@ var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
 
 
-describe.only("states.end", function() {
+describe("states.end", function() {
     describe("EndState", function () {
         var tester;
+        var opts;
 
         beforeEach(function() {
             var app = new App('states:start');
@@ -30,20 +31,20 @@ describe.only("states.end", function() {
             });
 
             app.states.add('states:end', function(name) {
-                _.defaults(tester.data.opts, {
+                _.defaults(opts, {
                     text: 'goodbye',
                     next: 'states:start'
                 });
 
-                return new EndState(name, tester.data.opts);
+                return new EndState(name, opts);
             });
 
+            opts = {};
             tester = new AppTester(app);
-            tester.data.opts = {};
         });
 
         it("should translate the displayed content", function() {
-            tester.data.opts.text = tester.app.$('goodbye');
+            opts.text = tester.app.$('goodbye');
 
             return tester
                 .setup.config(fixtures.config())
@@ -63,7 +64,7 @@ describe.only("states.end", function() {
                 return tester
                     .setup.user.state('states:mid')
                     .input('foo')
-                    .check.user.state('states:start')
+                    .check.user.state('states:end')
                     .check.reply('goodbye')
                     .run()
                     .then(function() {
@@ -89,6 +90,8 @@ describe.only("states.end", function() {
                 return tester
                     .setup.user.state('states:mid')
                     .input('foo')
+                    .check.user.state('states:end')
+                    .check.reply('goodbye')
                     .run()
                     .then(function() {
                         return tester
