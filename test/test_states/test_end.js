@@ -83,7 +83,7 @@ describe.only("states.end", function() {
                 return tester
                     .setup.user.state('states:start')
                     .input({
-                        content: null,
+                        content: 'foo',
                         session_event: null
                     })
                     .check.reply('hello')
