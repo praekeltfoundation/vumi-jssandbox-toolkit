@@ -54,41 +54,53 @@ describe.only("states.end", function() {
                 .run();
         });
 
-        it("should move the user to the next state after showing the state",
+        describe("when the state is reached with a session-based message",
         function() {
-            return tester
-                .setup.user.state('states:mid')
-                .input('foo')
-                .check.reply('goodbye')
-                .check.user.state('states:start')
-                .run();
-        });
+            it("should show the state, then the next state on a new session",
+            function() {
+                var user = tester.im.user;
 
-        describe("when dealing with session-based messages", function() {
-            it("should show the next state on a new session", function() {
                 return tester
-                    .setup.user.state('states:start')
-                    .input({
-                        content: null,
-                        session_event: 'new'
-                    })
-                    .check.reply('hello')
+                    .setup.user.state('states:mid')
+                    .input('foo')
                     .check.user.state('states:start')
-                    .run();
+                    .check.reply('goodbye')
+                    .run()
+                    .then(function() {
+                        return tester
+                            .setup.user(user.serialize())
+                            .input({
+                                content: null,
+                                session_event: 'new'
+                            })
+                            .check.reply('hello')
+                            .check.user.state('states:start')
+                            .run();
+                    });
             });
         });
 
-        describe("when dealing with non-session-based messages", function() {
-            it("should show the next state on a new session", function() {
+        describe("when the state is reached with a non-session-based message",
+        function() {
+            it("should show the state, then the next state on a new session",
+            function() {
+                var user = tester.im.user;
+
                 return tester
-                    .setup.user.state('states:start')
-                    .input({
-                        content: 'foo',
-                        session_event: null
-                    })
-                    .check.reply('hello')
-                    .check.user.state('states:start')
-                    .run();
+                    .setup.user.state('states:mid')
+                    .input('foo')
+                    .run()
+                    .then(function() {
+                        return tester
+                            .setup.user(user.serialize())
+                            .input({
+                                content: 'foo',
+                                session_event: null
+                            })
+                            .check.reply('hello')
+                            .check.user.state('states:start')
+                            .run();
+                    });
             });
         });
     });
