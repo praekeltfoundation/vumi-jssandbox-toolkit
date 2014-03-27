@@ -210,7 +210,7 @@ describe("metrics.api", function() {
                     });
             });
 
-            it("should return the the new total", function() {
+            it("should return the new total", function() {
                 api.kv.store['test_app.yaddle_the_metric'] = 3;
 
                 return metrics
