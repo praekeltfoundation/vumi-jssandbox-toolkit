@@ -559,7 +559,15 @@ describe("interaction_machine", function() {
                 function() {
                     return im.reply(msg).then(function() {
                         var reply = api.outbound.store[0];
-                        assert.deepEqual(reply.continue_session, false);
+                        assert(!reply.continue_session);
+                    });
+                });
+
+                it("should set the user to not be in a session", function() {
+                    im.user.in_session = true;
+
+                    return im.reply(msg).then(function() {
+                        assert(!im.user.in_session);
                     });
                 });
             });
@@ -693,6 +701,26 @@ describe("interaction_machine", function() {
                     assert.strictEqual(im.state, null);
                     return im.emit(event).then(function() {
                         assert.equal(im.state.name, 'start');
+                    });
+                });
+            });
+
+            describe("if the user is not in a session", function() {
+                it("should use session start for non-session-based messages",
+                function() {
+                    msg.session_event = null;
+                    var p = im.once.resolved('session:new');
+
+                    return im.emit(event).then(function() {
+                        assert(p.isFulfilled());
+                    });
+                });
+
+                it("should set the user to be in a session", function() {
+                    assert(!im.user.in_session);
+
+                    return im.emit(event).then(function() {
+                        assert(im.user.in_session);
                     });
                 });
             });

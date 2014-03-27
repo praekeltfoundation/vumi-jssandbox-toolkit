@@ -19,6 +19,7 @@ describe("AppTester Interaction Tasks", function() {
         app.states.add(new State('start'));
 
         tester = new AppTester(app);
+        tester.api.config.app.name = 'test_app';
         tasks = tester.tasks.get('interactions');
         im = tester.im;
     });
@@ -49,8 +50,6 @@ describe("AppTester Interaction Tasks", function() {
                 content: 'hello',
                 session_event: 'resume'
             };
-            
-            return tester.run();
         });
 
         it("should send the message into the sandbox", function() {
