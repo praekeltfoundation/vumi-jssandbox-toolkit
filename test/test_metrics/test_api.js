@@ -198,12 +198,12 @@ describe("metrics.api", function() {
             });
         });
 
-        describe(".fire.inc", function() {
+        describe(".inc", function() {
             it("should increment the associated kv key", function() {
                 api.kv.store['test_app.yaddle_the_metric'] = 3;
 
                 return metrics
-                    .fire.inc('yaddle_the_metric')
+                    .inc('yaddle_the_metric')
                     .then(function() {
                         assert.equal(
                             api.kv.store['test_app.yaddle_the_metric'], 4);
@@ -214,7 +214,7 @@ describe("metrics.api", function() {
                 api.kv.store['test_app.yaddle_the_metric'] = 3;
 
                 return metrics
-                    .fire.inc('yaddle_the_metric')
+                    .inc('yaddle_the_metric')
                     .then(function(total) {
                         assert.equal(total, 4);
                     });
@@ -225,9 +225,9 @@ describe("metrics.api", function() {
                 api.kv.store['test_app.yaddle_the_metric'] = 3;
 
                 return Q.all([
-                    metrics.fire.inc('yoda_the_metric'),
-                    metrics.fire.inc('yoda_the_metric'),
-                    metrics.fire.inc('yaddle_the_metric')
+                    metrics.inc('yoda_the_metric'),
+                    metrics.inc('yoda_the_metric'),
+                    metrics.inc('yaddle_the_metric')
                 ]).then(function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
