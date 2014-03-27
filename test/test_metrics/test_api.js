@@ -8,11 +8,13 @@ var MetricStore = vumigo.metrics.api.MetricStore;
 
 describe("metrics.api", function() {
     var im;
+    var api;
     var metrics;
 
     beforeEach(function() {
         return test_utils.make_im().then(function(new_im) {
             im = new_im;
+            api = im.api;
             metrics = im.metrics;
         });
     });
@@ -34,7 +36,7 @@ describe("metrics.api", function() {
         describe(".fire", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire('yaddle-the-metric', 23,  'sum')
+                    .fire('yaddle_the_metric', 23,  'sum')
                     .then(function(success) {
                         assert(success);
                     });
@@ -67,7 +69,7 @@ describe("metrics.api", function() {
         describe(".fire.sum", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire.sum('yaddle-the-metric', 23)
+                    .fire.sum('yaddle_the_metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -100,7 +102,7 @@ describe("metrics.api", function() {
         describe(".fire.avg", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire.avg('yaddle-the-metric', 23)
+                    .fire.avg('yaddle_the_metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -133,7 +135,7 @@ describe("metrics.api", function() {
         describe(".fire.min", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire.min('yaddle-the-metric', 23)
+                    .fire.min('yaddle_the_metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -166,7 +168,7 @@ describe("metrics.api", function() {
         describe(".fire.max", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire.max('yaddle-the-metric', 23)
+                    .fire.max('yaddle_the_metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
@@ -197,16 +199,30 @@ describe("metrics.api", function() {
         });
 
         describe(".fire.inc", function() {
-            it("should return the status of the fire call", function() {
+            it("should increment the associated kv key", function() {
+                api.kv.store['test_app.yaddle_the_metric'] = 3;
+
                 return metrics
-                    .fire.inc('yaddle-the-metric')
-                    .then(function(success) {
-                        assert(success);
+                    .fire.inc('yaddle_the_metric')
+                    .then(function() {
+                        assert.equal(
+                            api.kv.store['test_app.yaddle_the_metric'], 4);
+                    });
+            });
+
+            it("should return the the new total", function() {
+                api.kv.store['test_app.yaddle_the_metric'] = 3;
+
+                return metrics
+                    .fire.inc('yaddle_the_metric')
+                    .then(function(total) {
+                        assert.equal(total, 4);
                     });
             });
 
             it("should record the metric", function() {
                 assert.deepEqual(im.api.metrics.stores, {});
+                api.kv.store['test_app.yaddle_the_metric'] = 3;
 
                 return Q.all([
                     metrics.fire.inc('yoda_the_metric'),
@@ -216,12 +232,12 @@ describe("metrics.api", function() {
                     assert.deepEqual(im.api.metrics.stores, {
                         test_app:{
                             yoda_the_metric: {
-                                agg: 'sum',
-                                values: [1, 1]
+                                agg: 'last',
+                                values: [1, 2]
                             },
                             yaddle_the_metric: {
-                                agg: 'sum',
-                                values: [1]
+                                agg: 'last',
+                                values: [4]
                             }
                         }
                     });
@@ -232,7 +248,7 @@ describe("metrics.api", function() {
         describe(".fire.last", function() {
             it("should return the status of the fire call", function() {
                 return metrics
-                    .fire.last('yaddle-the-metric', 23)
+                    .fire.last('yaddle_the_metric', 23)
                     .then(function(success) {
                         assert(success);
                     });
