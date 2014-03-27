@@ -795,6 +795,20 @@ describe("AppTester Check Tasks", function() {
         });
     });
 
+    describe(".check.reply.ends_session", function() {
+        it("should check if the reply ended the session", function() {
+            return tester
+                .input()
+                .check.reply.ends_session()
+                .run()
+                .catch(function(e) {
+                    assert.equal(
+                        e.msg,
+                        "Reply did not end the session");
+                });
+        });
+    });
+
     describe(".check.reply.properties(obj)", function() {
         it("should check the content of the sent reply", function() {
                 return tester
