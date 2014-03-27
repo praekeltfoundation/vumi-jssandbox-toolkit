@@ -203,10 +203,10 @@ describe("metrics.api", function() {
                 api.kv.store['test_app.yaddle_the_metric'] = 3;
 
                 return metrics
-                    .inc('yaddle_the_metric')
+                    .inc('yaddle_the_metric', {amount: 2})
                     .then(function() {
                         assert.equal(
-                            api.kv.store['test_app.yaddle_the_metric'], 4);
+                            api.kv.store['test_app.yaddle_the_metric'], 5);
                     });
             });
 
