@@ -1,4 +1,6 @@
 var assert = require('assert');
+var AssertionError = assert.AssertionError;
+
 var vumigo = require("../lib");
 var fixtures = vumigo.fixtures;
 var test_utils = vumigo.test_utils;
@@ -66,6 +68,20 @@ describe("test_utils", function() {
             }).then(function(im) {
                 assert.strictEqual(im.app, app);
             });
+        });
+    });
+
+    describe(".fail", function() {
+        it("should throw an AssertionError", function() {
+            assert.throws(
+                function() {
+                    test_utils.fail();
+                },
+                function(e) {
+                    assert(e instanceof AssertionError);
+                    assert.equal(e.message, 'Expected test to fail');
+                    return true;
+                });
         });
     });
 });
