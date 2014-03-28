@@ -794,16 +794,20 @@ describe("AppTester Check Tasks", function() {
                 .run();
         });
 
-        it("should fail if the reply did not end the session", function() {
+        it.only("should fail if the reply did not end the session", function() {
             return tester
                 .input()
                 .check.reply.ends_session()
                 .run()
-                .catch(function(e) {
-                    assert.equal(
-                        e.msg,
-                        "Reply did not end the session");
-                });
+                .then(
+                    function() {
+                        assert.fail(null, null, 'Expected test to fail');
+                    },
+                    function(e) {
+                        assert.equal(
+                            e.msg,
+                            "Reply did not end the session");
+                    });
         });
     });
 
