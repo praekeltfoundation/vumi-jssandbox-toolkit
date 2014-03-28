@@ -1,4 +1,4 @@
-var vumigo = require('vumigo_v02');
+var vumigo = require('../../../lib');
 
 var App = vumigo.App;
 var MenuState = vumigo.states.MenuState;

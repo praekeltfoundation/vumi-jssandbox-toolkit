@@ -2,6 +2,7 @@ var Q = require('q');
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var test_utils = vumigo.test_utils;
 var App = vumigo.app.App;
 
 var EndState = vumigo.states.EndState;
@@ -44,6 +45,29 @@ describe("AppTester Setup Tasks", function() {
             send_reply: false
         }));
     });
+
+    it("should set up a new user if only the user address has been given",
+    function() {
+        var p = tester.im.user.once.resolved('user:new');
+
+        return tester.run().then(function() {
+            assert(p.isFulfilled());
+        });
+    });
+
+    it("should set up an exiting user if user fields have been given",
+    function() {
+        var p = tester.im.user.once.resolved('user:load');
+
+        return tester
+            .setup.user.addr('+273123')
+            .setup.user.state('initial_state')
+            .run()
+            .then(function() {
+                assert(p.isFulfilled());
+            });
+    });
+
 
     describe("if interaction tasks have already been scheduled", function() {
         beforeEach(function() {
@@ -344,7 +368,7 @@ describe("AppTester Setup Tasks", function() {
                     '1. Tea',
                     '2. Coffee'].join('\n'))
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "The reply content's character count was longer",
                         "than the expected limit: 31 > 3"].join(' '));
