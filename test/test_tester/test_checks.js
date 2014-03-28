@@ -786,25 +786,23 @@ describe("AppTester Check Tasks", function() {
     });
 
     describe(".check.reply.ends_session", function() {
-        it("should check if the reply ended the session", function() {
-            return Q()
-                .then(function() {
-                    return tester
-                        .setup.user.state('initial_state')
-                        .input('2')
-                        .check.reply.ends_session()
-                        .run();
-                })
-                .then(function() {
-                    return tester
-                        .input()
-                        .check.reply.ends_session()
-                        .run()
-                        .catch(function(e) {
-                            assert.equal(
-                                e.msg,
-                                "Reply did not end the session");
-                        });
+        it("should succeed if the reply ended the session", function() {
+            return tester
+                .setup.user.state('initial_state')
+                .input('2')
+                .check.reply.ends_session()
+                .run();
+        });
+
+        it("should fail if the reply did not end the session", function() {
+            return tester
+                .input()
+                .check.reply.ends_session()
+                .run()
+                .catch(function(e) {
+                    assert.equal(
+                        e.msg,
+                        "Reply did not end the session");
                 });
         });
     });
