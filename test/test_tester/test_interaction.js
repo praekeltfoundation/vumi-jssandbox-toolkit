@@ -2,6 +2,7 @@ var Q = require('q');
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
 var App = vumigo.app.App;
 var AppTester = vumigo.tester.AppTester;
@@ -77,12 +78,12 @@ describe("AppTester Interaction Tasks", function() {
 
                 return tasks
                     .send(msg)
-                    .catch(function() {})
+                    .then(test_utils.fail, function() {})
                     .thenResolve(p);
             });
 
             it("should rethrow the error", function() {
-                return tasks.send(msg).catch(function(e) {
+                return tasks.send(msg).then(test_utils.fail, function(e) {
                     assert.equal(e.message, ':(');
                 });
             });
