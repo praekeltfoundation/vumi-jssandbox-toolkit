@@ -233,7 +233,7 @@ describe("AppTester Check Tasks", function() {
                 .input()
                 .check.interaction({state: 'tea_state'})
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user state name");
                     assert.equal(e.expected, 'tea_state');
                     assert.equal(e.actual, 'initial_state');
@@ -248,7 +248,7 @@ describe("AppTester Check Tasks", function() {
                     reply: 'Spam?'
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected reply content");
                     assert.equal(e.expected, 'Spam?');
                     assert.equal(e.actual, [
@@ -267,7 +267,7 @@ describe("AppTester Check Tasks", function() {
                     char_limit: 2
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "The reply content's character count was longer than",
                         "the expected limit: 31 > 2"].join(' '));
@@ -286,7 +286,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.user({lerp: 'larp'})
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected user properties");
                         assert.deepEqual(e.actual, user.serialize());
                         assert.deepEqual(e.expected, {lerp: 'larp'});
@@ -332,7 +332,7 @@ describe("AppTester Check Tasks", function() {
                     }
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user state");
                     assert.deepEqual(e.actual, {
                         name: 'initial_state',
@@ -355,7 +355,7 @@ describe("AppTester Check Tasks", function() {
                     answers: {initial_state: 'coffee'}
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user answers");
                     assert.deepEqual(e.expected, {initial_state: 'coffee'});
                     assert.deepEqual(e.actual, {initial_state: 'tea'});
@@ -370,7 +370,7 @@ describe("AppTester Check Tasks", function() {
                     metadata: {foo: 'baz'}
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user metadata");
                     assert.deepEqual(e.actual, {foo: 'bar'});
                     assert.deepEqual(e.expected, {foo: 'baz'});
@@ -388,7 +388,7 @@ describe("AppTester Check Tasks", function() {
                     addr: '+27123456788'
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(
                         e.msg,
                         "Unexpected values for user properties");
@@ -411,7 +411,7 @@ describe("AppTester Check Tasks", function() {
                 .input('1')
                 .check.user.answers({initial_state: 'coffee'})
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user answers");
                     assert.deepEqual(e.expected, {initial_state: 'coffee'});
                     assert.deepEqual(e.actual, {initial_state: 'tea'});
@@ -426,7 +426,7 @@ describe("AppTester Check Tasks", function() {
                 .input('1')
                 .check.user.answer('initial_state', 'coffee')
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(
                         e.msg,
                         "Unexpected user answer to state 'initial_state'");
@@ -442,7 +442,7 @@ describe("AppTester Check Tasks", function() {
                 .setup.user.metadata({foo: 'bar'})
                 .check.user.metadata({foo: 'baz'})
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user metadata");
                     assert.deepEqual(e.expected, {foo: 'baz'});
                     assert.deepEqual(e.actual, {foo: 'bar'});
@@ -457,7 +457,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.user.state('tea_state')
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected user state name");
                         assert.equal(e.expected, 'tea_state');
                         assert.equal(e.actual, 'initial_state');
@@ -479,7 +479,7 @@ describe("AppTester Check Tasks", function() {
                         creator_opts: {qux: 'bar'}
                     })
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected user state");
 
                         assert.deepEqual(e.actual, {
@@ -539,7 +539,7 @@ describe("AppTester Check Tasks", function() {
                 .setup.user.state('initial_state', {metadata: {foo: 'bar'}})
                 .check.user.state.metadata({foo: 'baz'})
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, "Unexpected user state metadata");
                     assert.deepEqual(e.expected, {foo: 'baz'});
                     assert.deepEqual(e.actual, {foo: 'bar'});
@@ -554,7 +554,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.reply('Spam?')
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected reply content");
                         assert.equal(e.expected, 'Spam?');
                         assert.equal(e.actual, [
@@ -578,7 +578,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n'))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Expecting a single reply from the app",
                             "to the user"].join(' '));
@@ -596,7 +596,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n'))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "The reply content's character count was longer",
                             "than the expected limit: 31 > 2"].join(' '));
@@ -610,7 +610,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.reply(/Spam?/)
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Reply content 'Tea or coffee?",
                             "1. Tea",
@@ -632,7 +632,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n')))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Expecting a single reply from the app",
                             "to the user"].join(' '));
@@ -650,7 +650,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n')))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "The reply content's character count was longer",
                             "than the expected limit: 31 > 2"].join(' '));
@@ -666,7 +666,7 @@ describe("AppTester Check Tasks", function() {
                         content: 'Spam?'
                     })
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected reply");
 
                         assert.deepEqual(e.actual, {
@@ -698,7 +698,7 @@ describe("AppTester Check Tasks", function() {
                             '2. Coffee'].join('\n')
                     })
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Expecting a single reply from the app",
                             "to the user"].join(' '));
@@ -718,7 +718,7 @@ describe("AppTester Check Tasks", function() {
                             '2. Coffee'].join('\n')
                     })
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "The reply content's character count was longer",
                             "than the expected limit: 31 > 2"].join(' '));
@@ -749,7 +749,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.reply(function() {})
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Expecting a single reply from the app",
                             "to the user"].join(' '));
@@ -764,7 +764,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.reply(function() {})
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "The reply content's character count was longer",
                             "than the expected limit: 31 > 2"].join(' '));
@@ -785,6 +785,28 @@ describe("AppTester Check Tasks", function() {
         });
     });
 
+    describe(".check.reply.ends_session", function() {
+        it("should succeed if the reply ended the session", function() {
+            return tester
+                .setup.user.state('initial_state')
+                .input('2')
+                .check.reply.ends_session()
+                .run();
+        });
+
+        it("should fail if the reply did not end the session", function() {
+            return tester
+                .input()
+                .check.reply.ends_session()
+                .run()
+                .then(test_utils.fail, function(e) {
+                    assert.equal(
+                        e.msg,
+                        "Reply did not end the session");
+                });
+        });
+    });
+
     describe(".check.reply.properties(obj)", function() {
         it("should check the content of the sent reply", function() {
                 return tester
@@ -793,7 +815,7 @@ describe("AppTester Check Tasks", function() {
                         content: 'Spam?'
                     })
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected reply content");
                         assert.equal(e.expected, 'Spam?');
                         assert.equal(e.actual, [
@@ -809,7 +831,7 @@ describe("AppTester Check Tasks", function() {
                 .input()
                 .check.reply.properties({in_reply_to: '2'})
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "Unexpected values for reply properties"].join(' '));
                     assert.deepEqual(e.actual, {in_reply_to: '1'});
@@ -832,7 +854,7 @@ describe("AppTester Check Tasks", function() {
                         '2. Coffee'].join('\n')
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "Expecting a single reply from the app",
                         "to the user"].join(' '));
@@ -852,7 +874,7 @@ describe("AppTester Check Tasks", function() {
                         '2. Coffee'].join('\n')
                 })
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "The reply content's character count was longer",
                         "than the expected limit: 31 > 2"].join(' '));
@@ -867,7 +889,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.reply.content('Spam?')
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected reply content");
                         assert.equal(e.expected, 'Spam?');
                         assert.equal(e.actual, [
@@ -891,7 +913,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n'))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Expecting a single reply from the app",
                             "to the user"].join(' '));
@@ -909,7 +931,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n'))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "The reply content's character count was longer",
                             "than the expected limit: 31 > 2"].join(' '));
@@ -923,7 +945,7 @@ describe("AppTester Check Tasks", function() {
                     .input()
                     .check.reply.content(/Spam?/)
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Reply content 'Tea or coffee?",
                             "1. Tea",
@@ -945,7 +967,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n')))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "Expecting a single reply from the app",
                             "to the user"].join(' '));
@@ -963,7 +985,7 @@ describe("AppTester Check Tasks", function() {
                         '1. Tea',
                         '2. Coffee'].join('\n')))
                     .run()
-                    .catch(function(e) {
+                    .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, [
                             "The reply content's character count was longer",
                             "than the expected limit: 31 > 2"].join(' '));
@@ -978,7 +1000,7 @@ describe("AppTester Check Tasks", function() {
                 .input()
                 .check.reply.char_limit(3)
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "The reply content's character count was longer than",
                         "the expected limit: 31 > 3"].join(' '));
@@ -997,7 +1019,7 @@ describe("AppTester Check Tasks", function() {
                 .input()
                 .check.reply.char_limit(100)
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "Expecting a single reply from the app",
                         "to the user"].join(' '));
@@ -1013,7 +1035,7 @@ describe("AppTester Check Tasks", function() {
                 .input()
                 .check.no_reply()
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(
                         e.msg, 
                         "Expecting no replies from the app to the user");
