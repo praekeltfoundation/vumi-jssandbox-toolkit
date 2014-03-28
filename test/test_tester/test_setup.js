@@ -2,6 +2,7 @@ var Q = require('q');
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var test_utils = vumigo.test_utils;
 var App = vumigo.app.App;
 
 var EndState = vumigo.states.EndState;
@@ -367,7 +368,7 @@ describe("AppTester Setup Tasks", function() {
                     '1. Tea',
                     '2. Coffee'].join('\n'))
                 .run()
-                .catch(function(e) {
+                .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "The reply content's character count was longer",
                         "than the expected limit: 31 > 3"].join(' '));
