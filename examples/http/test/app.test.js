@@ -91,7 +91,7 @@ describe("app", function() {
                     .setup.user.state('states:put')
                     .input('hello world!')
                     .check.interaction({
-                        state: 'states:start',
+                        state: 'states:done',
                         reply: [
                             "You just performed a put.",
                             "It was echoed back: hello world!"
@@ -124,7 +124,7 @@ describe("app", function() {
                     .setup.user.state('states:post')
                     .input('hello world!')
                     .check.interaction({
-                        state: 'states:start',
+                        state: 'states:done',
                         reply: [
                             "You just performed a post.",
                             "It was echoed back: hello world!"

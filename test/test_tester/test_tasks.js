@@ -116,6 +116,17 @@ describe("tester.tasks", function() {
                 tasks.reset();
                 assert.deepEqual(tasks.data, {});
             });
+
+            it("should use refresh the api and im", function() {
+                tester.im = {};
+                tester.api = {};
+                assert.notStrictEqual(tasks.api, tester.api);
+                assert.notStrictEqual(tasks.im, tester.im);
+
+                tasks.reset();
+                assert.strictEqual(tasks.api, tester.api);
+                assert.strictEqual(tasks.im, tester.im);
+            });
         });
 
         describe(".schedule", function() {

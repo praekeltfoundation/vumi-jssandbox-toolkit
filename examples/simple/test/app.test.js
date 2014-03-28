@@ -54,7 +54,7 @@ describe("app", function() {
                         .setup.user.state('states:start')
                         .input('1')
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:tea',
                             reply: 'Meh. Bye.'
                         })
                         .run();
@@ -73,7 +73,7 @@ describe("app", function() {
                         .setup.user.state('states:start')
                         .input('2')
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:coffee',
                             reply: 'Cool :) Bye.'
                         })
                         .run();
