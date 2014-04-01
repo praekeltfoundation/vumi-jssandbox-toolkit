@@ -18,7 +18,6 @@
   },
   "devDependencies": {
     "mocha": "~1.18",
-    "mocha-as-promised": "~2.0.0",
     "jshint": "~2.4.3"
   },
   "keywords": [
