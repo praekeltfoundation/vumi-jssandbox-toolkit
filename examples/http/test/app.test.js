@@ -1,4 +1,3 @@
-require('mocha-as-promised')();
 var assert = require('assert');
 var vumigo = require('../../../lib');
 var fixtures = require('./fixtures');
