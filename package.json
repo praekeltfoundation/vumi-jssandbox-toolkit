@@ -17,8 +17,7 @@
     "moment": "~2.5.1"
   },
   "devDependencies": {
-    "mocha": "~1.8",
-    "mocha-as-promised": "~2.0.0",
+    "mocha": "~1.18",
     "jshint": "~2.4.3"
   },
   "keywords": [

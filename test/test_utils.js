@@ -150,6 +150,14 @@ describe("utils", function() {
             assert.equal(utils.infer_addr_type('twitter'), 'twitter_handle');
         });
 
+        it("should infer the address type for mxit", function() {
+            assert.equal(utils.infer_addr_type('mxit'), 'mxit_id');
+        });
+
+        it("should infer the address type for wechat", function() {
+            assert.equal(utils.infer_addr_type('wechat'), 'wechat_id');
+        });
+
         it("should return undefined for unrecognized delivery classes",
         function() {
             assert.equal(
