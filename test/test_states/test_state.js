@@ -444,15 +444,13 @@ describe("states.state", function() {
                 it("should set the error object to an appropriate error",
                 function() {
                     var state = new State('foo');
+                    var text = test_utils.$('no!');
 
                     return state
-                        .invalidate(test_utils.$('no!'))
+                        .invalidate(text)
                         .then(function() {
                             assert(state.error instanceof StateInvalidError);
-
-                            assert.deepEqual(
-                                state.error.response,
-                                test_utils.$('no!'));
+                            assert.deepEqual(state.error.response, text);
                         });
                 });
             });
