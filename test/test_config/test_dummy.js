@@ -49,7 +49,7 @@ describe("config.dummy", function() {
 
                 it("should return the unformatted value if requested",
                 function() {
-                    api.config.is_json.foo = false;
+                    api.config.json.foo = false;
                     api.config.store.foo = "<doc>A doc</doc>";
                     return request('config.get', {
                         key: 'foo',
