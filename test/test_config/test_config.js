@@ -32,7 +32,7 @@ describe("config.api", function() {
         
         describe(".get", function() {
             it("should retrieve the config value", function() {
-                return config.get('foo').then(function(value) {
+                return config.get('foo', {json: false}).then(function(value) {
                     assert.deepEqual(JSON.parse(value), {bar: 'baz'});
                 });
             });
@@ -41,6 +41,16 @@ describe("config.api", function() {
                 it("should parse the config value as JSON", function() {
                     return config
                         .get('foo', {json: true})
+                        .then(function(value) {
+                            assert.deepEqual(value, {bar: 'baz'});
+                        });
+                });
+            });
+
+            describe("if the 'json' option is ommitted", function() {
+                it("should default the json value to true", function() {
+                    return config
+                        .get('foo')
                         .then(function(value) {
                             assert.deepEqual(value, {bar: 'baz'});
                         });
