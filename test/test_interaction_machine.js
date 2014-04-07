@@ -397,6 +397,16 @@ describe("interaction_machine", function() {
                 return im.switch_state('end', {}, {}).thenResolve(p);
             });
 
+            it("should not emit an 'enter' event if the user is on the state",
+            function() {
+                var p = end_state.once.resolved('state:enter');
+                im.user.state.reset('end');
+
+                return im.switch_state('end', {}, {}).then(function() {
+                    assert(!p.isFulfilled());
+                });
+            });
+
             it("should reset the user's state to the new state", function() {
                 assert(!im.user.state.is('end'));
 
