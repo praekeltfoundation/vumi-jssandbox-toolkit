@@ -39,6 +39,36 @@ describe("states.booklet", function() {
             tester.data.opts = {};
         });
 
+        it("should stay on page 0 when the user tries go back on it",
+        function() {
+            return tester
+                .setup.user.state({
+                    name: 'states:test',
+                    metadata: {page: 0}
+                })
+                .input('1')
+                .check.reply([
+                    "Page 0.",
+                    "1 for prev, 2 for next, 0 to end."
+                ].join('\n'))
+                .run();
+        });
+
+        it("should stay on the last page when the user tries go forward on it",
+        function() {
+            return tester
+                .setup.user.state({
+                    name: 'states:test',
+                    metadata: {page: 2}
+                })
+                .input('2')
+                .check.reply([
+                    "Page 2.",
+                    "1 for prev, 2 for next, 0 to end."
+                ].join('\n'))
+                .run();
+        });
+
         it("should display the first page when the user enters", function() {
             return tester
                 .input()
