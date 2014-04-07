@@ -46,6 +46,17 @@ describe("config.dummy", function() {
                         assert.equal(reply.value, 'null');
                     });
                 });
+
+                it("should return the unformatted value if requested",
+                function() {
+                    api.config.json.foo = false;
+                    api.config.store.foo = "<doc>A doc</doc>";
+                    return request('config.get', {
+                        key: 'foo',
+                    }).then(function(reply) {
+                        assert.equal(reply.value, '<doc>A doc</doc>');
+                    });
+                });
             });
         });
     });
