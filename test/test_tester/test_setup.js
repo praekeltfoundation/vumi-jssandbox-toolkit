@@ -323,7 +323,19 @@ describe("AppTester Setup Tasks", function() {
                 .run()
                 .then(function() {
                     assert.equal(api.config.store.foo, 'bar');
+                    assert.equal(api.config.json.foo, true);
                     assert.equal(api.config.store.baz, 'qux');
+                    assert.equal(api.config.json.baz, true);
+                });
+        });
+
+        it("should mark config as not-JSON if requested", function() {
+            return tester
+                .setup.config({foo: '<doc>xml</doc>'}, {json: false})
+                .run()
+                .then(function() {
+                    assert.deepEqual(api.config.store.foo, '<doc>xml</doc>');
+                    assert.deepEqual(api.config.json.foo, false);
                 });
         });
 
