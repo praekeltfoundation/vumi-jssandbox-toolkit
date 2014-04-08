@@ -119,6 +119,18 @@ describe("utils", function() {
                 assert.equal(Child.foo, Parent.foo);
             });
 
+            it("should delegate to the parent if no child is given",
+            function() {
+                var Parent = Extendable.extend(function(self) {
+                    self.foo = 'bar';
+                });
+
+                var Child = Parent.extend();
+                var child = new Child();
+
+                assert.equal(child.foo, 'bar');
+            });
+
             describe("the returned constructor function", function() {
                 it("should pass `this` to the actual constructor as an arg",
                 function() {
