@@ -1,6 +1,6 @@
 {
   "name": "vumigo_v02",
-  "version": "0.2.0-beta.12",
+  "version": "0.2.0-beta.16",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "lib/index.js",
   "scripts": {
@@ -17,8 +17,7 @@
     "moment": "~2.5.1"
   },
   "devDependencies": {
-    "mocha": "~1.8",
-    "mocha-as-promised": "~2.0.0",
+    "mocha": "~1.18",
     "jshint": "~2.4.3"
   },
   "keywords": [

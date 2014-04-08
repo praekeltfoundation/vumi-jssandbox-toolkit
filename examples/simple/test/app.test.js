@@ -1,4 +1,3 @@
-require('mocha-as-promised')();
 var vumigo = require('../../../lib');
 var app = require('../lib/app');
 var SimpleApp = app.SimpleApp;
@@ -54,7 +53,7 @@ describe("app", function() {
                         .setup.user.state('states:start')
                         .input('1')
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:tea',
                             reply: 'Meh. Bye.'
                         })
                         .run();
@@ -73,7 +72,7 @@ describe("app", function() {
                         .setup.user.state('states:start')
                         .input('2')
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:coffee',
                             reply: 'Cool :) Bye.'
                         })
                         .run();

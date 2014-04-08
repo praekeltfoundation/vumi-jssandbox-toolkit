@@ -104,6 +104,37 @@ describe(".translate", function() {
         });
     });
 
+    describe("LazyText", function() {
+        describe(".apply_translation", function() {
+            it("should apply the given translation", function() {
+                var $ = new LazyTranslator();
+                var jed = new Jed(fixtures.lang('af'));
+                assert.equal($('yes').apply_translation(jed), 'ja');
+            });
+
+            it("should apply its context", function() {
+                var $ = new LazyTranslator();
+                var lang = fixtures.lang('af');
+
+                lang.locale_data.messages["there is an alien"] = [
+                    "there are {{ n }} aliens",
+                    "daar is 'n ruimeteweser",
+                    "daar is {{ n }} ruimetewesers"
+                ];
+
+                var result = $
+                    .ngettext(
+                        'there is an alien',
+                        'there are {{ n }} aliens',
+                        3)
+                    .context({n: 3})
+                    .apply_translation(new Jed(lang));
+
+                assert.equal(result, 'daar is 3 ruimetewesers');
+            });
+        });
+    });
+
     describe("Translator", function() {
         describe("if a lazy translation was given", function() {
             it("should apply the corresponding method and args",

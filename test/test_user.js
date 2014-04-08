@@ -134,6 +134,7 @@ describe("user", function() {
                 lang: 'af',
                 answers: {start: 'ja'},
                 metadata: {name: 'jan'},
+                in_session: false,
                 state: {
                     name: 'start',
                     metadata: {foo: 'bar'},

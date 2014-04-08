@@ -1,6 +1,5 @@
 var assert = require('assert');
 
-require('mocha-as-promised')();
 var vumigo = require('../../../lib');
 var app = require('../lib/app');
 var ContactsApp = app.ContactsApp;
@@ -43,7 +42,7 @@ describe("app", function() {
                         })
                         .start()
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:registered',
                             reply: [
                                 "Hello Anakin. I hear you like tea.",
                                 "That's nice. Bye."
@@ -69,7 +68,7 @@ describe("app", function() {
                         })
                         .start()
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:registered',
                             reply: [
                                 "Hello Luke. I hear you like coffee.",
                                 "That's nice. Bye."
@@ -178,7 +177,7 @@ describe("app", function() {
                     return tester
                         .input('1')
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:registered',
                             reply: [
                                 "Hello Anakin. I hear you like tea.",
                                 "That's nice. Bye."
@@ -221,7 +220,7 @@ describe("app", function() {
                     return tester
                         .input('2')
                         .check.interaction({
-                            state: 'states:start',
+                            state: 'states:registered',
                             reply: [
                                 "Hello Luke. I hear you like coffee.",
                                 "That's nice. Bye."
