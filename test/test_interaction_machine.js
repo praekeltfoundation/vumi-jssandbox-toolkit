@@ -397,6 +397,34 @@ describe("interaction_machine", function() {
                 return im.switch_state('end', {}, {}).thenResolve(p);
             });
 
+            it("should emit an 'enter' event if the user is not on the state",
+            function() {
+                assert(im.is_in_state('start'));
+                var p = end_state.once.resolved('state:enter');
+
+                // states have already set the new user state name
+                im.user.state.reset('end');
+
+                return im.switch_state('end', {}, {}).then(function() {
+                    assert(p.isFulfilled());
+                });
+            });
+
+            it("should not emit an 'enter' event if the user is on the state",
+            function() {
+                return im.switch_state('end', {}, {}).then(function() {
+                    assert(im.is_in_state('end'));
+                    var p = end_state.once.resolved('state:enter');
+
+                    // states have already set the new user state name
+                    im.user.state.reset('end');
+
+                    return im.switch_state('end', {}, {}).then(function() {
+                        assert(!p.isFulfilled());
+                    });
+                });
+            });
+
             it("should reset the user's state to the new state", function() {
                 assert(!im.user.state.is('end'));
 
