@@ -835,6 +835,17 @@ describe("interaction_machine", function() {
                 var im = vumigo.interact(api, app_creator);
                 assert.strictEqual(im.app, app);
             });
+
+            it("should support passing in an App class", function() {
+                var MyApp = App.extend(function(self) {
+                    App.call(self, 'start');
+                    self.name = 'my_app';
+                }
+
+                var api = {};
+                var im = vumigo.interact(api, MyApp);
+                assert.strictEqual(im.app.name, 'my_app');
+            });
         });
 
         describe("when the api is not defined", function() {
