@@ -354,13 +354,31 @@ describe("AppTester Setup Tasks", function() {
         it("should update the sandbox's endpoint config with the given endpoint",
         function() {
             return tester
-                .setup.config.endpoint('sms_endpoint', 'sms')
-                .setup.config.endpoint('twitter_endpoint', 'twitter')
+                .setup.config.endpoint('sms_endpoint', {
+                    delivery_class: 'sms'
+                })
+                .setup.config.endpoint('twitter_endpoint', {
+                    delivery_class: 'twitter'})
                 .run()
                 .then(function() {
                     assert.deepEqual(api.config.app.endpoints, {
                         sms_endpoint: {delivery_class: 'sms'},
                         twitter_endpoint: {delivery_class: 'twitter'},
+                    });
+                });
+        });
+
+        it("should allow configuring endpoints without a delivery_class",
+        function() {
+            return tester
+                .setup.config.endpoint('my_endpoint')
+                .setup.config.endpoint('other_endpoint', {
+                    extra: 'data'})
+                .run()
+                .then(function() {
+                    assert.deepEqual(api.config.app.endpoints, {
+                        my_endpoint: {},
+                        other_endpoint: {extra: 'data'},
                     });
                 });
         });
