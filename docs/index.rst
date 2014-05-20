@@ -15,7 +15,7 @@ Vumi Go's Javascript sandbox.
    examples.rst
    interaction_machine.rst
    app.rst
-   states.rst
+   states/index.rst
    log.rst
    user.rst
    config.rst
