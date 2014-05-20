@@ -436,7 +436,7 @@ describe("AppTester Check Tasks", function() {
         });
     });
 
-    describe.only(".check.user.lang", function() {
+    describe(".check.user.lang", function() {
         it("should succeed if the language matches", function() {
             return tester
                 .setup.user({lang: 'af'})
