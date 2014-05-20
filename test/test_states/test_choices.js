@@ -8,6 +8,7 @@ var test_utils = vumigo.test_utils;
 
 var ChoiceState = vumigo.states.ChoiceState;
 var MenuState = vumigo.states.MenuState;
+var LanguageChoice = vumigo.states.LanguageChoice;
 var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
 var Choice = vumigo.states.Choice;
 
@@ -225,6 +226,55 @@ describe("states.choice", function() {
                     assert.equal(im.user.state.name, 'state_by_object');
                     assert.deepEqual(im.user.state.metadata, {"foo": "bar"});
                 });
+            });
+        });
+    });
+
+    describe("LanguageChoice", function () {
+        var tester;
+
+        beforeEach(function () {
+            var app = new App('states:text');
+
+            app.states.add(new LanguageChoice('states:text', {
+                question: "What language would you like to use?",
+                choices: [
+                    new Choice("sw", "Swahili"),
+                    new Choice("en", "English"),
+                ]
+            }));
+
+            tester = new AppTester(app);
+        });
+
+        describe("when entered", function() {
+            it("should display the question", function () {
+                return tester
+                    .start()
+                    .check.reply([
+                        "What language would you like to use?",
+                        "1. Swahili",
+                        "2. English",
+                    ].join("\n"))
+                    .run();
+            });
+        });
+
+        describe("when a valid choice is made", function () {
+            it("should set the user's language", function () {
+                return tester
+                    .input("1")
+                    .check.user.lang("sw")
+                    .run();
+            });
+        });
+
+        describe("when an invalid choice is made", function () {
+            it("should not set the user's language", function () {
+                return tester
+                    .input("3")
+                    .check.user.lang(null)
+                    .run();
             });
         });
     });
