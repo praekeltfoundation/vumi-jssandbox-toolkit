@@ -12,7 +12,6 @@ Vumi Go's Javascript sandbox.
 .. toctree::
    :maxdepth: 1
 
-   examples.rst
    interaction_machine.rst
    app.rst
    states/index.rst
