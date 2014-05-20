@@ -36,7 +36,7 @@ An application is a set of state creators collected into an
 :class:`InteractionMachine` which manages states and links an
 application to the low-level sandbox API.
 
-An :class:`InteractionMachine` received messages from people (via the
+An :class:`InteractionMachine` receives messages from people (via the
 sandbox API) and directs those messages to the current state. It also
 tracks what state a person is interacting with and manages transitions
 to new states.

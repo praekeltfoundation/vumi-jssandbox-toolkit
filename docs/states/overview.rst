@@ -83,9 +83,9 @@ See :class:`PaginatedChoiceState`.
 BookletState
 ------------
 
-A state for displaying paginated text. Useful when present medium
-length pieces of text that need to split across multiple USSD messages
-or pages of related information.
+A state for displaying paginated text. Useful when presenting medium
+length pieces of text or pages of related information that need to be
+split across multiple USSD messages.
 
 See :class:`BookletState`.
 
@@ -107,5 +107,5 @@ Writing your own states
 
 You can also write your own states!
 
-Start by extending one of the exist states, or the base :class:`State`
-class as needed.
+Start by extending one of the existing states, or the base
+:class:`State` class as needed.
