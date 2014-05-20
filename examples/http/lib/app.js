@@ -5,7 +5,6 @@ var MenuState = vumigo.states.MenuState;
 var Choice = vumigo.states.Choice;
 var EndState = vumigo.states.EndState;
 var FreeText = vumigo.states.FreeText;
-var InteractionMachine = vumigo.InteractionMachine;
 var JsonApi = vumigo.http.api.JsonApi;
 
 
@@ -94,9 +93,7 @@ var HttpApp = App.extend(function(self) {
 });
 
 
-if (typeof api != 'undefined') {
-    new InteractionMachine(api, new HttpApp());
-}
+vumigo.interact(this.api, HttpApp);
 
 
 this.HttpApp = HttpApp;
