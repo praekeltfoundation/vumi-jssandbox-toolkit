@@ -11,6 +11,10 @@ describe("outbound.api", function() {
     beforeEach(function() {
         return test_utils.make_im().then(function(new_im) {
             im = new_im;
+            im.api.config.app.endpoints = {
+                sms: {delivery_class: "sms"},
+                twitter_endpoint: {delivery_class: "twitter"},
+            };
         });
     });
 
