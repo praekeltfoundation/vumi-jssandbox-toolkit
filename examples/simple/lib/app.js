@@ -4,7 +4,6 @@ var App = vumigo.App;
 var Choice = vumigo.states.Choice;
 var ChoiceState = vumigo.states.ChoiceState;
 var EndState = vumigo.states.EndState;
-var InteractionMachine = vumigo.InteractionMachine;
 
 
 // `App` is the base class that needs to be extended and given app-specific
@@ -57,10 +56,8 @@ var SimpleApp = App.extend(function(self) {
 });
 
 
-// if we have the real api, this is not a test, start the interaction machine
-if (typeof api != 'undefined') {
-    new InteractionMachine(api, new SimpleApp());
-}
+// connect the app to the api (api is only defined inside the real sandbox)
+vumigo.interact(this.api, SimpleApp);
 
 
 // export the app so we can require it in our tests
