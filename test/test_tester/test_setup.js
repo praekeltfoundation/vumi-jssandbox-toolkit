@@ -350,6 +350,20 @@ describe("AppTester Setup Tasks", function() {
                     assert.equal(api.config.app.baz, 'qux');
                 });
         });
+
+        it("should update the sandbox's endpoint config with the given endpoint",
+        function() {
+            return tester
+                .setup.config.endpoint('sms_endpoint', 'sms')
+                .setup.config.endpoint('twitter_endpoint', 'twitter')
+                .run()
+                .then(function() {
+                    assert.deepEqual(api.config.app.endpoints, {
+                        sms_endpoint: {delivery_class: 'sms'},
+                        twitter_endpoint: {delivery_class: 'twitter'},
+                    });
+                });
+        });
     });
 
     describe(".setup.kv", function() {
