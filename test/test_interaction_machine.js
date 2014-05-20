@@ -840,7 +840,7 @@ describe("interaction_machine", function() {
                 var MyApp = App.extend(function(self) {
                     App.call(self, 'start');
                     self.name = 'my_app';
-                }
+                });
 
                 var api = {};
                 var im = vumigo.interact(api, MyApp);
