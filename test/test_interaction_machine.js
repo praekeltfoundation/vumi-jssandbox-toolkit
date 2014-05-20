@@ -817,4 +817,32 @@ describe("interaction_machine", function() {
             });
         });
     });
+
+    describe("interact", function () {
+        var app;
+        var app_creator;
+
+        beforeEach(function() {
+            app = new App('start');
+            app_creator = function () {
+                return app;
+            };
+        });
+
+        describe("when the api is defined", function() {
+            it("should create an interaction machine", function() {
+                var api = {};
+                var im = vumigo.interact(api, app_creator);
+                assert.strictEqual(im.app, app);
+            });
+        });
+
+        describe("when the api is not defined", function() {
+            it("should not create an interaction machine", function() {
+                var api;
+                var im = vumigo.interact(api, app_creator);
+                assert.strictEqual(im, null);
+            });
+        });
+    });
 });
