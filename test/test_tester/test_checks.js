@@ -436,6 +436,49 @@ describe("AppTester Check Tasks", function() {
         });
     });
 
+    describe.only(".check.user.lang", function() {
+        it("should succeed if the language matches", function() {
+            return tester
+                .setup.user({lang: 'af'})
+                .check.user.lang('af')
+                .run();
+        });
+
+        it("should fail if the language does not match", function() {
+            return tester
+                .setup.user({lang: 'en'})
+                .check.user.lang('jp')
+                .run()
+                .then(test_utils.fail, function(e) {
+                    assert.equal(
+                        e.msg,
+                        "Unexpected user language");
+                    assert.deepEqual(e.actual, 'en');
+                    assert.deepEqual(e.expected, 'jp');
+                });
+        });
+
+        it("should succeed if the language matches null", function() {
+            return tester
+                .check.user.lang(null)
+                .run();
+        });
+
+        it("should fail if the language does not match null", function() {
+            return tester
+                .setup.user({lang: 'en'})
+                .check.user.lang(null)
+                .run()
+                .then(test_utils.fail, function(e) {
+                    assert.equal(
+                        e.msg,
+                        "Unexpected user language");
+                    assert.deepEqual(e.actual, 'en');
+                    assert.deepEqual(e.expected, null);
+                });
+        });
+    });
+
     describe(".check.user.metadata", function() {
         it("should check the user's metadata", function() {
             return tester
