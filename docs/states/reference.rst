@@ -1,7 +1,7 @@
-States
-======
+State reference
+===============
 
-States are the building blocks of sandbox applications.
+A reference guide to all the states available in the toolkit.
 
 .. autojs:: ../lib/states/state.js
 
