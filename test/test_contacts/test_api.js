@@ -429,4 +429,46 @@ describe("contacts.api", function() {
             });
         });
     });
+
+    describe("GroupStore", function() {
+        var im;
+
+        beforeEach(function() {
+            return test_utils.make_im().then(function(new_im) {
+                im = new_im;
+            });
+        });
+
+        describe(".setup", function() {
+            it("should emit a setup event");
+        });
+
+        describe(".request", function() {
+            it("should make a raw request to the api's groups resource");
+        });
+
+        describe(".get", function() {
+            it("should create non-existent groups if asked");
+        });
+
+        describe(".get_by_key", function() {
+            it("should retrieve a group by its key");
+        });
+
+        describe(".search", function() {
+            it("should retrieve the matching groups");
+        });
+
+        describe(".save", function() {
+            it("should save the given group");
+        });
+
+        describe(".list", function() {
+            it("should retrieve the stored groups");
+        });
+
+        describe(".sizeOf", function() {
+            it("should return the number of members in the given group");
+        });
+    });
 });
