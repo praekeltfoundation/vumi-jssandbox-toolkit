@@ -677,6 +677,25 @@ describe("contacts.dummy", function() {
                 });
             });
 
+            describe(".list", function() {
+                it("should list all the stored groups", function() {
+                    api.groups.add({
+                        key: '1',
+                        name: 'one'
+                    });
+
+                    api.groups.add({
+                        key: '2',
+                        name: 'two'
+                    });
+
+                    return request('groups.list', {}).then(function(result) {
+                        assert(result.success);
+                        assert.deepEqual(result.groups, api.groups.store);
+                    });
+                });
+            });
+
             describe(".count_members", function() {
                 it("should return the member count for static groups",
                 function() {
