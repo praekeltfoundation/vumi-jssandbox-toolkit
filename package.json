@@ -1,22 +1,24 @@
 {
-  "name": "vumigo_v01",
-  "version": "0.1.23",
+  "name": "vumigo_v02",
+  "version": "0.2.0",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "./utils/test.sh"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/praekelt/vumi-jssandbox-toolkit"
   },
   "dependencies": {
-    "jed": "0.5.x",
-    "q": "0.9.x"
+    "jed": "~0.5",
+    "q": "~0.9",
+    "lodash": "~2.4.1",
+    "moment": "~2.6"
   },
   "devDependencies": {
-    "mocha": "1.7.x",
-    "sinon": "1.6.x"
+    "mocha": "~1.18",
+    "jshint": "~2.4.3"
   },
   "keywords": [
     "vumi",
