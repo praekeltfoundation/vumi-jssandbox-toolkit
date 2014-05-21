@@ -7,6 +7,7 @@ var api = vumigo.contacts.api;
 var Contact = api.Contact;
 var Group = api.Group;
 var ContactStore = api.ContactStore;
+var GroupStore = api.GroupStore;
 var structs = vumigo.structs;
 var ValidationError = structs.ValidationError;
 
@@ -425,6 +426,161 @@ describe("contacts.api", function() {
                              "'string': 3"].join(' '));
 
                         return true;
+                    });
+            });
+        });
+    });
+
+    describe("GroupStore", function() {
+        var im;
+
+        beforeEach(function() {
+            return test_utils.make_im().then(function(new_im) {
+                im = new_im;
+            });
+        });
+
+        describe(".setup", function() {
+            it("should emit a setup event", function() {
+                var groups = new GroupStore();
+                var p = groups.once.resolved('setup');
+                return groups.setup().then(function() {
+                    assert(p.isFulfilled());
+                });
+            });
+        });
+
+        describe(".request", function() {
+            it("should make a raw request to the api's groups resource",
+            function() {
+                im.api.groups.add({
+                    key: '123',
+                    name: 'spammers'
+                });
+
+                return im
+                    .groups.request('get', {key: '123'})
+                    .then(function(reply) {
+                        assert.equal(reply.group.name, 'spammers');
+                    });
+            });
+        });
+
+        describe(".get", function() {
+            it("should retrieve the group by name", function() {
+                im.api.groups.add({name: 'spammers'});
+
+                return im
+                    .groups.get('spammers')
+                    .then(function(group) {
+                        assert(group instanceof Group);
+                        assert.equal(group.name, 'spammers');
+                    });
+            });
+
+            it("should create non-existent groups if asked", function() {
+                return im
+                    .groups.get('spammers', {create: true})
+                    .then(function(group) {
+                        assert(group instanceof Group);
+                        assert.deepEqual(im.api.groups.store, [group]);
+                    });
+            });
+        });
+
+        describe(".get_by_key", function() {
+            it("should retrieve a group by its key", function() {
+                var spammers = im.api.groups.add({
+                    key: '123',
+                    name: 'spammers'
+                });
+
+                return im.groups
+                    .get_by_key('123')
+                    .then(function(group) {
+                        assert.deepEqual(group, spammers);
+                    });
+            });
+        });
+
+        describe(".search", function() {
+            it("should retrieve the matching groups", function() {
+                im.api.groups.add({
+                    key: '123',
+                    name: 'spammers'
+                });
+
+                im.api.groups.add({
+                    key: '456',
+                    name: 'sprockets'
+                });
+
+                im.api.groups.search_results["name:'s*'"] = ['123', '456'];
+
+                return im.groups
+                    .search("name:'s*'")
+                    .then(function(groups) {
+                        assert.deepEqual(im.api.groups.store, groups);
+                    });
+            });
+        });
+
+        describe(".save", function() {
+            it("should save the given group", function() {
+                im.api.groups.add({
+                    name: 'spammers',
+                    query: 'spam*'
+                });
+
+                return im
+                    .groups.get('spammers')
+                    .then(function(group) {
+                        group.name = 'hammers';
+                        group.query = 'ham*';
+
+                        return im.groups.save(group).then(function() {
+                            assert.deepEqual(im.api.groups.store, [group]);
+                        });
+                    });
+            });
+        });
+
+        describe(".list", function() {
+            it("should retrieve the stored groups", function() {
+                im.api.groups.add({
+                    key: '123',
+                    name: 'spammers'
+                });
+
+                im.api.groups.add({
+                    key: '456',
+                    name: 'sprockets'
+                });
+
+                return im.groups.list().then(function(groups) {
+                    assert.deepEqual(im.api.groups.store, groups);
+                });
+            });
+        });
+
+        describe(".sizeOf", function() {
+            it("should return the number of members in the given group",
+            function() {
+                im.api.groups.add({
+                    key: '123',
+                    name: 'spammers'
+                });
+
+                im.api.contacts.add({groups: ['123']});
+                im.api.contacts.add({groups: ['123']});
+
+                return im.groups
+                    .get('spammers')
+                    .then(function(group) {
+                        return im.groups.sizeOf(group);
+                    })
+                    .then(function(size) {
+                        assert.equal(size, 2);
                     });
             });
         });
