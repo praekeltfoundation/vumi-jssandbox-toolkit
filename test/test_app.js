@@ -100,12 +100,36 @@ describe("app", function() {
             });
 
             it("should allow options to be passed to the creator", function() {
+                var created = false;
+
                 states.add('spam', function(name, opts) {
+                    created = true;
                     assert.deepEqual(opts, {foo: 'bar'});
                     return new State('spam');
                 });
 
-                return states.create('spam', {foo: 'bar'});
+                return states
+                    .create('spam', {foo: 'bar'})
+                    .then(function() {
+                        assert(created);
+                    });
+            });
+
+            it("should pass creator opts to start states", function() {
+                var created = false;
+
+                states.add('spam', function(name, opts) {
+                    created = true;
+                    assert.deepEqual(opts, {foo: 'bar'});
+                    return new State('spam');
+                });
+
+                app.start_state_name = 'spam';
+                return states
+                    .create('spam', {foo: 'bar'})
+                    .then(function() {
+                        assert(created);
+                    });
             });
 
             describe("if the state does not exist", function() {
