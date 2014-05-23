@@ -10,7 +10,7 @@ describe("outbound.dummy", function() {
     var request;
 
     beforeEach(function() {
-        api =  new DummyApi();
+        api = new DummyApi();
         request = test_utils.requester(api);
     });
 
@@ -174,6 +174,12 @@ describe("outbound.dummy", function() {
             });
 
             describe(".send_to_endpoint", function() {
+                beforeEach(function() {
+                    api.config.app.endpoints = {
+                        sms: {delivery_class: "sms"},
+                    };
+                });
+
                 it("should record the sent message", function() {
                     return request('outbound.send_to_endpoint', {
                         content: 'foo',
@@ -229,6 +235,19 @@ describe("outbound.dummy", function() {
                         assert.equal(
                             result.reason,
                             "'endpoint' needs to be a string");
+                    });
+                });
+
+                it("should fail if 'endpoint' isn't configured", function() {
+                    return request('outbound.send_to_endpoint', {
+                        content: 'foo',
+                        to_addr: '+27123',
+                        endpoint: 'not_found',
+                    }).then(function(result) {
+                        assert(!result.success);
+                        assert.equal(
+                            result.reason,
+                            "endpoint 'not_found' is not configured");
                     });
                 });
             });

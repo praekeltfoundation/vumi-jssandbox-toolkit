@@ -5,7 +5,6 @@ var Choice = vumigo.states.Choice;
 var ChoiceState = vumigo.states.ChoiceState;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
-var InteractionMachine = vumigo.InteractionMachine;
 
 
 var ContactsApp = App.extend(function(self) {
@@ -31,7 +30,7 @@ var ContactsApp = App.extend(function(self) {
             ?  self.states.create('states:registered')
             :  self.states.create('states:registration:name');
     });
-    
+
     self.states.add('states:registered', function(name) {
         // Since the contact is registered, we have their information that we
         // want to display. The contact `name` is a standard contact field so
@@ -101,9 +100,7 @@ var ContactsApp = App.extend(function(self) {
 });
 
 
-if (typeof api != 'undefined') {
-    new InteractionMachine(api, new ContactsApp());
-}
+vumigo.interact(this.api, ContactsApp);
 
 
 this.ContactsApp = ContactsApp;
