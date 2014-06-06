@@ -6,6 +6,8 @@ var App = vumigo.App;
 var AppTester = vumigo.AppTester;
 var test_utils = vumigo.test_utils;
 
+var StateInvalidError = vumigo.states.StateInvalidError;
+
 var ChoiceState = vumigo.states.ChoiceState;
 var MenuState = vumigo.states.MenuState;
 var LanguageChoice = vumigo.states.LanguageChoice;
@@ -96,6 +98,19 @@ describe("states.choice", function() {
                         assert.equal(im.user.state.name, 'red_state');
                     });
                 });
+            });
+        });
+
+        describe(".check", function() {
+            it("should return null for a non-null choice", function() {
+                var error = state.check(new Choice("value", "label"));
+                assert.strictEqual(error, null);
+            });
+
+            it("should return a StateInvalidError for null", function() {
+                var error = state.check(null);
+                assert(error instanceof StateInvalidError);
+                assert.equal(error.response, "no!");
             });
         });
 
