@@ -125,6 +125,15 @@ describe("http.api", function() {
                 var cmd = request.to_cmd();
                 assert.equal(cmd.data.data, '{"foo":"bar"}');
             });
+
+            it("should include the verify_options params if passed as an array", function() {
+                var request = new HttpRequest('GET', 'https://foo.com/', {
+                    verify_options: ["VERIFY_NONE"]
+                });
+
+                var cmd = request.to_cmd();
+                assert.equal(cmd.data.verify_options, 'VERIFY_NONE');
+            });
         });
 
         describe(".toString", function() {
