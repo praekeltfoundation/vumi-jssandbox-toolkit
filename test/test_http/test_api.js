@@ -134,6 +134,15 @@ describe("http.api", function() {
                 var cmd = request.to_cmd();
                 assert.deepEqual(cmd.data.verify_options, ['VERIFY_NONE']);
             });
+
+            it("should include the ssl_method param if passed as an string", function() {
+                var request = new HttpRequest('GET', 'https://foo.com/', {
+                    ssl_method: "SSLv3"
+                });
+
+                var cmd = request.to_cmd();
+                assert.deepEqual(cmd.data.ssl_method, "SSLv3");
+            });
         });
 
         describe(".toString", function() {
