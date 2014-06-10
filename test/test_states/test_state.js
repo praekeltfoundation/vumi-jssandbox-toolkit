@@ -447,9 +447,11 @@ describe("states.state", function() {
                         })
                         .then(function() {
                             assert.deepEqual(error, new StateError(state, [
-                                ".check() may only return strings or instances of",
-                                "LazyText or StateInvalidError",
-                            ].join(" ")));
+                                ".check() may only return null or undefined",
+                                " (to indicate success), or string, LazyText",
+                                " or StateInvalidError objects (to indicate",
+                                " errors)",
+                            ].join("")));
                         });
                 });
             });
