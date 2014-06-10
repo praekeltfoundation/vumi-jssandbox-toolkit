@@ -132,7 +132,7 @@ describe("http.api", function() {
                 });
 
                 var cmd = request.to_cmd();
-                assert.equal(cmd.data.verify_options, 'VERIFY_NONE');
+                assert.deepEqual(cmd.data.verify_options, ['VERIFY_NONE']);
             });
         });
 
