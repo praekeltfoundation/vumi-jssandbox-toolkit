@@ -4,6 +4,7 @@ var assert = require('assert');
 var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 var State = vumigo.states.State;
+var StateError = vumigo.states.StateError;
 var StateInvalidError = vumigo.states.StateInvalidError;
 var Event = vumigo.events.Event;
 
@@ -370,7 +371,7 @@ describe("states.state", function() {
 
                 it("should emit a 'state:invalid' event", function() {
                     var state = new State('foo', {
-                        check: function() { return 'no!'; }
+                        check: function(input) { return 'no!'; }
                     });
 
                     var p = state.once.resolved('state:invalid');
@@ -384,7 +385,7 @@ describe("states.state", function() {
                     var error;
 
                     var state = new State('foo', {
-                        check: function() { return error; }
+                        check: function(input) { return error; }
                     });
 
                     error = new StateInvalidError(state, 'no!');
@@ -396,7 +397,7 @@ describe("states.state", function() {
 
                 it("should emit a 'state:invalid' event", function() {
                     var state = new State('foo', {
-                        check: function() {
+                        check: function(input) {
                             return new StateInvalidError(state, 'no!');
                         }
                     });
@@ -406,16 +407,50 @@ describe("states.state", function() {
                 });
             });
 
-            describe("if the checker returned a non-error", function() {
+            describe("if the checker returned undefined", function() {
                 it("should not invalidate the state", function() {
                     var state = new State('foo', {
-                        next: function() {}
+                        check: function(input) {},
                     });
 
                     assert.strictEqual(state.error, null);
                     return state.validate('swords').then(function() {
                         assert.strictEqual(state.error, null);
                     });
+                });
+            });
+
+            describe("if the checker returned null", function() {
+                it("should not invalidate the state", function() {
+                    var state = new State('foo', {
+                        check: function(input) { return null; }
+                    });
+
+                    assert.strictEqual(state.error, null);
+                    return state.validate('swords').then(function() {
+                        assert.strictEqual(state.error, null);
+                    });
+                });
+            });
+
+            describe("if the checker returned a generic object", function() {
+                it("should raise an StateError", function() {
+                    var state = new State('foo', {
+                        check: function(input) { return {"bad": "value"}; }
+                    });
+
+                    assert.strictEqual(state.error, null);
+                    var error = null;
+                    return state.validate('swords')
+                        .catch(function(e) {
+                            error = e;
+                        })
+                        .then(function() {
+                            assert.deepEqual(error, new StateError(state, [
+                                ".check() may only return strings or instances of",
+                                "LazyText or StateInvalidError",
+                            ].join(" ")));
+                        });
                 });
             });
         });
