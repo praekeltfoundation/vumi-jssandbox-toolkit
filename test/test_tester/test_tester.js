@@ -76,13 +76,47 @@ describe("tester.tester", function() {
             it("should use a new interaction machine", function() {
                 var im = tester.im;
                 tester.reset();
-                assert.notEqual(tester.im, im);
+                assert.notStrictEqual(tester.im, im);
+
+                im = tester.im;
+                assert.strictEqual(tester.tasks.get('setups').im, im);
+                assert.strictEqual(tester.tasks.get('interactions').im, im);
+                assert.strictEqual(tester.tasks.get('checks').im, im);
             });
 
             it("should use a new api", function() {
                 var api = tester.api;
                 tester.reset();
+                assert.notStrictEqual(tester.api, api);
+
+                api = tester.api;
+                assert.strictEqual(tester.tasks.get('setups').api, api);
+                assert.strictEqual(tester.tasks.get('interactions').api, api);
+                assert.strictEqual(tester.tasks.get('checks').api, api);
+            });
+        });
+
+        describe(".reset.interaction", function() {
+            it("should use a new interaction machine", function() {
+                var im = tester.im;
+                tester.reset.interaction();
+                assert.notStrictEqual(tester.im, im);
+
+                im = tester.im;
+                assert.strictEqual(tester.tasks.get('setups').im, im);
+                assert.strictEqual(tester.tasks.get('interactions').im, im);
+                assert.strictEqual(tester.tasks.get('checks').im, im);
+            });
+
+            it("should use a new api", function() {
+                var api = tester.api;
+                tester.reset.interaction();
                 assert.notEqual(tester.api, api);
+
+                api = tester.api;
+                assert.strictEqual(tester.tasks.get('setups').api, api);
+                assert.strictEqual(tester.tasks.get('interactions').api, api);
+                assert.strictEqual(tester.tasks.get('checks').api, api);
             });
         });
 
