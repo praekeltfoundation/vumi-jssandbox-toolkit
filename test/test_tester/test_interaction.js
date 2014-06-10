@@ -3,10 +3,14 @@ var assert = require('assert');
 
 var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
-var State = vumigo.states.State;
-var App = vumigo.app.App;
 var AppTester = vumigo.tester.AppTester;
 var TaskMethodError = vumigo.tester.TaskMethodError;
+
+var App = vumigo.app.App;
+var State = vumigo.states.State;
+var Choice = vumigo.states.Choice;
+var MenuState = vumigo.states.MenuState;
+var EndState = vumigo.states.EndState;
 
 
 describe("AppTester Interaction Tasks", function() {
@@ -187,6 +191,64 @@ describe("AppTester Interaction Tasks", function() {
                 return tester.input().run().then(function() {
                     assert.strictEqual(im.msg.session_event, 'new');
                 });
+            });
+        });
+
+        describe(".input(input1, input2[, ...])", function() {
+            beforeEach(function() {
+                app.states.add(new MenuState('states:a', {
+                    question: 'A',
+                    choices: [
+                        new Choice('states:b', 'states:b'),
+                        new Choice('states:c', 'states:c')]
+                }));
+
+                app.states.add(new MenuState('states:b', {
+                    question: 'B',
+                    choices: [
+                        new Choice('states:d', 'states:d'),
+                        new Choice('states:e', 'states:e')]
+                }));
+
+                app.states.add(new EndState('states:c', {text: 'C'}));
+                app.states.add(new EndState('states:d', {text: 'D'}));
+                app.states.add(new EndState('states:e', {text: 'E'}));
+            });
+
+            it("should use each input for a new interaction", function() {
+                return tester
+                    .setup.user.state('states:a')
+                    .input('1', '2')
+                    .check.user.state('states:e')
+                    .check.reply('E')
+                    .run();
+            });
+
+            it("should allow objects to be used as inputs", function() {
+                return tester
+                    .input({content: '1'}, {content: '2'})
+                    .check(function(api, im) {
+                        assert.strictEqual(im.msg.content, '2');
+                    })
+                    .run();
+            });
+
+            it("should allow strings to be used as inputs", function() {
+                return tester
+                    .input('1', '2')
+                    .check(function(api, im) {
+                        assert.strictEqual(im.msg.content, '2');
+                    })
+                    .run();
+            });
+
+            it("should allow nulls to be used as inputs", function() {
+                return tester
+                    .input(null, null)
+                    .check(function(api, im) {
+                        assert.strictEqual(im.msg.content, null);
+                    })
+                    .run();
             });
         });
     });
