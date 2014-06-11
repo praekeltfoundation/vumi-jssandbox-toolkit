@@ -4,6 +4,7 @@ var assert = require('assert');
 var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
 var AppTester = vumigo.tester.AppTester;
+var TaskError = vumigo.tester.tasks.TaskError;
 var TaskMethodError = vumigo.tester.TaskMethodError;
 
 var App = vumigo.app.App;
@@ -27,6 +28,21 @@ describe("AppTester Interaction Tasks", function() {
         tester.api.config.app.name = 'test_app';
         tasks = tester.tasks.get('interactions');
         im = tester.im;
+    });
+
+    it("should throw an error if both a single and multiple inputs were given",
+    function() {
+        return tester
+            .input('a')
+            .input('b', 'c')
+            .run()
+            .then(test_utils.fail, function(e) {
+                assert(e instanceof TaskError);
+                assert.equal(
+                    e.message,
+                    ['AppTester expected either a single or multiple inputs',
+                    'but was given both.'].join(' '));
+            });
     });
 
     describe("if checking tasks have already been scheduled", function() {
