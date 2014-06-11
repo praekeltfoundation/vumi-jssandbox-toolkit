@@ -125,6 +125,24 @@ describe("http.api", function() {
                 var cmd = request.to_cmd();
                 assert.equal(cmd.data.data, '{"foo":"bar"}');
             });
+
+            it("should include the verify_options params if passed as an array", function() {
+                var request = new HttpRequest('GET', 'https://foo.com/', {
+                    verify_options: ["VERIFY_NONE"]
+                });
+
+                var cmd = request.to_cmd();
+                assert.deepEqual(cmd.data.verify_options, ['VERIFY_NONE']);
+            });
+
+            it("should include the ssl_method param if passed as an string", function() {
+                var request = new HttpRequest('GET', 'https://foo.com/', {
+                    ssl_method: "SSLv3"
+                });
+
+                var cmd = request.to_cmd();
+                assert.deepEqual(cmd.data.ssl_method, "SSLv3");
+            });
         });
 
         describe(".toString", function() {
