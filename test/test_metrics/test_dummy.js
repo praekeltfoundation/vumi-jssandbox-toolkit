@@ -121,6 +121,28 @@ describe("metrics.dummy", function() {
                         return true;
                     });
             });
+
+            it("should fail if an invalid metric name is given", function() {
+                assert.throws(
+                    function() {
+                        api.metrics.record({
+                            store: 'store',
+                            metric: 'bad-metric',
+                            agg: 'avg',
+                            value: 2
+                        });
+                    },
+                    function(e) {
+                        assert(e instanceof DummyResourceError);
+                        assert.equal(
+                            e.message,
+                            ["Metric name 'bad-metric' is invalid. It should",
+                             "match '^[a-zA-Z][a-zA-Z0-9._]{0,100}$'.",
+                            ].join(' '));
+
+                        return true;
+                    });
+            });
         });
 
         describe(".handlers", function() {

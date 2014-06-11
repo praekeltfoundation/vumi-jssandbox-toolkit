@@ -3,10 +3,15 @@ var assert = require('assert');
 
 var vumigo = require('../../lib');
 var test_utils = vumigo.test_utils;
-var State = vumigo.states.State;
-var App = vumigo.app.App;
 var AppTester = vumigo.tester.AppTester;
+var TaskError = vumigo.tester.tasks.TaskError;
 var TaskMethodError = vumigo.tester.TaskMethodError;
+
+var App = vumigo.app.App;
+var State = vumigo.states.State;
+var Choice = vumigo.states.Choice;
+var MenuState = vumigo.states.MenuState;
+var EndState = vumigo.states.EndState;
 
 
 describe("AppTester Interaction Tasks", function() {
@@ -23,6 +28,21 @@ describe("AppTester Interaction Tasks", function() {
         tester.api.config.app.name = 'test_app';
         tasks = tester.tasks.get('interactions');
         im = tester.im;
+    });
+
+    it("should throw an error if both a single and multiple inputs were given",
+    function() {
+        return tester
+            .input('a')
+            .inputs('b', 'c')
+            .run()
+            .then(test_utils.fail, function(e) {
+                assert(e instanceof TaskError);
+                assert.equal(
+                    e.message,
+                    ['AppTester expected either a single or multiple inputs',
+                    'but was given both.'].join(' '));
+            });
     });
 
     describe("if checking tasks have already been scheduled", function() {
@@ -187,6 +207,82 @@ describe("AppTester Interaction Tasks", function() {
                 return tester.input().run().then(function() {
                     assert.strictEqual(im.msg.session_event, 'new');
                 });
+            });
+        });
+    });
+
+    describe(".inputs", function() {
+        beforeEach(function() {
+            app.states.add(new MenuState('states:a', {
+                question: 'A',
+                choices: [
+                    new Choice('states:b', 'states:b'),
+                    new Choice('states:c', 'states:c')]
+            }));
+
+            app.states.add(new MenuState('states:b', {
+                question: 'B',
+                choices: [
+                    new Choice('states:d', 'states:d'),
+                    new Choice('states:e', 'states:e')]
+            }));
+
+            app.states.add(new EndState('states:c', {text: 'C'}));
+            app.states.add(new EndState('states:d', {text: 'D'}));
+            app.states.add(new EndState('states:e', {text: 'E'}));
+        });
+
+        describe(".inputs(input1[, input2[, ...]])", function() {
+            it("should use each input for a new interaction", function() {
+                return tester
+                    .setup.user.state('states:a')
+                    .inputs('1', '2')
+                    .check.user.state('states:e')
+                    .check.reply('E')
+                    .run();
+            });
+
+            it("should allow objects to be used as inputs", function() {
+                return tester
+                    .inputs({content: '1'}, {content: '2'})
+                    .check(function(api, im) {
+                        assert.strictEqual(im.msg.content, '2');
+                    })
+                    .run();
+            });
+
+            it("should allow strings to be used as inputs", function() {
+                return tester
+                    .inputs('1', '2')
+                    .check(function(api, im) {
+                        assert.strictEqual(im.msg.content, '2');
+                    })
+                    .run();
+            });
+
+            it("should allow nulls to be used as inputs", function() {
+                return tester
+                    .inputs(null, null)
+                    .check(function(api, im) {
+                        assert.strictEqual(im.msg.content, null);
+                    })
+                    .run();
+            });
+        });
+
+        describe(".inputs(fn)", function() {
+            it("should set the message with the function's result", function() {
+                return tester
+                    .setup.user.state('states:a')
+                    .inputs(function(msgs) {
+                        return msgs.concat('1');
+                    })
+                    .inputs(function(msgs) {
+                        return msgs.concat('2');
+                    })
+                    .check.user.state('states:e')
+                    .check.reply('E')
+                    .run();
             });
         });
     });

@@ -608,28 +608,6 @@ describe("AppTester Check Tasks", function() {
                     });
             });
 
-            it("should check that only one reply was sent", function() {
-                api.outbound.store.push({
-                    content: 'fake reply',
-                    in_reply_to: '1'
-                });
-
-                return tester
-                    .input()
-                    .check.reply([
-                        'Tea or coffee?',
-                        '1. Tea',
-                        '2. Coffee'].join('\n'))
-                    .run()
-                    .then(test_utils.fail, function(e) {
-                        assert.equal(e.msg, [
-                            "Expecting a single reply from the app",
-                            "to the user"].join(' '));
-                        assert.equal(e.expected, 1);
-                        assert.equal(e.actual, 2);
-                    });
-            });
-
             it("should check the reply char limit", function() {
                 return tester
                     .setup.char_limit(2)
@@ -662,28 +640,6 @@ describe("AppTester Check Tasks", function() {
                     });
             });
 
-            it("should check that only one reply was sent", function() {
-                api.outbound.store.push({
-                    content: 'fake reply',
-                    in_reply_to: '1'
-                });
-
-                return tester
-                    .input()
-                    .check.reply(new RegExp([
-                        'Tea or coffee?',
-                        '1. Tea',
-                        '2. Coffee'].join('\n')))
-                    .run()
-                    .then(test_utils.fail, function(e) {
-                        assert.equal(e.msg, [
-                            "Expecting a single reply from the app",
-                            "to the user"].join(' '));
-                        assert.equal(e.expected, 1);
-                        assert.equal(e.actual, 2);
-                    });
-            });
-
             it("should check the reply char limit", function() {
                 return tester
                     .setup.char_limit(2)
@@ -711,42 +667,14 @@ describe("AppTester Check Tasks", function() {
                     .run()
                     .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected reply");
-
-                        assert.deepEqual(e.actual, {
-                            in_reply_to: '1',
-                            continue_session: true,
-                            content: [
-                                'Tea or coffee?',
-                                '1. Tea',
-                                '2. Coffee'
-                            ].join('\n')
-                        });
-
                         assert.deepEqual(e.expected, {content: 'Spam?'});
-                    });
-            });
 
-            it("should check that only one reply was sent", function() {
-                api.outbound.store.push({
-                    content: 'fake reply',
-                    in_reply_to: '1'
-                });
-
-                return tester
-                    .input()
-                    .check.reply({
-                        content: [
+                        assert(e.actual.continue_session);
+                        assert.equal(e.actual.content, [
                             'Tea or coffee?',
                             '1. Tea',
-                            '2. Coffee'].join('\n')
-                    })
-                    .run()
-                    .then(test_utils.fail, function(e) {
-                        assert.equal(e.msg, [
-                            "Expecting a single reply from the app",
-                            "to the user"].join(' '));
-                        assert.equal(e.expected, 1);
-                        assert.equal(e.actual, 2);
+                            '2. Coffee'
+                        ].join('\n'));
                     });
             });
 
@@ -780,25 +708,6 @@ describe("AppTester Check Tasks", function() {
                 }).run().then(function() {
                     assert(called);
                 });
-            });
-
-            it("should check that only one reply was sent", function() {
-                api.outbound.store.push({
-                    content: 'fake reply',
-                    in_reply_to: '1'
-                });
-
-                return tester
-                    .input()
-                    .check.reply(function() {})
-                    .run()
-                    .then(test_utils.fail, function(e) {
-                        assert.equal(e.msg, [
-                            "Expecting a single reply from the app",
-                            "to the user"].join(' '));
-                        assert.equal(e.expected, 1);
-                        assert.equal(e.actual, 2);
-                    });
             });
 
             it("should check the reply char limit", function() {
@@ -872,37 +781,13 @@ describe("AppTester Check Tasks", function() {
         it("should check the properties of the sent reply", function() {
             return tester
                 .input()
-                .check.reply.properties({in_reply_to: '2'})
+                .check.reply.properties({continue_session: false})
                 .run()
                 .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "Unexpected values for reply properties"].join(' '));
-                    assert.deepEqual(e.actual, {in_reply_to: '1'});
-                    assert.deepEqual(e.expected, {in_reply_to: '2'});
-                });
-        });
-
-        it("should check that only one reply was sent", function() {
-            api.outbound.store.push({
-                content: 'fake reply',
-                in_reply_to: '1'
-            });
-
-            return tester
-                .input()
-                .check.reply.properties({
-                    content: [
-                        'Tea or coffee?',
-                        '1. Tea',
-                        '2. Coffee'].join('\n')
-                })
-                .run()
-                .then(test_utils.fail, function(e) {
-                    assert.equal(e.msg, [
-                        "Expecting a single reply from the app",
-                        "to the user"].join(' '));
-                    assert.equal(e.expected, 1);
-                    assert.equal(e.actual, 2);
+                    assert.deepEqual(e.actual, {continue_session: true});
+                    assert.deepEqual(e.expected, {continue_session: false});
                 });
         });
 
@@ -943,28 +828,6 @@ describe("AppTester Check Tasks", function() {
                     });
             });
 
-            it("should check that only one reply was sent", function() {
-                api.outbound.store.push({
-                    content: 'fake reply',
-                    in_reply_to: '1'
-                });
-
-                return tester
-                    .input()
-                    .check.reply.content([
-                        'Tea or coffee?',
-                        '1. Tea',
-                        '2. Coffee'].join('\n'))
-                    .run()
-                    .then(test_utils.fail, function(e) {
-                        assert.equal(e.msg, [
-                            "Expecting a single reply from the app",
-                            "to the user"].join(' '));
-                        assert.equal(e.expected, 1);
-                        assert.equal(e.actual, 2);
-                    });
-            });
-
             it("should check the reply char limit", function() {
                 return tester
                     .setup.char_limit(2)
@@ -994,28 +857,6 @@ describe("AppTester Check Tasks", function() {
                             "1. Tea",
                             "2. Coffee' did not match regular expression " +
                             "/Spam?/"].join('\n'));
-                    });
-            });
-
-            it("should check that only one reply was sent", function() {
-                api.outbound.store.push({
-                    content: 'fake reply',
-                    in_reply_to: '1'
-                });
-
-                return tester
-                    .input()
-                    .check.reply.content(new RegExp([
-                        'Tea or coffee?',
-                        '1. Tea',
-                        '2. Coffee'].join('\n')))
-                    .run()
-                    .then(test_utils.fail, function(e) {
-                        assert.equal(e.msg, [
-                            "Expecting a single reply from the app",
-                            "to the user"].join(' '));
-                        assert.equal(e.expected, 1);
-                        assert.equal(e.actual, 2);
                     });
             });
 
@@ -1051,25 +892,6 @@ describe("AppTester Check Tasks", function() {
                     assert.equal(e.actual, 31);
                 });
         });
-
-        it("should check that only one reply was sent", function() {
-            api.outbound.store.push({
-                content: 'fake reply',
-                in_reply_to: '1'
-            });
-
-            return tester
-                .input()
-                .check.reply.char_limit(100)
-                .run()
-                .then(test_utils.fail, function(e) {
-                    assert.equal(e.msg, [
-                        "Expecting a single reply from the app",
-                        "to the user"].join(' '));
-                    assert.equal(e.expected, 1);
-                    assert.equal(e.actual, 2);
-                });
-        });
     });
 
     describe(".check.reply.no_reply", function() {
@@ -1085,15 +907,14 @@ describe("AppTester Check Tasks", function() {
 
                     assert.deepEqual(e.expected, []);
 
-                    assert.deepEqual(e.actual, [{
-                        in_reply_to: '1',
-                        continue_session: true,
-                        content: [
-                            'Tea or coffee?',
-                            '1. Tea',
-                            '2. Coffee'
-                        ].join('\n')
-                    }]);
+                    var actual = e.actual[0];
+                    assert.equal(e.actual.length, 1);
+                    assert(actual.continue_session);
+                    assert.equal(actual.content, [
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'
+                    ].join('\n'));
                 });
         });
     });
