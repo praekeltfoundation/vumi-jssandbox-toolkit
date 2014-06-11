@@ -117,13 +117,32 @@ describe("tester.tasks", function() {
                 assert.deepEqual(tasks.data, {});
             });
 
-            it("should use refresh the api and im", function() {
+            it("should yoink the tester's state", function() {
                 tester.im = {};
                 tester.api = {};
+                tester.app = {};
+                assert.notStrictEqual(tasks.app, tester.app);
                 assert.notStrictEqual(tasks.api, tester.api);
                 assert.notStrictEqual(tasks.im, tester.im);
 
                 tasks.reset();
+                assert.strictEqual(tasks.app, tester.app);
+                assert.strictEqual(tasks.api, tester.api);
+                assert.strictEqual(tasks.im, tester.im);
+            });
+        });
+
+        describe(".yoink", function() {
+            it("should yoink the tester's api and im", function() {
+                tester.im = {};
+                tester.api = {};
+                tester.app = {};
+                assert.notStrictEqual(tasks.app, tester.app);
+                assert.notStrictEqual(tasks.api, tester.api);
+                assert.notStrictEqual(tasks.im, tester.im);
+
+                tasks.yoink();
+                assert.strictEqual(tasks.app, tester.app);
                 assert.strictEqual(tasks.api, tester.api);
                 assert.strictEqual(tasks.im, tester.im);
             });
