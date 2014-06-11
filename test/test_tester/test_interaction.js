@@ -34,7 +34,7 @@ describe("AppTester Interaction Tasks", function() {
     function() {
         return tester
             .input('a')
-            .input('b', 'c')
+            .inputs('b', 'c')
             .run()
             .then(test_utils.fail, function(e) {
                 assert(e instanceof TaskError);
@@ -209,32 +209,34 @@ describe("AppTester Interaction Tasks", function() {
                 });
             });
         });
+    });
 
-        describe(".input(input1, input2[, ...])", function() {
-            beforeEach(function() {
-                app.states.add(new MenuState('states:a', {
-                    question: 'A',
-                    choices: [
-                        new Choice('states:b', 'states:b'),
-                        new Choice('states:c', 'states:c')]
-                }));
+    describe(".inputs", function() {
+        beforeEach(function() {
+            app.states.add(new MenuState('states:a', {
+                question: 'A',
+                choices: [
+                    new Choice('states:b', 'states:b'),
+                    new Choice('states:c', 'states:c')]
+            }));
 
-                app.states.add(new MenuState('states:b', {
-                    question: 'B',
-                    choices: [
-                        new Choice('states:d', 'states:d'),
-                        new Choice('states:e', 'states:e')]
-                }));
+            app.states.add(new MenuState('states:b', {
+                question: 'B',
+                choices: [
+                    new Choice('states:d', 'states:d'),
+                    new Choice('states:e', 'states:e')]
+            }));
 
-                app.states.add(new EndState('states:c', {text: 'C'}));
-                app.states.add(new EndState('states:d', {text: 'D'}));
-                app.states.add(new EndState('states:e', {text: 'E'}));
-            });
+            app.states.add(new EndState('states:c', {text: 'C'}));
+            app.states.add(new EndState('states:d', {text: 'D'}));
+            app.states.add(new EndState('states:e', {text: 'E'}));
+        });
 
+        describe(".inputs(input1[, input2[, ...]])", function() {
             it("should use each input for a new interaction", function() {
                 return tester
                     .setup.user.state('states:a')
-                    .input('1', '2')
+                    .inputs('1', '2')
                     .check.user.state('states:e')
                     .check.reply('E')
                     .run();
@@ -242,7 +244,7 @@ describe("AppTester Interaction Tasks", function() {
 
             it("should allow objects to be used as inputs", function() {
                 return tester
-                    .input({content: '1'}, {content: '2'})
+                    .inputs({content: '1'}, {content: '2'})
                     .check(function(api, im) {
                         assert.strictEqual(im.msg.content, '2');
                     })
@@ -251,7 +253,7 @@ describe("AppTester Interaction Tasks", function() {
 
             it("should allow strings to be used as inputs", function() {
                 return tester
-                    .input('1', '2')
+                    .inputs('1', '2')
                     .check(function(api, im) {
                         assert.strictEqual(im.msg.content, '2');
                     })
@@ -260,10 +262,26 @@ describe("AppTester Interaction Tasks", function() {
 
             it("should allow nulls to be used as inputs", function() {
                 return tester
-                    .input(null, null)
+                    .inputs(null, null)
                     .check(function(api, im) {
                         assert.strictEqual(im.msg.content, null);
                     })
+                    .run();
+            });
+        });
+
+        describe(".inputs(fn)", function() {
+            it("should set the message with the function's result", function() {
+                return tester
+                    .setup.user.state('states:a')
+                    .inputs(function(msgs) {
+                        return msgs.concat('1');
+                    })
+                    .inputs(function(msgs) {
+                        return msgs.concat('2');
+                    })
+                    .check.user.state('states:e')
+                    .check.reply('E')
                     .run();
             });
         });
