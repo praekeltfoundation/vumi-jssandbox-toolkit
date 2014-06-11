@@ -107,12 +107,6 @@ describe("tester.tester", function() {
                 assert.strictEqual(tester.tasks.get('interactions').im, im);
                 assert.strictEqual(tester.tasks.get('checks').im, im);
             });
-
-            it("should clear the api's outbound resource store", function() {
-                var store = tester.api.outbound.store;
-                tester.reset.interaction();
-                assert.notStrictEqual(tester.api.outbound.store, store);
-            });
         });
 
         describe(".run", function() {
