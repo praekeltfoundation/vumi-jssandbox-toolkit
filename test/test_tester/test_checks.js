@@ -667,18 +667,14 @@ describe("AppTester Check Tasks", function() {
                     .run()
                     .then(test_utils.fail, function(e) {
                         assert.equal(e.msg, "Unexpected reply");
-
-                        assert.deepEqual(e.actual, {
-                            in_reply_to: '1',
-                            continue_session: true,
-                            content: [
-                                'Tea or coffee?',
-                                '1. Tea',
-                                '2. Coffee'
-                            ].join('\n')
-                        });
-
                         assert.deepEqual(e.expected, {content: 'Spam?'});
+
+                        assert(e.actual.continue_session);
+                        assert.equal(e.actual.content, [
+                            'Tea or coffee?',
+                            '1. Tea',
+                            '2. Coffee'
+                        ].join('\n'));
                     });
             });
 
@@ -785,13 +781,13 @@ describe("AppTester Check Tasks", function() {
         it("should check the properties of the sent reply", function() {
             return tester
                 .input()
-                .check.reply.properties({in_reply_to: '2'})
+                .check.reply.properties({continue_session: false})
                 .run()
                 .then(test_utils.fail, function(e) {
                     assert.equal(e.msg, [
                         "Unexpected values for reply properties"].join(' '));
-                    assert.deepEqual(e.actual, {in_reply_to: '1'});
-                    assert.deepEqual(e.expected, {in_reply_to: '2'});
+                    assert.deepEqual(e.actual, {continue_session: true});
+                    assert.deepEqual(e.expected, {continue_session: false});
                 });
         });
 
@@ -911,15 +907,14 @@ describe("AppTester Check Tasks", function() {
 
                     assert.deepEqual(e.expected, []);
 
-                    assert.deepEqual(e.actual, [{
-                        in_reply_to: '1',
-                        continue_session: true,
-                        content: [
-                            'Tea or coffee?',
-                            '1. Tea',
-                            '2. Coffee'
-                        ].join('\n')
-                    }]);
+                    var actual = e.actual[0];
+                    assert.equal(e.actual.length, 1);
+                    assert(actual.continue_session);
+                    assert.equal(actual.content, [
+                        'Tea or coffee?',
+                        '1. Tea',
+                        '2. Coffee'
+                    ].join('\n'));
                 });
         });
     });
