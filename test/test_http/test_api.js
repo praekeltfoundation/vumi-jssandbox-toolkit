@@ -251,6 +251,95 @@ describe("http.api", function() {
             });
         });
 
+        describe("request defaults", function() {
+            it("should support default basic auth", function() {
+                return make_api({
+                    auth: {
+                        username: 'me',
+                        password: 'pw'
+                    }
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/');
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+
+                    assert.deepEqual(
+                        request.headers.Authorization,
+                        ['Basic bWU6cHc=']);
+                });
+            });
+
+            it("should support default verify options", function() {
+                return make_api({
+                    verify_options: ['VERIFY_NONE']
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/');
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+                    assert.deepEqual(request.verify_options, ['VERIFY_NONE']);
+                });
+            });
+
+            it("should support a default ssl method", function() {
+                return make_api({
+                    ssl_method: 'SSLv3'
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/');
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+                    assert.deepEqual(request.ssl_method, 'SSLv3');
+                });
+            });
+
+            it("should support a default headers", function() {
+                return make_api({
+                    headers: {
+                        foo: ['bar'],
+                        baz: ['qux']
+                    }
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/', {
+                        headers: {baz: ['quux']}
+                    });
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+
+                    assert.deepEqual(request.headers, {
+                        foo: ['bar'],
+                        baz: ['quux']
+                    });
+                });
+            });
+        });
+
         describe(".get", function() {
             it("should perform GET requests", function() {
                 im.api.http.fixtures.add({
@@ -431,12 +520,7 @@ describe("http.api", function() {
             });
 
             it("should support basic auth", function() {
-                return make_api({
-                    auth: {
-                        username: 'me',
-                        password: 'pw'
-                    }
-                }).then(function() {
+                return make_api().then(function() {
                     im.api.http.fixtures.add({
                         request: {
                             method: 'GET',
@@ -444,7 +528,12 @@ describe("http.api", function() {
                         }
                     });
 
-                    return api.get('http://foo.com/');
+                    return api.get('http://foo.com/', {
+                        auth: {
+                            username: 'me',
+                            password: 'pw'
+                        }
+                    });
                 }).then(function() {
                     var request = im.api.http.requests[0];
                     assert.deepEqual(
