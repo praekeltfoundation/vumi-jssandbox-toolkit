@@ -404,6 +404,26 @@ describe("http.dummy", function() {
 
                 assert.deepEqual(request.data, {foo: 'bar'});
             });
+
+            it("should support commands with verify options", function() {
+                var request = api.http.request_from_cmd({
+                    cmd: 'http.get',
+                    url: 'http://example.com',
+                    verify_options: ['VERIFY_NONE']
+                });
+
+                assert.deepEqual(request.verify_options, ['VERIFY_NONE']);
+            });
+
+            it("should support commands with an ssl method", function() {
+                var request = api.http.request_from_cmd({
+                    cmd: 'http.get',
+                    url: 'http://example.com',
+                    ssl_method: 'SSLv3'
+                });
+
+                assert.equal(request.ssl_method, 'SSLv3');
+            });
         });
 
         describe(".handlers", function() {
