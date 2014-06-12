@@ -431,12 +431,7 @@ describe("http.api", function() {
             });
 
             it("should support basic auth", function() {
-                return make_api({
-                    auth: {
-                        username: 'me',
-                        password: 'pw'
-                    }
-                }).then(function() {
+                return make_api().then(function() {
                     im.api.http.fixtures.add({
                         request: {
                             method: 'GET',
@@ -444,7 +439,12 @@ describe("http.api", function() {
                         }
                     });
 
-                    return api.get('http://foo.com/');
+                    return api.get('http://foo.com/', {
+                        auth: {
+                            username: 'me',
+                            password: 'pw'
+                        }
+                    });
                 }).then(function() {
                     var request = im.api.http.requests[0];
                     assert.deepEqual(
