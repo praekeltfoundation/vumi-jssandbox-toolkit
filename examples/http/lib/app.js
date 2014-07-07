@@ -94,12 +94,13 @@ var HttpApp = App.extend(function(self) {
 
     self.states.add('states:error', function(name) {
         // When we get a response with a status code that is not in the 200
-        // range, an error is thrown. We need to use `.catch()` (the promise
-        // method to use for error callbacks) to handle the error instead of
-        // `.then()` (the promise method to use for success callbacks).
-        // The error object given as a parameter to `.catch()` is an
-        // HttpResponseError instance, so we can access the response off the
-        // object as `.response`.
+        // range, an error is thrown. We use `.catch()` (the promise method to
+        // use for error callbacks) to handle the error instead of `.then()`
+        // (the promise method to use for success callbacks).  The error object
+        // given as a parameter to `.catch()` is an HttpResponseError instance,
+        // so we can access the response off the object as `.response`. Note
+        // that if we wanted to have both success and error callbacks, we could
+        // provide both as arguments to `.then()` instead of using `.catch()`.
         return self
             .http.get('http://httpbin.org/status/418')
             .catch(function(e) {
