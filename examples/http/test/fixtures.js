@@ -65,6 +65,16 @@ module.exports = function() {
                 }
             }
         }
+    },
+    {
+        "request": {
+          "method": "GET",
+          "url": "http://httpbin.org/status/418"
+        },
+        "response": {
+          "code": 418,
+          "data": {}
+        }
     }
     ];
 };
