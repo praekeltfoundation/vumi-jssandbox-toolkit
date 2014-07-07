@@ -23,7 +23,8 @@ var HttpApp = App.extend(function(self) {
 
             choices: [
                 new Choice('states:put', "Put something"),
-                new Choice('states:post', "Post something")]
+                new Choice('states:post', "Post something"),
+                new Choice('states:error', "Cause an error")]
         });
     });
 
@@ -89,6 +90,27 @@ var HttpApp = App.extend(function(self) {
             ].join(' '),
             next: 'states:start'
         });
+    });
+
+    self.states.add('states:error', function(name) {
+        // When we get a response with a status code that is not in the 200
+        // range, an error is thrown. We need to use `.catch()` (the promise
+        // method to use for error callbacks) to handle the error instead of
+        // `.then()` (the promise method to use for success callbacks).
+        // The error object given as a parameter to `.catch()` is an
+        // HttpResponseError instance, so we can access the response off the
+        // object as `.response`.
+        return self
+            .http.get('http://httpbin.org/status/418')
+            .catch(function(e) {
+                return new EndState(name, {
+                    text: [
+                        "You just performed a request. It got a response",
+                        "with the status code", e.response.code
+                    ].join(' '),
+                    next: 'states:start'
+                });
+            });
     });
 });
 

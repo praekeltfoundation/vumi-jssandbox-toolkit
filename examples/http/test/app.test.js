@@ -33,7 +33,8 @@ describe("app", function() {
                         reply: [
                             'Choose your destiny:',
                             '1. Put something',
-                            '2. Post something'
+                            '2. Post something',
+                            '3. Cause an error'
                         ].join('\n')
                     })
                     .run();
@@ -61,6 +62,23 @@ describe("app", function() {
                             state: 'states:post',
                             reply: 'What would you like to post?'
                         })
+                        .run();
+                });
+            });
+
+            describe("when the user chooses to cause an error", function() {
+                it("should tell them the result", function() {
+                    return tester
+                        .setup.user.state('states:start')
+                        .input('3')
+                        .check.interaction({
+                            state: 'states:error',
+                            reply: [
+                                "You just performed a request.",
+                                "It got a response with the status code 418"
+                            ].join(' ')
+                        })
+                        .check.reply.ends_session()
                         .run();
                 });
             });
@@ -96,6 +114,7 @@ describe("app", function() {
                             "It was echoed back: hello world!"
                         ].join(' ')
                     })
+                    .check.reply.ends_session()
                     .run();
             });
         });
@@ -129,6 +148,7 @@ describe("app", function() {
                             "It was echoed back: hello world!"
                         ].join(' ')
                     })
+                    .check.reply.ends_session()
                     .run();
             });
         });
