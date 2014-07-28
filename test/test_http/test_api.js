@@ -210,17 +210,26 @@ describe("http.api", function() {
             });
         });
 
-        describe(".toString", function() {
+        describe(".serialize", function() {
             it("should include the code", function() {
                 var response = new HttpResponse(request, 404);
-                assert(response.toString().indexOf(404) > -1);
+                assert.equal(response.serialize().code, 404);
+            });
+            it("should include the request", function() {
+                var response = new HttpResponse(request, 404, {
+                    body: '{"foo":"bar"}'
+                });
+                assert.equal(response.serialize().body, '{"foo":"bar"}');
             });
 
             it("should include the body if available", function() {
                 var response = new HttpResponse(request, 404, {
                     body: '{"foo":"bar"}'
                 });
-                assert(response.toString().indexOf('{"foo":"bar"}') > -1);
+
+                assert.deepEqual(
+                    response.serialize().request,
+                    request.serialize());
             });
         });
     });
