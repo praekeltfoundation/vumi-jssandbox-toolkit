@@ -21,15 +21,25 @@ describe("http.api", function() {
         });
 
         describe(".message", function() {
+            it("should use the serialized error data", function() {
+                var error = new HttpRequestError(request, 'Sigh');
+                assert.deepEqual(error.serialize(), JSON.parse(error.message));
+            });
+        });
+
+        describe(".serialize", function() {
             it("should include the request", function() {
                 var error = new HttpRequestError(request);
-                assert(error.message.indexOf(request) > -1);
+                assert.deepEqual(
+                    error.serialize().request,
+                    request.serialize());
             });
 
-            it("should include the error reason if available", function() {
+            it("should include the reason if relevant", function() {
                 var error = new HttpRequestError(request, 'Sigh');
-                assert(error.message.indexOf('Sigh') > -1);
+                assert.equal(error.serialize().reason, 'Sigh');
             });
+
         });
     });
 
@@ -42,14 +52,23 @@ describe("http.api", function() {
         });
 
         describe(".message", function() {
+            it("should use the serialized error data", function() {
+                var error = new HttpResponseError(response, 'Sigh');
+                assert.deepEqual(error.serialize(), JSON.parse(error.message));
+            });
+        });
+
+        describe(".serialize", function() {
             it("should include the response", function() {
                 var error = new HttpResponseError(response);
-                assert(error.message.indexOf(response) > -1);
+                assert.deepEqual(
+                    error.serialize().response,
+                    response.serialize());
             });
 
-            it("should include the error reason if available", function() {
+            it("should include the reason if relevant", function() {
                 var error = new HttpResponseError(response, 'Sigh');
-                assert(error.message.indexOf('Sigh') > -1);
+                assert.equal(error.serialize().reason, 'Sigh');
             });
         });
     });
