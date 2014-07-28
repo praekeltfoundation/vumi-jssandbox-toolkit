@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var utils = vumigo.utils;
 var test_utils = vumigo.test_utils;
 
 var api = vumigo.http.api;
@@ -23,7 +24,8 @@ describe("http.api", function() {
         describe(".message", function() {
             it("should use the serialized error data", function() {
                 var error = new HttpRequestError(request, 'Sigh');
-                assert.deepEqual(error.serialize(), JSON.parse(error.message));
+                var s = utils.pretty(error.serialize(), ['reason'], ['request']);
+                assert(error.message.indexOf(s) > -1);
             });
         });
 
@@ -39,7 +41,6 @@ describe("http.api", function() {
                 var error = new HttpRequestError(request, 'Sigh');
                 assert.equal(error.serialize().reason, 'Sigh');
             });
-
         });
     });
 
@@ -54,7 +55,8 @@ describe("http.api", function() {
         describe(".message", function() {
             it("should use the serialized error data", function() {
                 var error = new HttpResponseError(response, 'Sigh');
-                assert.deepEqual(error.serialize(), JSON.parse(error.message));
+                var s = utils.pretty(error.serialize(), ['reason'], ['response']);
+                assert(error.message.indexOf(s) > -1);
             });
         });
 
@@ -164,7 +166,7 @@ describe("http.api", function() {
             });
         });
         
-        describe.only(".serialize", function() {
+        describe(".serialize", function() {
             it("should include the request method", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
                 assert.equal(request.serialize().method, 'GET');
