@@ -193,4 +193,70 @@ describe("utils", function() {
             assert.equal(utils.format_addr('foo', 'unknown_type'), 'foo');
         });
     });
+
+    describe(".pretty", function() {
+        it("should support arrays", function() {
+            assert.equal(
+                utils.pretty(['a', 'b', 'c']),
+                ['- a', '- b', '- c', ''].join('\n'));
+        });
+
+        it("should support objects", function() {
+            assert.equal(
+                utils.pretty({
+                  foo: 'bar',
+                  baz: {
+                      quux: 'corge',
+                      grault: 'garply',
+                      xyzzy: {a: 'b'}
+                  },
+                  waldo: [
+                      'fred',
+                      'plugh'
+                  ]
+                }),
+                ['foo: bar',
+                 'baz:',
+                 '    quux: corge',
+                 '    grault: garply',
+                 '    xyzzy:',
+                 '        a: b',
+                 'waldo:',
+                 '    - fred',
+                 '    - plugh',
+                 ''].join('\n'));
+        });
+
+        it("should support prioritising item positioning", function() {
+            var obj = {
+                foo: 'bar',
+                r: 2,
+                baz: {
+                    quux: 'corge',
+                    grault: 'garply',
+                    xyzzy: {a: 'b'}
+                },
+                d: 3,
+                waldo: [
+                    'fred',
+                    'plugh'
+                ]
+            };
+
+            assert.equal(
+                utils.pretty(obj, ['d', 'r'], ['waldo', 'baz']),
+                ['d: 3',
+                 'w: 2',
+                 'foo: bar',
+                 'waldo:',
+                 '    - fred',
+                 '    - plugh',
+                 'baz:',
+                 '    quux: corge',
+                 '    grault: garply',
+                 '    xyzzy:',
+                 '        a: b',
+                 ''].join('\n'));
+        });
+    });
 });
