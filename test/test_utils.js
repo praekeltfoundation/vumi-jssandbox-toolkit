@@ -244,9 +244,9 @@ describe("utils", function() {
             };
 
             assert.equal(
-                utils.pretty(obj, ['d', 'r'], ['waldo', 'baz']),
+                utils.pretty(obj, ['d', 'r'], ['waldo', 'baz', 'larp']),
                 ['d: 3',
-                 'w: 2',
+                 'r: 2',
                  'foo: bar',
                  'waldo:',
                  '    - fred',
