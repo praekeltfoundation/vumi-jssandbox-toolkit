@@ -157,12 +157,7 @@ describe("http.dummy", function() {
                     {body: '{"baz":"qux"}'}]
             });
 
-
-            var data = fixture.serialize();
-
-            assert.equal(
-                fixture.toString(),
-                utils.pretty(data, ['uses'], ['request', 'responses']));
+            assert.equal(fixture.toString(), utils.pretty(fixture.serialize()));
         });
     });
 

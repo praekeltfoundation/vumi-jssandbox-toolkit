@@ -24,7 +24,7 @@ describe("http.api", function() {
         describe(".message", function() {
             it("should use the serialized error data", function() {
                 var error = new HttpRequestError(request, 'Sigh');
-                var s = utils.pretty(error.serialize(), ['reason'], ['request']);
+                var s = utils.pretty(error.serialize());
                 assert(error.message.indexOf(s) > -1);
             });
         });
@@ -55,7 +55,7 @@ describe("http.api", function() {
         describe(".message", function() {
             it("should use the serialized error data", function() {
                 var error = new HttpResponseError(response, 'Sigh');
-                var s = utils.pretty(error.serialize(), ['reason'], ['response']);
+                var s = utils.pretty(error.serialize());
                 assert(error.message.indexOf(s) > -1);
             });
         });
@@ -610,8 +610,8 @@ describe("http.api", function() {
                     return p.catch(function(e) {
                         assert(e instanceof HttpResponseError);
                         assert.equal(e.reason, [
-                            "Could not parse response",
-                            "(Error: You shall not parse)"].join(' '));
+                            "Could not parse response:",
+                            "    Error: You shall not parse"].join('\n'));
                         assert.equal(e.response.code, 200);
                         assert.equal(e.response.body, '{"foo": "bar"}');
                     });
