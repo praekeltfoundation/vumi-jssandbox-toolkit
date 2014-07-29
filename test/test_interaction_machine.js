@@ -525,9 +525,14 @@ describe("interaction_machine", function() {
         });
 
         describe(".done", function() {
-            it("should save the user", function() {
-                var p = im.user.once.resolved('user:save');
-                return im.done().thenResolve(p);
+            it("should save the user", function(done) {
+                im.user.on('user:save', function() { done(); });
+                im.done();
+            });
+
+            it("should tear down the interaction machine", function(done) {
+                im.on('teardown', function() { done(); });
+                im.done();
             });
 
             it("should terminate the sandbox", function() {
