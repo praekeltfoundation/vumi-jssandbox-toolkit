@@ -194,6 +194,27 @@ describe("utils", function() {
         });
     });
 
+    describe(".indent", function() {
+        it("should indent the given string", function() {
+            assert.equal(
+                utils.indent([
+                    'foo',
+                    '    bar',
+                    '        baz'
+                ].join('\n')), [
+                    '    foo',
+                    '        bar',
+                    '            baz'
+                ].join('\n'));
+        });
+
+        it("should allow the indentation to be configured", function() {
+            assert.equal(
+                utils.indent('  foo', {indent: 2}),
+                '    foo');
+        });
+    });
+
     describe(".pretty", function() {
         it("should allow the indentation to be configured", function() {
             assert.equal(
