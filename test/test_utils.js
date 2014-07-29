@@ -195,68 +195,41 @@ describe("utils", function() {
     });
 
     describe(".pretty", function() {
-        it("should support arrays", function() {
+        it("should allow the indentation to be configured", function() {
             assert.equal(
-                utils.pretty(['a', 'b', 'c']),
-                ['- a', '- b', '- c', ''].join('\n'));
+                utils.pretty({foo: {bar: 'baz'}}, {indent: 2}),
+                ['foo:',
+                 '  bar: baz',
+                ].join('\n'));
         });
 
-        it("should support objects", function() {
+        it("should pretty print nested data structures", function() {
             assert.equal(
                 utils.pretty({
                   foo: 'bar',
+                  waldo: [{
+                      lerp: 'larp',
+                  }, {
+                      lorem: 'ipsum',
+                      fred: 'plugh'
+                  }],
                   baz: {
                       quux: 'corge',
                       grault: 'garply',
                       xyzzy: {a: 'b'}
-                  },
-                  waldo: [
-                      'fred',
-                      'plugh'
-                  ]
+                  }
                 }),
                 ['foo: bar',
+                 'waldo:',
+                 '    - lerp: larp',
+                 '    - fred: plugh',
+                 '      lorem: ipsum',
                  'baz:',
                  '    quux: corge',
                  '    grault: garply',
                  '    xyzzy:',
                  '        a: b',
-                 'waldo:',
-                 '    - fred',
-                 '    - plugh',
-                 ''].join('\n'));
-        });
-
-        it("should support prioritising item positioning", function() {
-            var obj = {
-                foo: 'bar',
-                r: 2,
-                baz: {
-                    quux: 'corge',
-                    grault: 'garply',
-                    xyzzy: {a: 'b'}
-                },
-                d: 3,
-                waldo: [
-                    'fred',
-                    'plugh'
-                ]
-            };
-
-            assert.equal(
-                utils.pretty(obj, ['d', 'r'], ['waldo', 'baz', 'larp']),
-                ['d: 3',
-                 'r: 2',
-                 'foo: bar',
-                 'waldo:',
-                 '    - fred',
-                 '    - plugh',
-                 'baz:',
-                 '    quux: corge',
-                 '    grault: garply',
-                 '    xyzzy:',
-                 '        a: b',
-                 ''].join('\n'));
+                ].join('\n'));
         });
     });
 });
