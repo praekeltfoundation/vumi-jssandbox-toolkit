@@ -124,6 +124,30 @@ describe("interaction_machine", function() {
             });
         });
 
+        describe(".teardown", function() {
+            it("should remove its event listeners", function() {
+                im.on('foo', function() {});
+                im.on('teardown', function() {});
+                assert.equal(im.listeners('foo').length, 1);
+                assert.equal(im.listeners('teardown').length, 1);
+
+                return im.teardown().then(function() {
+                    assert.equal(im.listeners('foo').length, 0);
+                    assert.equal(im.listeners('teardown').length, 0);
+                });
+            });
+
+            it("should teardown its app", function(done) {
+                app.on('teardown', function() { done(); });
+                im.teardown();
+            });
+
+            it("should emit a 'teardown' event", function(done) {
+                im.on('teardown', function() { done(); });
+                im.teardown();
+            });
+        });
+
         describe(".attach", function() {
             beforeEach(function() {
                 delete api.on_unknown_command;
