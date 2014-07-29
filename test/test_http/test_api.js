@@ -24,7 +24,7 @@ describe("http.api", function() {
         describe(".message", function() {
             it("should use the serialized error data", function() {
                 var error = new HttpRequestError(request, 'Sigh');
-                var s = utils.pretty(error.serialize());
+                var s = utils.indent(utils.pretty(error.serialize()));
                 assert(error.message.indexOf(s) > -1);
             });
         });
@@ -55,7 +55,7 @@ describe("http.api", function() {
         describe(".message", function() {
             it("should use the serialized error data", function() {
                 var error = new HttpResponseError(response, 'Sigh');
-                var s = utils.pretty(error.serialize());
+                var s = utils.indent(utils.pretty(error.serialize()));
                 assert(error.message.indexOf(s) > -1);
             });
         });
