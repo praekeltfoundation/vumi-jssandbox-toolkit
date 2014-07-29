@@ -157,6 +157,41 @@ describe("events", function() {
             });
         });
 
+        describe(".teardown_listeners", function() {
+            it("should clear non 'teardown' event listeners", function() {
+                eventable.on('foo', function() {});
+                eventable.once('foo', function() {});
+                eventable.on('bar', function() {});
+                eventable.once('bar', function() {});
+                eventable.on('teardown', function() {});
+                eventable.once('teardown', function() {});
+
+                assert.equal(eventable.listeners('foo').length, 2);
+                assert.equal(eventable.listeners('bar').length, 2);
+                assert.equal(eventable.listeners('teardown').length, 2);
+
+                eventable.teardown_listeners();
+
+                assert.equal(eventable.listeners('foo').length, 0);
+                assert.equal(eventable.listeners('bar').length, 0);
+                assert.equal(eventable.listeners('teardown').length, 2);
+            });
+
+            it("should rebind all 'teardown' listeners as oneshots", function() {
+                eventable.on('teardown', function() {});
+                eventable.once('teardown', function() {});
+                eventable.teardown_listeners();
+
+                assert.equal(eventable.listeners('teardown').length, 2);
+                
+                return eventable
+                    .emit.teardown()
+                    .then(function() {
+                        assert.equal(eventable.listeners('teardown').length, 0);
+                    });
+            });
+        });
+
         describe(".emit", function() {
             it("should emit the event", function() {
                 return eventable
@@ -212,6 +247,13 @@ describe("events", function() {
                         assert.strictEqual(e, error);
                     });
                 });
+            });
+        });
+
+        describe(".emit.teardown", function() {
+            it("should emit a 'teardown' event", function(done) {
+                eventable.on('teardown', function() { done(); });
+                eventable.emit.teardown();
             });
         });
     });
