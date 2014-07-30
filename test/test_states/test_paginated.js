@@ -252,19 +252,15 @@ describe("states.paginated", function() {
 
         describe("default 'page' function", function() {
             it("should display the words fitting on the page", function() {
-                opts.chars = 22;
-
-                opts.text = [
-                    "Lorem ipsum dolor sit amet,",
-                    "consectetur adipisicing elit."
-                ].join(' ');
+                opts.chars = 5;
+                opts.text = 'fo bar bz qx';
 
                 return Q()
                     .then(function() {
                         return tester
                             .start()
                             .check.reply([
-                                "Lorem ipsum dolor sit",
+                                "fo",
                                 "1. More",
                                 "2. Exit",
                             ].join('\n'))
@@ -274,7 +270,7 @@ describe("states.paginated", function() {
                         return tester
                             .inputs(null, '1')
                             .check.reply([
-                                "amet, consectetur",
+                                "bar",
                                 "1. Back",
                                 "2. More",
                                 "3. Exit",
@@ -285,7 +281,7 @@ describe("states.paginated", function() {
                         return tester
                             .inputs(null, '1', '2')
                             .check.reply([
-                                "adipisicing elit.",
+                                "bz qx",
                                 "1. Back",
                                 "2. Exit",
                             ].join('\n'))
