@@ -1,8 +1,9 @@
 var Q = require('q');
-var _ = require('lodash');
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var fixtures = vumigo.fixtures;
+var test_utils = vumigo.test_utils;
 var App = vumigo.App;
 var AppTester = vumigo.AppTester;
 var EndState = vumigo.states.EndState;
@@ -27,7 +28,7 @@ describe("states.paginated", function() {
             opts = function() { return {}; };
 
             app.states.add('states:test', function(name) {
-                return new PaginatedState(name, _.cloneDeep(opts));
+                return new PaginatedState(name, opts);
             });
 
             app.states.add('states:next', function(name) {
@@ -227,6 +228,26 @@ describe("states.paginated", function() {
                     ].join('\n'))
                     .run();
             });
+        });
+
+        it("should translate the displayed content", function() {
+            opts.page = function(i, text) { return text; };
+            opts.text = test_utils.$('hello');
+            opts.back = test_utils.$('no');
+            opts.more = test_utils.$('yes');
+            opts.exit = test_utils.$('goodbye');
+
+            return tester
+                .setup.config(fixtures.config())
+                .setup.user.lang('af')
+                .inputs(null, '1')
+                .check.reply([
+                    "hallo",
+                    "1. nee",
+                    "2. ja",
+                    "3. totsiens",
+                ].join('\n'))
+                .run();
         });
 
         describe("default 'page' function", function() {
