@@ -286,6 +286,39 @@ describe("states.paginated", function() {
                                 "2. Exit",
                             ].join('\n'))
                             .run();
+                    })
+                    .then(function() {
+                        opts.text = 'a bbb ccc ddd';
+
+                        return tester
+                            .start()
+                            .check.reply([
+                                "a bbb",
+                                "1. More",
+                                "2. Exit",
+                            ].join('\n'))
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '1')
+                            .check.reply([
+                                "ccc",
+                                "1. Back",
+                                "2. More",
+                                "3. Exit",
+                            ].join('\n'))
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '1', '2')
+                            .check.reply([
+                                "ddd",
+                                "1. Back",
+                                "2. Exit",
+                            ].join('\n'))
+                            .run();
                     });
             });
         });
