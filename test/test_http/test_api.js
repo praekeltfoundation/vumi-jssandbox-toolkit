@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var utils = vumigo.utils;
 var test_utils = vumigo.test_utils;
 
 var api = vumigo.http.api;
@@ -21,14 +22,24 @@ describe("http.api", function() {
         });
 
         describe(".message", function() {
+            it("should use the serialized error data", function() {
+                var error = new HttpRequestError(request, 'Sigh');
+                var s = utils.indent(utils.pretty(error.serialize()));
+                assert(error.message.indexOf(s) > -1);
+            });
+        });
+
+        describe(".serialize", function() {
             it("should include the request", function() {
                 var error = new HttpRequestError(request);
-                assert(error.message.indexOf(request) > -1);
+                assert.deepEqual(
+                    error.serialize().request,
+                    request.serialize());
             });
 
-            it("should include the error reason if available", function() {
+            it("should include the reason if relevant", function() {
                 var error = new HttpRequestError(request, 'Sigh');
-                assert(error.message.indexOf('Sigh') > -1);
+                assert.equal(error.serialize().reason, 'Sigh');
             });
         });
     });
@@ -42,14 +53,24 @@ describe("http.api", function() {
         });
 
         describe(".message", function() {
+            it("should use the serialized error data", function() {
+                var error = new HttpResponseError(response, 'Sigh');
+                var s = utils.indent(utils.pretty(error.serialize()));
+                assert(error.message.indexOf(s) > -1);
+            });
+        });
+
+        describe(".serialize", function() {
             it("should include the response", function() {
                 var error = new HttpResponseError(response);
-                assert(error.message.indexOf(response) > -1);
+                assert.deepEqual(
+                    error.serialize().response,
+                    response.serialize());
             });
 
-            it("should include the error reason if available", function() {
+            it("should include the reason if relevant", function() {
                 var error = new HttpResponseError(response, 'Sigh');
-                assert(error.message.indexOf('Sigh') > -1);
+                assert.equal(error.serialize().reason, 'Sigh');
             });
         });
     });
@@ -144,16 +165,16 @@ describe("http.api", function() {
                 assert.deepEqual(cmd.data.ssl_method, "SSLv3");
             });
         });
-
-        describe(".toString", function() {
+        
+        describe(".serialize", function() {
             it("should include the request method", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
-                assert(request.toString().indexOf('GET') > -1);
+                assert.equal(request.serialize().method, 'GET');
             });
 
             it("should include the url", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
-                assert(request.toString().indexOf('http://foo.com/') > -1);
+                assert.equal(request.serialize().url, 'http://foo.com/');
             });
 
             it("should include the body if available", function() {
@@ -162,24 +183,19 @@ describe("http.api", function() {
                     encoder: JSON.stringify
                 });
                 request.encode();
-
-                assert(request.toString().indexOf('{"foo":"bar"}') > -1);
+                assert.equal(request.serialize().body, '{"foo":"bar"}');
             });
 
             it("should include the params if available", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/', {
                     params: {bar: 'baz'}
                 });
-
-                var request_str = request.toString();
-                assert(request_str.indexOf(
-                    '(params: {"bar":"baz"})') > -1);
+                assert.deepEqual(request.serialize().params, {bar: 'baz'});
             });
 
             it("should exclude the params if not present", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
-                assert.strictEqual(
-                    request.toString().indexOf('(params:'), -1);
+                assert(!('params' in request.serialize()));
             });
         });
     });
@@ -215,17 +231,26 @@ describe("http.api", function() {
             });
         });
 
-        describe(".toString", function() {
+        describe(".serialize", function() {
             it("should include the code", function() {
                 var response = new HttpResponse(request, 404);
-                assert(response.toString().indexOf(404) > -1);
+                assert.equal(response.serialize().code, 404);
+            });
+            it("should include the request", function() {
+                var response = new HttpResponse(request, 404, {
+                    body: '{"foo":"bar"}'
+                });
+                assert.equal(response.serialize().body, '{"foo":"bar"}');
             });
 
             it("should include the body if available", function() {
                 var response = new HttpResponse(request, 404, {
                     body: '{"foo":"bar"}'
                 });
-                assert(response.toString().indexOf('{"foo":"bar"}') > -1);
+
+                assert.deepEqual(
+                    response.serialize().request,
+                    request.serialize());
             });
         });
     });
@@ -585,8 +610,8 @@ describe("http.api", function() {
                     return p.catch(function(e) {
                         assert(e instanceof HttpResponseError);
                         assert.equal(e.reason, [
-                            "Could not parse response",
-                            "(Error: You shall not parse)"].join(' '));
+                            "Could not parse response:",
+                            "    Error: You shall not parse"].join('\n'));
                         assert.equal(e.response.code, 200);
                         assert.equal(e.response.body, '{"foo": "bar"}');
                     });

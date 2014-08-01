@@ -193,4 +193,64 @@ describe("utils", function() {
             assert.equal(utils.format_addr('foo', 'unknown_type'), 'foo');
         });
     });
+
+    describe(".indent", function() {
+        it("should indent the given string", function() {
+            assert.equal(
+                utils.indent([
+                    'foo',
+                    '    bar',
+                    '        baz'
+                ].join('\n')), [
+                    '    foo',
+                    '        bar',
+                    '            baz'
+                ].join('\n'));
+        });
+
+        it("should allow the indentation to be configured", function() {
+            assert.equal(
+                utils.indent('  foo', {indent: 2}),
+                '    foo');
+        });
+    });
+
+    describe(".pretty", function() {
+        it("should allow the indentation to be configured", function() {
+            assert.equal(
+                utils.pretty({foo: {bar: 'baz'}}, {indent: 2}),
+                ['foo:',
+                 '  bar: baz',
+                ].join('\n'));
+        });
+
+        it("should pretty print nested data structures", function() {
+            assert.equal(
+                utils.pretty({
+                  foo: 'bar',
+                  waldo: [{
+                      lerp: 'larp',
+                  }, {
+                      lorem: 'ipsum',
+                      fred: 'plugh'
+                  }],
+                  baz: {
+                      quux: 'corge',
+                      grault: 'garply',
+                      xyzzy: {a: 'b'}
+                  }
+                }),
+                ['foo: bar',
+                 'waldo:',
+                 '    - lerp: larp',
+                 '    - fred: plugh',
+                 '      lorem: ipsum',
+                 'baz:',
+                 '    quux: corge',
+                 '    grault: garply',
+                 '    xyzzy:',
+                 '        a: b',
+                ].join('\n'));
+        });
+    });
 });
