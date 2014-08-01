@@ -74,8 +74,8 @@ describe("states.paginated", function() {
                     .inputs(null, '1')
                     .check.reply([
                         "Page 1",
-                        "1. Back",
-                        "2. More",
+                        "1. More",
+                        "2. Back",
                         "3. Exit",
                     ].join('\n'))
                     .run();
@@ -112,7 +112,7 @@ describe("states.paginated", function() {
                 opts.page = pager;
 
                 return tester
-                    .inputs(null, '1', '2')
+                    .inputs(null, '1', '1')
                     .check.reply([
                         "Page 2",
                         "1. Back",
@@ -125,11 +125,11 @@ describe("states.paginated", function() {
                 opts.page = pager;
 
                 return tester
-                    .inputs(null, '1', '2', '1')
+                    .inputs(null, '1', '1', '1')
                     .check.reply([
                         "Page 1",
-                        "1. Back",
-                        "2. More",
+                        "1. More",
+                        "2. Back",
                         "3. Exit",
                     ].join('\n'))
                     .run();
@@ -140,7 +140,7 @@ describe("states.paginated", function() {
                 opts.next = 'states:next';
 
                 return tester
-                    .inputs(null, '1', '2', '2')
+                    .inputs(null, '1', '1', '2')
                     .check.user.state('states:next')
                     .check.reply('You are on the next state.')
                     .run();
@@ -151,7 +151,7 @@ describe("states.paginated", function() {
                 opts.next = 'states:next';
 
                 return tester
-                    .inputs(null, '1', '2', '3', '4', 'a', 'b')
+                    .inputs(null, '1', '1', '3', '4', 'a', 'b')
                     .check.reply([
                         "Page 2",
                         "1. Back",
@@ -169,8 +169,8 @@ describe("states.paginated", function() {
                     .inputs(null, '1')
                     .check.reply([
                         "Page 1",
-                        "1. Back",
-                        "2. More",
+                        "1. More",
+                        "2. Back",
                         "3. Exit",
                     ].join('\n'))
                     .run();
@@ -180,7 +180,7 @@ describe("states.paginated", function() {
                 opts.page = pager;
 
                 return tester
-                    .inputs(null, '1', '1')
+                    .inputs(null, '1', '2')
                     .check.reply([
                         "Page 0",
                         "1. More",
@@ -193,7 +193,7 @@ describe("states.paginated", function() {
                 opts.page = pager;
 
                 return tester
-                    .inputs(null, '1', '2')
+                    .inputs(null, '1', '1')
                     .check.reply([
                         "Page 2",
                         "1. Back",
@@ -221,8 +221,8 @@ describe("states.paginated", function() {
                     .inputs(null, '1', '4', 'a', 'b')
                     .check.reply([
                         "Page 1",
-                        "1. Back",
-                        "2. More",
+                        "1. More",
+                        "2. Back",
                         "3. Exit",
                     ].join('\n'))
                     .run();
@@ -242,8 +242,8 @@ describe("states.paginated", function() {
                 .inputs(null, '1')
                 .check.reply([
                     "hallo",
-                    "1. nee",
-                    "2. ja",
+                    "1. ja",
+                    "2. nee",
                     "3. totsiens",
                 ].join('\n'))
                 .run();
@@ -276,15 +276,15 @@ describe("states.paginated", function() {
                             .inputs(null, '1')
                             .check.reply([
                                 "bar",
-                                "1. Back",
-                                "2. More",
+                                "1. More",
+                                "2. Back",
                                 "3. Exit",
                             ].join('\n'))
                             .run();
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '1', '2')
+                            .inputs(null, '1', '1')
                             .check.reply([
                                 "bz qx",
                                 "1. Back",
@@ -309,15 +309,15 @@ describe("states.paginated", function() {
                             .inputs(null, '1')
                             .check.reply([
                                 "ccc",
-                                "1. Back",
-                                "2. More",
+                                "1. More",
+                                "2. Back",
                                 "3. Exit",
                             ].join('\n'))
                             .run();
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '1', '2')
+                            .inputs(null, '1', '1')
                             .check.reply([
                                 "ddd",
                                 "1. Back",
