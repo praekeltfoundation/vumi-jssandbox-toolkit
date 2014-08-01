@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "jed": "~0.5",
-    "q": "~0.9",
     "lodash": "~2.4.1",
-    "moment": "~2.6"
+    "moment": "~2.6",
+    "q": "~0.9"
   },
   "devDependencies": {
     "mocha": "~1.18",
