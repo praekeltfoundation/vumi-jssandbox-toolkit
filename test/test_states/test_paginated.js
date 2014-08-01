@@ -39,7 +39,7 @@ describe("states.paginated", function() {
         });
 
         it("should pass the correct args to the page function", function() {
-            opts.chars = 31;
+            opts.characters_per_page = 31;
             opts.text = 'foo';
 
             opts.page = function(i, text, n) {
@@ -251,13 +251,13 @@ describe("states.paginated", function() {
 
         describe("default 'page' function", function() {
             it("should display the words fitting on the page", function() {
-                var choices_len = [
+                opts.characters_per_page = 5 + [
                     "1. Back",
                     "2. More",
-                    "3. Exit",
-                ].join('\n').length;
+                    "3. Exit"]
+                    .join('\n')
+                    .length;
 
-                opts.chars = 5 + choices_len;
                 opts.text = 'fo bar bz qx';
 
                 return Q()
