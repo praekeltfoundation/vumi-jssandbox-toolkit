@@ -5,6 +5,7 @@ var assert = require('assert');
 var vumigo = require('../../lib');
 var App = vumigo.App;
 var AppTester = vumigo.AppTester;
+var fixtures = vumigo.fixtures;
 var test_utils = vumigo.test_utils;
 
 var ChoiceState = vumigo.states.ChoiceState;
@@ -303,6 +304,47 @@ describe("states.choice", function() {
             });
 
             tester = new AppTester(app);
+        });
+
+        it("should translate the displayed content", function() {
+            opts.options_per_page = 2;
+
+            opts.question = test_utils.$('hello?');
+
+            opts.choices = [
+                new Choice('red', test_utils.$('red')),
+                new Choice('blue', test_utils.$('blue')),
+                new Choice('green', test_utils.$('green'))];
+
+            opts.back = test_utils.$('no');
+            opts.more = test_utils.$('yes');
+
+            return Q()
+                .then(function() {
+                    return tester
+                        .setup.config(fixtures.config())
+                        .setup.user.lang('af')
+                        .start()
+                        .check.reply([
+                            "hallo?",
+                            "1. rooi",
+                            "2. blou",
+                            "3. ja"
+                        ].join('\n'))
+                        .run();
+                })
+                .then(function() {
+                    return tester
+                        .setup.config(fixtures.config())
+                        .setup.user.lang('af')
+                        .inputs(null, '3')
+                        .check.reply([
+                            "hallo?",
+                            "1. groen",
+                            "2. nee"
+                        ].join('\n'))
+                        .run();
+                });
         });
 
         it("should shorten choices if needed", function() {
