@@ -68,12 +68,12 @@ See :class:`LanguageChoice`.
 PaginatedChoiceState
 --------------------
 
-An extension of :ref:`ChoiceState <choice-state>` for displaying long
-lists of choices by spanning choices across multiple pages. Allows
-selecting the number of choices displayed on each page and optionally
-shortens the length of labels to ensure that a specified character
-limit is not exceeded. Extremely useful for display dynamic sets of
-options over USSD or SMS.
+An extension of :ref:`ChoiceState <choice-state>` for displaying long lists of
+choices by spanning choices across multiple pages. Allows both automatically
+dividing up the choices displayed on each page and fixing the number of choices
+displayed on each page, optionally shortening the length of labels to ensure
+that a specified character limit is not exceeded. Extremely useful for display
+dynamic sets of options over USSD or SMS.
 
 See :class:`PaginatedChoiceState`.
 
