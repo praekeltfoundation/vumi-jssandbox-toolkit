@@ -39,14 +39,13 @@ describe("states.paginated", function() {
         });
 
         it("should pass the correct args to the page function", function() {
-            opts.chars = 12;
-
+            opts.chars = 31;
             opts.text = 'foo';
 
             opts.page = function(i, text, n) {
                 assert([0, 1].indexOf(i) > -1);
                 assert.equal(text, 'foo');
-                assert.equal(n, 12);
+                assert.equal(n, 8);
             };
 
             return tester
@@ -252,7 +251,13 @@ describe("states.paginated", function() {
 
         describe("default 'page' function", function() {
             it("should display the words fitting on the page", function() {
-                opts.chars = 5;
+                var choices_len = [
+                    "1. Back",
+                    "2. More",
+                    "3. Exit",
+                ].join('\n').length;
+
+                opts.chars = 5 + choices_len;
                 opts.text = 'fo bar bz qx';
 
                 return Q()
