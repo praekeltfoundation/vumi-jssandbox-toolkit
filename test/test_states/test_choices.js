@@ -1,5 +1,6 @@
-var assert = require('assert');
+var Q = require('q');
 var _ = require('lodash');
+var assert = require('assert');
 
 var vumigo = require('../../lib');
 var App = vumigo.App;
@@ -404,6 +405,81 @@ describe("states.choice", function() {
                         "2. Back"
                     ].join('\n'))
                     .run();
+            });
+        });
+
+        describe("when the options per page is not fixed", function() {
+            it("should dynamically split the choices", function() {
+                opts.question = 'Hello.',
+                opts.options_per_page = null;
+                opts.characters_per_page = 21 + [
+                    "Hello.",
+                    "nn. Back",
+                    "nn. More",
+                    ""]
+                    .join('\n')
+                    .length;
+
+                opts.choices = [
+                    new Choice('foo', 'Foo'),
+                    new Choice('bar', 'Bar'),
+                    new Choice('baz', 'Baz'),
+                    new Choice('quux', 'Quux'),
+                    new Choice('corge', 'Corge'),
+                    new Choice('grault', 'Grault'),
+                    new Choice('garply', 'Garply'),
+                    new Choice('waldo', 'Waldo'),
+                    new Choice('fred', 'Fred'),
+                    new Choice('plugh', 'Plugh')
+                ];
+
+                return Q()
+                    .then(function() {
+                        return tester
+                            .start()
+                            .check.reply([
+                                "Hello.",
+                                "1. Foo",
+                                "2. Bar",
+                                "3. Baz",
+                                "4. More"
+                            ].join('\n'))
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4')
+                            .check.reply([
+                                "Hello.",
+                                "1. Quux",
+                                "2. Corge",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '3')
+                            .check.reply([
+                                "Hello.",
+                                "1. Waldo",
+                                "2. Fred",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '3', '3')
+                            .check.reply([
+                                "Hello.",
+                                "1. Plugh",
+                                "2. Back"
+                            ].join('\n'))
+                            .run();
+                    });
             });
         });
     });
