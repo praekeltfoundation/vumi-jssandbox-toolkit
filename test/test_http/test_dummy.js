@@ -2,6 +2,7 @@ var Q = require('q');
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var utils = vumigo.utils;
 var DummyApi = vumigo.dummy.api.DummyApi;
 var DummyResourceError = vumigo.dummy.resources.DummyResourceError;
 var HttpRequest = vumigo.http.api.HttpRequest;
@@ -107,6 +108,56 @@ describe("http.dummy", function() {
                     fixture.use();
                 }, DummyResourceError);
             });
+        });
+
+        describe(".serialize", function() {
+            it("should include its uses", function() {
+                var fixture = new HttpFixture({
+                    request: {url: 'http://example.com'},
+                    responses: [
+                        {body: '{"foo":"bar"}'},
+                        {body: '{"baz":"qux"}'}]
+                });
+
+                fixture.use();
+                fixture.use();
+                
+                assert.equal(fixture.serialize().uses, 2);
+            });
+
+            it("should include its request", function() {
+                var fixture = new HttpFixture({
+                    request: {url: 'http://example.com'}
+                });
+
+                assert.deepEqual(
+                    fixture.serialize().request,
+                    fixture.request.serialize());
+            });
+
+            it("should include its responses", function() {
+                var fixture = new HttpFixture({
+                    request: {url: 'http://example.com'},
+                    responses: [
+                        {body: '{"foo":"bar"}'},
+                        {body: '{"baz":"qux"}'}]
+                });
+
+                assert.deepEqual(
+                    fixture.serialize().responses,
+                    fixture.responses.map(function(r) { return r.serialize(); }));
+            });
+        });
+
+        describe("it should use its serialized data", function() {
+            var fixture = new HttpFixture({
+                request: {url: 'http://example.com'},
+                responses: [
+                    {body: '{"foo":"bar"}'},
+                    {body: '{"baz":"qux"}'}]
+            });
+
+            assert.equal(fixture.toString(), utils.pretty(fixture.serialize()));
         });
     });
 
@@ -403,6 +454,26 @@ describe("http.dummy", function() {
                 });
 
                 assert.deepEqual(request.data, {foo: 'bar'});
+            });
+
+            it("should support commands with verify options", function() {
+                var request = api.http.request_from_cmd({
+                    cmd: 'http.get',
+                    url: 'http://example.com',
+                    verify_options: ['VERIFY_NONE']
+                });
+
+                assert.deepEqual(request.verify_options, ['VERIFY_NONE']);
+            });
+
+            it("should support commands with an ssl method", function() {
+                var request = api.http.request_from_cmd({
+                    cmd: 'http.get',
+                    url: 'http://example.com',
+                    ssl_method: 'SSLv3'
+                });
+
+                assert.equal(request.ssl_method, 'SSLv3');
             });
         });
 

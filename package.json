@@ -1,6 +1,6 @@
 {
   "name": "vumigo_v02",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "lib/index.js",
   "scripts": {
@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "jed": "~0.5",
-    "q": "~0.9",
     "lodash": "~2.4.1",
-    "moment": "~2.6"
+    "moment": "~2.6",
+    "q": "~0.9"
   },
   "devDependencies": {
     "mocha": "~1.18",

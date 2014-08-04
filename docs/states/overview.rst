@@ -9,6 +9,7 @@ The currently available states are:
 * :ref:`LanguageChoice <language-choice>`
 * :ref:`PaginatedChoiceState <paginated-choice-state>`
 * :ref:`BookletState <booklet-state>`
+* :ref:`PaginatedState <paginated-state>`
 * :ref:`EndState <end-state>`
 
 
@@ -68,12 +69,12 @@ See :class:`LanguageChoice`.
 PaginatedChoiceState
 --------------------
 
-An extension of :ref:`ChoiceState <choice-state>` for displaying long
-lists of choices by spanning choices across multiple pages. Allows
-selecting the number of choices displayed on each page and optionally
-shortens the length of labels to ensure that a specified character
-limit is not exceeded. Extremely useful for display dynamic sets of
-options over USSD or SMS.
+An extension of :ref:`ChoiceState <choice-state>` for displaying long lists of
+choices by spanning choices across multiple pages. Allows both automatically
+dividing up the choices displayed on each page and fixing the number of choices
+displayed on each page, optionally shortening the length of labels to ensure
+that a specified character limit is not exceeded. Extremely useful for display
+dynamic sets of options over USSD or SMS.
 
 See :class:`PaginatedChoiceState`.
 
@@ -83,11 +84,25 @@ See :class:`PaginatedChoiceState`.
 BookletState
 ------------
 
-A state for displaying paginated text. Useful when presenting medium
-length pieces of text or pages of related information that need to be
-split across multiple USSD messages.
+A state for displaying paginated text, where the text displayed on each page is
+programatically determined. Useful when presenting medium length pieces of text
+or pages of related information that need to be split across multiple USSD
+messages.
 
 See :class:`BookletState`.
+
+
+.. _paginated-state:
+
+PaginatedState
+--------------
+
+Similar to :ref:`BookletState <booklet-state>`, PaginatedState displays
+paginated text. The difference between the two is that PaginatedState requires
+the text to be displayed to the user to be given up front. The text is then
+automatically divided up into pages.
+
+See :class:`PaginatedState`.
 
 
 .. _end-state:

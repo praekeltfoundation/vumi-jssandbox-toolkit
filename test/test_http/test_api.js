@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 var vumigo = require('../../lib');
+var utils = vumigo.utils;
 var test_utils = vumigo.test_utils;
 
 var api = vumigo.http.api;
@@ -21,14 +22,24 @@ describe("http.api", function() {
         });
 
         describe(".message", function() {
+            it("should use the serialized error data", function() {
+                var error = new HttpRequestError(request, 'Sigh');
+                var s = utils.indent(utils.pretty(error.serialize()));
+                assert(error.message.indexOf(s) > -1);
+            });
+        });
+
+        describe(".serialize", function() {
             it("should include the request", function() {
                 var error = new HttpRequestError(request);
-                assert(error.message.indexOf(request) > -1);
+                assert.deepEqual(
+                    error.serialize().request,
+                    request.serialize());
             });
 
-            it("should include the error reason if available", function() {
+            it("should include the reason if relevant", function() {
                 var error = new HttpRequestError(request, 'Sigh');
-                assert(error.message.indexOf('Sigh') > -1);
+                assert.equal(error.serialize().reason, 'Sigh');
             });
         });
     });
@@ -42,14 +53,24 @@ describe("http.api", function() {
         });
 
         describe(".message", function() {
+            it("should use the serialized error data", function() {
+                var error = new HttpResponseError(response, 'Sigh');
+                var s = utils.indent(utils.pretty(error.serialize()));
+                assert(error.message.indexOf(s) > -1);
+            });
+        });
+
+        describe(".serialize", function() {
             it("should include the response", function() {
                 var error = new HttpResponseError(response);
-                assert(error.message.indexOf(response) > -1);
+                assert.deepEqual(
+                    error.serialize().response,
+                    response.serialize());
             });
 
-            it("should include the error reason if available", function() {
+            it("should include the reason if relevant", function() {
                 var error = new HttpResponseError(response, 'Sigh');
-                assert(error.message.indexOf('Sigh') > -1);
+                assert.equal(error.serialize().reason, 'Sigh');
             });
         });
     });
@@ -144,16 +165,16 @@ describe("http.api", function() {
                 assert.deepEqual(cmd.data.ssl_method, "SSLv3");
             });
         });
-
-        describe(".toString", function() {
+        
+        describe(".serialize", function() {
             it("should include the request method", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
-                assert(request.toString().indexOf('GET') > -1);
+                assert.equal(request.serialize().method, 'GET');
             });
 
             it("should include the url", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
-                assert(request.toString().indexOf('http://foo.com/') > -1);
+                assert.equal(request.serialize().url, 'http://foo.com/');
             });
 
             it("should include the body if available", function() {
@@ -162,24 +183,19 @@ describe("http.api", function() {
                     encoder: JSON.stringify
                 });
                 request.encode();
-
-                assert(request.toString().indexOf('{"foo":"bar"}') > -1);
+                assert.equal(request.serialize().body, '{"foo":"bar"}');
             });
 
             it("should include the params if available", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/', {
                     params: {bar: 'baz'}
                 });
-
-                var request_str = request.toString();
-                assert(request_str.indexOf(
-                    '(params: {"bar":"baz"})') > -1);
+                assert.deepEqual(request.serialize().params, {bar: 'baz'});
             });
 
             it("should exclude the params if not present", function() {
                 var request = new HttpRequest('GET', 'http://foo.com/');
-                assert.strictEqual(
-                    request.toString().indexOf('(params:'), -1);
+                assert(!('params' in request.serialize()));
             });
         });
     });
@@ -215,17 +231,26 @@ describe("http.api", function() {
             });
         });
 
-        describe(".toString", function() {
+        describe(".serialize", function() {
             it("should include the code", function() {
                 var response = new HttpResponse(request, 404);
-                assert(response.toString().indexOf(404) > -1);
+                assert.equal(response.serialize().code, 404);
+            });
+            it("should include the request", function() {
+                var response = new HttpResponse(request, 404, {
+                    body: '{"foo":"bar"}'
+                });
+                assert.equal(response.serialize().body, '{"foo":"bar"}');
             });
 
             it("should include the body if available", function() {
                 var response = new HttpResponse(request, 404, {
                     body: '{"foo":"bar"}'
                 });
-                assert(response.toString().indexOf('{"foo":"bar"}') > -1);
+
+                assert.deepEqual(
+                    response.serialize().request,
+                    request.serialize());
             });
         });
     });
@@ -248,6 +273,95 @@ describe("http.api", function() {
             return make_api().then(function(new_api) {
                 api = new_api;
                 im = api.im;
+            });
+        });
+
+        describe("request defaults", function() {
+            it("should support default basic auth", function() {
+                return make_api({
+                    auth: {
+                        username: 'me',
+                        password: 'pw'
+                    }
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/');
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+
+                    assert.deepEqual(
+                        request.headers.Authorization,
+                        ['Basic bWU6cHc=']);
+                });
+            });
+
+            it("should support default verify options", function() {
+                return make_api({
+                    verify_options: ['VERIFY_NONE']
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/');
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+                    assert.deepEqual(request.verify_options, ['VERIFY_NONE']);
+                });
+            });
+
+            it("should support a default ssl method", function() {
+                return make_api({
+                    ssl_method: 'SSLv3'
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/');
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+                    assert.deepEqual(request.ssl_method, 'SSLv3');
+                });
+            });
+
+            it("should support a default headers", function() {
+                return make_api({
+                    headers: {
+                        foo: ['bar'],
+                        baz: ['qux']
+                    }
+                }).then(function() {
+                    im.api.http.fixtures.add({
+                        request: {
+                            method: 'GET',
+                            url: 'http://foo.com/',
+                        }
+                    });
+
+                    return api.get('http://foo.com/', {
+                        headers: {baz: ['quux']}
+                    });
+                }).then(function() {
+                    var request = im.api.http.requests[0];
+
+                    assert.deepEqual(request.headers, {
+                        foo: ['bar'],
+                        baz: ['quux']
+                    });
+                });
             });
         });
 
@@ -431,12 +545,7 @@ describe("http.api", function() {
             });
 
             it("should support basic auth", function() {
-                return make_api({
-                    auth: {
-                        username: 'me',
-                        password: 'pw'
-                    }
-                }).then(function() {
+                return make_api().then(function() {
                     im.api.http.fixtures.add({
                         request: {
                             method: 'GET',
@@ -444,7 +553,12 @@ describe("http.api", function() {
                         }
                     });
 
-                    return api.get('http://foo.com/');
+                    return api.get('http://foo.com/', {
+                        auth: {
+                            username: 'me',
+                            password: 'pw'
+                        }
+                    });
                 }).then(function() {
                     var request = im.api.http.requests[0];
                     assert.deepEqual(
@@ -496,8 +610,8 @@ describe("http.api", function() {
                     return p.catch(function(e) {
                         assert(e instanceof HttpResponseError);
                         assert.equal(e.reason, [
-                            "Could not parse response",
-                            "(Error: You shall not parse)"].join(' '));
+                            "Could not parse response:",
+                            "    Error: You shall not parse"].join('\n'));
                         assert.equal(e.response.code, 200);
                         assert.equal(e.response.body, '{"foo": "bar"}');
                     });

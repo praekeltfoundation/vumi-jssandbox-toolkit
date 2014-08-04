@@ -341,5 +341,24 @@ describe("app", function() {
                 return app.setup().thenResolve(p);
             });
         });
+
+        describe(".teardown", function() {
+            it("should remove its event listeners", function() {
+                app.on('foo', function() {});
+                app.on('teardown', function() {});
+                assert.equal(app.listeners('foo').length, 1);
+                assert.equal(app.listeners('teardown').length, 1);
+
+                return app.teardown().then(function() {
+                    assert.equal(app.listeners('foo').length, 0);
+                    assert.equal(app.listeners('teardown').length, 0);
+                });
+            });
+
+            it("should emit a 'teardown' event", function(done) {
+                app.on('teardown', function() { done(); });
+                app.teardown();
+            });
+        });
     });
 });
