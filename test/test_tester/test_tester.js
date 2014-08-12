@@ -43,18 +43,6 @@ describe("tester.tester", function() {
             tester.tasks.attach();
         });
 
-        it("should throw app errors emitted as events", function() {
-            var error = new Error(':(');
-            var p = tester.app.once.resolved('app:error');
-
-            return tester
-                .app.emit(new AppErrorEvent(tester.app, error))
-                .catch(function(e) {
-                    assert.strictEqual(error, e);
-                })
-                .thenResolve(p);
-        });
-
         describe(".reset", function() {
             it("should reset its tasks", function() {
                 tester
@@ -106,6 +94,31 @@ describe("tester.tester", function() {
                 assert.strictEqual(tester.tasks.get('setups').im, im);
                 assert.strictEqual(tester.tasks.get('interactions').im, im);
                 assert.strictEqual(tester.tasks.get('checks').im, im);
+            });
+
+            it("should bind an event listener that rethrows errors", function() {
+                var app = tester.app;
+
+                function bad_fullfill() {
+                    throw new Error('Promise should not have been fulfilled');
+                }
+
+                function bad_reject() {
+                    throw new Error('Promise should not have been rejected');
+                }
+
+                return app.teardown()
+                    .then(function() {
+                        return app.emit.app_error('no foo');
+                    })
+                    .then(function() {
+                        tester.reset.interaction();
+                        return app.emit.app_error('no bar');
+                    }, bad_reject)
+                    .then(bad_fullfill, function(e) {
+                        assert(e instanceof Error);
+                        assert.equal(e.message, 'no bar');
+                    });
             });
         });
 
