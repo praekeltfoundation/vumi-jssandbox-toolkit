@@ -253,4 +253,38 @@ describe("utils", function() {
                 ].join('\n'));
         });
     });
+
+    describe(".normalize_msisdn", function() {
+        it("Should remove invalid characters", function() {
+            assert.equal(utils.normalize_msisdn('+12ab5 7','27'), '+1257');
+        });
+
+        it("Should not touch shortcodes", function() {
+            assert.equal(utils.normalize_msisdn('12345'), '12345');
+        });
+
+        it("Should handle ``00`` case", function() {
+            assert.equal(utils.normalize_msisdn('0027741234567','27'),
+                '+27741234567');
+        });
+
+        it("Should handle the `0` case", function() {
+            assert.equal(utils.normalize_msisdn('0741234567','27'),
+                '+27741234567');
+        });
+
+        it("Should add the ``+`` in the case of country code", function() {
+            assert.equal(utils.normalize_msisdn('27741234567','27'),
+                '+27741234567');
+        });
+
+        it("Should return null for incorrect numbers", function() {
+            assert.equal(utils.normalize_msisdn('123456789','27'), null);
+        });
+
+        it("Should handle ``+`` symbol in country code", function() {
+            assert.equal(utils.normalize_msisdn('0741234567','+27'),
+                '+27741234567');
+        });
+    });
 });
