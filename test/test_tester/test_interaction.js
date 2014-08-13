@@ -224,12 +224,17 @@ describe("AppTester Interaction Tasks", function() {
                 question: 'B',
                 choices: [
                     new Choice('states:d', 'states:d'),
-                    new Choice('states:e', 'states:e')]
+                    new Choice('states:e', 'states:e'),
+                    new Choice('states:bad', 'states:bad')]
             }));
 
             app.states.add(new EndState('states:c', {text: 'C'}));
             app.states.add(new EndState('states:d', {text: 'D'}));
             app.states.add(new EndState('states:e', {text: 'E'}));
+
+            app.states.add('states:bad', function() {
+                throw new Error(':(');
+            });
         });
 
         describe(".inputs(input1[, input2[, ...]])", function() {
@@ -267,6 +272,17 @@ describe("AppTester Interaction Tasks", function() {
                         assert.strictEqual(im.msg.content, null);
                     })
                     .run();
+            });
+
+            it("should throw errors occuring in the sequence", function() {
+                return tester
+                    .setup.user.state('states:a')
+                    .inputs('1', '3', '1')
+                    .run()
+                    .then(test_utils.fail, function(e) {
+                        assert(e instanceof Error);
+                        assert.equal(e.message, ':(');
+                    });
             });
         });
 
