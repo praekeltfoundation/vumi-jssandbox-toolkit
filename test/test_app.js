@@ -10,6 +10,7 @@ var App = vumigo.App;
 var AppStateError = vumigo.app.AppStateError;
 var AppTester = vumigo.AppTester;
 var Event = vumigo.events.Event;
+var IMShutdownEvent = vumigo.interaction_machine.IMShutdownEvent;
 
 
 describe("app", function() {
@@ -320,6 +321,13 @@ describe("app", function() {
                         assert(d.promise.isFulfilled());
                     });
             });
+        });
+
+        describe(".exit", function() {
+          it("should be invoked when the im is shutting down", function(done) {
+              app.exit = function() { done(); };
+              im.emit(new IMShutdownEvent(im));
+          });
         });
 
         describe(".setup", function() {
