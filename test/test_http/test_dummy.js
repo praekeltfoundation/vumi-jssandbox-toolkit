@@ -109,18 +109,18 @@ describe("http.dummy", function() {
                 }, DummyResourceError);
             });
 
-            it("should not throw an error the response is repeatable", function() {
+            it("should allow fixtures to be repeatable", function() {
                 var fixture = new HttpFixture({
                     repeatable: true,
                     request: {url: 'http://example.com'},
-                    responses: [
-                        {body: '{"foo":"bar"}'},
-                        {body: '{"baz":"qux"}'}]
+                    response: {body: '{"foo":"bar"}'}
                 });
 
-                fixture.use();
-                fixture.use();
-                fixture.use();
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
             });
         });
 
