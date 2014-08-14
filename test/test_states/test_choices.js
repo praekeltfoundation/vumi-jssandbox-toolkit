@@ -486,6 +486,7 @@ describe("states.choice", function() {
                                 "3. Baz",
                                 "4. More"
                             ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
                             .run();
                     })
                     .then(function() {
@@ -498,6 +499,20 @@ describe("states.choice", function() {
                                 "3. More",
                                 "4. Back"
                             ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3')
+                            .check.reply([
+                                "Hello.",
+                                "1. Grault",
+                                "2. Garply",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
                             .run();
                     })
                     .then(function() {
@@ -510,6 +525,7 @@ describe("states.choice", function() {
                                 "3. More",
                                 "4. Back"
                             ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
                             .run();
                     })
                     .then(function() {
@@ -520,6 +536,59 @@ describe("states.choice", function() {
                                 "1. Plugh",
                                 "2. Back"
                             ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '3', '3', '2')
+                            .check.reply([
+                                "Hello.",
+                                "1. Waldo",
+                                "2. Fred",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '3', '3', '2', '4')
+                            .check.reply([
+                                "Hello.",
+                                "1. Grault",
+                                "2. Garply",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '3', '3', '2', '4', '4')
+                            .check.reply([
+                                "Hello.",
+                                "1. Quux",
+                                "2. Corge",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '3', '3', '2', '4', '4', '4')
+                            .check.reply([
+                                "Hello.",
+                                "1. Foo",
+                                "2. Bar",
+                                "3. Baz",
+                                "4. More"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
                             .run();
                     });
             });
