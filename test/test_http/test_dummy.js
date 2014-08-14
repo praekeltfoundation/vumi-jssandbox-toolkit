@@ -108,6 +108,20 @@ describe("http.dummy", function() {
                     fixture.use();
                 }, DummyResourceError);
             });
+
+            it("should allow fixtures to be repeatable", function() {
+                var fixture = new HttpFixture({
+                    repeatable: true,
+                    request: {url: 'http://example.com'},
+                    response: {body: '{"foo":"bar"}'}
+                });
+
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+                assert.deepEqual([fixture.use()], fixture.responses);
+            });
         });
 
         describe(".serialize", function() {
