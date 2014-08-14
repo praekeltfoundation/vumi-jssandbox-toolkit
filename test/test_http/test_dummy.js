@@ -108,6 +108,20 @@ describe("http.dummy", function() {
                     fixture.use();
                 }, DummyResourceError);
             });
+
+            it("should not throw an error the response is repeatable", function() {
+                var fixture = new HttpFixture({
+                    repeatable: true,
+                    request: {url: 'http://example.com'},
+                    responses: [
+                        {body: '{"foo":"bar"}'},
+                        {body: '{"baz":"qux"}'}]
+                });
+
+                fixture.use();
+                fixture.use();
+                fixture.use();
+            });
         });
 
         describe(".serialize", function() {
