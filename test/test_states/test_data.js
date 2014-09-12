@@ -104,9 +104,24 @@ describe("data", function() {
         });
 
         describe(".is", function() {
-            it("should compare its state to another by name", function() {
-                assert(!state.is('larp_state'));
-                assert(state.is('test_state'));
+            it("should compare its state to another state", function() {
+                var state = new StateData('states:foo');
+                assert(!state.is('states:bar'));
+                assert(state.is('states:foo'));
+            });
+
+            it("should compare its state to another given a name",
+            function() {
+                var state = new StateData('states:foo');
+                assert(!state.is(new State('states:bar')));
+                assert(state.is(new State('states:foo')));
+            });
+
+            it("should compare its state to another StateData's state",
+            function() {
+                var state = new StateData('states:foo');
+                assert(!state.is(new StateData('states:bar')));
+                assert(state.is(new StateData('states:foo')));
             });
         });
     });
