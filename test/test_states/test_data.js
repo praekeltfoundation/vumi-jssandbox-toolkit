@@ -32,17 +32,30 @@ describe("data", function() {
             });
 
             describe(".reset(state, opts)", function() {
-                it("should reset itself using a state instance and options",
-                function() {
+                it("should reset itself using a state instance", function() {
                     assert(typeof state.name == 'undefined');
                     assert.deepEqual(state.metadata, {});
 
                     var s = new State('test_state');
                     s.metadata = {foo: 'bar'};
-                    state.reset(s, {creator_opts: {baz: 'qux'}});
 
+                    state.reset(s);
                     assert.equal(state.name, 'test_state');
                     assert.deepEqual(state.metadata, {foo: 'bar'});
+                });
+
+                it("should use the creator opts recorded on the state",
+                function() {
+                    var s = new State('test_state');
+                    s._record_creator_opts({corge: 'grault'});
+                    state.reset(s);
+                    assert.deepEqual(state.creator_opts, {corge: 'grault'});
+                });
+
+                it("should allow explicit creator opts to be given", function() {
+                    var s = new State('test_state');
+                    s._record_creator_opts({corge: 'grault'});
+                    state.reset(s, {creator_opts: {baz: 'qux'}});
                     assert.deepEqual(state.creator_opts, {baz: 'qux'});
                 });
             });
@@ -65,7 +78,7 @@ describe("data", function() {
                 });
             });
 
-            describe(".reset(name opts)", function() {
+            describe(".reset(name, opts)", function() {
                 it("should reset itself using a name and options",
                 function() {
                     assert(typeof state.name == 'undefined');
