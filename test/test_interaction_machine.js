@@ -627,8 +627,31 @@ describe("interaction_machine", function() {
             });
         });
 
+        describe(".emit.state.exit", function() {
+            it("should emit a 'state:exit' event on the im", function() {
+                var state = new State('states:foo');
+                var p = im.once.resolved('state:exit');
+
+                return im.emit.state.exit(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
+                    });
+            });
+
+            it("should emit a 'state:exit' event on the current state",
+            function() {
+                var state = new State('states:foo');
+                var p = state.once.resolved('state:exit');
+
+                return im.emit.state.exit(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
+                    });
+            });
+        });
+
         describe(".emit.state.enter", function() {
-            it("should emit an 'state:enter' event on the im",
+            it("should emit n 'state:enter' event on the im",
             function() {
                 var state = new State('states:foo');
                 var p = im.once.resolved('state:enter');
@@ -639,7 +662,7 @@ describe("interaction_machine", function() {
                     });
             });
 
-            it("should emit an 'state:enter' event on the new state",
+            it("should emit a 'state:enter' event on the new state",
             function() {
                 var state = new State('states:foo');
                 var p = state.once.resolved('state:enter');
@@ -651,24 +674,24 @@ describe("interaction_machine", function() {
             });
         });
 
-        describe(".emit.state.exit", function() {
-            it("should emit an 'state:exit' event on the im",
+        describe(".emit.state.resume", function() {
+            it("should emit a 'state:resume' event on the im",
             function() {
                 var state = new State('states:foo');
-                var p = im.once.resolved('state:exit');
+                var p = im.once.resolved('state:resume');
 
-                return im.emit.state.exit(state)
+                return im.emit.state.resume(state)
                     .then(function() {
                         assert(p.isFulfilled());
                     });
             });
 
-            it("should emit an 'state:exit' event on the current state",
+            it("should emit an 'state:resume' event on the new state",
             function() {
                 var state = new State('states:foo');
-                var p = state.once.resolved('state:exit');
+                var p = state.once.resolved('state:resume');
 
-                return im.emit.state.exit(state)
+                return im.emit.state.resume(state)
                     .then(function() {
                         assert(p.isFulfilled());
                     });
