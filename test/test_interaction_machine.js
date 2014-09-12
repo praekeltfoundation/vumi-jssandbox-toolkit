@@ -6,6 +6,7 @@ var fixtures = vumigo.fixtures;
 var test_utils = vumigo.test_utils;
 
 var App = vumigo.App;
+var State = vumigo.states.State;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
 
@@ -626,52 +627,51 @@ describe("interaction_machine", function() {
             });
         });
 
-        describe(".emit", function() {
-            describe(".state", function() {
-                beforeEach(function() {
-                    return im.switch_to_start_state();
-                });
+        describe(".emit.state.enter", function() {
+            it("should emit an 'state:enter' event on the im",
+            function() {
+                var state = new State('states:foo');
+                var p = im.once.resolved('state:enter');
 
-                describe(".exit", function() {
-                    it("should emit an 'state:exit' event on the im",
-                    function() {
-                        var p = im.once.resolved('state:exit');
-                        return im.emit.state.exit().thenResolve(p);
+                return im.emit.state.enter(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
+            });
 
-                    it("should emit an 'state:exit' event on the current state",
-                    function() {
-                        var p = im.state.once.resolved('state:exit');
-                        return im.emit.state.exit().thenResolve(p);
+            it("should emit an 'state:enter' event on the new state",
+            function() {
+                var state = new State('states:foo');
+                var p = state.once.resolved('state:enter');
+
+                return im.emit.state.enter(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
+            });
+        });
 
-                    describe("if the im is not in a state", function() {
-                        beforeEach(function() {
-                            im.state = null;
-                        });
+        describe(".emit.state.exit", function() {
+            it("should emit an 'state:exit' event on the im",
+            function() {
+                var state = new State('states:foo');
+                var p = im.once.resolved('state:exit');
 
-                        it("should not emit any 'exit' events", function() {
-                            var p = im.once.resolved('state:exit');
-                            return im.emit.state.exit().then(function() {
-                                assert(!p.isFulfilled());
-                            });
-                        });
+                return im.emit.state.exit(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
-                });
+            });
 
-                describe(".enter", function() {
-                    it("should emit an 'state:enter' event on the im",
-                    function() {
-                        var p = im.once.resolved('state:enter');
-                        return im.emit.state.enter(end_state).thenResolve(p);
-                    });
+            it("should emit an 'state:exit' event on the current state",
+            function() {
+                var state = new State('states:foo');
+                var p = state.once.resolved('state:exit');
 
-                    it("should emit an 'state:enter' event on the new state",
-                    function() {
-                        var p = end_state.once.resolved('state:enter');
-                        return im.emit.state.enter(end_state).thenResolve(p);
+                return im.emit.state.exit(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
-                });
             });
         });
 
