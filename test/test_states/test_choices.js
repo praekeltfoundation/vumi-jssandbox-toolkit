@@ -54,16 +54,16 @@ describe("states.choice", function() {
 
         describe("if the 'accept_labels' option is not set", function() {
             it("should accept a number-based answers", function () {
-                assert.equal(im.user.state.name, 'color_state');
+                assert(!im.next_state.exists());
 
                 return state.input("1").then(function() {
-                    assert.equal(im.user.state.name, 'red_state');
+                    assert(im.next_state.is('red_state'));
                 });
             });
 
             it("should not accept label-based answers", function() {
                 return state.input("Red").then(function() {
-                    assert.equal(im.user.state.name, 'color_state');
+                    assert(!im.next_state.exists());
                 });
             });
         });
@@ -71,10 +71,10 @@ describe("states.choice", function() {
         describe("if the 'accept_labels' option is set", function() {
             it("should accept label-based answers", function() {
                 return make_state({accept_labels: true}).then(function(state) {
-                    assert.equal(im.user.state.name, 'color_state');
+                    assert(!im.next_state.exists());
 
                     state.input("Red").then(function() {
-                        assert.equal(im.user.state.name, 'red_state');
+                        assert(im.next_state.is('red_state'));
                     });
                 });
             });
@@ -82,20 +82,20 @@ describe("states.choice", function() {
             it("should be case insensitive with label-based answers",
             function() {
                 return make_state({accept_labels: true}).then(function(state) {
-                    assert.equal(im.user.state.name, 'color_state');
+                    assert(!im.next_state.exists());
 
                     state.input("reD").then(function() {
-                        assert.equal(im.user.state.name, 'red_state');
+                        assert(im.next_state.is('red_state'));
                     });
                 });
             });
 
             it("should accept number-based answers", function() {
                 return make_state({accept_labels: true}).then(function(state) {
-                    assert.equal(im.user.state.name, 'color_state');
+                    assert(!im.next_state.exists());
 
                     state.input("1").then(function() {
-                        assert.equal(im.user.state.name, 'red_state');
+                        assert(im.next_state.is('red_state'));
                     });
                 });
             });
@@ -136,10 +136,10 @@ describe("states.choice", function() {
             describe("if the user response is valid", function() {
                 it("should set the user's current state to the next state",
                 function() {
-                    assert.equal(im.user.state.name, 'color_state');
+                    assert(!im.next_state.exists());
 
                     return state.input('1').then(function() {
-                        assert.equal(im.user.state.name, 'red_state');
+                        assert(im.next_state.is('red_state'));
                     });
                 });
 
@@ -155,10 +155,10 @@ describe("states.choice", function() {
 
             describe("if the user response is not a valid choice", function() {
                 it("should not set the user's state", function() {
-                    assert.equal(im.user.state.name, 'color_state');
+                    assert(!im.next_state.exists());
 
                     return state.input('3').then(function() {
-                        assert.equal(im.user.state.name, 'color_state');
+                        assert(!im.next_state.exists());
                     });
                 });
 
@@ -216,17 +216,17 @@ describe("states.choice", function() {
 
         describe("should support", function () {
             it("state name choice values", function () {
-                assert.equal(im.user.state.name, 'menu_state');
+                assert(!im.next_state.exists());
 
                 return state.input("1").then(function() {
-                    assert.equal(im.user.state.name, 'state_by_name');
+                    assert(im.next_state.is('state_by_name'));
                 });
             });
 
             it("state object choice values", function() {
                 return state.input("2").then(function() {
-                    assert.equal(im.user.state.name, 'state_by_object');
-                    assert.deepEqual(im.user.state.metadata, {"foo": "bar"});
+                    assert(im.next_state.is('state_by_object'));
+                    assert.deepEqual(im.next_state.metadata, {"foo": "bar"});
                 });
             });
         });

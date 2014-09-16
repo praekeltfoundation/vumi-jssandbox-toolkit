@@ -232,25 +232,28 @@ describe("states.state", function() {
 
         describe(".set_next_state", function() {
             it("should not change state undefined is given", function() {
-                assert.equal(im.user.state.name, 'start');
+                assert(!im.next_state.exists());
+
                 return state.set_next_state().then(function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
                 });
             });
 
             it("should not change state null is given", function() {
-                assert.equal(im.user.state.name, 'start');
+                assert(!im.next_state.exists());
+
                 return state.set_next_state(null).then(function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
                 });
             });
 
             describe(".set_next_state(name)", function() {
                 it("should set the next state using the given name",
                 function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
+
                     return state.set_next_state('spam').then(function() {
-                        assert.equal(im.user.state.name, 'spam');
+                        assert(im.next_state.is('spam'));
                     });
                 });
             });
@@ -258,7 +261,7 @@ describe("states.state", function() {
             describe(".set_next_state(opts)", function() {
                 it("should set the next state using the given options",
                 function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
 
                     return state
                         .set_next_state({
@@ -266,7 +269,7 @@ describe("states.state", function() {
                             metadata: {foo: 'bar'},
                             creator_opts: {baz: 'qux'}
                         }).then(function() {
-                            var state = im.user.state;
+                            var state = im.next_state;
                             assert.equal(state.name, 'spam');
                             assert.deepEqual(state.metadata, {foo: 'bar'});
                             assert.deepEqual(state.creator_opts, {baz: 'qux'});
@@ -276,7 +279,7 @@ describe("states.state", function() {
 
             describe(".set_next_state(fn)", function() {
                 it("should be allowed to return an options object", function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
 
                     return state
                         .set_next_state(function() {
@@ -286,7 +289,7 @@ describe("states.state", function() {
                                 creator_opts: {baz: 'qux'}
                             };
                         }).then(function() {
-                            var state = im.user.state;
+                            var state = im.next_state;
                             assert.equal(state.name, 'spam');
                             assert.deepEqual(state.metadata, {foo: 'bar'});
                             assert.deepEqual(state.creator_opts, {baz: 'qux'});
@@ -294,17 +297,17 @@ describe("states.state", function() {
                 });
 
                 it("should be allowed to return a name", function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
 
                     return state
                         .set_next_state(function() {
                             return 'spam';
                         }).then(function() {
-                            assert.equal(im.user.state.name, 'spam');
+                            assert(im.next_state.is('spam'));
                         });
                 });
 
-                it("should allow arguments to be given the function",
+                it("should allow arguments to be given to the function",
                 function() {
                     function fn(a, b) {
                         assert.equal(a, 'foo');
@@ -315,35 +318,35 @@ describe("states.state", function() {
                 });
 
                 it("should be allowed to return a promise", function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
 
                     return state
                         .set_next_state(function() {
                             return Q('spam');
                         }).then(function() {
-                            assert.equal(im.user.state.name, 'spam');
+                            assert(im.next_state.is('spam'));
                         });
                 });
 
                 it("should not change state if null is returned", function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
 
                     return state
                         .set_next_state(function() {
                             return null;
                         }).then(function() {
-                            assert.equal(im.user.state.name, 'start');
+                            assert(!im.next_state.exists());
                         });
                 });
 
                 it("should not change state if undefined is returned",
                 function() {
-                    assert.equal(im.user.state.name, 'start');
+                    assert(!im.next_state.exists());
 
                     return state
                         .set_next_state(function() {})
                         .then(function() {
-                            assert.equal(im.user.state.name, 'start');
+                            assert(!im.next_state.exists());
                         });
                 });
             });
