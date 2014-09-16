@@ -957,7 +957,6 @@ describe("interaction_machine", function() {
                 })
                 .run();
         });
-
     });
 
     describe("interact", function () {
