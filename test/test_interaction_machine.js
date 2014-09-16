@@ -865,7 +865,8 @@ describe("interaction_machine", function() {
             function push(e) {
                 events.push({
                     event: e.name,
-                    state: e.state.name
+                    state: e.state.name,
+                    message: app.im.msg.content
                 });
             }
 
@@ -898,60 +899,79 @@ describe("interaction_machine", function() {
                 .check(function() {
                     assert.deepEqual(events, [{
                         state: 'a',
+                        message: null,
                         event: 'state:enter'
                     }, {
                         state: 'a',
+                        message: 'hi',
                         event: 'state:resume'
                     }, {
                         state: 'a',
+                        message: 'hi',
                         event: 'state:exit'
                     }, {
                         state: 'b',
+                        message: 'hi',
                         event: 'state:enter'
                     }, {
                         state: 'b',
+                        message: 'foo',
                         event: 'state:resume'
                     }, {
                         state: 'b',
+                        message: 'foo',
                         event: 'state:exit'
                     }, {
                         state: 'c',
+                        message: 'foo',
                         event: 'state:enter'
                     }, {
                         state: 'c',
+                        message: null,
                         event: 'state:resume'
                     }, {
                         state: 'c',
+                        message: null,
                         event: 'state:exit'
                     }, {
                         state: 'a',
+                        message: null,
                         event: 'state:enter'
                     }, {
                         state: 'a',
+                        message: 'hi again',
                         event: 'state:resume'
                     }, {
                         state: 'a',
+                        message: 'hi again',
                         event: 'state:exit'
                     }, {
                         state: 'b',
+                        message: 'hi again',
                         event: 'state:enter'
                     }, {
                         state: 'b',
+                        message: 'bar',
                         event: 'state:resume'
                     }, {
                         state: 'b',
+                        message: 'bar',
                         event: 'state:exit'
                     }, {
                         state: 'c',
+                        message: 'bar',
                         event: 'state:enter'
                     }, {
                         state: 'c',
+                        message: null,
                         event: 'state:resume'
                     }, {
                         state: 'c',
+                        message: null,
                         event: 'state:exit'
                     }, {
                         state: 'a',
+                        message: null,
                         event: 'state:enter'
                     }]);
                 })
