@@ -6,6 +6,8 @@ var fixtures = vumigo.fixtures;
 var test_utils = vumigo.test_utils;
 
 var App = vumigo.App;
+var AppTester = vumigo.AppTester;
+
 var State = vumigo.states.State;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
@@ -855,6 +857,107 @@ describe("interaction_machine", function() {
                 });
             });
         });
+
+        it("should emit state lifecycle events sensibly", function() {
+            var app = new App('a');
+
+            var events = [];
+            function push(e) {
+                events.push({
+                    event: e.name,
+                    state: e.state.name
+                });
+            }
+
+            app.events = {
+                'im state:enter': push,
+                'im state:resume': push,
+                'im state:exit': push
+            };
+
+            app.states.add(new FreeText('a', {
+                question: 'hello?',
+                next: 'b'
+            }));
+
+            app.states.add(new FreeText('b', {
+                question: 'you are in the middle, say something',
+                next: 'c'
+            }));
+
+            app.states.add(new EndState('c', {
+                text: 'bye',
+                next: 'a'
+            }));
+
+            return new AppTester(app)
+                .inputs(
+                  null, 'hi', 'foo',
+                  null, 'hi again', 'bar',
+                  null)
+                .check(function() {
+                    assert.deepEqual(events, [{
+                        state: 'a',
+                        event: 'state:enter'
+                    }, {
+                        state: 'a',
+                        event: 'state:resume'
+                    }, {
+                        state: 'a',
+                        event: 'state:exit'
+                    }, {
+                        state: 'b',
+                        event: 'state:enter'
+                    }, {
+                        state: 'b',
+                        event: 'state:resume'
+                    }, {
+                        state: 'b',
+                        event: 'state:exit'
+                    }, {
+                        state: 'c',
+                        event: 'state:enter'
+                    }, {
+                        state: 'c',
+                        event: 'state:resume'
+                    }, {
+                        state: 'c',
+                        event: 'state:exit'
+                    }, {
+                        state: 'a',
+                        event: 'state:enter'
+                    }, {
+                        state: 'a',
+                        event: 'state:resume'
+                    }, {
+                        state: 'a',
+                        event: 'state:exit'
+                    }, {
+                        state: 'b',
+                        event: 'state:enter'
+                    }, {
+                        state: 'b',
+                        event: 'state:resume'
+                    }, {
+                        state: 'b',
+                        event: 'state:exit'
+                    }, {
+                        state: 'c',
+                        event: 'state:enter'
+                    }, {
+                        state: 'c',
+                        event: 'state:resume'
+                    }, {
+                        state: 'c',
+                        event: 'state:exit'
+                    }, {
+                        state: 'a',
+                        event: 'state:enter'
+                    }]);
+                })
+                .run();
+        });
+
     });
 
     describe("interact", function () {
