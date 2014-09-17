@@ -374,6 +374,22 @@ describe("interaction_machine", function() {
                         assert.strictEqual(e.state, expected);
                     });
             });
+
+            it("should emit a 'state:enter' event if a different state is created",
+            function() {
+                var p = im.once.resolved('state:enter');
+                var expected = new State('bar');
+
+                im.app.states.add('foo', function() {
+                    return expected;
+                });
+
+                return im.resume_state('foo')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert.strictEqual(e.state, expected);
+                    });
+            });
         });
 
         describe(".enter_state", function() {
