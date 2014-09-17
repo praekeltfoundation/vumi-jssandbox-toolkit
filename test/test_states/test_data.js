@@ -31,6 +31,16 @@ describe("data", function() {
                 });
             });
 
+            describe(".reset(null)", function() {
+                it("should reset itself to an undefined state", function() {
+                    var state = new StateData('test_state');
+                    assert(state.exists());
+
+                    state.reset(null);
+                    assert(!state.exists());
+                });
+            });
+
             describe(".reset(state, opts)", function() {
                 it("should reset itself using a state instance", function() {
                     assert(typeof state.name == 'undefined');

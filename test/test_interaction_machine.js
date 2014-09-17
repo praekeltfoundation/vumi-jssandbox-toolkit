@@ -296,6 +296,16 @@ describe("interaction_machine", function() {
                 im.set_state(s);
                 assert.strictEqual(im.state, s);
             });
+
+            it("unset the state if null is given", function() {
+                im.set_state(new State('foo'));
+                assert.notStrictEqual(im.state, null);
+                assert(im.user.state.exists());
+
+                im.set_state(null);
+                assert.strictEqual(im.state, null);
+                assert(!im.user.state.exists());
+            });
         });
 
         describe(".create_state", function() {
