@@ -329,12 +329,12 @@ describe("interaction_machine", function() {
             });
         });
 
-        describe(".set_new_state", function() {
+        describe(".create_and_set_state", function() {
             it("should create the given state as the current state", function() {
                 var expected = new State('foo');
                 im.app.states.add(expected);
 
-                return im.set_new_state('foo')
+                return im.create_and_set_state('foo')
                     .then(function(state) {
                         assert.strictEqual(im.state, expected);
                     });
