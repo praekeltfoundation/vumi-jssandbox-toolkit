@@ -1,5 +1,5 @@
 var assert = require('assert');
-var vumigo = require('../../../lib');
+var vumigo = require('vumigo_v02');
 var fixtures = require('./fixtures');
 var app = require('../lib/app');
 var HttpApp = app.HttpApp;
@@ -9,7 +9,7 @@ describe("app", function() {
     describe("HttpApp", function() {
         var app;
         var tester;
-        
+
         beforeEach(function() {
             app = new HttpApp();
             tester = new AppTester(app);

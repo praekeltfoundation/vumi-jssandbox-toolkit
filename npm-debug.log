@@ -1,0 +1,1268 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'grunt-mocha-test',
+1 verbose cli   '--save-dev' ]
+2 info using npm@2.0.0
+3 info using node@v0.10.32
+4 verbose node symlink /usr/local/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'grunt-mocha-test', null ]
+7 verbose cache add spec="grunt-mocha-test" args=["grunt-mocha-test",null]
+8 verbose parsed spec { raw: 'grunt-mocha-test',
+8 verbose parsed spec   scope: null,
+8 verbose parsed spec   name: 'grunt-mocha-test',
+8 verbose parsed spec   rawSpec: '',
+8 verbose parsed spec   spec: '*',
+8 verbose parsed spec   type: 'range' }
+9 verbose parsed spec { raw: 'grunt-mocha-test',
+9 verbose parsed spec   scope: null,
+9 verbose parsed spec   name: 'grunt-mocha-test',
+9 verbose parsed spec   rawSpec: '',
+9 verbose parsed spec   spec: '*',
+9 verbose parsed spec   type: 'range' }
+10 verbose addNamed [ 'grunt-mocha-test', '*' ]
+11 verbose addNamed [ null, '*' ]
+12 silly lockFile 046691a0-grunt-mocha-test grunt-mocha-test@*
+13 verbose lock grunt-mocha-test@* /Users/steve/.npm/046691a0-grunt-mocha-test.lock
+14 silly addNameRange { name: 'grunt-mocha-test', range: '*', hasData: false }
+15 verbose mapToRegistry name grunt-mocha-test
+16 verbose mapToRegistry uri https://registry.npmjs.org/grunt-mocha-test
+17 verbose request on initialization, where is /grunt-mocha-test
+18 verbose request after pass 1, where is /grunt-mocha-test
+19 verbose request url raw /grunt-mocha-test
+20 verbose request resolving registry [ 'https://registry.npmjs.org/', './grunt-mocha-test' ]
+21 verbose request after pass 2, where is https://registry.npmjs.org/grunt-mocha-test
+22 verbose request no auth needed
+23 info attempt registry request try #1 at 09:08:57
+24 verbose request id be1393b6c7091048
+25 verbose etag "B9ICRIDVTNO7ANIK28TM3VN6G"
+26 http request GET https://registry.npmjs.org/grunt-mocha-test
+27 http 304 https://registry.npmjs.org/grunt-mocha-test
+28 silly registry.get cb [ 304,
+28 silly registry.get   { date: 'Sun, 12 Oct 2014 07:08:58 GMT',
+28 silly registry.get     server: 'Apache',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:08:58 GMT',
+28 silly registry.get     'cache-control': 'max-age=60',
+28 silly registry.get     etag: '"B9ICRIDVTNO7ANIK28TM3VN6G"',
+28 silly registry.get     'x-served-by': 'cache-fra1236-FRA',
+28 silly registry.get     'x-cache': 'MISS',
+28 silly registry.get     'x-cache-hits': '0',
+28 silly registry.get     'x-timer': 'S1413097738.540481,VS0,VE416',
+28 silly registry.get     vary: 'Accept',
+28 silly registry.get     'content-length': '0',
+28 silly registry.get     'keep-alive': 'timeout=10, max=50',
+28 silly registry.get     connection: 'Keep-Alive' } ]
+29 verbose etag https://registry.npmjs.org/grunt-mocha-test from cache
+30 silly addNameRange number 2 { name: 'grunt-mocha-test', range: '*', hasData: true }
+31 silly addNameRange versions [ 'grunt-mocha-test',
+31 silly addNameRange   [ '0.0.1',
+31 silly addNameRange     '0.1.0',
+31 silly addNameRange     '0.1.1',
+31 silly addNameRange     '0.2.0',
+31 silly addNameRange     '0.2.1',
+31 silly addNameRange     '0.2.2',
+31 silly addNameRange     '0.3.0',
+31 silly addNameRange     '0.3.1',
+31 silly addNameRange     '0.3.2',
+31 silly addNameRange     '0.3.3',
+31 silly addNameRange     '0.3.4',
+31 silly addNameRange     '0.3.5',
+31 silly addNameRange     '0.4.0',
+31 silly addNameRange     '0.5.0',
+31 silly addNameRange     '0.6.0',
+31 silly addNameRange     '0.6.1',
+31 silly addNameRange     '0.6.2',
+31 silly addNameRange     '0.6.3',
+31 silly addNameRange     '0.7.0',
+31 silly addNameRange     '0.8.0',
+31 silly addNameRange     '0.8.1',
+31 silly addNameRange     '0.8.2',
+31 silly addNameRange     '0.9.0',
+31 silly addNameRange     '0.9.1',
+31 silly addNameRange     '0.9.2',
+31 silly addNameRange     '0.9.3',
+31 silly addNameRange     '0.9.4',
+31 silly addNameRange     '0.10.0',
+31 silly addNameRange     '0.10.1',
+31 silly addNameRange     '0.10.2',
+31 silly addNameRange     '0.11.0',
+31 silly addNameRange     '0.12.0',
+31 silly addNameRange     '0.12.1' ] ]
+32 verbose addNamed [ 'grunt-mocha-test', '0.12.1' ]
+33 verbose addNamed [ '0.12.1', '0.12.1' ]
+34 silly lockFile ae9c78d2-grunt-mocha-test-0-12-1 grunt-mocha-test@0.12.1
+35 verbose lock grunt-mocha-test@0.12.1 /Users/steve/.npm/ae9c78d2-grunt-mocha-test-0-12-1.lock
+36 silly lockFile ae9c78d2-grunt-mocha-test-0-12-1 grunt-mocha-test@0.12.1
+37 silly lockFile ae9c78d2-grunt-mocha-test-0-12-1 grunt-mocha-test@0.12.1
+38 silly lockFile 046691a0-grunt-mocha-test grunt-mocha-test@*
+39 silly lockFile 046691a0-grunt-mocha-test grunt-mocha-test@*
+40 silly resolved [ { name: 'grunt-mocha-test',
+40 silly resolved     description: 'A grunt task for running server side mocha tests',
+40 silly resolved     version: '0.12.1',
+40 silly resolved     homepage: 'https://github.com/pghalliday/grunt-mocha-test',
+40 silly resolved     author:
+40 silly resolved      { name: 'Peter Halliday',
+40 silly resolved        email: 'pghalliday@gmail.com',
+40 silly resolved        url: 'http://pghalliday.github.io/' },
+40 silly resolved     repository:
+40 silly resolved      { type: 'git',
+40 silly resolved        url: 'git://github.com/pghalliday/grunt-mocha-test.git' },
+40 silly resolved     bugs: { url: 'https://github.com/pghalliday/grunt-mocha-test/issues' },
+40 silly resolved     licenses: [ [Object] ],
+40 silly resolved     engines: { node: '>= 0.10.4' },
+40 silly resolved     scripts: { test: 'grunt', ci: 'grunt ci' },
+40 silly resolved     config: { 'travis-cov': [Object] },
+40 silly resolved     dependencies: { 'fs-extra': '^0.12.0', hooker: '~0.2.3' },
+40 silly resolved     peerDependencies: { mocha: '^1.20.0' },
+40 silly resolved     devDependencies:
+40 silly resolved      { chai: '~1.9.0',
+40 silly resolved        'coffee-script': '~1.8.0',
+40 silly resolved        'cover-child-process': '~0.1.5',
+40 silly resolved        grunt: '~0.4.4',
+40 silly resolved        'grunt-blanket': '~0.0.8',
+40 silly resolved        'grunt-cli': '~0.1.13',
+40 silly resolved        'grunt-contrib-clean': '~0.6.0',
+40 silly resolved        'grunt-contrib-copy': '^0.6.0',
+40 silly resolved        'grunt-contrib-jshint': '~0.10.0',
+40 silly resolved        'grunt-coveralls': '~1.0.0',
+40 silly resolved        'grunt-env': '~0.4.1',
+40 silly resolved        mocha: '^1.20.0',
+40 silly resolved        'mocha-lcov-reporter': '0.0.1',
+40 silly resolved        'travis-cov': '~0.2.5' },
+40 silly resolved     keywords: [ 'gruntplugin', 'mocha', 'test' ],
+40 silly resolved     files: [ 'tasks', 'LICENSE-MIT' ],
+40 silly resolved     gitHead: 'abc947c2a442f52b14249638295583535948b728',
+40 silly resolved     _id: 'grunt-mocha-test@0.12.1',
+40 silly resolved     _shasum: '5fadc0a0de305315623e90ceb5af8218716cda89',
+40 silly resolved     _from: 'grunt-mocha-test@*',
+40 silly resolved     _npmVersion: '2.0.0',
+40 silly resolved     _npmUser: { name: 'pghalliday', email: 'pghalliday@gmail.com' },
+40 silly resolved     maintainers: [ [Object] ],
+40 silly resolved     dist:
+40 silly resolved      { shasum: '5fadc0a0de305315623e90ceb5af8218716cda89',
+40 silly resolved        tarball: 'http://registry.npmjs.org/grunt-mocha-test/-/grunt-mocha-test-0.12.1.tgz' },
+40 silly resolved     directories: {},
+40 silly resolved     _resolved: 'https://registry.npmjs.org/grunt-mocha-test/-/grunt-mocha-test-0.12.1.tgz',
+40 silly resolved     readme: 'ERROR: No README data found!' } ]
+41 info install grunt-mocha-test@0.12.1 into /Users/steve/Documents/Sites/go-jsbox-odl
+42 info installOne grunt-mocha-test@0.12.1
+43 verbose node_modules/grunt-mocha-test unbuild
+44 info preuninstall grunt-mocha-test@0.12.1
+45 info uninstall grunt-mocha-test@0.12.1
+46 verbose true,/Users/steve/Documents/Sites/go-jsbox-odl/node_modules,/Users/steve/Documents/Sites/go-jsbox-odl/node_modules unbuild grunt-mocha-test@0.12.1
+47 info postuninstall grunt-mocha-test@0.12.1
+48 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+49 silly gentlyRm purging /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+50 silly gentlyRm quitting because other entries in /Users/steve/Documents/Sites/go-jsbox-odl/node_modules
+51 verbose tar unpack /Users/steve/.npm/grunt-mocha-test/0.12.1/package.tgz
+52 silly lockFile 63a867c7-dl-node-modules-grunt-mocha-test tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+53 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test /Users/steve/.npm/63a867c7-dl-node-modules-grunt-mocha-test.lock
+54 silly lockFile e596f28f-nt-mocha-test-0-12-1-package-tgz tar:///Users/steve/.npm/grunt-mocha-test/0.12.1/package.tgz
+55 verbose lock tar:///Users/steve/.npm/grunt-mocha-test/0.12.1/package.tgz /Users/steve/.npm/e596f28f-nt-mocha-test-0-12-1-package-tgz.lock
+56 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+57 silly gunzTarPerm modes [ '755', '644' ]
+58 silly gunzTarPerm extractEntry package.json
+59 silly gunzTarPerm extractEntry README.md
+60 silly gunzTarPerm extractEntry tasks/mocha-test.js
+61 silly gunzTarPerm extractEntry tasks/lib/MochaWrapper.js
+62 silly gunzTarPerm extractEntry LICENSE-MIT
+63 silly lockFile 63a867c7-dl-node-modules-grunt-mocha-test tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+64 silly lockFile 63a867c7-dl-node-modules-grunt-mocha-test tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+65 silly lockFile e596f28f-nt-mocha-test-0-12-1-package-tgz tar:///Users/steve/.npm/grunt-mocha-test/0.12.1/package.tgz
+66 silly lockFile e596f28f-nt-mocha-test-0-12-1-package-tgz tar:///Users/steve/.npm/grunt-mocha-test/0.12.1/package.tgz
+67 info preinstall grunt-mocha-test@0.12.1
+68 verbose readDependencies using package.json deps
+69 verbose readDependencies using package.json deps
+70 verbose cache add [ 'fs-extra@^0.12.0', null ]
+71 verbose cache add spec="fs-extra@^0.12.0" args=["fs-extra@^0.12.0",null]
+72 verbose parsed spec { raw: 'fs-extra@^0.12.0',
+72 verbose parsed spec   scope: null,
+72 verbose parsed spec   name: 'fs-extra',
+72 verbose parsed spec   rawSpec: '^0.12.0',
+72 verbose parsed spec   spec: '>=0.12.0 <0.13.0',
+72 verbose parsed spec   type: 'range' }
+73 verbose cache add [ 'hooker@~0.2.3', null ]
+74 verbose cache add spec="hooker@~0.2.3" args=["hooker@~0.2.3",null]
+75 verbose parsed spec { raw: 'hooker@~0.2.3',
+75 verbose parsed spec   scope: null,
+75 verbose parsed spec   name: 'hooker',
+75 verbose parsed spec   rawSpec: '~0.2.3',
+75 verbose parsed spec   spec: '>=0.2.3 <0.3.0',
+75 verbose parsed spec   type: 'range' }
+76 verbose parsed spec { raw: 'fs-extra@^0.12.0',
+76 verbose parsed spec   scope: null,
+76 verbose parsed spec   name: 'fs-extra',
+76 verbose parsed spec   rawSpec: '^0.12.0',
+76 verbose parsed spec   spec: '>=0.12.0 <0.13.0',
+76 verbose parsed spec   type: 'range' }
+77 verbose addNamed [ 'fs-extra', '>=0.12.0 <0.13.0' ]
+78 verbose addNamed [ null, '>=0.12.0 <0.13.0' ]
+79 silly lockFile 9376f99a-fs-extra-0-12-0-0-13-0 fs-extra@>=0.12.0 <0.13.0
+80 verbose lock fs-extra@>=0.12.0 <0.13.0 /Users/steve/.npm/9376f99a-fs-extra-0-12-0-0-13-0.lock
+81 verbose parsed spec { raw: 'hooker@~0.2.3',
+81 verbose parsed spec   scope: null,
+81 verbose parsed spec   name: 'hooker',
+81 verbose parsed spec   rawSpec: '~0.2.3',
+81 verbose parsed spec   spec: '>=0.2.3 <0.3.0',
+81 verbose parsed spec   type: 'range' }
+82 verbose addNamed [ 'hooker', '>=0.2.3 <0.3.0' ]
+83 verbose addNamed [ null, '>=0.2.3 <0.3.0' ]
+84 silly lockFile 6eba692a-hooker-0-2-3-0-3-0 hooker@>=0.2.3 <0.3.0
+85 verbose lock hooker@>=0.2.3 <0.3.0 /Users/steve/.npm/6eba692a-hooker-0-2-3-0-3-0.lock
+86 silly addNameRange { name: 'fs-extra', range: '>=0.12.0 <0.13.0', hasData: false }
+87 verbose mapToRegistry name fs-extra
+88 verbose mapToRegistry uri https://registry.npmjs.org/fs-extra
+89 silly addNameRange { name: 'hooker', range: '>=0.2.3 <0.3.0', hasData: false }
+90 verbose mapToRegistry name hooker
+91 verbose mapToRegistry uri https://registry.npmjs.org/hooker
+92 verbose request on initialization, where is /fs-extra
+93 verbose request after pass 1, where is /fs-extra
+94 verbose request url raw /fs-extra
+95 verbose request resolving registry [ 'https://registry.npmjs.org/', './fs-extra' ]
+96 verbose request after pass 2, where is https://registry.npmjs.org/fs-extra
+97 verbose request no auth needed
+98 info attempt registry request try #1 at 09:08:59
+99 verbose etag "30H0WQ0GUUEEC5LSGQT1PTOP"
+100 http request GET https://registry.npmjs.org/fs-extra
+101 verbose request on initialization, where is /hooker
+102 verbose request after pass 1, where is /hooker
+103 verbose request url raw /hooker
+104 verbose request resolving registry [ 'https://registry.npmjs.org/', './hooker' ]
+105 verbose request after pass 2, where is https://registry.npmjs.org/hooker
+106 verbose request no auth needed
+107 info attempt registry request try #1 at 09:08:59
+108 verbose etag "3W6Z69KPD2QT28LPKI5AT8P77"
+109 http request GET https://registry.npmjs.org/hooker
+110 http 304 https://registry.npmjs.org/fs-extra
+111 silly registry.get cb [ 304,
+111 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:00 GMT',
+111 silly registry.get     server: 'Apache',
+111 silly registry.get     via: '1.1 varnish',
+111 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:09:00 GMT',
+111 silly registry.get     'cache-control': 'max-age=60',
+111 silly registry.get     etag: '"30H0WQ0GUUEEC5LSGQT1PTOP"',
+111 silly registry.get     age: '5238',
+111 silly registry.get     'x-served-by': 'cache-fra1229-FRA',
+111 silly registry.get     'x-cache': 'HIT',
+111 silly registry.get     'x-cache-hits': '1',
+111 silly registry.get     'x-timer': 'S1413097740.110894,VS0,VE113',
+111 silly registry.get     vary: 'Accept',
+111 silly registry.get     'content-length': '0',
+111 silly registry.get     'keep-alive': 'timeout=10, max=50',
+111 silly registry.get     connection: 'Keep-Alive' } ]
+112 verbose etag https://registry.npmjs.org/fs-extra from cache
+113 http 304 https://registry.npmjs.org/hooker
+114 silly registry.get cb [ 304,
+114 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:00 GMT',
+114 silly registry.get     server: 'Apache',
+114 silly registry.get     via: '1.1 varnish',
+114 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:08:42 GMT',
+114 silly registry.get     'cache-control': 'max-age=60',
+114 silly registry.get     etag: '"3W6Z69KPD2QT28LPKI5AT8P77"',
+114 silly registry.get     'x-served-by': 'cache-fra1228-FRA',
+114 silly registry.get     'x-cache': 'HIT',
+114 silly registry.get     'x-cache-hits': '2',
+114 silly registry.get     'x-timer': 'S1413097740.190886,VS0,VE0',
+114 silly registry.get     vary: 'Accept',
+114 silly registry.get     'content-length': '0',
+114 silly registry.get     'keep-alive': 'timeout=10, max=50',
+114 silly registry.get     connection: 'Keep-Alive' } ]
+115 verbose etag https://registry.npmjs.org/hooker from cache
+116 silly addNameRange number 2 { name: 'fs-extra', range: '>=0.12.0 <0.13.0', hasData: true }
+117 silly addNameRange versions [ 'fs-extra',
+117 silly addNameRange   [ '0.0.1',
+117 silly addNameRange     '0.0.11',
+117 silly addNameRange     '0.0.3',
+117 silly addNameRange     '0.0.4',
+117 silly addNameRange     '0.1.0',
+117 silly addNameRange     '0.1.1',
+117 silly addNameRange     '0.1.2',
+117 silly addNameRange     '0.1.3',
+117 silly addNameRange     '0.2.0',
+117 silly addNameRange     '0.2.1',
+117 silly addNameRange     '0.3.0',
+117 silly addNameRange     '0.3.1',
+117 silly addNameRange     '0.3.2',
+117 silly addNameRange     '0.4.0',
+117 silly addNameRange     '0.5.0',
+117 silly addNameRange     '0.6.0',
+117 silly addNameRange     '0.6.1',
+117 silly addNameRange     '0.6.2',
+117 silly addNameRange     '0.6.3',
+117 silly addNameRange     '0.6.4',
+117 silly addNameRange     '0.7.0',
+117 silly addNameRange     '0.7.1',
+117 silly addNameRange     '0.8.0',
+117 silly addNameRange     '0.8.1',
+117 silly addNameRange     '0.9.0',
+117 silly addNameRange     '0.9.1',
+117 silly addNameRange     '0.10.0',
+117 silly addNameRange     '0.11.0',
+117 silly addNameRange     '0.11.1',
+117 silly addNameRange     '0.12.0' ] ]
+118 verbose addNamed [ 'fs-extra', '0.12.0' ]
+119 verbose addNamed [ '0.12.0', '0.12.0' ]
+120 silly lockFile c8267045-fs-extra-0-12-0 fs-extra@0.12.0
+121 verbose lock fs-extra@0.12.0 /Users/steve/.npm/c8267045-fs-extra-0-12-0.lock
+122 silly addNameRange number 2 { name: 'hooker', range: '>=0.2.3 <0.3.0', hasData: true }
+123 silly addNameRange versions [ 'hooker', [ '0.2.3' ] ]
+124 verbose addNamed [ 'hooker', '0.2.3' ]
+125 verbose addNamed [ '0.2.3', '0.2.3' ]
+126 silly lockFile 97e6505f-hooker-0-2-3 hooker@0.2.3
+127 verbose lock hooker@0.2.3 /Users/steve/.npm/97e6505f-hooker-0-2-3.lock
+128 silly lockFile c8267045-fs-extra-0-12-0 fs-extra@0.12.0
+129 silly lockFile c8267045-fs-extra-0-12-0 fs-extra@0.12.0
+130 silly lockFile 9376f99a-fs-extra-0-12-0-0-13-0 fs-extra@>=0.12.0 <0.13.0
+131 silly lockFile 9376f99a-fs-extra-0-12-0-0-13-0 fs-extra@>=0.12.0 <0.13.0
+132 silly lockFile 97e6505f-hooker-0-2-3 hooker@0.2.3
+133 silly lockFile 97e6505f-hooker-0-2-3 hooker@0.2.3
+134 silly lockFile 6eba692a-hooker-0-2-3-0-3-0 hooker@>=0.2.3 <0.3.0
+135 silly lockFile 6eba692a-hooker-0-2-3-0-3-0 hooker@>=0.2.3 <0.3.0
+136 silly resolved [ { name: 'fs-extra',
+136 silly resolved     version: '0.12.0',
+136 silly resolved     description: 'fs-extra contains methods that aren\'t included in the vanilla Node.js fs package. Such as mkdir -p, cp -r, and rm -rf.',
+136 silly resolved     homepage: 'https://github.com/jprichardson/node-fs-extra',
+136 silly resolved     repository:
+136 silly resolved      { type: 'git',
+136 silly resolved        url: 'https://github.com/jprichardson/node-fs-extra' },
+136 silly resolved     keywords:
+136 silly resolved      [ 'fs',
+136 silly resolved        'file',
+136 silly resolved        'file system',
+136 silly resolved        'copy',
+136 silly resolved        'directory',
+136 silly resolved        'extra',
+136 silly resolved        'mkdirp',
+136 silly resolved        'mkdir',
+136 silly resolved        'mkdirs',
+136 silly resolved        'recursive',
+136 silly resolved        'json',
+136 silly resolved        'read',
+136 silly resolved        'write',
+136 silly resolved        'extra',
+136 silly resolved        'delete',
+136 silly resolved        'remove',
+136 silly resolved        'touch',
+136 silly resolved        'create',
+136 silly resolved        'text',
+136 silly resolved        'output',
+136 silly resolved        'move' ],
+136 silly resolved     author: { name: 'JP Richardson', email: 'jprichardson@gmail.com' },
+136 silly resolved     licenses: [ [Object] ],
+136 silly resolved     dependencies:
+136 silly resolved      { ncp: '^0.6.0',
+136 silly resolved        mkdirp: '^0.5.0',
+136 silly resolved        jsonfile: '^2.0.0',
+136 silly resolved        rimraf: '^2.2.8' },
+136 silly resolved     devDependencies:
+136 silly resolved      { mocha: '*',
+136 silly resolved        'path-extra': '0.0.x',
+136 silly resolved        testutil: '~0.5.0',
+136 silly resolved        userid: '~0.1.1' },
+136 silly resolved     main: './lib/index',
+136 silly resolved     scripts: { test: 'mocha test' },
+136 silly resolved     bugs: { url: 'https://github.com/jprichardson/node-fs-extra/issues' },
+136 silly resolved     _id: 'fs-extra@0.12.0',
+136 silly resolved     dist:
+136 silly resolved      { shasum: '407cf6e11321e440d66f9486fba1cc9eb4c21868',
+136 silly resolved        tarball: 'http://registry.npmjs.org/fs-extra/-/fs-extra-0.12.0.tgz' },
+136 silly resolved     _from: 'fs-extra@>=0.12.0 <0.13.0',
+136 silly resolved     _npmVersion: '1.4.3',
+136 silly resolved     _npmUser: { name: 'jp', email: 'jprichardson@gmail.com' },
+136 silly resolved     maintainers: [ [Object] ],
+136 silly resolved     directories: {},
+136 silly resolved     _shasum: '407cf6e11321e440d66f9486fba1cc9eb4c21868',
+136 silly resolved     _resolved: 'https://registry.npmjs.org/fs-extra/-/fs-extra-0.12.0.tgz',
+136 silly resolved     readme: 'ERROR: No README data found!' },
+136 silly resolved   { name: 'hooker',
+136 silly resolved     description: 'Monkey-patch (hook) functions for debugging and stuff.',
+136 silly resolved     version: '0.2.3',
+136 silly resolved     homepage: 'http://github.com/cowboy/javascript-hooker',
+136 silly resolved     author: { name: '"Cowboy" Ben Alman', url: 'http://benalman.com/' },
+136 silly resolved     repository:
+136 silly resolved      { type: 'git',
+136 silly resolved        url: 'git://github.com/cowboy/javascript-hooker.git' },
+136 silly resolved     bugs: { url: 'https://github.com/cowboy/javascript-hooker/issues' },
+136 silly resolved     licenses: [ [Object] ],
+136 silly resolved     dependencies: {},
+136 silly resolved     devDependencies: { grunt: '~0.2.1' },
+136 silly resolved     keywords: [ 'patch', 'hook', 'function', 'debug', 'aop' ],
+136 silly resolved     engines: { node: '*' },
+136 silly resolved     main: 'lib/hooker',
+136 silly resolved     scripts: { test: 'grunt test' },
+136 silly resolved     _npmUser: { name: 'cowboy', email: 'cowboy@rj3.net' },
+136 silly resolved     _id: 'hooker@0.2.3',
+136 silly resolved     optionalDependencies: {},
+136 silly resolved     _engineSupported: true,
+136 silly resolved     _npmVersion: '1.1.0-2',
+136 silly resolved     _nodeVersion: 'v0.6.8',
+136 silly resolved     _defaultsLoaded: true,
+136 silly resolved     dist:
+136 silly resolved      { shasum: 'b834f723cc4a242aa65963459df6d984c5d3d959',
+136 silly resolved        tarball: 'http://registry.npmjs.org/hooker/-/hooker-0.2.3.tgz' },
+136 silly resolved     maintainers: [ [Object] ],
+136 silly resolved     directories: {},
+136 silly resolved     _shasum: 'b834f723cc4a242aa65963459df6d984c5d3d959',
+136 silly resolved     _from: 'hooker@>=0.2.3 <0.3.0',
+136 silly resolved     _resolved: 'https://registry.npmjs.org/hooker/-/hooker-0.2.3.tgz',
+136 silly resolved     readme: 'ERROR: No README data found!' } ]
+137 info install fs-extra@0.12.0 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+138 info install hooker@0.2.3 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+139 info installOne fs-extra@0.12.0
+140 info installOne hooker@0.2.3
+141 verbose node_modules/grunt-mocha-test/node_modules/fs-extra unbuild
+142 verbose node_modules/grunt-mocha-test/node_modules/hooker unbuild
+143 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+144 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+145 verbose tar unpack /Users/steve/.npm/fs-extra/0.12.0/package.tgz
+146 silly lockFile da64bbac-mocha-test-node-modules-fs-extra tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+147 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra /Users/steve/.npm/da64bbac-mocha-test-node-modules-fs-extra.lock
+148 silly lockFile f610a9c7--npm-fs-extra-0-12-0-package-tgz tar:///Users/steve/.npm/fs-extra/0.12.0/package.tgz
+149 verbose lock tar:///Users/steve/.npm/fs-extra/0.12.0/package.tgz /Users/steve/.npm/f610a9c7--npm-fs-extra-0-12-0-package-tgz.lock
+150 verbose tar unpack /Users/steve/.npm/hooker/0.2.3/package.tgz
+151 silly lockFile f96966ed-t-mocha-test-node-modules-hooker tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+152 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker /Users/steve/.npm/f96966ed-t-mocha-test-node-modules-hooker.lock
+153 silly lockFile 830819c2-eve-npm-hooker-0-2-3-package-tgz tar:///Users/steve/.npm/hooker/0.2.3/package.tgz
+154 verbose lock tar:///Users/steve/.npm/hooker/0.2.3/package.tgz /Users/steve/.npm/830819c2-eve-npm-hooker-0-2-3-package-tgz.lock
+155 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+156 silly gunzTarPerm modes [ '755', '644' ]
+157 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+158 silly gunzTarPerm modes [ '755', '644' ]
+159 silly gunzTarPerm extractEntry package.json
+160 silly gunzTarPerm extractEntry child.js
+161 silly gunzTarPerm extractEntry .npmignore
+162 silly gunzTarPerm extractEntry README.md
+163 silly gunzTarPerm extractEntry dist/
+164 silly gunzTarPerm extractEntry dist/ba-hooker.js
+165 silly gunzTarPerm extractEntry LICENSE
+166 silly gunzTarPerm extractEntry CHANGELOG.md
+167 silly gunzTarPerm extractEntry dist/ba-hooker.min.js
+168 silly gunzTarPerm extractEntry grunt.js
+169 silly gunzTarPerm extractEntry lib/
+170 silly gunzTarPerm extractEntry lib/copy.js
+171 silly gunzTarPerm extractEntry lib/hooker.js
+172 silly gunzTarPerm extractEntry lib/create.js
+173 silly gunzTarPerm extractEntry lib/ensure.js
+174 silly gunzTarPerm extractEntry LICENSE-MIT
+175 silly gunzTarPerm extractEntry package.json
+176 silly gunzTarPerm extractEntry parent.js
+177 silly gunzTarPerm extractEntry README.md
+178 silly gunzTarPerm extractEntry lib/index.js
+179 silly gunzTarPerm extractEntry lib/json.js
+180 silly gunzTarPerm extractEntry test/
+181 silly gunzTarPerm extractEntry test/hooker_test.js
+182 silly gunzTarPerm extractEntry lib/mkdir.js
+183 silly gunzTarPerm extractEntry lib/move.js
+184 silly gunzTarPerm extractEntry lib/output.js
+185 silly gunzTarPerm extractEntry lib/remove.js
+186 silly lockFile da64bbac-mocha-test-node-modules-fs-extra tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+187 silly lockFile da64bbac-mocha-test-node-modules-fs-extra tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+188 silly lockFile f610a9c7--npm-fs-extra-0-12-0-package-tgz tar:///Users/steve/.npm/fs-extra/0.12.0/package.tgz
+189 silly lockFile f610a9c7--npm-fs-extra-0-12-0-package-tgz tar:///Users/steve/.npm/fs-extra/0.12.0/package.tgz
+190 info preinstall fs-extra@0.12.0
+191 verbose readDependencies using package.json deps
+192 verbose readDependencies using package.json deps
+193 verbose cache add [ 'ncp@^0.6.0', null ]
+194 verbose cache add spec="ncp@^0.6.0" args=["ncp@^0.6.0",null]
+195 verbose parsed spec { raw: 'ncp@^0.6.0',
+195 verbose parsed spec   scope: null,
+195 verbose parsed spec   name: 'ncp',
+195 verbose parsed spec   rawSpec: '^0.6.0',
+195 verbose parsed spec   spec: '>=0.6.0 <0.7.0',
+195 verbose parsed spec   type: 'range' }
+196 verbose cache add [ 'mkdirp@^0.5.0', null ]
+197 verbose cache add spec="mkdirp@^0.5.0" args=["mkdirp@^0.5.0",null]
+198 verbose parsed spec { raw: 'mkdirp@^0.5.0',
+198 verbose parsed spec   scope: null,
+198 verbose parsed spec   name: 'mkdirp',
+198 verbose parsed spec   rawSpec: '^0.5.0',
+198 verbose parsed spec   spec: '>=0.5.0 <0.6.0',
+198 verbose parsed spec   type: 'range' }
+199 verbose parsed spec { raw: 'ncp@^0.6.0',
+199 verbose parsed spec   scope: null,
+199 verbose parsed spec   name: 'ncp',
+199 verbose parsed spec   rawSpec: '^0.6.0',
+199 verbose parsed spec   spec: '>=0.6.0 <0.7.0',
+199 verbose parsed spec   type: 'range' }
+200 verbose addNamed [ 'ncp', '>=0.6.0 <0.7.0' ]
+201 verbose addNamed [ null, '>=0.6.0 <0.7.0' ]
+202 silly lockFile 509061c2-ncp-0-6-0-0-7-0 ncp@>=0.6.0 <0.7.0
+203 verbose lock ncp@>=0.6.0 <0.7.0 /Users/steve/.npm/509061c2-ncp-0-6-0-0-7-0.lock
+204 verbose cache add [ 'jsonfile@^2.0.0', null ]
+205 verbose cache add spec="jsonfile@^2.0.0" args=["jsonfile@^2.0.0",null]
+206 verbose parsed spec { raw: 'jsonfile@^2.0.0',
+206 verbose parsed spec   scope: null,
+206 verbose parsed spec   name: 'jsonfile',
+206 verbose parsed spec   rawSpec: '^2.0.0',
+206 verbose parsed spec   spec: '>=2.0.0 <3.0.0',
+206 verbose parsed spec   type: 'range' }
+207 verbose parsed spec { raw: 'mkdirp@^0.5.0',
+207 verbose parsed spec   scope: null,
+207 verbose parsed spec   name: 'mkdirp',
+207 verbose parsed spec   rawSpec: '^0.5.0',
+207 verbose parsed spec   spec: '>=0.5.0 <0.6.0',
+207 verbose parsed spec   type: 'range' }
+208 verbose addNamed [ 'mkdirp', '>=0.5.0 <0.6.0' ]
+209 verbose addNamed [ null, '>=0.5.0 <0.6.0' ]
+210 silly lockFile 7c5de448-mkdirp-0-5-0-0-6-0 mkdirp@>=0.5.0 <0.6.0
+211 verbose lock mkdirp@>=0.5.0 <0.6.0 /Users/steve/.npm/7c5de448-mkdirp-0-5-0-0-6-0.lock
+212 silly lockFile f96966ed-t-mocha-test-node-modules-hooker tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+213 silly lockFile f96966ed-t-mocha-test-node-modules-hooker tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+214 verbose cache add [ 'rimraf@^2.2.8', null ]
+215 verbose cache add spec="rimraf@^2.2.8" args=["rimraf@^2.2.8",null]
+216 verbose parsed spec { raw: 'rimraf@^2.2.8',
+216 verbose parsed spec   scope: null,
+216 verbose parsed spec   name: 'rimraf',
+216 verbose parsed spec   rawSpec: '^2.2.8',
+216 verbose parsed spec   spec: '>=2.2.8 <3.0.0',
+216 verbose parsed spec   type: 'range' }
+217 verbose parsed spec { raw: 'jsonfile@^2.0.0',
+217 verbose parsed spec   scope: null,
+217 verbose parsed spec   name: 'jsonfile',
+217 verbose parsed spec   rawSpec: '^2.0.0',
+217 verbose parsed spec   spec: '>=2.0.0 <3.0.0',
+217 verbose parsed spec   type: 'range' }
+218 verbose addNamed [ 'jsonfile', '>=2.0.0 <3.0.0' ]
+219 verbose addNamed [ null, '>=2.0.0 <3.0.0' ]
+220 silly lockFile 739519b8-jsonfile-2-0-0-3-0-0 jsonfile@>=2.0.0 <3.0.0
+221 verbose lock jsonfile@>=2.0.0 <3.0.0 /Users/steve/.npm/739519b8-jsonfile-2-0-0-3-0-0.lock
+222 silly lockFile 830819c2-eve-npm-hooker-0-2-3-package-tgz tar:///Users/steve/.npm/hooker/0.2.3/package.tgz
+223 silly lockFile 830819c2-eve-npm-hooker-0-2-3-package-tgz tar:///Users/steve/.npm/hooker/0.2.3/package.tgz
+224 silly addNameRange { name: 'ncp', range: '>=0.6.0 <0.7.0', hasData: false }
+225 verbose mapToRegistry name ncp
+226 verbose mapToRegistry uri https://registry.npmjs.org/ncp
+227 verbose parsed spec { raw: 'rimraf@^2.2.8',
+227 verbose parsed spec   scope: null,
+227 verbose parsed spec   name: 'rimraf',
+227 verbose parsed spec   rawSpec: '^2.2.8',
+227 verbose parsed spec   spec: '>=2.2.8 <3.0.0',
+227 verbose parsed spec   type: 'range' }
+228 verbose addNamed [ 'rimraf', '>=2.2.8 <3.0.0' ]
+229 verbose addNamed [ null, '>=2.2.8 <3.0.0' ]
+230 silly lockFile 31c59b4d-rimraf-2-2-8-3-0-0 rimraf@>=2.2.8 <3.0.0
+231 verbose lock rimraf@>=2.2.8 <3.0.0 /Users/steve/.npm/31c59b4d-rimraf-2-2-8-3-0-0.lock
+232 silly addNameRange { name: 'mkdirp', range: '>=0.5.0 <0.6.0', hasData: false }
+233 verbose mapToRegistry name mkdirp
+234 verbose mapToRegistry uri https://registry.npmjs.org/mkdirp
+235 silly addNameRange { name: 'jsonfile', range: '>=2.0.0 <3.0.0', hasData: false }
+236 verbose mapToRegistry name jsonfile
+237 verbose mapToRegistry uri https://registry.npmjs.org/jsonfile
+238 silly addNameRange { name: 'rimraf', range: '>=2.2.8 <3.0.0', hasData: false }
+239 verbose mapToRegistry name rimraf
+240 verbose mapToRegistry uri https://registry.npmjs.org/rimraf
+241 info preinstall hooker@0.2.3
+242 verbose request on initialization, where is /ncp
+243 verbose request after pass 1, where is /ncp
+244 verbose request url raw /ncp
+245 verbose request resolving registry [ 'https://registry.npmjs.org/', './ncp' ]
+246 verbose request after pass 2, where is https://registry.npmjs.org/ncp
+247 verbose request no auth needed
+248 info attempt registry request try #1 at 09:09:00
+249 verbose etag "36GM6BKF4GFZD4FTDL0N76MXC"
+250 http request GET https://registry.npmjs.org/ncp
+251 verbose request on initialization, where is /mkdirp
+252 verbose request after pass 1, where is /mkdirp
+253 verbose request url raw /mkdirp
+254 verbose request resolving registry [ 'https://registry.npmjs.org/', './mkdirp' ]
+255 verbose request after pass 2, where is https://registry.npmjs.org/mkdirp
+256 verbose request no auth needed
+257 info attempt registry request try #1 at 09:09:00
+258 verbose etag "EX7OC1GRA0A9TYJRE9RXASM1I"
+259 http request GET https://registry.npmjs.org/mkdirp
+260 verbose request on initialization, where is /jsonfile
+261 verbose request after pass 1, where is /jsonfile
+262 verbose request url raw /jsonfile
+263 verbose request resolving registry [ 'https://registry.npmjs.org/', './jsonfile' ]
+264 verbose request after pass 2, where is https://registry.npmjs.org/jsonfile
+265 verbose request no auth needed
+266 info attempt registry request try #1 at 09:09:00
+267 verbose etag "CKMGE5JDYKE1EFIHI3UAXI52B"
+268 http request GET https://registry.npmjs.org/jsonfile
+269 verbose readDependencies using package.json deps
+270 verbose request on initialization, where is /rimraf
+271 verbose request after pass 1, where is /rimraf
+272 verbose request url raw /rimraf
+273 verbose request resolving registry [ 'https://registry.npmjs.org/', './rimraf' ]
+274 verbose request after pass 2, where is https://registry.npmjs.org/rimraf
+275 verbose request no auth needed
+276 info attempt registry request try #1 at 09:09:00
+277 verbose etag "CLGT3399536M802ZVS65IL4LB"
+278 http request GET https://registry.npmjs.org/rimraf
+279 verbose readDependencies using package.json deps
+280 silly resolved []
+281 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+282 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/hooker
+283 verbose linkStuff [ false,
+283 verbose linkStuff   false,
+283 verbose linkStuff   false,
+283 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules' ]
+284 info linkStuff hooker@0.2.3
+285 verbose linkBins hooker@0.2.3
+286 verbose linkMans hooker@0.2.3
+287 verbose rebuildBundles hooker@0.2.3
+288 info install hooker@0.2.3
+289 info postinstall hooker@0.2.3
+290 http 304 https://registry.npmjs.org/ncp
+291 silly registry.get cb [ 304,
+291 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:01 GMT',
+291 silly registry.get     server: 'Apache',
+291 silly registry.get     via: '1.1 varnish',
+291 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:09:01 GMT',
+291 silly registry.get     'cache-control': 'max-age=60',
+291 silly registry.get     etag: '"36GM6BKF4GFZD4FTDL0N76MXC"',
+291 silly registry.get     age: '39',
+291 silly registry.get     'x-served-by': 'cache-fra1247-FRA',
+291 silly registry.get     'x-cache': 'HIT',
+291 silly registry.get     'x-cache-hits': '1',
+291 silly registry.get     'x-timer': 'S1413097741.020650,VS0,VE0',
+291 silly registry.get     vary: 'Accept',
+291 silly registry.get     'content-length': '0',
+291 silly registry.get     'keep-alive': 'timeout=10, max=50',
+291 silly registry.get     connection: 'Keep-Alive' } ]
+292 verbose etag https://registry.npmjs.org/ncp from cache
+293 silly addNameRange number 2 { name: 'ncp', range: '>=0.6.0 <0.7.0', hasData: true }
+294 silly addNameRange versions [ 'ncp',
+294 silly addNameRange   [ '0.0.0',
+294 silly addNameRange     '0.0.1',
+294 silly addNameRange     '0.0.2',
+294 silly addNameRange     '0.1.0',
+294 silly addNameRange     '0.1.1',
+294 silly addNameRange     '0.1.2',
+294 silly addNameRange     '0.2.0',
+294 silly addNameRange     '0.2.1',
+294 silly addNameRange     '0.2.2',
+294 silly addNameRange     '0.2.3',
+294 silly addNameRange     '0.2.4',
+294 silly addNameRange     '0.2.5',
+294 silly addNameRange     '0.2.6',
+294 silly addNameRange     '0.3.0',
+294 silly addNameRange     '0.4.0',
+294 silly addNameRange     '0.2.7',
+294 silly addNameRange     '0.4.1',
+294 silly addNameRange     '0.4.2',
+294 silly addNameRange     '0.5.0',
+294 silly addNameRange     '0.5.1',
+294 silly addNameRange     '0.6.0',
+294 silly addNameRange     '1.0.0',
+294 silly addNameRange     '1.0.1' ] ]
+295 verbose addNamed [ 'ncp', '0.6.0' ]
+296 verbose addNamed [ '0.6.0', '0.6.0' ]
+297 silly lockFile 8a9ef8b5-ncp-0-6-0 ncp@0.6.0
+298 verbose lock ncp@0.6.0 /Users/steve/.npm/8a9ef8b5-ncp-0-6-0.lock
+299 silly lockFile 8a9ef8b5-ncp-0-6-0 ncp@0.6.0
+300 silly lockFile 8a9ef8b5-ncp-0-6-0 ncp@0.6.0
+301 silly lockFile 509061c2-ncp-0-6-0-0-7-0 ncp@>=0.6.0 <0.7.0
+302 silly lockFile 509061c2-ncp-0-6-0-0-7-0 ncp@>=0.6.0 <0.7.0
+303 http 304 https://registry.npmjs.org/mkdirp
+304 silly registry.get cb [ 304,
+304 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:01 GMT',
+304 silly registry.get     server: 'Apache',
+304 silly registry.get     via: '1.1 varnish',
+304 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:09:01 GMT',
+304 silly registry.get     'cache-control': 'max-age=60',
+304 silly registry.get     etag: '"EX7OC1GRA0A9TYJRE9RXASM1I"',
+304 silly registry.get     age: '2335',
+304 silly registry.get     'x-served-by': 'cache-fra1233-FRA',
+304 silly registry.get     'x-cache': 'HIT',
+304 silly registry.get     'x-cache-hits': '1',
+304 silly registry.get     'x-timer': 'S1413097741.030005,VS0,VE0',
+304 silly registry.get     vary: 'Accept',
+304 silly registry.get     'content-length': '0',
+304 silly registry.get     'keep-alive': 'timeout=10, max=50',
+304 silly registry.get     connection: 'Keep-Alive' } ]
+305 verbose etag https://registry.npmjs.org/mkdirp from cache
+306 silly addNameRange number 2 { name: 'mkdirp', range: '>=0.5.0 <0.6.0', hasData: true }
+307 silly addNameRange versions [ 'mkdirp',
+307 silly addNameRange   [ '0.0.1',
+307 silly addNameRange     '0.0.2',
+307 silly addNameRange     '0.0.3',
+307 silly addNameRange     '0.0.4',
+307 silly addNameRange     '0.0.5',
+307 silly addNameRange     '0.0.6',
+307 silly addNameRange     '0.0.7',
+307 silly addNameRange     '0.1.0',
+307 silly addNameRange     '0.2.0',
+307 silly addNameRange     '0.2.1',
+307 silly addNameRange     '0.2.2',
+307 silly addNameRange     '0.3.0',
+307 silly addNameRange     '0.3.1',
+307 silly addNameRange     '0.3.2',
+307 silly addNameRange     '0.3.3',
+307 silly addNameRange     '0.3.4',
+307 silly addNameRange     '0.3.5',
+307 silly addNameRange     '0.4.0',
+307 silly addNameRange     '0.4.1',
+307 silly addNameRange     '0.4.2',
+307 silly addNameRange     '0.5.0' ] ]
+308 verbose addNamed [ 'mkdirp', '0.5.0' ]
+309 verbose addNamed [ '0.5.0', '0.5.0' ]
+310 silly lockFile bf9ae38d-mkdirp-0-5-0 mkdirp@0.5.0
+311 verbose lock mkdirp@0.5.0 /Users/steve/.npm/bf9ae38d-mkdirp-0-5-0.lock
+312 silly lockFile bf9ae38d-mkdirp-0-5-0 mkdirp@0.5.0
+313 silly lockFile bf9ae38d-mkdirp-0-5-0 mkdirp@0.5.0
+314 silly lockFile 7c5de448-mkdirp-0-5-0-0-6-0 mkdirp@>=0.5.0 <0.6.0
+315 silly lockFile 7c5de448-mkdirp-0-5-0-0-6-0 mkdirp@>=0.5.0 <0.6.0
+316 http 304 https://registry.npmjs.org/jsonfile
+317 silly registry.get cb [ 304,
+317 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:01 GMT',
+317 silly registry.get     server: 'Apache',
+317 silly registry.get     via: '1.1 varnish',
+317 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:09:01 GMT',
+317 silly registry.get     'cache-control': 'max-age=60',
+317 silly registry.get     etag: '"CKMGE5JDYKE1EFIHI3UAXI52B"',
+317 silly registry.get     age: '1188',
+317 silly registry.get     'x-served-by': 'cache-fra1243-FRA',
+317 silly registry.get     'x-cache': 'HIT',
+317 silly registry.get     'x-cache-hits': '1',
+317 silly registry.get     'x-timer': 'S1413097741.034411,VS0,VE109',
+317 silly registry.get     vary: 'Accept',
+317 silly registry.get     'content-length': '0',
+317 silly registry.get     'keep-alive': 'timeout=10, max=50',
+317 silly registry.get     connection: 'Keep-Alive' } ]
+318 verbose etag https://registry.npmjs.org/jsonfile from cache
+319 silly addNameRange number 2 { name: 'jsonfile', range: '>=2.0.0 <3.0.0', hasData: true }
+320 silly addNameRange versions [ 'jsonfile',
+320 silly addNameRange   [ '0.0.1', '1.0.0', '1.0.1', '1.1.0', '1.1.1', '1.2.0', '2.0.0' ] ]
+321 verbose addNamed [ 'jsonfile', '2.0.0' ]
+322 verbose addNamed [ '2.0.0', '2.0.0' ]
+323 silly lockFile 53973583-jsonfile-2-0-0 jsonfile@2.0.0
+324 verbose lock jsonfile@2.0.0 /Users/steve/.npm/53973583-jsonfile-2-0-0.lock
+325 silly lockFile 53973583-jsonfile-2-0-0 jsonfile@2.0.0
+326 silly lockFile 53973583-jsonfile-2-0-0 jsonfile@2.0.0
+327 silly lockFile 739519b8-jsonfile-2-0-0-3-0-0 jsonfile@>=2.0.0 <3.0.0
+328 silly lockFile 739519b8-jsonfile-2-0-0-3-0-0 jsonfile@>=2.0.0 <3.0.0
+329 http 304 https://registry.npmjs.org/rimraf
+330 silly registry.get cb [ 304,
+330 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:01 GMT',
+330 silly registry.get     server: 'Apache',
+330 silly registry.get     via: '1.1 varnish',
+330 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:09:01 GMT',
+330 silly registry.get     'cache-control': 'max-age=60',
+330 silly registry.get     etag: '"CLGT3399536M802ZVS65IL4LB"',
+330 silly registry.get     age: '3682',
+330 silly registry.get     'x-served-by': 'cache-fra1243-FRA',
+330 silly registry.get     'x-cache': 'HIT',
+330 silly registry.get     'x-cache-hits': '1',
+330 silly registry.get     'x-timer': 'S1413097741.148470,VS0,VE0',
+330 silly registry.get     vary: 'Accept',
+330 silly registry.get     'content-length': '0',
+330 silly registry.get     'keep-alive': 'timeout=10, max=50',
+330 silly registry.get     connection: 'Keep-Alive' } ]
+331 verbose etag https://registry.npmjs.org/rimraf from cache
+332 silly addNameRange number 2 { name: 'rimraf', range: '>=2.2.8 <3.0.0', hasData: true }
+333 silly addNameRange versions [ 'rimraf',
+333 silly addNameRange   [ '1.0.0',
+333 silly addNameRange     '1.0.1',
+333 silly addNameRange     '1.0.2',
+333 silly addNameRange     '1.0.4',
+333 silly addNameRange     '1.0.5',
+333 silly addNameRange     '1.0.6',
+333 silly addNameRange     '1.0.7',
+333 silly addNameRange     '1.0.8',
+333 silly addNameRange     '1.0.9',
+333 silly addNameRange     '2.0.0',
+333 silly addNameRange     '2.0.1',
+333 silly addNameRange     '2.0.2',
+333 silly addNameRange     '2.0.3',
+333 silly addNameRange     '2.1.0',
+333 silly addNameRange     '2.1.1',
+333 silly addNameRange     '2.1.2',
+333 silly addNameRange     '2.1.3',
+333 silly addNameRange     '2.1.4',
+333 silly addNameRange     '2.2.0',
+333 silly addNameRange     '2.2.1',
+333 silly addNameRange     '2.2.2',
+333 silly addNameRange     '2.2.3',
+333 silly addNameRange     '2.2.4',
+333 silly addNameRange     '2.2.5',
+333 silly addNameRange     '2.2.6',
+333 silly addNameRange     '2.2.8' ] ]
+334 verbose addNamed [ 'rimraf', '2.2.8' ]
+335 verbose addNamed [ '2.2.8', '2.2.8' ]
+336 silly lockFile b87241a4-rimraf-2-2-8 rimraf@2.2.8
+337 verbose lock rimraf@2.2.8 /Users/steve/.npm/b87241a4-rimraf-2-2-8.lock
+338 silly lockFile b87241a4-rimraf-2-2-8 rimraf@2.2.8
+339 silly lockFile b87241a4-rimraf-2-2-8 rimraf@2.2.8
+340 silly lockFile 31c59b4d-rimraf-2-2-8-3-0-0 rimraf@>=2.2.8 <3.0.0
+341 silly lockFile 31c59b4d-rimraf-2-2-8-3-0-0 rimraf@>=2.2.8 <3.0.0
+342 silly resolved [ { name: 'ncp',
+342 silly resolved     version: '0.6.0',
+342 silly resolved     author: { name: 'AvianFlu', email: 'charlie@charlieistheman.com' },
+342 silly resolved     description: 'Asynchronous recursive file copy utility.',
+342 silly resolved     bin: { ncp: './bin/ncp' },
+342 silly resolved     devDependencies: { mocha: '1.15.x', rimraf: '1.0.x', 'read-dir-files': '0.0.x' },
+342 silly resolved     main: './lib/ncp.js',
+342 silly resolved     repository: { type: 'git', url: 'https://github.com/AvianFlu/ncp.git' },
+342 silly resolved     keywords: [ 'cli', 'copy' ],
+342 silly resolved     license: 'MIT',
+342 silly resolved     engine: { node: '>=0.6' },
+342 silly resolved     scripts: { test: 'mocha -R spec' },
+342 silly resolved     bugs: { url: 'https://github.com/AvianFlu/ncp/issues' },
+342 silly resolved     homepage: 'https://github.com/AvianFlu/ncp',
+342 silly resolved     _id: 'ncp@0.6.0',
+342 silly resolved     dist:
+342 silly resolved      { shasum: 'df8ce021e262be21b52feb3d3e5cfaab12491f0d',
+342 silly resolved        tarball: 'http://registry.npmjs.org/ncp/-/ncp-0.6.0.tgz' },
+342 silly resolved     _from: 'ncp@>=0.6.0 <0.7.0',
+342 silly resolved     _npmVersion: '1.4.3',
+342 silly resolved     _npmUser: { name: 'avianflu', email: 'charlie@charlieistheman.com' },
+342 silly resolved     maintainers: [ [Object], [Object] ],
+342 silly resolved     directories: {},
+342 silly resolved     _shasum: 'df8ce021e262be21b52feb3d3e5cfaab12491f0d',
+342 silly resolved     _resolved: 'https://registry.npmjs.org/ncp/-/ncp-0.6.0.tgz',
+342 silly resolved     readme: 'ERROR: No README data found!' },
+342 silly resolved   { name: 'mkdirp',
+342 silly resolved     description: 'Recursively mkdir, like `mkdir -p`',
+342 silly resolved     version: '0.5.0',
+342 silly resolved     author:
+342 silly resolved      { name: 'James Halliday',
+342 silly resolved        email: 'mail@substack.net',
+342 silly resolved        url: 'http://substack.net' },
+342 silly resolved     main: './index',
+342 silly resolved     keywords: [ 'mkdir', 'directory' ],
+342 silly resolved     repository:
+342 silly resolved      { type: 'git',
+342 silly resolved        url: 'https://github.com/substack/node-mkdirp.git' },
+342 silly resolved     scripts: { test: 'tap test/*.js' },
+342 silly resolved     dependencies: { minimist: '0.0.8' },
+342 silly resolved     devDependencies: { tap: '~0.4.0', 'mock-fs': '~2.2.0' },
+342 silly resolved     bin: { mkdirp: 'bin/cmd.js' },
+342 silly resolved     license: 'MIT',
+342 silly resolved     bugs: { url: 'https://github.com/substack/node-mkdirp/issues' },
+342 silly resolved     homepage: 'https://github.com/substack/node-mkdirp',
+342 silly resolved     _id: 'mkdirp@0.5.0',
+342 silly resolved     dist:
+342 silly resolved      { shasum: '1d73076a6df986cd9344e15e71fcc05a4c9abf12',
+342 silly resolved        tarball: 'http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.0.tgz' },
+342 silly resolved     _from: 'mkdirp@>=0.5.0 <0.6.0',
+342 silly resolved     _npmVersion: '1.4.3',
+342 silly resolved     _npmUser: { name: 'substack', email: 'mail@substack.net' },
+342 silly resolved     maintainers: [ [Object] ],
+342 silly resolved     directories: {},
+342 silly resolved     _shasum: '1d73076a6df986cd9344e15e71fcc05a4c9abf12',
+342 silly resolved     _resolved: 'https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.0.tgz',
+342 silly resolved     readme: 'ERROR: No README data found!' },
+342 silly resolved   { name: 'jsonfile',
+342 silly resolved     version: '2.0.0',
+342 silly resolved     description: 'Easily read/write JSON files.',
+342 silly resolved     repository:
+342 silly resolved      { type: 'git',
+342 silly resolved        url: 'git@github.com:jprichardson/node-jsonfile.git' },
+342 silly resolved     keywords: [ 'read', 'write', 'file', 'json' ],
+342 silly resolved     author: { name: 'JP Richardson', email: 'jprichardson@gmail.com' },
+342 silly resolved     licenses: [ [Object] ],
+342 silly resolved     dependencies: {},
+342 silly resolved     devDependencies: { testutil: '^0.7.0', mocha: '*', terst: '^0.2.0' },
+342 silly resolved     main: './lib/jsonfile.js',
+342 silly resolved     scripts: { test: 'mocha test' },
+342 silly resolved     bugs: { url: 'https://github.com/jprichardson/node-jsonfile/issues' },
+342 silly resolved     homepage: 'https://github.com/jprichardson/node-jsonfile',
+342 silly resolved     _id: 'jsonfile@2.0.0',
+342 silly resolved     dist:
+342 silly resolved      { shasum: 'c3944f350bd3c078b392e0aa1633b44662fcf06b',
+342 silly resolved        tarball: 'http://registry.npmjs.org/jsonfile/-/jsonfile-2.0.0.tgz' },
+342 silly resolved     _from: 'jsonfile@>=2.0.0 <3.0.0',
+342 silly resolved     _npmVersion: '1.4.3',
+342 silly resolved     _npmUser: { name: 'jp', email: 'jprichardson@gmail.com' },
+342 silly resolved     maintainers: [ [Object] ],
+342 silly resolved     directories: {},
+342 silly resolved     _shasum: 'c3944f350bd3c078b392e0aa1633b44662fcf06b',
+342 silly resolved     _resolved: 'https://registry.npmjs.org/jsonfile/-/jsonfile-2.0.0.tgz',
+342 silly resolved     readme: 'ERROR: No README data found!' },
+342 silly resolved   { name: 'rimraf',
+342 silly resolved     version: '2.2.8',
+342 silly resolved     main: 'rimraf.js',
+342 silly resolved     description: 'A deep deletion module for node (like `rm -rf`)',
+342 silly resolved     author:
+342 silly resolved      { name: 'Isaac Z. Schlueter',
+342 silly resolved        email: 'i@izs.me',
+342 silly resolved        url: 'http://blog.izs.me/' },
+342 silly resolved     license:
+342 silly resolved      { type: 'MIT',
+342 silly resolved        url: 'https://github.com/isaacs/rimraf/raw/master/LICENSE' },
+342 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/rimraf.git' },
+342 silly resolved     scripts: { test: 'cd test && bash run.sh' },
+342 silly resolved     bin: { rimraf: './bin.js' },
+342 silly resolved     contributors: [ [Object], [Object], [Object], [Object], [Object] ],
+342 silly resolved     bugs: { url: 'https://github.com/isaacs/rimraf/issues' },
+342 silly resolved     homepage: 'https://github.com/isaacs/rimraf',
+342 silly resolved     _id: 'rimraf@2.2.8',
+342 silly resolved     _shasum: 'e439be2aaee327321952730f99a8929e4fc50582',
+342 silly resolved     _from: 'rimraf@>=2.2.8 <3.0.0',
+342 silly resolved     _npmVersion: '1.4.10',
+342 silly resolved     _npmUser: { name: 'isaacs', email: 'i@izs.me' },
+342 silly resolved     maintainers: [ [Object] ],
+342 silly resolved     dist:
+342 silly resolved      { shasum: 'e439be2aaee327321952730f99a8929e4fc50582',
+342 silly resolved        tarball: 'http://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz' },
+342 silly resolved     directories: {},
+342 silly resolved     _resolved: 'https://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz',
+342 silly resolved     readme: 'ERROR: No README data found!' } ]
+343 info install ncp@0.6.0 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+344 info install mkdirp@0.5.0 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+345 info install jsonfile@2.0.0 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+346 info install rimraf@2.2.8 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+347 info installOne ncp@0.6.0
+348 info installOne mkdirp@0.5.0
+349 info installOne jsonfile@2.0.0
+350 info installOne rimraf@2.2.8
+351 verbose node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp unbuild
+352 verbose node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp unbuild
+353 verbose node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile unbuild
+354 verbose node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf unbuild
+355 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+356 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+357 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+358 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+359 verbose tar unpack /Users/steve/.npm/ncp/0.6.0/package.tgz
+360 silly lockFile 2dcc5930-odules-fs-extra-node-modules-ncp tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+361 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp /Users/steve/.npm/2dcc5930-odules-fs-extra-node-modules-ncp.lock
+362 silly lockFile de2e36ae--steve-npm-ncp-0-6-0-package-tgz tar:///Users/steve/.npm/ncp/0.6.0/package.tgz
+363 verbose lock tar:///Users/steve/.npm/ncp/0.6.0/package.tgz /Users/steve/.npm/de2e36ae--steve-npm-ncp-0-6-0-package-tgz.lock
+364 verbose tar unpack /Users/steve/.npm/mkdirp/0.5.0/package.tgz
+365 silly lockFile e31fcc5e-les-fs-extra-node-modules-mkdirp tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+366 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp /Users/steve/.npm/e31fcc5e-les-fs-extra-node-modules-mkdirp.lock
+367 silly lockFile 5638183e-eve-npm-mkdirp-0-5-0-package-tgz tar:///Users/steve/.npm/mkdirp/0.5.0/package.tgz
+368 verbose lock tar:///Users/steve/.npm/mkdirp/0.5.0/package.tgz /Users/steve/.npm/5638183e-eve-npm-mkdirp-0-5-0-package-tgz.lock
+369 verbose tar unpack /Users/steve/.npm/jsonfile/2.0.0/package.tgz
+370 silly lockFile 45670331-s-fs-extra-node-modules-jsonfile tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+371 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile /Users/steve/.npm/45670331-s-fs-extra-node-modules-jsonfile.lock
+372 silly lockFile c5a80ee0-e-npm-jsonfile-2-0-0-package-tgz tar:///Users/steve/.npm/jsonfile/2.0.0/package.tgz
+373 verbose lock tar:///Users/steve/.npm/jsonfile/2.0.0/package.tgz /Users/steve/.npm/c5a80ee0-e-npm-jsonfile-2-0-0-package-tgz.lock
+374 verbose tar unpack /Users/steve/.npm/rimraf/2.2.8/package.tgz
+375 silly lockFile d567235b-les-fs-extra-node-modules-rimraf tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+376 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf /Users/steve/.npm/d567235b-les-fs-extra-node-modules-rimraf.lock
+377 silly lockFile d8d6138b-eve-npm-rimraf-2-2-8-package-tgz tar:///Users/steve/.npm/rimraf/2.2.8/package.tgz
+378 verbose lock tar:///Users/steve/.npm/rimraf/2.2.8/package.tgz /Users/steve/.npm/d8d6138b-eve-npm-rimraf-2-2-8-package-tgz.lock
+379 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+380 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+381 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+382 silly gunzTarPerm modes [ '755', '644' ]
+383 silly gunzTarPerm modes [ '755', '644' ]
+384 silly gunzTarPerm modes [ '755', '644' ]
+385 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+386 silly gunzTarPerm modes [ '755', '644' ]
+387 silly gunzTarPerm extractEntry package.json
+388 silly gunzTarPerm extractEntry package.json
+389 silly gunzTarPerm extractEntry package.json
+390 silly gunzTarPerm extractEntry package.json
+391 silly gunzTarPerm extractEntry .npmignore
+392 silly gunzTarPerm extractEntry README.md
+393 silly gunzTarPerm extractEntry .npmignore
+394 silly gunzTarPerm extractEntry LICENSE
+395 silly gunzTarPerm extractEntry .npmignore
+396 silly gunzTarPerm extractEntry README.md
+397 silly gunzTarPerm extractEntry README.md
+398 silly gunzTarPerm extractEntry LICENSE
+399 silly gunzTarPerm extractEntry .travis.yml
+400 silly gunzTarPerm extractEntry LICENSE.md
+401 silly gunzTarPerm extractEntry index.js
+402 silly gunzTarPerm extractEntry .travis.yml
+403 silly gunzTarPerm extractEntry bin.js
+404 silly gunzTarPerm extractEntry rimraf.js
+405 silly gunzTarPerm extractEntry LICENSE
+406 silly gunzTarPerm extractEntry CHANGELOG.md
+407 silly gunzTarPerm extractEntry lib/jsonfile.js
+408 silly gunzTarPerm extractEntry bin/cmd.js
+409 silly gunzTarPerm extractEntry bin/usage.txt
+410 silly gunzTarPerm extractEntry bin/ncp
+411 silly gunzTarPerm extractEntry lib/ncp.js
+412 silly gunzTarPerm extractEntry AUTHORS
+413 silly gunzTarPerm extractEntry test/test-async.js
+414 silly gunzTarPerm extractEntry examples/pow.js
+415 silly gunzTarPerm extractEntry readme.markdown
+416 silly gunzTarPerm extractEntry test/test-sync.js
+417 silly gunzTarPerm extractEntry test/run.sh
+418 silly gunzTarPerm extractEntry test/ncp.js
+419 silly gunzTarPerm extractEntry test/setup.sh
+420 silly gunzTarPerm extractEntry test/regular-fixtures/src/a
+421 silly gunzTarPerm extractEntry test/regular-fixtures/src/b
+422 silly gunzTarPerm extractEntry test/chmod.js
+423 silly gunzTarPerm extractEntry test/opts_fs_sync.js
+424 silly gunzTarPerm extractEntry test/perm.js
+425 silly gunzTarPerm extractEntry test/perm_sync.js
+426 silly gunzTarPerm extractEntry test/opts_fs.js
+427 silly gunzTarPerm extractEntry test/rel.js
+428 silly gunzTarPerm extractEntry test/return.js
+429 silly gunzTarPerm extractEntry test/return_sync.js
+430 silly gunzTarPerm extractEntry test/root.js
+431 silly gunzTarPerm extractEntry test/sync.js
+432 silly gunzTarPerm extractEntry test/mkdirp.js
+433 silly gunzTarPerm extractEntry test/umask.js
+434 silly gunzTarPerm extractEntry test/clobber.js
+435 silly gunzTarPerm extractEntry test/umask_sync.js
+436 silly gunzTarPerm extractEntry test/race.js
+437 silly gunzTarPerm extractEntry test/regular-fixtures/src/c
+438 silly gunzTarPerm extractEntry test/regular-fixtures/src/d
+439 silly gunzTarPerm extractEntry test/regular-fixtures/src/e
+440 silly gunzTarPerm extractEntry test/regular-fixtures/src/f
+441 silly lockFile 45670331-s-fs-extra-node-modules-jsonfile tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+442 silly lockFile 45670331-s-fs-extra-node-modules-jsonfile tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+443 silly lockFile c5a80ee0-e-npm-jsonfile-2-0-0-package-tgz tar:///Users/steve/.npm/jsonfile/2.0.0/package.tgz
+444 silly lockFile c5a80ee0-e-npm-jsonfile-2-0-0-package-tgz tar:///Users/steve/.npm/jsonfile/2.0.0/package.tgz
+445 info preinstall jsonfile@2.0.0
+446 verbose readDependencies using package.json deps
+447 verbose readDependencies using package.json deps
+448 silly resolved []
+449 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+450 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/jsonfile
+451 verbose linkStuff [ false,
+451 verbose linkStuff   false,
+451 verbose linkStuff   false,
+451 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules' ]
+452 info linkStuff jsonfile@2.0.0
+453 verbose linkBins jsonfile@2.0.0
+454 verbose linkMans jsonfile@2.0.0
+455 verbose rebuildBundles jsonfile@2.0.0
+456 info install jsonfile@2.0.0
+457 info postinstall jsonfile@2.0.0
+458 silly gunzTarPerm extractEntry test/regular-fixtures/src/sub/a
+459 silly gunzTarPerm extractEntry test/regular-fixtures/src/sub/b
+460 silly gunzTarPerm extractEntry test/symlink-fixtures/src/dir/bar
+461 silly gunzTarPerm extractEntry test/symlink-fixtures/src/foo
+462 silly lockFile d567235b-les-fs-extra-node-modules-rimraf tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+463 silly lockFile d567235b-les-fs-extra-node-modules-rimraf tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+464 silly lockFile d8d6138b-eve-npm-rimraf-2-2-8-package-tgz tar:///Users/steve/.npm/rimraf/2.2.8/package.tgz
+465 silly lockFile d8d6138b-eve-npm-rimraf-2-2-8-package-tgz tar:///Users/steve/.npm/rimraf/2.2.8/package.tgz
+466 info preinstall rimraf@2.2.8
+467 verbose readDependencies using package.json deps
+468 verbose readDependencies using package.json deps
+469 silly resolved []
+470 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+471 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/rimraf
+472 verbose linkStuff [ false,
+472 verbose linkStuff   false,
+472 verbose linkStuff   false,
+472 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules' ]
+473 info linkStuff rimraf@2.2.8
+474 verbose linkBins rimraf@2.2.8
+475 verbose link bins [ { rimraf: './bin.js' },
+475 verbose link bins   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/.bin',
+475 verbose link bins   false ]
+476 verbose linkMans rimraf@2.2.8
+477 verbose rebuildBundles rimraf@2.2.8
+478 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/.bin/rimraf
+479 info install rimraf@2.2.8
+480 info postinstall rimraf@2.2.8
+481 silly lockFile 2dcc5930-odules-fs-extra-node-modules-ncp tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+482 silly lockFile 2dcc5930-odules-fs-extra-node-modules-ncp tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+483 silly lockFile de2e36ae--steve-npm-ncp-0-6-0-package-tgz tar:///Users/steve/.npm/ncp/0.6.0/package.tgz
+484 silly lockFile de2e36ae--steve-npm-ncp-0-6-0-package-tgz tar:///Users/steve/.npm/ncp/0.6.0/package.tgz
+485 info preinstall ncp@0.6.0
+486 verbose readDependencies using package.json deps
+487 verbose readDependencies using package.json deps
+488 silly resolved []
+489 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+490 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/ncp
+491 verbose linkStuff [ false,
+491 verbose linkStuff   false,
+491 verbose linkStuff   false,
+491 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules' ]
+492 info linkStuff ncp@0.6.0
+493 verbose linkBins ncp@0.6.0
+494 verbose link bins [ { ncp: './bin/ncp' },
+494 verbose link bins   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/.bin',
+494 verbose link bins   false ]
+495 verbose linkMans ncp@0.6.0
+496 verbose rebuildBundles ncp@0.6.0
+497 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/.bin/ncp
+498 info install ncp@0.6.0
+499 info postinstall ncp@0.6.0
+500 silly lockFile e31fcc5e-les-fs-extra-node-modules-mkdirp tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+501 silly lockFile e31fcc5e-les-fs-extra-node-modules-mkdirp tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+502 silly lockFile 5638183e-eve-npm-mkdirp-0-5-0-package-tgz tar:///Users/steve/.npm/mkdirp/0.5.0/package.tgz
+503 silly lockFile 5638183e-eve-npm-mkdirp-0-5-0-package-tgz tar:///Users/steve/.npm/mkdirp/0.5.0/package.tgz
+504 info preinstall mkdirp@0.5.0
+505 verbose readDependencies using package.json deps
+506 verbose readDependencies using package.json deps
+507 verbose cache add [ 'minimist@0.0.8', null ]
+508 verbose cache add spec="minimist@0.0.8" args=["minimist@0.0.8",null]
+509 verbose parsed spec { raw: 'minimist@0.0.8',
+509 verbose parsed spec   scope: null,
+509 verbose parsed spec   name: 'minimist',
+509 verbose parsed spec   rawSpec: '0.0.8',
+509 verbose parsed spec   spec: '0.0.8',
+509 verbose parsed spec   type: 'version' }
+510 verbose parsed spec { raw: 'minimist@0.0.8',
+510 verbose parsed spec   scope: null,
+510 verbose parsed spec   name: 'minimist',
+510 verbose parsed spec   rawSpec: '0.0.8',
+510 verbose parsed spec   spec: '0.0.8',
+510 verbose parsed spec   type: 'version' }
+511 verbose addNamed [ 'minimist', '0.0.8' ]
+512 verbose addNamed [ '0.0.8', '0.0.8' ]
+513 silly lockFile 22c6b485-minimist-0-0-8 minimist@0.0.8
+514 verbose lock minimist@0.0.8 /Users/steve/.npm/22c6b485-minimist-0-0-8.lock
+515 verbose mapToRegistry name minimist
+516 verbose mapToRegistry uri https://registry.npmjs.org/minimist
+517 verbose request on initialization, where is /minimist
+518 verbose request after pass 1, where is /minimist
+519 verbose request url raw /minimist
+520 verbose request resolving registry [ 'https://registry.npmjs.org/', './minimist' ]
+521 verbose request after pass 2, where is https://registry.npmjs.org/minimist
+522 verbose request no auth needed
+523 info attempt registry request try #1 at 09:09:01
+524 verbose etag "6MF9HA17VJ2E91MOFVNKLW2WW"
+525 http request GET https://registry.npmjs.org/minimist
+526 http 304 https://registry.npmjs.org/minimist
+527 silly registry.get cb [ 304,
+527 silly registry.get   { date: 'Sun, 12 Oct 2014 07:09:02 GMT',
+527 silly registry.get     server: 'Apache',
+527 silly registry.get     via: '1.1 varnish',
+527 silly registry.get     'last-modified': 'Sun, 12 Oct 2014 07:09:02 GMT',
+527 silly registry.get     'cache-control': 'max-age=60',
+527 silly registry.get     etag: '"6MF9HA17VJ2E91MOFVNKLW2WW"',
+527 silly registry.get     age: '46',
+527 silly registry.get     'x-served-by': 'cache-fra1245-FRA',
+527 silly registry.get     'x-cache': 'HIT',
+527 silly registry.get     'x-cache-hits': '1',
+527 silly registry.get     'x-timer': 'S1413097742.568965,VS0,VE0',
+527 silly registry.get     vary: 'Accept',
+527 silly registry.get     'content-length': '0',
+527 silly registry.get     'keep-alive': 'timeout=10, max=50',
+527 silly registry.get     connection: 'Keep-Alive' } ]
+528 verbose etag https://registry.npmjs.org/minimist from cache
+529 silly lockFile 22c6b485-minimist-0-0-8 minimist@0.0.8
+530 silly lockFile 22c6b485-minimist-0-0-8 minimist@0.0.8
+531 silly resolved [ { name: 'minimist',
+531 silly resolved     version: '0.0.8',
+531 silly resolved     description: 'parse argument options',
+531 silly resolved     main: 'index.js',
+531 silly resolved     devDependencies: { tape: '~1.0.4', tap: '~0.4.0' },
+531 silly resolved     scripts: { test: 'tap test/*.js' },
+531 silly resolved     testling: { files: 'test/*.js', browsers: [Object] },
+531 silly resolved     repository: { type: 'git', url: 'git://github.com/substack/minimist.git' },
+531 silly resolved     homepage: 'https://github.com/substack/minimist',
+531 silly resolved     keywords: [ 'argv', 'getopt', 'parser', 'optimist' ],
+531 silly resolved     author:
+531 silly resolved      { name: 'James Halliday',
+531 silly resolved        email: 'mail@substack.net',
+531 silly resolved        url: 'http://substack.net' },
+531 silly resolved     license: 'MIT',
+531 silly resolved     bugs: { url: 'https://github.com/substack/minimist/issues' },
+531 silly resolved     _id: 'minimist@0.0.8',
+531 silly resolved     dist:
+531 silly resolved      { shasum: '857fcabfc3397d2625b8228262e86aa7a011b05d',
+531 silly resolved        tarball: 'http://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz' },
+531 silly resolved     _from: 'minimist@0.0.8',
+531 silly resolved     _npmVersion: '1.4.3',
+531 silly resolved     _npmUser: { name: 'substack', email: 'mail@substack.net' },
+531 silly resolved     maintainers: [ [Object] ],
+531 silly resolved     directories: {},
+531 silly resolved     _shasum: '857fcabfc3397d2625b8228262e86aa7a011b05d',
+531 silly resolved     _resolved: 'https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz',
+531 silly resolved     readme: 'ERROR: No README data found!' } ]
+532 info install minimist@0.0.8 into /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+533 info installOne minimist@0.0.8
+534 verbose node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist unbuild
+535 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+536 verbose tar unpack /Users/steve/.npm/minimist/0.0.8/package.tgz
+537 silly lockFile 823d5ea7-les-mkdirp-node-modules-minimist tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+538 verbose lock tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist /Users/steve/.npm/823d5ea7-les-mkdirp-node-modules-minimist.lock
+539 silly lockFile 60d207fc-e-npm-minimist-0-0-8-package-tgz tar:///Users/steve/.npm/minimist/0.0.8/package.tgz
+540 verbose lock tar:///Users/steve/.npm/minimist/0.0.8/package.tgz /Users/steve/.npm/60d207fc-e-npm-minimist-0-0-8-package-tgz.lock
+541 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+542 silly gunzTarPerm modes [ '755', '644' ]
+543 silly gunzTarPerm extractEntry package.json
+544 silly gunzTarPerm extractEntry LICENSE
+545 silly gunzTarPerm extractEntry index.js
+546 silly gunzTarPerm extractEntry .travis.yml
+547 silly gunzTarPerm extractEntry example/parse.js
+548 silly gunzTarPerm extractEntry readme.markdown
+549 silly gunzTarPerm extractEntry test/dash.js
+550 silly gunzTarPerm extractEntry test/default_bool.js
+551 silly gunzTarPerm extractEntry test/dotted.js
+552 silly gunzTarPerm extractEntry test/long.js
+553 silly gunzTarPerm extractEntry test/parse.js
+554 silly gunzTarPerm extractEntry test/parse_modified.js
+555 silly gunzTarPerm extractEntry test/short.js
+556 silly gunzTarPerm extractEntry test/whitespace.js
+557 silly lockFile 823d5ea7-les-mkdirp-node-modules-minimist tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+558 silly lockFile 823d5ea7-les-mkdirp-node-modules-minimist tar:///Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+559 silly lockFile 60d207fc-e-npm-minimist-0-0-8-package-tgz tar:///Users/steve/.npm/minimist/0.0.8/package.tgz
+560 silly lockFile 60d207fc-e-npm-minimist-0-0-8-package-tgz tar:///Users/steve/.npm/minimist/0.0.8/package.tgz
+561 info preinstall minimist@0.0.8
+562 verbose readDependencies using package.json deps
+563 verbose readDependencies using package.json deps
+564 silly resolved []
+565 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+566 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules/minimist
+567 verbose linkStuff [ false,
+567 verbose linkStuff   false,
+567 verbose linkStuff   false,
+567 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp/node_modules' ]
+568 info linkStuff minimist@0.0.8
+569 verbose linkBins minimist@0.0.8
+570 verbose linkMans minimist@0.0.8
+571 verbose rebuildBundles minimist@0.0.8
+572 info install minimist@0.0.8
+573 info postinstall minimist@0.0.8
+574 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+575 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/mkdirp
+576 verbose linkStuff [ false,
+576 verbose linkStuff   false,
+576 verbose linkStuff   false,
+576 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules' ]
+577 info linkStuff mkdirp@0.5.0
+578 verbose linkBins mkdirp@0.5.0
+579 verbose link bins [ { mkdirp: 'bin/cmd.js' },
+579 verbose link bins   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/.bin',
+579 verbose link bins   false ]
+580 verbose linkMans mkdirp@0.5.0
+581 verbose rebuildBundles mkdirp@0.5.0
+582 verbose rebuildBundles [ 'minimist' ]
+583 verbose gentlyRm vacuuming /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra/node_modules/.bin/mkdirp
+584 info install mkdirp@0.5.0
+585 info postinstall mkdirp@0.5.0
+586 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+587 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules/fs-extra
+588 verbose linkStuff [ false,
+588 verbose linkStuff   false,
+588 verbose linkStuff   false,
+588 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test/node_modules' ]
+589 info linkStuff fs-extra@0.12.0
+590 verbose linkBins fs-extra@0.12.0
+591 verbose linkMans fs-extra@0.12.0
+592 verbose rebuildBundles fs-extra@0.12.0
+593 verbose rebuildBundles [ '.bin', 'jsonfile', 'mkdirp', 'ncp', 'rimraf' ]
+594 info install fs-extra@0.12.0
+595 info postinstall fs-extra@0.12.0
+596 verbose about to build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+597 info build /Users/steve/Documents/Sites/go-jsbox-odl/node_modules/grunt-mocha-test
+598 verbose linkStuff [ false,
+598 verbose linkStuff   false,
+598 verbose linkStuff   false,
+598 verbose linkStuff   '/Users/steve/Documents/Sites/go-jsbox-odl/node_modules' ]
+599 info linkStuff grunt-mocha-test@0.12.1
+600 verbose linkBins grunt-mocha-test@0.12.1
+601 verbose linkMans grunt-mocha-test@0.12.1
+602 verbose rebuildBundles grunt-mocha-test@0.12.1
+603 verbose rebuildBundles [ 'fs-extra', 'hooker' ]
+604 info install grunt-mocha-test@0.12.1
+605 info postinstall grunt-mocha-test@0.12.1
+606 verbose readDependencies using package.json deps
+607 verbose already installed skipping mocha@^1.20.0 /Users/steve/Documents/Sites/go-jsbox-odl
+608 silly resolved []
+609 verbose stack Error: The package mocha does not satisfy its siblings' peerDependencies requirements!
+609 verbose stack     at /usr/local/lib/node_modules/npm/lib/install.js:98:32
+609 verbose stack     at /usr/local/lib/node_modules/npm/lib/install.js:202:5
+609 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:138:5
+609 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:251:14
+609 verbose stack     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:47:24)
+609 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:251:14
+609 verbose stack     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:47:24)
+609 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:251:14
+609 verbose stack     at cb (/usr/local/lib/node_modules/npm/node_modules/slide/lib/async-map.js:47:24)
+609 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-installed/read-installed.js:251:14
+610 verbose cwd /Users/steve/Documents/Sites/go-jsbox-odl
+611 error Darwin 13.4.0
+612 error argv "node" "/usr/local/bin/npm" "install" "grunt-mocha-test" "--save-dev"
+613 error node v0.10.32
+614 error npm  v2.0.0
+615 error code EPEERINVALID
+616 error peerinvalid The package mocha does not satisfy its siblings' peerDependencies requirements!
+616 error peerinvalid Peer grunt-mocha-test@0.12.1 wants mocha@^1.20.0
+617 verbose exit [ 1, true ]
