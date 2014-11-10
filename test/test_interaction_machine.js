@@ -6,12 +6,16 @@ var fixtures = vumigo.fixtures;
 var test_utils = vumigo.test_utils;
 
 var App = vumigo.App;
+var AppTester = vumigo.AppTester;
+
+var State = vumigo.states.State;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
 
+var ApiError = vumigo.interaction_machine.ApiError;
+var ReplyEvent = vumigo.interaction_machine.ReplyEvent;
 var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
 var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
-var ApiError = vumigo.interaction_machine.ApiError;
 
 
 describe("interaction_machine", function() {
@@ -281,212 +285,213 @@ describe("interaction_machine", function() {
             });
         });
 
-        describe(".is_in_state", function() {
-            describe("if no state is given", function() {
-                it("should determine whether the im is in any state",
-                function() {
-                    assert(!im.is_in_state());
-                    return im.switch_to_start_state().then(function() {
-                        assert(im.is_in_state());
-                    });
-                });
+        describe(".set_state", function() {
+            it("should set the given state as the user's state", function() {
+                var s = new State('foo');
+                im.set_state(s);
+                assert(im.user.state.is(s));
             });
 
-            describe("if a state name is given", function() {
-                it("should determine whether the im is in the given state",
-                function() {
-                    assert(!im.is_in_state('start'));
-                    return im.switch_to_start_state().then(function() {
-                        assert(im.is_in_state('start'));
-                    });
-                });
-            });
-        });
-
-        describe(".switch_to_user_state", function() {
-            beforeEach(function() {
-                return im.switch_to_start_state();
+            it("should set the given state as the im's state", function() {
+                var s = new State('foo');
+                im.set_state(s);
+                assert.strictEqual(im.state, s);
             });
 
-            it("should switch to the current user state", function() {
-                im.user.state.reset(end_state);
-                assert(im.is_in_state('start'));
+            it("unset the state if null is given", function() {
+                im.set_state(new State('foo'));
+                assert.notStrictEqual(im.state, null);
+                assert(im.user.state.exists());
 
-                return im.switch_to_user_state().then(function() {
-                    assert(im.is_in_state('end'));
-                });
+                im.set_state(null);
+                assert.strictEqual(im.state, null);
+                assert(!im.user.state.exists());
             });
         });
 
-        describe(".switch_to_start_state", function() {
-            beforeEach(function() {
-                return im.switch_state('end', {}, {});
+        describe(".create_state", function() {
+            it("should create the state from a state name", function() {
+                var expected = new State('foo');
+                im.app.states.add(expected);
+
+                return im.create_state('foo')
+                    .then(function(state) {
+                        assert.strictEqual(state, expected);
+                    });
             });
 
-            it("should switch to the start state", function() {
-                assert(im.is_in_state('end'));
-
-                return im.switch_to_start_state().then(function() {
-                    assert(im.is_in_state('start'));
+            it("should create the state from state data", function() {
+                im.app.states.add('foo', function(name, opts) {
+                    var s = new State('foo');
+                    s.creator_opts = opts;
+                    return s;
                 });
+
+                return im.create_state({
+                        name: 'foo',
+                        metadata: {bar: 'baz'},
+                        creator_opts: {quux: 'corge'}
+                    })
+                    .then(function(state) {
+                        assert.equal(state.name, 'foo');
+                        assert.deepEqual(state.metadata, {bar: 'baz'});
+                        assert.deepEqual(state.creator_opts, {quux: 'corge'});
+                    });
+            });
+        });
+
+        describe(".create_and_set_state", function() {
+            it("should create the given state as the current state", function() {
+                var expected = new State('foo');
+                im.app.states.add(expected);
+
+                return im.create_and_set_state('foo')
+                    .then(function(state) {
+                        assert.strictEqual(im.state, expected);
+                    });
+            });
+        });
+
+        describe(".resume_state", function() {
+            it("should set the given state as the current state", function() {
+                var expected = new State('foo');
+                im.app.states.add(expected);
+
+                return im.resume_state('foo')
+                    .then(function(state) {
+                        assert.strictEqual(im.state, expected);
+                    });
+            });
+
+            it("should emit a 'state:resume' event for the dest state",
+            function() {
+                var p = im.once.resolved('state:resume');
+                var expected = new State('foo');
+                im.app.states.add(expected);
+
+                return im.resume_state('foo')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert.strictEqual(e.state, expected);
+                    });
+            });
+
+            it("should emit a 'state:enter' event if a different state is created",
+            function() {
+                var p = im.once.resolved('state:enter');
+                var expected = new State('bar');
+
+                im.app.states.add('foo', function() {
+                    return expected;
+                });
+
+                return im.resume_state('foo')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert.strictEqual(e.state, expected);
+                    });
+            });
+        });
+
+        describe(".enter_state", function() {
+            it("should set the given state as the current state", function() {
+                var expected = new State('foo');
+                im.app.states.add(expected);
+
+                return im.enter_state('foo')
+                    .then(function(state) {
+                        assert.strictEqual(im.state, expected);
+                    });
+            });
+
+            it("should emit a 'state:enter' event for the dest state",
+            function() {
+                var p = im.once.resolved('state:enter');
+                var expected = new State('foo');
+                im.app.states.add(expected);
+
+                return im.enter_state('foo')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert.strictEqual(e.state, expected);
+                    });
+            });
+        });
+
+        describe(".exit_state", function() {
+            it("should act as a noop if there is no current state", function() {
+                assert.strictEqual(im.state, null);
+
+                return im.exit_state()
+                    .then(function() {
+                        assert.strictEqual(im.state, null);
+                    });
+            });
+
+            it("should unset the current state", function() {
+                return im.resume_state('start')
+                    .then(function() {
+                        return im.exit_state();
+                    })
+                    .then(function() {
+                        assert.strictEqual(im.state, null);
+                    });
+            });
+
+            it("should emit a 'state:exit' event for the dest state",
+            function() {
+                return im.resume_state('start')
+                    .then(function() {
+                        var p = im.once.resolved('state:exit');
+                        return im.exit_state().thenResolve(p);
+                    })
+                    .then(function(e) {
+                        assert.strictEqual(e.state, start_state);
+                    });
             });
         });
 
         describe(".switch_state", function() {
             beforeEach(function() {
-                im.state = start_state;
+                return im.resume_state('start');
             });
 
-            it("should pass creator options to the state creator", function() {
-                im.app.states.add('spam', function(name, opts) {
-                    assert.deepEqual(opts, {baz: 'qux'});
-                    return new EndState(name, {text: 'spam'});
-                });
-
-                return im.switch_state('spam', {}, {baz: 'qux'});
-            });
-
-            it("should translate the state", function() {
-                return test_utils.make_im({
-                    msg: fixtures.msg('1')
-                }).then(function(im) {
-                    im.app.states.add('foo', function(name) {
-                        var state = new EndState(name, {
-                            text: test_utils.$('yes or no?')
-                        });
-
-                        var text = state.display();
-                        assert.equal(text.args[0], 'yes or no?');
-
-                        return state;
-                    });
-
-                    return im.switch_state('foo').then(function() {
-                        assert.equal(im.state.display(), 'ja of nee?');
-                    });
-                });
-            });
-
-            it("should setup the new state", function() {
-                var p = end_state.once.resolved('setup');
-                return im.switch_state('end', {}, {}).thenResolve(p);
-            });
-
-            describe("if we are already in the requested state", function() {
-                it("should not try switch state", function() {
-                    var exit = im.once.resolved('state:exit');
-                    var enter = im.once.resolved('state:enter');
-                    return im.switch_state('start', {}, {}).then(function() {
-                        assert(!exit.isFulfilled());
-                        assert(!enter.isFulfilled());
-                    });
-                });
-            });
-
-            it("should allow state creators to delegate to other creators",
+            it("should not switch states if the src and dest are the same",
             function() {
-                im.app.states.add('foo', function() {
-                    return im.app.states.create('start');
-                });
-
-                return im.switch_state('foo').then(function() {
-                    assert.equal(im.state, start_state);
-                });
-            });
-
-            it("should create the requested state", function() {
-                return im.switch_state('end', {}, {}).then(function() {
-                    assert.equal(im.state, end_state);
-                });
-            });
-
-            it("should setup the new state", function() {
-                var p = end_state.once.resolved('setup');
-                return im.switch_state('end', {}, {}).thenResolve(p);
-            });
-
-            it("should emit a 'state:exit' event for the old state",
-            function() {
-                var p = start_state.once.resolved('state:exit');
-                return im.switch_state('end', {}, {}).thenResolve(p);
-            });
-
-            it("should set the user's state to the new state", function() {
-                var p = start_state.once.resolved('state:exit');
-                return im.switch_state('end', {}, {}).thenResolve(p);
-            });
-
-            it("should emit an 'enter' event for the new state", function() {
-                var p = end_state.once.resolved('state:enter');
-                return im.switch_state('end', {}, {}).thenResolve(p);
-            });
-
-            it("should emit an 'enter' event if the user is not on the state",
-            function() {
-                assert(im.is_in_state('start'));
-                var p = end_state.once.resolved('state:enter');
-
-                // states have already set the new user state name
-                im.user.state.reset('end');
-
-                return im.switch_state('end', {}, {}).then(function() {
-                    assert(p.isFulfilled());
-                });
-            });
-
-            it("should not emit an 'enter' event if the user is on the state",
-            function() {
-                return im.switch_state('end', {}, {}).then(function() {
-                    assert(im.is_in_state('end'));
-                    var p = end_state.once.resolved('state:enter');
-
-                    // states have already set the new user state name
-                    im.user.state.reset('end');
-
-                    return im.switch_state('end', {}, {}).then(function() {
-                        assert(!p.isFulfilled());
-                    });
-                });
-            });
-
-            it("should reset the user's state to the new state", function() {
-                assert(!im.user.state.is('end'));
-
-                return im
-                    .switch_state('end', {}, {baz: 'qux'})
+                return im.switch_state('start')
                     .then(function() {
-                        assert(im.user.state.is('end'));
-                        assert.deepEqual(
-                            im.user.state.creator_opts,
-                            {baz: 'qux'});
-                });
+                        assert.strictEqual(im.state, start_state);
+                    });
             });
 
-            it("should save the right opts for delegate state creators",
+            it("should not switch states if the dest does not exist",
             function() {
-                assert(_.isUndefined(im.user.creator_opts));
-
-                im.app.states.add('foo', function(name) {
-                    return im.app.states.create('bar', {eggs: 'ham'});
-                });
-
-                im.app.states.add('bar', function(name, opts) {
-                    return im.app.states.create('baz', {lerp: 'larp'});
-                });
-
-                im.app.states.add('baz', function(name, opts) {
-                    return new EndState(name, {text: opts.lerp});
-                });
-
-                return im
-                    .switch_state('foo', {}, {lorem: 'ipsum'})
+                return im.switch_state('i-do-not-exist')
                     .then(function() {
-                        assert(im.user.state.is('baz'));
+                        assert.strictEqual(im.state, start_state);
+                    });
+            });
 
-                        assert.deepEqual(
-                            im.user.state.creator_opts,
-                            {lerp: 'larp'});
-                });
+            it("should exit the current state", function() {
+                var p = im.once.resolved('state:exit');
+
+                return im.switch_state('end')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert.strictEqual(e.state, start_state);
+                    });
+            });
+
+            it("should enter the dest state", function() {
+                var p = im.once.resolved('state:enter');
+                var dest = new State('dest');
+                im.app.states.add(dest);
+
+                return im.switch_state('dest')
+                    .thenResolve(p)
+                    .then(function(e) {
+                        assert.strictEqual(e.state, dest);
+                    });
             });
         });
 
@@ -572,10 +577,18 @@ describe("interaction_machine", function() {
         });
 
         describe(".reply", function() {
-            it("should switch to the user's current state", function() {
-                assert(!im.is_in_state());
+            beforeEach(function() {
+                return im.resume_state('start')
+                    .then(function() {
+                        im.next_state.reset('end');
+                    });
+            });
+
+            it("should switch to the user's next state", function() {
+                assert.strictEqual(im.state.name, 'start');
+
                 return im.reply(msg).then(function() {
-                    assert(im.is_in_state('start'));
+                    assert.equal(im.state.name, 'end');
                 });
             });
 
@@ -583,8 +596,20 @@ describe("interaction_machine", function() {
             function() {
                 return im.reply(msg).then(function() {
                     var reply = api.outbound.store[0];
-                    assert.deepEqual(reply.content, 'hello?');
+                    assert.deepEqual(reply.content, 'goodbye');
                 });
+            });
+
+            it("should emit an event after sending the reply", function() {
+                var p = im.once.resolved('reply').then(function(e) {
+                    assert(api.outbound.store.length);
+                    assert(e instanceof ReplyEvent);
+                    assert(!e.continue_session);
+                    assert.equal(e.content, 'goodbye');
+                });
+
+                im.reply(msg);
+                return p;
             });
 
             describe("if the translate option is true", function() {
@@ -596,7 +621,7 @@ describe("interaction_machine", function() {
                 function() {
                     return im.reply(msg, {translate: true}).then(function() {
                         var reply = api.outbound.store[0];
-                        assert.deepEqual(reply.content, 'hallo?');
+                        assert.deepEqual(reply.content, 'totsiens');
                     });
                 });
             });
@@ -636,7 +661,11 @@ describe("interaction_machine", function() {
                         send_reply: false
                     });
                     im.app.states.add(state);
-                    im.user.state.reset(state);
+
+                    return im.resume_state('start')
+                        .then(function() {
+                            im.next_state.reset('a_new_end');
+                        });
                 });
 
                 it("should not send a reply", function() {
@@ -647,52 +676,74 @@ describe("interaction_machine", function() {
             });
         });
 
-        describe(".emit", function() {
-            describe(".state", function() {
-                beforeEach(function() {
-                    return im.switch_to_start_state();
-                });
+        describe(".emit.state.exit", function() {
+            it("should emit a 'state:exit' event on the im", function() {
+                var state = new State('foo');
+                var p = im.once.resolved('state:exit');
 
-                describe(".exit", function() {
-                    it("should emit an 'state:exit' event on the im",
-                    function() {
-                        var p = im.once.resolved('state:exit');
-                        return im.emit.state.exit().thenResolve(p);
+                return im.emit.state.exit(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
+            });
 
-                    it("should emit an 'state:exit' event on the current state",
-                    function() {
-                        var p = im.state.once.resolved('state:exit');
-                        return im.emit.state.exit().thenResolve(p);
+            it("should emit a 'state:exit' event on the current state",
+            function() {
+                var state = new State('foo');
+                var p = state.once.resolved('state:exit');
+
+                return im.emit.state.exit(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
+            });
+        });
 
-                    describe("if the im is not in a state", function() {
-                        beforeEach(function() {
-                            im.state = null;
-                        });
+        describe(".emit.state.enter", function() {
+            it("should emit n 'state:enter' event on the im",
+            function() {
+                var state = new State('foo');
+                var p = im.once.resolved('state:enter');
 
-                        it("should not emit any 'exit' events", function() {
-                            var p = im.once.resolved('state:exit');
-                            return im.emit.state.exit().then(function() {
-                                assert(!p.isFulfilled());
-                            });
-                        });
+                return im.emit.state.enter(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
-                });
+            });
 
-                describe(".enter", function() {
-                    it("should emit an 'state:enter' event on the im",
-                    function() {
-                        var p = im.once.resolved('state:enter');
-                        return im.emit.state.enter(end_state).thenResolve(p);
-                    });
+            it("should emit a 'state:enter' event on the new state",
+            function() {
+                var state = new State('foo');
+                var p = state.once.resolved('state:enter');
 
-                    it("should emit an 'state:enter' event on the new state",
-                    function() {
-                        var p = end_state.once.resolved('state:enter');
-                        return im.emit.state.enter(end_state).thenResolve(p);
+                return im.emit.state.enter(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
                     });
-                });
+            });
+        });
+
+        describe(".emit.state.resume", function() {
+            it("should emit a 'state:resume' event on the im",
+            function() {
+                var state = new State('foo');
+                var p = im.once.resolved('state:resume');
+
+                return im.emit.state.resume(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
+                    });
+            });
+
+            it("should emit an 'state:resume' event on the new state",
+            function() {
+                var state = new State('foo');
+                var p = state.once.resolved('state:resume');
+
+                return im.emit.state.resume(state)
+                    .then(function() {
+                        assert(p.isFulfilled());
+                    });
             });
         });
 
@@ -844,6 +895,126 @@ describe("interaction_machine", function() {
                     });
                 });
             });
+        });
+
+        it("should emit state lifecycle events sensibly", function() {
+            var app = new App('a');
+
+            var events = [];
+            function push(e) {
+                events.push({
+                    event: e.name,
+                    state: e.state.name,
+                    message: app.im.msg.content
+                });
+            }
+
+            app.events = {
+                'im state:enter': push,
+                'im state:resume': push,
+                'im state:exit': push
+            };
+
+            app.states.add(new FreeText('a', {
+                question: 'hello?',
+                next: 'b'
+            }));
+
+            app.states.add(new FreeText('b', {
+                question: 'you are in the middle, say something',
+                next: 'c'
+            }));
+
+            app.states.add(new EndState('c', {
+                text: 'bye',
+                next: 'a'
+            }));
+
+            return new AppTester(app)
+                .inputs(
+                  null, 'hi', 'foo',
+                  null, 'hi again', 'bar',
+                  null)
+                .check(function() {
+                    assert.deepEqual(events, [{
+                        state: 'a',
+                        message: null,
+                        event: 'state:enter'
+                    }, {
+                        state: 'a',
+                        message: 'hi',
+                        event: 'state:resume'
+                    }, {
+                        state: 'a',
+                        message: 'hi',
+                        event: 'state:exit'
+                    }, {
+                        state: 'b',
+                        message: 'hi',
+                        event: 'state:enter'
+                    }, {
+                        state: 'b',
+                        message: 'foo',
+                        event: 'state:resume'
+                    }, {
+                        state: 'b',
+                        message: 'foo',
+                        event: 'state:exit'
+                    }, {
+                        state: 'c',
+                        message: 'foo',
+                        event: 'state:enter'
+                    }, {
+                        state: 'c',
+                        message: null,
+                        event: 'state:resume'
+                    }, {
+                        state: 'c',
+                        message: null,
+                        event: 'state:exit'
+                    }, {
+                        state: 'a',
+                        message: null,
+                        event: 'state:enter'
+                    }, {
+                        state: 'a',
+                        message: 'hi again',
+                        event: 'state:resume'
+                    }, {
+                        state: 'a',
+                        message: 'hi again',
+                        event: 'state:exit'
+                    }, {
+                        state: 'b',
+                        message: 'hi again',
+                        event: 'state:enter'
+                    }, {
+                        state: 'b',
+                        message: 'bar',
+                        event: 'state:resume'
+                    }, {
+                        state: 'b',
+                        message: 'bar',
+                        event: 'state:exit'
+                    }, {
+                        state: 'c',
+                        message: 'bar',
+                        event: 'state:enter'
+                    }, {
+                        state: 'c',
+                        message: null,
+                        event: 'state:resume'
+                    }, {
+                        state: 'c',
+                        message: null,
+                        event: 'state:exit'
+                    }, {
+                        state: 'a',
+                        message: null,
+                        event: 'state:enter'
+                    }]);
+                })
+                .run();
         });
     });
 
