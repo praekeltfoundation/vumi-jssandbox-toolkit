@@ -12,9 +12,10 @@ var State = vumigo.states.State;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
 
+var ApiError = vumigo.interaction_machine.ApiError;
+var ReplyEvent = vumigo.interaction_machine.ReplyEvent;
 var InboundMessageEvent = vumigo.interaction_machine.InboundMessageEvent;
 var UnknownCommandEvent = vumigo.interaction_machine.UnknownCommandEvent;
-var ApiError = vumigo.interaction_machine.ApiError;
 
 
 describe("interaction_machine", function() {
@@ -597,6 +598,18 @@ describe("interaction_machine", function() {
                     var reply = api.outbound.store[0];
                     assert.deepEqual(reply.content, 'goodbye');
                 });
+            });
+
+            it("should emit an event after sending the reply", function() {
+                var p = im.once.resolved('reply').then(function(e) {
+                    assert(api.outbound.store.length);
+                    assert(e instanceof ReplyEvent);
+                    assert(!e.continue_session);
+                    assert.equal(e.content, 'goodbye');
+                });
+
+                im.reply(msg);
+                return p;
             });
 
             describe("if the translate option is true", function() {
