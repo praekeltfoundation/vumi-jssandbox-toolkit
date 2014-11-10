@@ -276,7 +276,7 @@ describe("AppTester Check Tasks", function() {
                 });
         });
 
-        it("should check the default char limit no limit is given", function() {
+        it("should check the default char limit if no limit is given", function() {
             return tester
                 .setup.char_limit(2)
                 .input()
