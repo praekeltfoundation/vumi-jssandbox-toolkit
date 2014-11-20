@@ -428,6 +428,32 @@ describe("http.api", function() {
             });
         });
 
+        describe(".patch", function() {
+            it("should perform PATCH requests", function() {
+                im.api.http.fixtures.add({
+                    request: {
+                        method: 'PATCH',
+                        url: 'http://foo.com/',
+                        data: {lerp: 'larp'},
+                        headers: {'Content-Type': ['application/json']}
+                    },
+                    response: {
+                        data: {foo: 'bar'}
+                    }
+                });
+
+                return api.patch('http://foo.com/', {
+                    data: JSON.stringify({lerp: 'larp'}),
+                    headers: {'Content-Type': ['application/json']}
+                }).then(function(response) {
+                    assert.equal(response.code, 200);
+                    assert.strictEqual(
+                        response.data,
+                        JSON.stringify({foo: "bar"}));
+                });
+            });
+        });
+
         describe(".put", function() {
             it("should perform PUT requests", function() {
                 im.api.http.fixtures.add({
