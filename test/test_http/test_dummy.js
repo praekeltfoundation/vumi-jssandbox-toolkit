@@ -635,6 +635,29 @@ describe("http.dummy", function() {
                 });
             });
 
+            describe(".patch", function() {
+                it("should perform dummy patch requests", function() {
+                    api.http.fixtures.add({
+                        request: {
+                            method: 'patch',
+                            url: 'http://example.com',
+                            data: {lerp: 'larp'}
+                        },
+                        response: {
+                            data: {foo: 'bar'}
+                        }
+                    });
+
+                    return request('http.patch', {
+                        url: 'http://example.com',
+                        data: JSON.stringify({lerp: 'larp'})
+                    }).then(function(result) {
+                        assert.equal(result.code, 200);
+                        assert.equal(result.body, '{"foo":"bar"}');
+                    });
+                });
+            });
+
             describe(".delete", function() {
                 it("should perform dummy delete requests", function() {
                     api.http.fixtures.add({
