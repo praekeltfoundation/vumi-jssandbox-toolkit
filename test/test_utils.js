@@ -287,4 +287,60 @@ describe("utils", function() {
                 '+27741234567');
         });
     });
+
+    describe(".url_params", function() {
+        it("should return the decoded querystring in a url", function() {
+            assert.deepEqual(utils.url_params('www.foo.com/?a=b&c=d&c=f'), {
+                a: 'b',
+                c: ['d', 'f']
+            });
+
+            assert.deepEqual(utils.url_params('www.foo.com/bar/?a=b&c=d'), {
+                a: 'b',
+                c: 'd'
+            });
+        });
+    });
+
+    describe("url_with_params", function() {
+        it("should join the url with the encoded params", function() {
+            var result;
+
+            result = utils.url_with_params('www.foo.com', {a: 'b'});
+            assert.equal(result, 'www.foo.com?a=b');
+
+            result = utils.url_with_params('www.foo.com/', {
+                a: 'b',
+                c: ['d', 'f']
+            });
+
+            assert.equal(result, 'www.foo.com/?a=b&c=d&c=f');
+
+            result = utils.url_with_params('www.foo.com/bar/', {
+                a: 'b',
+                c: 'd'
+            });
+
+            assert.equal(result, 'www.foo.com/bar/?a=b&c=d');
+        });
+    });
+
+    describe("url_without_params", function() {
+        it("should remove the querystring from the url", function() {
+            var result;
+
+            result = utils.url_with_params('www.foo.com/', {
+                a: 'b',
+                c: ['d', 'f']
+            });
+
+            assert.equal(
+                utils.url_without_params('www.foo.com/?a=b&c=d&c=f'),
+                'www.foo.com/');
+
+            assert.equal(
+                utils.url_without_params('www.foo.com/bar/?a=b^c=d'),
+                'www.foo.com/bar/');
+        });
+    });
 });
