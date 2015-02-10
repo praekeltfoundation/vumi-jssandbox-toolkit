@@ -238,6 +238,33 @@ describe("user", function() {
                         assert.equal(e.user, user);
                     });
             });
+
+            it("should set the default expiry", function() {
+                return user
+                    .save()
+                    .then(function() {
+                        assert.strictEqual(
+                            im.api.kv.expiry[user.key()],
+                            user.default_expiry());
+                    });
+            });
+
+            it("should set an integer custom expiry", function() {
+                return user
+                    .save({seconds: 5})
+                    .then(function() {
+                        assert.strictEqual(im.api.kv.expiry[user.key()], 5);
+                    });
+            });
+
+            it("should set a null custom expiry", function() {
+                return user
+                    .save({seconds: null})
+                    .then(function() {
+                        assert.strictEqual(
+                            user.key() in im.api.kv.expiry, false);
+                    });
+            });
         });
 
         describe(".set_lang", function() {
