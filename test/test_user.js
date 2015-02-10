@@ -244,7 +244,7 @@ describe("user", function() {
                     .save()
                     .then(function() {
                         assert.strictEqual(
-                            im.api.kv.expiry[user.key()],
+                            im.api.kv.ttl[user.key()],
                             user.default_expiry());
                     });
             });
@@ -253,7 +253,7 @@ describe("user", function() {
                 return user
                     .save({seconds: 5})
                     .then(function() {
-                        assert.strictEqual(im.api.kv.expiry[user.key()], 5);
+                        assert.strictEqual(im.api.kv.ttl[user.key()], 5);
                     });
             });
 
@@ -262,7 +262,7 @@ describe("user", function() {
                     .save({seconds: null})
                     .then(function() {
                         assert.strictEqual(
-                            user.key() in im.api.kv.expiry, false);
+                            user.key() in im.api.kv.ttl, false);
                     });
             });
         });

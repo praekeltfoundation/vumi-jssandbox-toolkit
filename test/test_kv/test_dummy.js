@@ -72,23 +72,23 @@ describe("kv.dummy", function() {
             });
         });
 
-        describe(".expire", function() {
-            it("should set the expiry if given", function() {
-                assert.deepEqual(api.kv.expiry, {});
-                api.kv.expire("foo", 5);
-                assert.deepEqual(api.kv.expiry, {"foo": 5});
+        describe(".set_ttl", function() {
+            it("should set the ttl if given", function() {
+                assert.deepEqual(api.kv.ttl, {});
+                api.kv.set_ttl("foo", 5);
+                assert.deepEqual(api.kv.ttl, {"foo": 5});
             });
 
-            it("should unset the expiry if seconds is null", function() {
-                api.kv.expiry.foo = 10;
-                api.kv.expire("foo", null);
-                assert.deepEqual(api.kv.expiry, {});
+            it("should unset the ttl if seconds is null", function() {
+                api.kv.ttl.foo = 10;
+                api.kv.set_ttl("foo", null);
+                assert.deepEqual(api.kv.ttl, {});
             });
 
-            it("should unset the expiry if seconds is undefined", function() {
-                api.kv.expiry.foo = 10;
-                api.kv.expire("foo");
-                assert.deepEqual(api.kv.expiry, {});
+            it("should unset the ttl if seconds is undefined", function() {
+                api.kv.ttl.foo = 10;
+                api.kv.set_ttl("foo");
+                assert.deepEqual(api.kv.ttl, {});
             });
         });
 
@@ -123,7 +123,7 @@ describe("kv.dummy", function() {
                     }).then(function(reply) {
                         assert(reply.success);
                         assert.equal(api.kv.store.foo, 'bar');
-                        assert.equal(typeof api.kv.expiry.foo, 'undefined');
+                        assert.equal(typeof api.kv.ttl.foo, 'undefined');
                     });
                 });
 
@@ -135,7 +135,7 @@ describe("kv.dummy", function() {
                     }).then(function(reply) {
                         assert(reply.success);
                         assert.equal(api.kv.store.foo, 'bar');
-                        assert.equal(api.kv.expiry.foo, 15);
+                        assert.equal(api.kv.ttl.foo, 15);
                     });
                 });
             });
