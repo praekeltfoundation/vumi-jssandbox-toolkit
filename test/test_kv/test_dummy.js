@@ -72,6 +72,26 @@ describe("kv.dummy", function() {
             });
         });
 
+        describe(".expire", function() {
+            it("should set the expiry if given", function() {
+                assert.deepEqual(api.kv.expiry, {});
+                api.kv.expire("foo", 5);
+                assert.deepEqual(api.kv.expiry, {"foo": 5});
+            });
+
+            it("should unset the expiry if seconds is null", function() {
+                api.kv.expiry.foo = 10;
+                api.kv.expire("foo", null);
+                assert.deepEqual(api.kv.expiry, {});
+            });
+
+            it("should unset the expiry if seconds is undefined", function() {
+                api.kv.expiry.foo = 10;
+                api.kv.expire("foo");
+                assert.deepEqual(api.kv.expiry, {});
+            });
+        });
+
         describe(".handlers", function() {
             describe(".get", function() {
                 it("should retrieve the value for the given key", function() {
