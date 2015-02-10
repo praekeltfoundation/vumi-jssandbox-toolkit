@@ -194,20 +194,20 @@ describe("user", function() {
             });
         });
 
-        describe(".default_expiry", function() {
+        describe(".default_ttl", function() {
             it("should be seven days if no config is set", function() {
-                assert.strictEqual(user.default_expiry(), 604800);
+                assert.strictEqual(user.default_ttl(), 604800);
             });
 
             describe("should be overriden", function() {
-                it("when config.user_expiry is an integer", function() {
-                    im.config.user_expiry = 60;
-                    assert.strictEqual(user.default_expiry(), 60);
+                it("when config.user_ttl is an integer", function() {
+                    im.config.user_ttl = 60;
+                    assert.strictEqual(user.default_ttl(), 60);
                 });
 
-                it("when config.user_expiry is null", function() {
-                    im.config.user_expiry = null;
-                    assert.strictEqual(user.default_expiry(), null);
+                it("when config.user_ttl is null", function() {
+                    im.config.user_ttl = null;
+                    assert.strictEqual(user.default_ttl(), null);
                 });
             });
         });
@@ -239,17 +239,17 @@ describe("user", function() {
                     });
             });
 
-            it("should set the default expiry", function() {
+            it("should set the default ttl", function() {
                 return user
                     .save()
                     .then(function() {
                         assert.strictEqual(
                             im.api.kv.ttl[user.key()],
-                            user.default_expiry());
+                            user.default_ttl());
                     });
             });
 
-            it("should set an integer custom expiry", function() {
+            it("should set an integer custom ttl", function() {
                 return user
                     .save({seconds: 5})
                     .then(function() {
@@ -257,7 +257,7 @@ describe("user", function() {
                     });
             });
 
-            it("should set a null custom expiry", function() {
+            it("should not set a ttl for null seconds", function() {
                 return user
                     .save({seconds: null})
                     .then(function() {
