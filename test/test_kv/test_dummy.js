@@ -123,6 +123,19 @@ describe("kv.dummy", function() {
                     }).then(function(reply) {
                         assert(reply.success);
                         assert.equal(api.kv.store.foo, 'bar');
+                        assert.equal(typeof api.kv.expiry.foo, 'undefined');
+                    });
+                });
+
+                it("should set an expiry if one is given", function() {
+                    return request('kv.set', {
+                        key: 'foo',
+                        value: 'bar',
+                        seconds: 15
+                    }).then(function(reply) {
+                        assert(reply.success);
+                        assert.equal(api.kv.store.foo, 'bar');
+                        assert.equal(api.kv.expiry.foo, 15);
                     });
                 });
             });
