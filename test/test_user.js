@@ -194,6 +194,24 @@ describe("user", function() {
             });
         });
 
+        describe(".default_ttl", function() {
+            it("should be seven days if no config is set", function() {
+                assert.strictEqual(user.default_ttl(), 604800);
+            });
+
+            describe("should be overriden", function() {
+                it("when config.user_ttl is an integer", function() {
+                    im.config.user_ttl = 60;
+                    assert.strictEqual(user.default_ttl(), 60);
+                });
+
+                it("when config.user_ttl is null", function() {
+                    im.config.user_ttl = null;
+                    assert.strictEqual(user.default_ttl(), null);
+                });
+            });
+        });
+
         describe(".save", function() {
             it("should save the user", function() {
                 user.set_answer('why', 'no');
@@ -218,6 +236,33 @@ describe("user", function() {
                     .thenResolve(p)
                     .then(function(e) {
                         assert.equal(e.user, user);
+                    });
+            });
+
+            it("should set the default ttl", function() {
+                return user
+                    .save()
+                    .then(function() {
+                        assert.strictEqual(
+                            im.api.kv.ttl[user.key()],
+                            user.default_ttl());
+                    });
+            });
+
+            it("should set an integer custom ttl", function() {
+                return user
+                    .save({seconds: 5})
+                    .then(function() {
+                        assert.strictEqual(im.api.kv.ttl[user.key()], 5);
+                    });
+            });
+
+            it("should not set a ttl for null seconds", function() {
+                return user
+                    .save({seconds: null})
+                    .then(function() {
+                        assert.strictEqual(
+                            user.key() in im.api.kv.ttl, false);
                     });
             });
         });

@@ -72,6 +72,26 @@ describe("kv.dummy", function() {
             });
         });
 
+        describe(".set_ttl", function() {
+            it("should set the ttl if given", function() {
+                assert.deepEqual(api.kv.ttl, {});
+                api.kv.set_ttl("foo", 5);
+                assert.deepEqual(api.kv.ttl, {"foo": 5});
+            });
+
+            it("should unset the ttl if seconds is null", function() {
+                api.kv.ttl.foo = 10;
+                api.kv.set_ttl("foo", null);
+                assert.deepEqual(api.kv.ttl, {});
+            });
+
+            it("should unset the ttl if seconds is undefined", function() {
+                api.kv.ttl.foo = 10;
+                api.kv.set_ttl("foo");
+                assert.deepEqual(api.kv.ttl, {});
+            });
+        });
+
         describe(".handlers", function() {
             describe(".get", function() {
                 it("should retrieve the value for the given key", function() {
@@ -103,6 +123,19 @@ describe("kv.dummy", function() {
                     }).then(function(reply) {
                         assert(reply.success);
                         assert.equal(api.kv.store.foo, 'bar');
+                        assert.equal(typeof api.kv.ttl.foo, 'undefined');
+                    });
+                });
+
+                it("should set an expiry if one is given", function() {
+                    return request('kv.set', {
+                        key: 'foo',
+                        value: 'bar',
+                        seconds: 15
+                    }).then(function(reply) {
+                        assert(reply.success);
+                        assert.equal(api.kv.store.foo, 'bar');
+                        assert.equal(api.kv.ttl.foo, 15);
                     });
                 });
             });
