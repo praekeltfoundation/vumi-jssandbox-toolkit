@@ -194,6 +194,24 @@ describe("user", function() {
             });
         });
 
+        describe(".default_expiry", function() {
+            it("should be seven days if no config is set", function() {
+                assert.strictEqual(user.default_expiry(), 604800);
+            });
+
+            describe("should be overriden", function() {
+                it("when config.user_expiry is an integer", function() {
+                    im.config.user_expiry = 60;
+                    assert.strictEqual(user.default_expiry(), 60);
+                });
+
+                it("when config.user_expiry is null", function() {
+                    im.config.user_expiry = null;
+                    assert.strictEqual(user.default_expiry(), null);
+                });
+            });
+        });
+
         describe(".save", function() {
             it("should save the user", function() {
                 user.set_answer('why', 'no');
