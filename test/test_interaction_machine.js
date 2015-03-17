@@ -873,6 +873,7 @@ describe("interaction_machine", function() {
                             content: 'hello?',
                             in_reply_to: '2',
                             continue_session: true,
+                            helper_metadata: {}
                         }]);
                     });
                 });
@@ -895,7 +896,8 @@ describe("interaction_machine", function() {
                         assert.deepEqual(api.outbound.store, [{
                             content: 'goodbye',
                             in_reply_to: '2',
-                            continue_session: false
+                            continue_session: false,
+                            helper_metadata: {}
                         }]);
                     });
                 });
