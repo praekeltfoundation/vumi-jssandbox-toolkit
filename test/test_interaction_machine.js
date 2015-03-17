@@ -600,12 +600,25 @@ describe("interaction_machine", function() {
                 });
             });
 
+            it("should use the state's helper metadata in the reply",
+            function() {
+                end_state.helper_metadata = {foo: 'bar'};
+
+                return im.reply(msg).then(function() {
+                    var reply = api.outbound.store[0];
+                    assert.deepEqual(reply.helper_metadata, {foo: 'bar'});
+                });
+            });
+
             it("should emit an event after sending the reply", function() {
+                end_state.helper_metadata = {foo: 'bar'};
+
                 var p = im.once.resolved('reply').then(function(e) {
                     assert(api.outbound.store.length);
                     assert(e instanceof ReplyEvent);
-                    assert(!e.continue_session);
                     assert.equal(e.content, 'goodbye');
+                    assert(!e.continue_session);
+                    assert.deepEqual(e.helper_metadata, {foo: 'bar'});
                 });
 
                 im.reply(msg);
