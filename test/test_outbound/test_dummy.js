@@ -21,7 +21,8 @@ describe("outbound.dummy", function() {
                     return request('outbound.reply_to', {
                         content: 'foo',
                         in_reply_to: '123',
-                        continue_session: false
+                        continue_session: false,
+                        helper_metadata: {foo: 'bar'}
                     }).then(function(result) {
                         assert(result.success);
                         assert.equal(api.outbound.store.length, 1);
@@ -30,7 +31,8 @@ describe("outbound.dummy", function() {
                         assert.deepEqual(message, {
                             content: 'foo',
                             in_reply_to: '123',
-                            continue_session: false
+                            continue_session: false,
+                            helper_metadata: {foo: 'bar'}
                         });
                     });
                 });
