@@ -230,6 +230,38 @@ describe("states.state", function() {
             });
         });
 
+        describe(".helper_metadata", function() {
+            it("should be null by default", function() {
+                var state = new State('luke_the_state', {});
+
+                assert.strictEqual(state.helper_metadata(), null);
+            });
+
+            it("should be allowed to be a function", function() {
+                var state = new State('luke_the_state', {
+                    helper_metadata: function() {
+                        return {green: 'grows the holly'};
+                    }
+                });
+
+                assert.deepEqual(state.helper_metadata(), {
+                    green: 'grows the holly',
+                });
+            });
+
+            it("should be allowed to be a non-function", function() {
+                var state = new State('luke_the_state', {
+                    helper_metadata: {
+                        good: 'donkey',
+                    }
+                });
+
+                assert.deepEqual(state.helper_metadata(), {
+                    good: 'donkey',
+                });
+            });
+        });
+
         describe(".set_next_state", function() {
             it("should not change state undefined is given", function() {
                 assert(!im.next_state.exists());

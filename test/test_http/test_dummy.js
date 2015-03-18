@@ -180,7 +180,7 @@ describe("http.dummy", function() {
             it("should support adding a fixture from data", function() {
                 var fixtures = new HttpFixtures();
 
-                fixtures.add({
+                var created_fixture = fixtures.add({
                     request: {url: 'http://example.com'},
                     response: {code: 201}
                 });
@@ -191,6 +191,7 @@ describe("http.dummy", function() {
                 assert(fixture instanceof HttpFixture);
                 assert.equal(fixture.request.url, 'http://example.com/');
                 assert.equal(fixture.responses[0].code, 201);
+                assert.strictEqual(created_fixture, fixture);
             });
 
             it("should support adding an already initialised fixture",
@@ -200,10 +201,11 @@ describe("http.dummy", function() {
                     request: {url: 'http://example.com'},
                     response: {code: 201}
                 });
-                fixtures.add(fixture);
+                var added_fixture = fixtures.add(fixture);
 
                 var request = new HttpRequest('get','http://example.com');
                 assert.equal(fixtures.filter(request)[0], fixture);
+                assert.strictEqual(added_fixture, fixture);
             });
         });
 
