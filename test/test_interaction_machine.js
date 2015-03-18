@@ -43,6 +43,12 @@ describe("interaction_machine", function() {
             });
             app.states.add(end_state);
 
+            helper_meta_state = new EndState('helper_meta', {
+                text: test_utils.$('goodbye'),
+                helper_metadata: {'grass': 'green'},
+            });
+            app.states.add(helper_meta_state);
+
             return test_utils.make_im({
                 app: app,
                 msg: msg
@@ -600,12 +606,23 @@ describe("interaction_machine", function() {
                 });
             });
 
+            it("should use the state's helper metadata in the reply",
+            function() {
+                im.next_state.reset('helper_meta');
+                return im.reply(msg).then(function() {
+                    var reply = api.outbound.store[0];
+                    assert.deepEqual(reply.helper_metadata, {grass: 'green'});
+                });
+            });
+
             it("should emit an event after sending the reply", function() {
+                im.next_state.reset('helper_meta');
                 var p = im.once.resolved('reply').then(function(e) {
                     assert(api.outbound.store.length);
                     assert(e instanceof ReplyEvent);
-                    assert(!e.continue_session);
                     assert.equal(e.content, 'goodbye');
+                    assert(!e.continue_session);
+                    assert.deepEqual(e.helper_metadata, {grass: 'green'});
                 });
 
                 im.reply(msg);
@@ -882,7 +899,7 @@ describe("interaction_machine", function() {
                         assert.deepEqual(api.outbound.store, [{
                             content: 'goodbye',
                             in_reply_to: '2',
-                            continue_session: false
+                            continue_session: false,
                         }]);
                     });
                 });
