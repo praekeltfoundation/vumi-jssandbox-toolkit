@@ -472,7 +472,9 @@ describe("states.choice", function() {
                     new Choice('garply', 'Garply'),
                     new Choice('waldo', 'Waldo'),
                     new Choice('fred', 'Fred'),
-                    new Choice('plugh', 'Plugh')
+                    new Choice('plu', 'Plu'),
+                    new Choice('pli', 'Pli'),
+                    new Choice('plo', 'Plo')
                 ];
 
                 return Q()
@@ -533,15 +535,17 @@ describe("states.choice", function() {
                             .inputs(null, '4', '3', '3', '3')
                             .check.reply([
                                 "Hello.",
-                                "1. Plugh",
-                                "2. Back"
+                                "1. Plu",
+                                "2. Pli",
+                                "3. Plo",
+                                "4. Back"
                             ].join('\n'))
                             .check.reply.char_limit(opts.characters_per_page)
                             .run();
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '2')
+                            .inputs(null, '4', '3', '3', '3', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Waldo",
@@ -554,7 +558,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '2', '4')
+                            .inputs(null, '4', '3', '3', '3', '4', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Grault",
@@ -567,7 +571,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '2', '4', '4')
+                            .inputs(null, '4', '3', '3', '3', '4', '4', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Quux",
@@ -580,7 +584,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '2', '4', '4', '4')
+                            .inputs(null, '4', '3', '3', '3', '4', '4', '4', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Foo",
