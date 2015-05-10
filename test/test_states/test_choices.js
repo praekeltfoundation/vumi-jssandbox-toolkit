@@ -450,9 +450,69 @@ describe("states.choice", function() {
             });
         });
 
+        describe("to make additional characters available", function() {
+            it("shouldn't count chars for .back on 1st pp and .more on last pp", function() {
+                opts.options_per_page = null;
+                opts.question = 'Select:',  // 8 chars (7 + \n)
+                opts.more = 'More',  // 8 chars (4 + 3 + \n)
+                opts.back = 'Back';  // 8 chars (4 + 3 + \n)
+                opts.characters_per_page = 24 + 16;  // should allow 2 off 8char choices
+
+                opts.choices = [
+                    new Choice('frut', 'Frut'), // 8 chars (4 + 3 + \n)
+                    new Choice('barz', 'Barz'), // 8 chars (4 + 3 + \n)
+                    new Choice('quux', 'Quux'), // 8 chars (4 + 3 + \n)
+                    new Choice('corg', 'Corg'), // 8 chars (4 + 3 + \n)
+                    new Choice('gnab', 'Gnab'), // 8 chars (4 + 3 + \n)
+                    new Choice('igni', 'Igni'), // 8 chars (4 + 3 + \n)
+                ];
+
+                return Q()
+                    .then(function() {
+                        return tester
+                            .start()
+                            .check.reply([
+                                "Select:",
+                                "1. Frut",
+                                "2. Barz",
+                                "3. Quux",
+                                "4. More"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4')
+                            .check.reply([
+                                "Select:",
+                                "1. Corg",
+                                "2. Gnab",
+                                "3. Igni",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '4')
+                            .check.reply([
+                                "Select:",
+                                "1. Frut",
+                                "2. Barz",
+                                "3. Quux",
+                                "4. More"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    });
+            });
+        });
+
         describe("when the options per page is not fixed", function() {
             it("should dynamically split the choices", function() {
-                opts.question = 'Hello.',
+                opts.question = 'Hello.';
                 opts.options_per_page = null;
                 opts.characters_per_page = 21 + [
                     "Hello.",
@@ -463,6 +523,7 @@ describe("states.choice", function() {
                     .length;
 
                 opts.choices = [
+                    new Choice('na', 'Na'),
                     new Choice('foo', 'Foo'),
                     new Choice('bar', 'Bar'),
                     new Choice('baz', 'Baz'),
@@ -483,17 +544,18 @@ describe("states.choice", function() {
                             .start()
                             .check.reply([
                                 "Hello.",
-                                "1. Foo",
-                                "2. Bar",
-                                "3. Baz",
-                                "4. More"
+                                "1. Na",
+                                "2. Foo",
+                                "3. Bar",
+                                "4. Baz",
+                                "5. More"
                             ].join('\n'))
                             .check.reply.char_limit(opts.characters_per_page)
                             .run();
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4')
+                            .inputs(null, '5')
                             .check.reply([
                                 "Hello.",
                                 "1. Quux",
@@ -506,7 +568,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3')
+                            .inputs(null, '5', '3')
                             .check.reply([
                                 "Hello.",
                                 "1. Grault",
@@ -519,7 +581,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3')
+                            .inputs(null, '5', '3', '3')
                             .check.reply([
                                 "Hello.",
                                 "1. Waldo",
@@ -532,7 +594,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3')
+                            .inputs(null, '5', '3', '3', '3')
                             .check.reply([
                                 "Hello.",
                                 "1. Plu",
@@ -545,7 +607,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '4')
+                            .inputs(null, '5', '3', '3', '3', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Waldo",
@@ -558,7 +620,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '4', '4')
+                            .inputs(null, '5', '3', '3', '3', '4', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Grault",
@@ -571,7 +633,7 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '4', '4', '4')
+                            .inputs(null, '5', '3', '3', '3', '4', '4', '4')
                             .check.reply([
                                 "Hello.",
                                 "1. Quux",
@@ -584,13 +646,14 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '3', '3', '3', '4', '4', '4', '4')
+                            .inputs(null, '5', '3', '3', '3', '4', '4', '4', '4')
                             .check.reply([
                                 "Hello.",
-                                "1. Foo",
-                                "2. Bar",
-                                "3. Baz",
-                                "4. More"
+                                "1. Na",
+                                "2. Foo",
+                                "3. Bar",
+                                "4. Baz",
+                                "5. More"
                             ].join('\n'))
                             .check.reply.char_limit(opts.characters_per_page)
                             .run();
