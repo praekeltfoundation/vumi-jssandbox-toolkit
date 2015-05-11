@@ -453,18 +453,21 @@ describe("states.choice", function() {
         describe("to make additional characters available", function() {
             it("shouldn't count chars for .back on 1st pp and .more on last pp", function() {
                 opts.options_per_page = null;
-                opts.question = 'Select:',  // 8 chars (7 + \n)
-                opts.more = 'More',  // 8 chars (4 + 3 + \n)
+                opts.question = 'Select:';  // 8 chars (7 + \n)
+                opts.more = 'More';  // 8 chars (4 + 3 + \n)
                 opts.back = 'Back';  // 8 chars (4 + 3 + \n)
-                opts.characters_per_page = 24 + 16;  // should allow 2 off 8char choices
+                opts.characters_per_page = 24 + 16;  // should allow 2 off 8char choices on mid
+                                                     // pages, 3 on first & last page
 
                 opts.choices = [
                     new Choice('frut', 'Frut'), // 8 chars (4 + 3 + \n)
-                    new Choice('barz', 'Barz'), // 8 chars (4 + 3 + \n)
-                    new Choice('quux', 'Quux'), // 8 chars (4 + 3 + \n)
-                    new Choice('corg', 'Corg'), // 8 chars (4 + 3 + \n)
-                    new Choice('gnab', 'Gnab'), // 8 chars (4 + 3 + \n)
-                    new Choice('igni', 'Igni'), // 8 chars (4 + 3 + \n)
+                    new Choice('barz', 'Barz'),
+                    new Choice('quux', 'Quux'),
+                    new Choice('corg', 'Corg'),
+                    new Choice('gnab', 'Gnab'),
+                    new Choice('igni', 'Igni'),
+                    new Choice('bolg', 'Bolg'),
+                    new Choice('ganz', 'Ganz')
                 ];
 
                 return Q()
@@ -488,7 +491,7 @@ describe("states.choice", function() {
                                 "Select:",
                                 "1. Corg",
                                 "2. Gnab",
-                                "3. Igni",
+                                "3. More",
                                 "4. Back"
                             ].join('\n'))
                             .check.reply.char_limit(opts.characters_per_page)
@@ -496,7 +499,33 @@ describe("states.choice", function() {
                     })
                     .then(function() {
                         return tester
-                            .inputs(null, '4', '4')
+                            .inputs(null, '4', '3')
+                            .check.reply([
+                                "Select:",
+                                "1. Igni",
+                                "2. Bolg",
+                                "3. Ganz",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '4')
+                            .check.reply([
+                                "Select:",
+                                "1. Corg",
+                                "2. Gnab",
+                                "3. More",
+                                "4. Back"
+                            ].join('\n'))
+                            .check.reply.char_limit(opts.characters_per_page)
+                            .run();
+                    })
+                    .then(function() {
+                        return tester
+                            .inputs(null, '4', '3', '4', '4')
                             .check.reply([
                                 "Select:",
                                 "1. Frut",
