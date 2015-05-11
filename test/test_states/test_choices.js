@@ -456,11 +456,14 @@ describe("states.choice", function() {
                 opts.question = 'Select:';  // 8 chars (7 + \n)
                 opts.more = 'More';  // 8 chars (4 + 3 + \n)
                 opts.back = 'Back';  // 8 chars (4 + 3 + \n)
-                opts.characters_per_page = 24 + 16;  // should allow 2 off 8char choices on mid
-                                                     // pages, 3 on first & last page
 
+                // should allow 2 of 8 char choices on mid
+                // pages, 3 on first & last page
+                opts.characters_per_page = 24 + 16;
+
+                // 8 chars (4 + 3 + \n)
                 opts.choices = [
-                    new Choice('frut', 'Frut'), // 8 chars (4 + 3 + \n)
+                    new Choice('frut', 'Frut'),
                     new Choice('barz', 'Barz'),
                     new Choice('quux', 'Quux'),
                     new Choice('corg', 'Corg'),
