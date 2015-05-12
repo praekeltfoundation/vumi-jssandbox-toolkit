@@ -45,7 +45,7 @@ describe("states.paginated", function() {
             opts.page = function(i, text, n) {
                 assert([0, 1].indexOf(i) > -1);
                 assert.equal(text, 'foo');
-                assert.equal(n, 8);
+                assert.equal(n, 7);
             };
 
             return tester
@@ -251,7 +251,8 @@ describe("states.paginated", function() {
 
         describe("default 'page' function", function() {
             it("should display the words fitting on the page", function() {
-                opts.characters_per_page = 5 + [
+                opts.characters_per_page = [
+                    "_____",
                     "1. Back",
                     "2. More",
                     "3. Exit"]
