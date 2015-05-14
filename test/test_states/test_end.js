@@ -39,6 +39,10 @@ describe("states.end", function() {
                 return new EndState(name, opts);
             });
 
+            app.states.add('states:delegate_to_end', function(name) {
+                return app.states.create('states:end');
+            });
+
             opts = {};
             tester = new AppTester(app);
         });
@@ -99,6 +103,35 @@ describe("states.end", function() {
                             .input({
                                 content: 'foo',
                                 session_event: null
+                            })
+                            .check.reply('hello')
+                            .check.user.state('states:start')
+                            .run();
+                    });
+            });
+        });
+
+        describe("when the state is delegated to at the start of a session",
+        function() {
+            it("should show the state, then the next state on a new session",
+            function() {
+                var user = tester.im.user;
+
+                return tester
+                    .setup.user.state('states:delegate_to_end')
+                    .input({
+                        content: null,
+                        session_event: 'new'
+                    })
+                    .check.user.state('states:end')
+                    .check.reply('goodbye')
+                    .run()
+                    .then(function() {
+                        return tester
+                            .setup.user(user.serialize())
+                            .input({
+                                content: null,
+                                session_event: 'new'
                             })
                             .check.reply('hello')
                             .check.user.state('states:start')
