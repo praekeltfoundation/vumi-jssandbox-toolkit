@@ -296,7 +296,7 @@ describe("AppTester Check Tasks", function() {
                 return tester
                     .check.interaction()
                     .input('1')
-                    .run()
+                    .run();
             } catch(e) {
                 assert.equal(e.message, [
                     "Method 'input' failed: Interaction tasks",
