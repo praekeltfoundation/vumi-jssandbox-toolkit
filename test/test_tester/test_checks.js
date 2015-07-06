@@ -292,10 +292,16 @@ describe("AppTester Check Tasks", function() {
         });
 
         it("should fail if input given after interaction", function() {
-            return tester
-                .check.interaction()
-                .input('1')
-                .run();
+            try {
+                return tester
+                    .check.interaction()
+                    .input('1')
+                    .run()
+            } catch(e) {
+                assert.equal(e.message, [
+                    "Method 'input' failed: Interaction tasks",
+                    "cannot be scheduled after check tasks"].join(' '));
+            }
         });
     });
 
