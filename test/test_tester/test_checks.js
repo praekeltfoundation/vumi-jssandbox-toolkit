@@ -290,6 +290,13 @@ describe("AppTester Check Tasks", function() {
                     assert.equal(e.actual, 31);
                 });
         });
+
+        it("should fail if input given after interaction", function() {
+            return tester
+                .check.interaction()
+                .input('1')
+                .run();
+        });
     });
 
     describe(".check.user", function() {
