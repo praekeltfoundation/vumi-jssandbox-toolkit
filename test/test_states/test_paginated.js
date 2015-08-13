@@ -325,6 +325,18 @@ describe("states.paginated", function() {
                                 "2. Exit",
                             ].join('\n'))
                             .run();
+                    })
+                    .then(function() {
+                        opts.text = 'a b c d e f g';
+
+                        return tester
+                            .inputs(null, '1', '1')
+                            .check.reply([
+                                "g",
+                                "1. Back",
+                                "2. Exit",
+                            ].join('\n'))
+                            .run();
                     });
             });
         });

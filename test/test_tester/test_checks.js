@@ -290,6 +290,19 @@ describe("AppTester Check Tasks", function() {
                     assert.equal(e.actual, 31);
                 });
         });
+
+        it("should fail if input given after interaction", function() {
+            try {
+                return tester
+                    .check.interaction()
+                    .input('1')
+                    .run();
+            } catch(e) {
+                assert.equal(e.message, [
+                    "Method 'input' failed: Interaction tasks",
+                    "cannot be scheduled after check tasks"].join(' '));
+            }
+        });
     });
 
     describe(".check.user", function() {

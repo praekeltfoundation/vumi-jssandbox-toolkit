@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Vumi Javascript Sandbox Toolkit'
-copyright = u'2013, Praekelt Foundation'
+copyright = u'2015, Praekelt Foundation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
