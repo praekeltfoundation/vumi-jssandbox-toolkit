@@ -1,6 +1,6 @@
 {
   "name": "vumigo_v02",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "description": "Javascript toolkit and examples for Vumi's Javascript sandbox",
   "main": "lib/index.js",
   "scripts": {
