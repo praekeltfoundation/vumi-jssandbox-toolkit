@@ -618,6 +618,21 @@ describe("AppTester Check Tasks", function() {
         });
     });
 
+    describe(".check.user.state.creator_opts", function() {
+        it("should check the user's state's creator_opts", function() {
+            return tester
+                .setup.user.state('initial_state', {creator_opts: {foo: 'bar'}})
+                .check.user.state.creator_opts({foo: 'baz'})
+                .run()
+                .then(test_utils.fail, function(e) {
+                    assert.equal(
+                        e.msg, "Unexpected user state creator options");
+                    assert.deepEqual(e.expected, {foo: 'baz'});
+                    assert.deepEqual(e.actual, {foo: 'bar'});
+                });
+        });
+    });
+
     describe(".check.reply", function() {
         describe(".check.reply(content)", function() {
             it("should check the content of the sent reply", function() {
@@ -930,7 +945,7 @@ describe("AppTester Check Tasks", function() {
                 .run()
                 .then(test_utils.fail, function(e) {
                     assert.equal(
-                        e.msg, 
+                        e.msg,
                         "Expecting no replies from the app to the user");
 
                     assert.deepEqual(e.expected, []);
