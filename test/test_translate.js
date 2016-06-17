@@ -139,7 +139,7 @@ describe(".translate", function() {
 
                 lang.locale_data.messages["foo {{a}}"] = ["", "oof {{a}}", ""];
                 lang.locale_data.messages["bar {{b}}"] = ["", "rab {{b}}", ""];
-                lang.locale_data.messages["baz"] = ["", "zab", ""];
+                lang.locale_data.messages.baz = ["", "zab", ""];
 
                 var result = $('foo {{a}}')
                     .context({a: $('bar {{b}}').context({b: $('baz')})})
