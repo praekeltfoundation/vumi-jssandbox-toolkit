@@ -1,5 +1,5 @@
-Javascript Sandbox Tutorial!
-===========================================================
+Javascript Sandbox Tutorial
+===========================
 
 This is a javascript sandbox tutorial for writing Vumi Go Application.
 
