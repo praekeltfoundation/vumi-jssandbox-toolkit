@@ -14,10 +14,12 @@ Introduction to an example we’re going to use for this tutorial
 Outcomes of the tutorial
 ------------------------
 
-- Sandbox skeleton
-- Able to write sandbox app
+By the end of this tutorial, you will be able to:
+
+- Know how to use Sandbox skeleton
+- Write Sandbox App
 - Write tests
-- Know how to make http request
+- Know how to make HTTP request
 - Do translations
 - Promises 
 - Deploying to VumiGo
