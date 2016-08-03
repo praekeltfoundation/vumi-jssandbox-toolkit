@@ -1,7 +1,7 @@
 Javascript Sandbox Tutorial
 ===========================
 
-This is a javascript sandbox tutorial for writing Vumi Go Application.
+This is a javascript sandbox tutorial for writing standalone Javascript sandbox applications (that connect to Junebug) too.
 
 What is the sandbox?
 --------------------
