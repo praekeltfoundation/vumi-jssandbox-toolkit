@@ -18,13 +18,13 @@ Outcomes of the tutorial
 
 By the end of this tutorial, you will be able to:
 
-- Know how to use Sandbox skeleton
-- Write Sandbox app
+- Understand the structure of a sandbox application repository
+- Write a sandbox application
 - Write tests
-- Know how to make HTTP request
+- Know how to make an HTTP request from a sandbox application
 - Do translations
-- Promises 
-- Deploying to VumiGo
+- Translate your application into other languages
+- Deploy your application to Vumi Go
 
 
 Other documentation
