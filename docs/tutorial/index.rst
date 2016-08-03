@@ -3,6 +3,7 @@ Javascript Sandbox Tutorial
 
 This is a javascript sandbox tutorial for writing standalone Javascript sandbox applications (that connect to Junebug) too.
 
+
 What is the sandbox?
 --------------------
 
@@ -30,33 +31,13 @@ By the end of this tutorial, you will be able to:
 Other documentation
 -------------------
 
+.. toctree::
+   :maxdepth: 1
 
-Sandbox skeleton
-----------------
-
-- What is .travis.yml file for
-- What does grunt do
-
-
-Deploying to VumiGo and standalone
-----------------------------------
-
-
-Creating states
----------------
-
-
-Updating tests
---------------
-
-
-Add a http request
-------------------
-
-
-adding translations
--------------------
-
-
-Selecting a language
---------------------
+   sandbox_skeleton.rst
+   deploying_to_VumiGo_and_standalone.rst
+   creating_states.rst
+   updating_tests.rst
+   add_an_http_request.rst
+   adding_translations.rst
+   selecting_a_language.rst
