@@ -22,8 +22,8 @@ By the end of this tutorial, you will be able to:
 - Write a sandbox application
 - Write tests
 - Know how to make an HTTP request from a sandbox application
-- Do translations
 - Translate your application into other languages
+- Work with promises
 - Deploy your application to Vumi Go
 
 
