@@ -3,10 +3,10 @@ Javascript Sandbox Tutorial
 
 This is a javascript sandbox tutorial for writing Vumi Go Application.
 
-What is sandbox?
-----------------
+What is the sandbox?
+--------------------
 
-A sandbox is a type of software testing environment that enables the isolated execution of software or programs for independent evaluation, monitoring or testing. Basically sandboxing is to test a software in a controlled environment before putting it to actual use.
+A sandbox is an isolated execution environment, but its used in production, not testing, and its role is to provide access to carefully selected external resources and capabilities (e.g. logging, web requests, a key-value store, sending messages).
 
 
 Introduction to an example we’re going to use for this tutorial
