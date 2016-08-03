@@ -13,6 +13,8 @@ A sandbox is an isolated execution environment, but its used in production, not 
 Introduction to an example we’re going to use for this tutorial
 ---------------------------------------------------------------
 
+In this tutorial we're going to write a sandbox application for `CTA train tracker <http://www.transitchicago.com/traintracker/default.aspx>`_ to shows a list of in-service trains and basic information and the locations for one or more specified `"L" <https://en.wikipedia.org/wiki/Chicago_%22L%22>`_ routes.
+
 
 Outcomes of the tutorial
 ------------------------
