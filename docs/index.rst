@@ -28,6 +28,7 @@ Vumi Go's Javascript sandbox.
    outbound.rst
    utils.rst
    test_utils.rst
+   tutorial/index.rst
 
 See also `Vumi Go's documentation <http://vumi-go.readthedocs.org/>`_.
 
