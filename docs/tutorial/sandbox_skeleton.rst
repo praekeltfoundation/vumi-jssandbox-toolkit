@@ -26,7 +26,7 @@ Clone the repo::
 
 Install requirements::
 
-    $ npm Install
+    $ npm install
 
 Run tests::
 
