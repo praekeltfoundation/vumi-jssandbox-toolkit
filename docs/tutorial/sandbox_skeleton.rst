@@ -53,7 +53,7 @@ Now let's take a look at the folders and files inside our go-jsbox-skeleton app 
 	- **fixture.js:** This file contains a list of fixtures. If you look at the code inside the file you'll notice that it pretends to be a server if the app makes an http request. it basically telling what an http should expect and respond to those requests.
 	- **setup.js:** Again, this file contains a `boilerplate code <https://en.wikipedia.org/wiki/Boilerplate_code>`_. There's nothing to worry about. 
 
-**travis.yml:** Is the configuration file for Travis-CI. Runs all go-jsbox-skeleton app tests everytime we commit or to GitHub. Read more about Travis-CI `here <https://travis-ci.org/>`_.
+**travis.yml:** Is the configuration file for Travis-CI. Runs all go-jsbox-skeleton app tests everytime we commit or push our code to GitHub. Read more about Travis-CI `here <https://travis-ci.org/>`_.
 
 
 **go-app.js:** This is a generated file. It a compiled version of go-jsbox-skeleton app. It auto generated when you run ``npm test``.
