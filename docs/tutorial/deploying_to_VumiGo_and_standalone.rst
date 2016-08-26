@@ -15,7 +15,7 @@ You will need a VumiGo account to deploy our sandbox skeleton app. If you alread
 
 **2. Sign in VumiGo**
 
-To sign in to VumiGo account, do the folliwing: 
+To sign in to VumiGo account, do the following: 
 
 - Go to https://go.vumi.org/accounts/login/?next=/conversations/
 - Enter your email address and password
