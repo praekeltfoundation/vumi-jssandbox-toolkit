@@ -47,4 +47,22 @@ By clicking **save**, you will be taken to the page shown below where you will s
 
 **4. Create new conversation**
 
+To create a new conversation the steps are as follows:
+
+- Click new conversation
+
+.. figure::  images/conversation.png
+
+- Enter a new **conversation name** and **conversation description** and then select a **kind of conversation** of your choice. Please see the picture below. Click **save**.
+
+.. figure::  images/create_new_conversation.png
+
+- Now copy the code in `go-app.js <https://github.com/praekelt/go-jsbox-skeleton/blob/develop/go-app.js>`_ file and paste it here:
+
+.. figure::  images/save_conversation.png
+
+After clicking **save**. You have successfully created a new conversation. Click **dashboard**.
+
+.. figure::  images/conversation_created_successfully.png
+
 **5. Campaign routing**
