@@ -21,6 +21,30 @@ To sign in to VumiGo account, do the following:
 - Enter your email address and password
 - Click Sign in
 
-After you have signed in you should see:
+After you have signed in, your dashboard panel should look like this:
 
 .. figure::  images/dashboard.png
+
+**3. Create a new channel**
+
+To create a new channel follow the following steps:
+
+- Click new channel
+
+.. figure::  images/new_channel.png
+
+- Select a **destination** and a **channel** as is shown in the picture below. Click **save**.
+
+.. figure::  images/save_new_channel.png
+
+By clicking **save**, you will be taken to the page shown below where you will see your new generated **USSD** code. Click **dashboard**.
+
+.. figure::  images/vumi_startcode.png
+
+.. warning::
+
+   Don't click the release button!
+
+**4. Create new conversation**
+
+**5. Campaign routing**
