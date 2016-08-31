@@ -66,3 +66,14 @@ After clicking **save**. You have successfully created a new conversation. Click
 .. figure::  images/conversation_created_successfully.png
 
 **5. Campaign routing**
+
+- Click campaign routing
+
+.. figure::  images/campaign_routing.png
+
+-  Under Channels you will see the channel you created, with a red "default" label. Click and drag on this label to join it with the similar label on the conversation you just created under Conversations. This will allow inbound messages on that channel to reach your conversation. Drag another arrow, this time from the conversation to the channel, this will allow replies from your conversation to reach the channel and be sent back to the user. Click **save**
+
+.. figure::  images/campaign_routing_save.png
+
+ Congratulations, you have successfully deployed your first app to VumiGo! You can test it by dailing: ``*120*8864*163#``
+ 
