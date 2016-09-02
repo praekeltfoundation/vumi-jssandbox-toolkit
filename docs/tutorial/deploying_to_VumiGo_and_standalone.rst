@@ -1,11 +1,7 @@
-Deploying to VumiGo and Standalone
-==================================
-
-In this part of the tutorial, we will learn how to deploy our app to `VumiGo <https://go.vumi.org>`_ and standalone using our sandbox skeleton app example.
-
-
 Deploying to VumiGo
--------------------
+===================
+
+In this part of the tutorial, we will learn how to deploy our app to `VumiGo <https://go.vumi.org>`_ using our sandbox skeleton app example.
 
 **1. Set up a VumiGo account**
 
@@ -15,7 +11,7 @@ You will need a VumiGo account to deploy our sandbox skeleton app. If you alread
 
 **2. Sign in VumiGo**
 
-To sign in to VumiGo account, do the following: 
+To sign in to VumiGo account, do the following:
 
 - Go to https://go.vumi.org/accounts/login/?next=/conversations/
 - Enter your email address and password
@@ -76,4 +72,3 @@ After clicking **save**. You have successfully created a new conversation. Click
 .. figure::  images/campaign_routing_save.png
 
  Congratulations, you have successfully deployed your first app to VumiGo! You can test it by dailing: ``*120*8864*163#``
- 
