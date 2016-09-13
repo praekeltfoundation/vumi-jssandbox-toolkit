@@ -53,7 +53,7 @@ To create a new conversation the steps are as follows:
 
 .. figure::  images/create_new_conversation.png
 
-- Now copy the github raw code url for `go-app.js <https://raw.githubusercontent.com/praekelt/go-jsbox-skeleton/develop/go-app.js>`_ and paste it in source url field. After you load the URL it'll show up in the editor. Click **update from url** and then click **save**.
+- Now copy the github raw code url for `go-app.js <https://raw.githubusercontent.com/praekelt/go-jsbox-skeleton/develop/go-app.js>`_ and paste it in source url field. Click **update from url**. After you load the URL it'll show up in the editor. Click **save**.
 
 .. figure::  images/save_conversation.png
 
