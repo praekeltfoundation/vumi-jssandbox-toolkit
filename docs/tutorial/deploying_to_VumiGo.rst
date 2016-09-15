@@ -9,7 +9,7 @@ You will need a Vumi Go account to deploy our sandbox skeleton app. If you alrea
 
 - To set up a Vumi Go account please contact the vumi development team via email by joining the the `vumi-dev@googlegroups.com <https://groups.google.com/forum/?fromgroups#!forum/vumi-dev>`_ mailing list or on irc in #vumi on the `Freenode IRC network <https://webchat.freenode.net/?channels=#vumi>`_.
 
-**2. Sign in Vumi Go**
+**2. Sign in to Vumi Go**
 
 To sign in to Vumi Go account, do the following:
 
