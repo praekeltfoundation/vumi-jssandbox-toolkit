@@ -37,7 +37,7 @@ Other documentation
    :maxdepth: 1
 
    sandbox_skeleton.rst
-   deploying_to_VumiGo_and_standalone.rst
+   deploying_to_VumiGo.rst
    creating_states.rst
    updating_tests.rst
    add_an_http_request.rst
