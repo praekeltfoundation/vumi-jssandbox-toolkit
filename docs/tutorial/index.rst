@@ -41,5 +41,4 @@ Other documentation
    creating_states.rst
    updating_tests.rst
    add_an_http_request.rst
-   adding_translations.rst
-   selecting_a_language.rst
+   
