@@ -17,13 +17,13 @@ describe("config.dummy", function() {
     describe("DummyConfigResource", function() {
         describe(".app", function() {
             it("should be a shortcut to .store.config", function() {
-                assert.strictEqual(api.config.store.config, api.config.app);
+                assert.strictEqual(api.config.store.app, api.config.app);
 
                 api.config.store.config = {};
-                assert.strictEqual(api.config.store.config, api.config.app);
+                assert.strictEqual(api.config.store.app, api.config.app);
 
                 api.config.app = {};
-                assert.strictEqual(api.config.store.config, api.config.app);
+                assert.strictEqual(api.config.store.app, api.config.app);
             });
         });
 
