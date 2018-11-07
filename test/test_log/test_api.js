@@ -8,7 +8,7 @@ describe("log.api", function() {
     var im;
 
     function contains_one(data, msg) {
-        var matches = _.where(data, msg);
+        var matches = _.filter(data, msg);
         return matches.length === 0;
     }
 
