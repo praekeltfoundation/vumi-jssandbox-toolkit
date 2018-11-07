@@ -512,18 +512,18 @@ describe("interaction_machine", function() {
 
         describe(".log", function() {
             it("should log the requested message", function() {
-                assert(!_.contains(api.log.info, 'wah wah'));
+                assert(!_.includes(api.log.info, 'wah wah'));
                 return im.log('wah wah').then(function() {
-                    assert(_.contains(api.log.info, 'wah wah'));
+                    assert(_.includes(api.log.info, 'wah wah'));
                 });
             });
         });
 
         describe(".err", function() {
             it("should log the error", function() {
-                assert(!_.contains(api.log.error, ':('));
+                assert(!_.includes(api.log.error, ':('));
                 return im.err(new Error(':(')).then(function() {
-                    assert(_.contains(api.log.error, ':('));
+                    assert(_.includes(api.log.error, ':('));
                 });
             });
 
@@ -556,9 +556,9 @@ describe("interaction_machine", function() {
 
         describe(".api_request", function() {
             it("should make a promise-based api request", function() {
-                assert(!_.contains(api.log.info, 'arrg'));
+                assert(!_.includes(api.log.info, 'arrg'));
                 im.api_request('log.info', {msg: 'arrg'}).then(function() {
-                    assert(_.contains(api.log.info, 'arrg'));
+                    assert(_.includes(api.log.info, 'arrg'));
                 });
             });
 
@@ -766,18 +766,18 @@ describe("interaction_machine", function() {
 
         describe("on 'unknown_command'", function() {
             it("should log the command", function() {
-                assert(!_.contains(
+                assert(!_.includes(
                     api.log.error,
                     'Received unknown command: {"bad":"cmd"}'));
 
                 var e = new UnknownCommandEvent(im, {bad: 'cmd'});
                 return im.emit(e).then(function() {
-                    assert(_.contains(
+                    assert(_.includes(
                         api.log.error,
                         'Received unknown command: {"bad":"cmd"}')); });
             });
         });
-        
+
         describe("on 'inbound_message'", function() {
             var event;
 

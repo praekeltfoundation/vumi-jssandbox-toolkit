@@ -127,7 +127,7 @@ describe("states.choice", function() {
                 state.translate(im.user.i18n);
 
                 assert.deepEqual(
-                    _.pluck(state.choices, 'label'),
+                    _.map(state.choices, 'label'),
                     ['ja', 'nee']);
             });
         });
