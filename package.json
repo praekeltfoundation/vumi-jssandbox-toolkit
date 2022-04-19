@@ -13,7 +13,7 @@
   "dependencies": {
     "jed": "~0.5",
     "lodash": "~4.17.11",
-    "moment": "~2.22.2",
+    "moment": "~2.29.2",
     "q": "~1.5.1"
   },
   "devDependencies": {
