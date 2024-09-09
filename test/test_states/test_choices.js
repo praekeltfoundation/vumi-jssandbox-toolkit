@@ -162,6 +162,14 @@ describe("states.choice", function() {
                     });
                 });
 
+                it("should not set the user's state for invalid selection 1.1", function() {
+                    assert(!im.next_state.exists());
+
+                    return state.input('1.1').then(function() {
+                        assert(!im.next_state.exists());
+                    });
+                });
+
                 it("should not save the user's answer", function() {
                     var answer = im.user.get_answer('color_state');
                     assert(typeof answer == 'undefined');
